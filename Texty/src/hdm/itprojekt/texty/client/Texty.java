@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>. Initial checking of Texty.
+ * Entry point classes define <code>onModuleLoad()</code>. Checking own branch.
  */
 public class Texty implements EntryPoint {
 	/**
