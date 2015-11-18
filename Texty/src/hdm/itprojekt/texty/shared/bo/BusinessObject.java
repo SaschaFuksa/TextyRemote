@@ -9,7 +9,7 @@ public abstract class BusinessObject implements Serializable {
 	private int id = 0;
 	private Date dateofCreation = null;
 	/**
-	 * @return the dateofCreation
+	 * @return dateofCreation
 	 */
 	public Date getDateofCreation() {
 		return dateofCreation;
@@ -21,7 +21,7 @@ public abstract class BusinessObject implements Serializable {
 		this.dateofCreation = dateofCreation;
 	}
 	/**
-	 * @return the id
+	 * @return id
 	 */
 	public int getId() {
 		return id;
