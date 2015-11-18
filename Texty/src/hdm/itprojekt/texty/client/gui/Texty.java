@@ -1,5 +1,13 @@
 package hdm.itprojekt.texty.client.gui;
 
-public class Texty {
+import com.google.gwt.core.client.EntryPoint;
+
+public class Texty implements EntryPoint{
+
+	
+	public void onModuleLoad() {
+		
+		
+	}
 
 }
