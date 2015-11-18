@@ -1,5 +1,13 @@
 package hdm.itprojekt.texty.client.gui;
 
-public class TextyReport {
+import com.google.gwt.core.client.EntryPoint;
+
+public class TextyReport implements EntryPoint {
+
+
+	public void onModuleLoad() {
+		
+		
+	}
 
 }
