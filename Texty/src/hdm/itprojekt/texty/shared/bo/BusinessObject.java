@@ -7,18 +7,18 @@ public abstract class BusinessObject implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private int id = 0;
-	private Date dateofCreation = null;
+	private Date dateOfCreation = null;
 	/**
-	 * @return dateofCreation
+	 * @return dateOfCreation
 	 */
-	public Date getDateofCreation() {
-		return dateofCreation;
+	public Date getDateOfCreation() {
+		return dateOfCreation;
 	}
 	/**
-	 * @param dateofCreation the dateofCreation to set
+	 * @param dateOfCreation the dateOfCreation to set
 	 */
-	public void setDateofCreation(Date dateofCreation) {
-		this.dateofCreation = dateofCreation;
+	public void setDateOfCreation(Date dateOfCreation) {
+		this.dateOfCreation = dateOfCreation;
 	}
 	/**
 	 * @return id
@@ -38,8 +38,8 @@ public abstract class BusinessObject implements Serializable {
 		StringBuilder str = new StringBuilder();
 		str.append("BusinessObject [id=");
 		str.append(id);
-		str.append(", dateofCreation=");
-		str.append(dateofCreation);
+		str.append(", dateOfCreation=");
+		str.append(dateOfCreation);
 		str.append("]");
 		return str.toString();
 	}
@@ -49,7 +49,7 @@ public abstract class BusinessObject implements Serializable {
 		final int a = 31;
 		int result = 1;
 		result = a * result
-				+ ((dateofCreation == null) ? 0 : dateofCreation.hashCode());
+				+ ((dateOfCreation == null) ? 0 : dateOfCreation.hashCode());
 		result = a * result + id;
 		return result;
 	}
@@ -63,10 +63,10 @@ public abstract class BusinessObject implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		BusinessObject other = (BusinessObject) obj;
-		if (dateofCreation == null) {
-			if (other.dateofCreation != null)
+		if (dateOfCreation == null) {
+			if (other.dateOfCreation != null)
 				return false;
-		} else if (!dateofCreation.equals(other.dateofCreation))
+		} else if (!dateOfCreation.equals(other.dateOfCreation))
 			return false;
 		if (id != other.id)
 			return false;
