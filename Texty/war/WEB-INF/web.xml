@@ -7,18 +7,33 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>hdm.itprojekt.texty.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>textyAdministrationServlet</servlet-name>
+    <servlet-class>hdm.itprojekt.texty.server.TextyAdministrationImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/texty/greet</url-pattern>
+    <servlet-name>textyAdministrationServlet</servlet-name>
+    <url-pattern>/texty/textyadministration</url-pattern>
+    <url-pattern>/textycommands/textyadministration</url-pattern>
+    <url-pattern>/textyreports/textyadministration</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>reportGeneratorServlet</servlet-name>
+    <servlet-class>hdm.itprojekt.texty.server.report.ReportGeneratorImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>reportGeneratorServlet</servlet-name>
+    <url-pattern>/texty/textyadministration</url-pattern>
+    <url-pattern>/textycommands/textyadministration</url-pattern>
+    <url-pattern>/textyreports/textyadministration</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Texty.html</welcome-file>
+    <welcome-file>textyReports.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
