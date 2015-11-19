@@ -29,6 +29,16 @@ h1 {
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+#editButton {
+  height: 33px;
+  width: 33px;
+  background: url('http://127.0.0.1:8888/icon-edit.png') 33px 33px;
+  border: 0px outset buttonface;
+}
+
+#editButton:hover {
+  height: 33px;
+  width: 33px;
+  background: url('http://127.0.0.1:8888/icon-edit-hover.png') 33px 33px;
+  border: 0px outset buttonface;
 }
