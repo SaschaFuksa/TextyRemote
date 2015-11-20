@@ -1,0 +1,33 @@
+div#Header {
+	border: 2px; 
+	border-style: solid;
+	height: 15%;
+	
+}
+
+div#Menue{
+	border: 2px;
+	border-style: solid;
+	height: 5%;
+}
+
+div#Trailer{
+	border: 2px;
+	border-style: solid;
+	height: 5%;
+}
+
+div#Navigator{
+	border: 2px;
+	border-style: solid;
+	height: 75%;
+	width: 25%;
+	float:left;
+}
+
+div#Details{
+	border: 2px;
+	border-style: solid;
+	height: 75%;
+	width: 99.8%;
+}

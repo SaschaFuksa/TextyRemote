@@ -1,5 +1,5 @@
-@import "button.css";
-
+@import "Button.css";
+@import "Layout.css";
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -26,39 +26,6 @@ h1 {
   color: red;
 }
 
-div#Header {
-	border: 2px; 
-	border-style: solid;
-	height: 15%;
-	
-}
-
-div#Menue{
-	border: 2px;
-	border-style: solid;
-	height: 5%;
-}
-
-div#Trailer{
-	border: 2px;
-	border-style: solid;
-	height: 5%;
-}
-
-div#Navigator{
-	border: 2px;
-	border-style: solid;
-	height: 75%;
-	width: 25%;
-	float:left;
-}
-
-div#Details{
-	border: 2px;
-	border-style: solid;
-	height: 75%;
-	width: 99.8%;
-}
 
 html {
 	height: 100%;
