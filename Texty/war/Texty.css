@@ -1,7 +1,5 @@
-/** Add css rules here for your application. */
+@import "button.css";
 
-
-/** Example rules used by the template application (remove for your app) */
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -26,19 +24,4 @@ h1 {
 
 .serverResponseLabelError {
   color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#editButton {
-  height: 33px;
-  width: 33px;
-  background: url('http://127.0.0.1:8888/icon-edit.png') 33px 33px;
-  border: 0px outset buttonface;
-}
-
-#editButton:hover {
-  height: 33px;
-  width: 33px;
-  background: url('http://127.0.0.1:8888/icon-edit-hover.png') 33px 33px;
-  border: 0px outset buttonface;
 }
