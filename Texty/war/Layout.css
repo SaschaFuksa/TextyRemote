@@ -1,33 +1,46 @@
-div#Header {
-	border: 2px; 
+#Header {
+	border: 1px; 
 	border-style: solid;
-	height: 15%;
+	height: 13%;
+	padding: 5px;
 	
 }
 
 div#Menue{
-	border: 2px;
+	border: 1px;
 	border-style: solid;
 	height: 5%;
+	padding: 5px;
 }
 
-div#Trailer{
-	border: 2px;
+div#Wrapper{
+	border: 1px;
 	border-style: solid;
-	height: 5%;
+	height: 75%;
 }
 
 div#Navigator{
-	border: 2px;
+	border: 1px;
 	border-style: solid;
-	height: 75%;
-	width: 25%;
-	float:left;
+	width: 23%;
+	height: 97%;
+	display: inline-block;
+	margin: 5px;
+	padding: 5px;
 }
 
 div#Details{
-	border: 2px;
+	border: 1px;
 	border-style: solid;
-	height: 75%;
-	width: 99.8%;
+	width: 74.5%;
+	height: 97%;
+	display: inline-block;
+	padding: 5px;
+}
+
+div#Trailer{
+	border: 1px;
+	border-style: solid;
+	height: 5%;
+	padding: 5px;
 }

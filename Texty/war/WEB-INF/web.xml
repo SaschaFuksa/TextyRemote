@@ -33,7 +33,7 @@
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Texty.html</welcome-file>
-    <welcome-file>textyReports.html</welcome-file>
+    <welcome-file>TextyReports.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
