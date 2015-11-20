@@ -1,0 +1,46 @@
+#Header {
+	border: 1px; 
+	border-style: solid;
+	height: 13%;
+	padding: 5px;
+	
+}
+
+div#Menue{
+	border: 1px;
+	border-style: solid;
+	height: 5%;
+	padding: 5px;
+}
+
+div#Wrapper{
+	border: 1px;
+	border-style: solid;
+	height: 75%;
+}
+
+div#Navigator{
+	border: 1px;
+	border-style: solid;
+	width: 23%;
+	height: 97%;
+	display: inline-block;
+	margin: 5px;
+	padding: 5px;
+}
+
+div#Details{
+	border: 1px;
+	border-style: solid;
+	width: 74.5%;
+	height: 97%;
+	display: inline-block;
+	padding: 5px;
+}
+
+div#Trailer{
+	border: 1px;
+	border-style: solid;
+	height: 5%;
+	padding: 5px;
+}
