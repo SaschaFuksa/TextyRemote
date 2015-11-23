@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.client.gui.About;
 import hdm.itprojekt.texty.client.gui.TextyReport;
 
 import java.util.ArrayList;
@@ -19,13 +20,17 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+
 //import hdm.itprojekt.texty.shared.*;
 
 public class Texty implements EntryPoint {
 	
 	
-	private VerticalPanel vertPanel = new VerticalPanel();
-	private Button testButton = new Button();
+	//private VerticalPanel vertPanel = new VerticalPanel();
+	//private Button testButton = new Button();
+	
+	private VerticalPanel trailerPanel = new VerticalPanel();
+	private Label aboutLabel = new Label("Impressum");
 	
 	/*private static final String SERVER_ERROR = "An error occurred while "
 			+ "attempting to contact the server. Please check your network "
@@ -37,6 +42,22 @@ public class Texty implements EntryPoint {
 
 	public void onModuleLoad() {
 		
+		aboutLabel.addStyleName("impressum");
+		trailerPanel.add(aboutLabel);
+		RootPanel.get("Trailer").add(aboutLabel);
+		
+		aboutLabel.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				RootPanel.get("Details").clear();
+				RootPanel.get("Details").add(new About());
+
+			}
+		});
+		
+		// Menübar einfügen
 		Command cmd = new Command() {
 		      public void execute() {
 		        Window.alert("You selected a menu item!");
