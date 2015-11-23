@@ -1,4 +1,4 @@
-/** Set ids using widget.getElement().setId("idOfElement") */
+/** Set ids using widget.getElement().setId("idOfElement") for buttons */
 #editButton {
   height: 25px;
   width: 25px;

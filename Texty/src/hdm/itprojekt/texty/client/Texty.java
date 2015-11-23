@@ -1,7 +1,11 @@
 package hdm.itprojekt.texty.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -28,33 +32,40 @@ public class Texty implements EntryPoint {
 		MenuBar subMenu1 = new MenuBar(true);
 		subMenu1.addItem("Public Conversation", cmd);
 		subMenu1.addItem("Private Conversations", cmd);
-
+		subMenu1.setStyleName("menubar");
+		
 		// Make some sub-menus that we will cascade from the top menu.
 		MenuBar fooMenu = new MenuBar(true);
 		fooMenu.addItem("New Conversation", cmd);
 		fooMenu.addItem("Show Conversations", subMenu1);
+		fooMenu.setStyleName("menubar");
 
 		// Make some sub-menus that we will cascade from the top menu.
 		MenuBar subMenu2 = new MenuBar(true);
 		subMenu2.addItem("Create", cmd);
 		subMenu2.addItem("Show", cmd);
+		subMenu2.setStyleName("menubar");
 
 		// Make some sub-menus that we will cascade from the top menu.
 		MenuBar subMenu3 = new MenuBar(true);
 		subMenu3.addItem("Create", cmd);
 		subMenu3.addItem("Show", cmd);
+		subMenu3.setStyleName("menubar");
 
 		MenuBar barMenu = new MenuBar(true);
 		barMenu.addItem("Hashtagsubscription", subMenu2);
 		barMenu.addItem("Usersubscription", subMenu3);
+		barMenu.setStyleName("menubar");
 
 		// Make a new menu bar, adding a few cascading menus to it.
 		MenuBar menu = new MenuBar();
 		menu.addItem("Conversation", fooMenu);
 		menu.addItem("Subscription", barMenu);
-		menu.addItem("Report", cmdReport);
-
+		menu.addItem("ReportGenerator", cmdReport);
+		
+		menu.setStyleName("menubar");
+		 
 		// Add it to the root panel.
-		RootPanel.get("Menue").add(menu);
+		RootPanel.get("Menu").add(menu);
 	}
 }

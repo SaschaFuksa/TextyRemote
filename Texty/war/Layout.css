@@ -1,46 +1,37 @@
-#Header {
-	border: 1px; 
-	border-style: solid;
+/** Set layout (size, color) for different div areas */
+div#Header {
 	height: 13%;
 	padding: 5px;
-	
+	background-color: #003399;	
 }
 
-div#Menue{
-	border: 1px;
-	border-style: solid;
+div#Menu{
 	height: 5%;
 	padding: 5px;
+	background-color: #80bfff;
 }
 
 div#Wrapper{
-	border: 1px;
-	border-style: solid;
 	height: 75%;
 }
 
 div#Navigator{
-	border: 1px;
-	border-style: solid;
 	width: 23%;
-	height: 97%;
-	display: inline-block;
-	margin: 5px;
+	height: 98.5%;
+	float: left;
 	padding: 5px;
+	background-color: #0080c0;
 }
 
 div#Details{
-	border: 1px;
-	border-style: solid;
-	width: 74.5%;
-	height: 97%;
-	display: inline-block;
+
+	width: 99.35%;
+	height: 98.4%;
 	padding: 5px;
 }
 
 div#Trailer{
-	border: 1px;
-	border-style: solid;
 	height: 5%;
 	padding: 5px;
+	background-color: #80bfff;
 }
