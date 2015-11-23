@@ -32,7 +32,7 @@ public class TextyReport implements EntryPoint {
 		menuReport.addItem("Report", fooMenu);
 
 		// Add it to the root panel.
-		RootPanel.get("MenueReport").add(menuReport);
+		RootPanel.get("Menu").add(menuReport);
 
 	}
 

@@ -1,7 +1,14 @@
 /** Set general style for html, body, font and captions */
 @import "Button.css";
+
 @import "Layout.css";
+
 @import "Menu.css";
+
+@font-face {
+	font-family: Texty;
+	src: url('Texty.otf');
+}
 
 html {
 	height: 100%;
@@ -13,9 +20,27 @@ body {
 }
 
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 40px 0px 70px;
-  text-align: center;
+	font-family: Texty;
+	font-size: 3em;
+	font-weight: bold;
+	color: #ffffff;
+	margin: 40px 0px 70px;
+	text-align: center;
+}
+
+#Details {
+	font-family: Texty;
+	font-size: 1.5em;
+}
+
+#Navigator {
+	font-family: Texty;
+	font-size: 1.5em;
+	color: white;
+}
+
+#Trailer {
+	font-family: Texty;
+	font-size: 1.5em;
+	color: white;
 }

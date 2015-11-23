@@ -1,4 +1,13 @@
 /** Set layout (size, color) for different div areas */
+div#Logo {
+	height: 100px;
+	float: left;
+	padding: 5px;
+	margin-left: 1%;
+	margin-top: 1%;
+	background-color: #003399;	
+}
+
 div#Header {
 	height: 13%;
 	padding: 5px;
