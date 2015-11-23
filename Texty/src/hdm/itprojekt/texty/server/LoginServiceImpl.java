@@ -1,15 +1,10 @@
 package hdm.itprojekt.texty.server;
 
-import hdm.itprojekt.texty.shared.LoginInfo;
+import hdm.itprojekt.texty.client.LoginInfo;
 import hdm.itprojekt.texty.shared.LoginService;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-/**
- * Anmeldung des Users mithilfe der Google Account API
- * 
- * @author Daniel
- *
- */
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
 	

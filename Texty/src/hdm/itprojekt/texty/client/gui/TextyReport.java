@@ -8,38 +8,32 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class TextyReport implements EntryPoint {
 
-
 	public void onModuleLoad() {
-		
+
 		Command cmd = new Command() {
-		      public void execute() {
-		        Window.alert("You selected a menu item!");
-		      }
-		    };
-		    
-		    Command cmdEditor = new Command() {
-			      public void execute() {
-			    	  Window.Location.assign("http://127.0.0.1:8888/Texty.html");
-			      }
-			    };
-		    
-		 
-		    // Make some sub-menus that we will cascade from the top menu.
-		    MenuBar fooMenu = new MenuBar(true);
-		    fooMenu.addItem("HashtagReport", cmd);
-		    fooMenu.addItem("Back",cmdEditor);
-		   
+			public void execute() {
+				Window.alert("You selected a menu item!");
+			}
+		};
 
-		    // Make a new menu bar, adding a few cascading menus to it.
-		    MenuBar menuReport = new MenuBar();
-		    menuReport.addItem("Report", fooMenu);
+		Command cmdEditor = new Command() {
+			public void execute() {
+				Window.Location.assign("http://127.0.0.1:8888/Texty.html");
+			}
+		};
 
-		    
-		    
+		// Make some sub-menus that we will cascade from the top menu.
+		MenuBar fooMenu = new MenuBar(true);
+		fooMenu.addItem("HashtagReport", cmd);
+		fooMenu.addItem("Back", cmdEditor);
 
-		    // Add it to the root panel.
-		    RootPanel.get("MenueReport").add(menuReport);
-		
+		// Make a new menu bar, adding a few cascading menus to it.
+		MenuBar menuReport = new MenuBar();
+		menuReport.addItem("Report", fooMenu);
+
+		// Add it to the root panel.
+		RootPanel.get("MenueReport").add(menuReport);
+
 	}
 
 }

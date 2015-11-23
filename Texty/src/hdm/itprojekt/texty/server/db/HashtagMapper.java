@@ -6,42 +6,43 @@ import hdm.itprojekt.texty.shared.bo.*;
 public class HashtagMapper {
 
 	private static HashtagMapper hashtagMapper = null;
-	
-	protected HashtagMapper(){
-		
+
+	protected HashtagMapper() {
+
 	}
-	
-	public static HashtagMapper hashtagMapper(){
-		if(hashtagMapper == null){
+
+	public static HashtagMapper hashtagMapper() {
+		if (hashtagMapper == null) {
 			hashtagMapper = new HashtagMapper();
 		}
 		return hashtagMapper;
 	}
-	
-	//anders als im Klassendiagramm werden wegen Einheitlichkeit nur Objekte hineingegeben
-	
-	public Hashtag insert(Hashtag h){
+
+	// anders als im Klassendiagramm werden wegen Einheitlichkeit nur Objekte
+	// hineingegeben
+
+	public Hashtag insert(Hashtag h) {
 		Connection con = DBConnection.connection();
 		// ...
 		return h;
 	}
-	
-	public Hashtag select(Hashtag h){
+
+	public Hashtag select(Hashtag h) {
 		Connection con = DBConnection.connection();
-		//...
+		// ...
 		return h;
 	}
-	
-	public Hashtag update(Hashtag h){
+
+	public Hashtag update(Hashtag h) {
 		Connection con = DBConnection.connection();
-		//...
-		return h; 
+		// ...
+		return h;
 	}
-	
-	public void delete(Hashtag h){
+
+	public void delete(Hashtag h) {
 		Connection con = DBConnection.connection();
-		//...
-		
+		// ...
+
 	}
-	
+
 }

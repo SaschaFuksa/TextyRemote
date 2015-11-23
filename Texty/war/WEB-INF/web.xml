@@ -1,39 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee">
+	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>textyAdministrationServlet</servlet-name>
-    <servlet-class>hdm.itprojekt.texty.server.TextyAdministrationImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>textyAdministrationServlet</servlet-name>
-    <url-pattern>/texty/textyadministration</url-pattern>
-    <url-pattern>/textycommands/textyadministration</url-pattern>
-    <url-pattern>/textyreports/textyadministration</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>reportGeneratorServlet</servlet-name>
-    <servlet-class>hdm.itprojekt.texty.server.report.ReportGeneratorImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>reportGeneratorServlet</servlet-name>
-    <url-pattern>/texty/textyadministration</url-pattern>
-    <url-pattern>/textycommands/textyadministration</url-pattern>
-    <url-pattern>/textyreports/textyadministration</url-pattern>
-  </servlet-mapping>
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Texty.html</welcome-file>
-    <welcome-file>TextyReports.html</welcome-file>
-  </welcome-file-list>
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Texty.html</welcome-file>
+		<welcome-file>TextyReports.html</welcome-file>
+	</welcome-file-list>
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>hdm.itprojekt.texty.server.LoginServiceImpl</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>administrationServlet</servlet-name>
+		<servlet-class>hdm.itprojekt.texty.server.TextyAdministrationImpl</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>reportServlet</servlet-name>
+		<servlet-class>hdm.itprojekt.texty.server.report.ReportGeneratorImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/texty/login</url-pattern>
+		<url-pattern>/textyreports/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>administrationServlet</servlet-name>
+		<url-pattern>/texty/administration</url-pattern>
+		<url-pattern>/textyreports/administration</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>reportServlet</servlet-name>
+		<url-pattern>/texty/report</url-pattern>
+		<url-pattern>/textyreports/report</url-pattern>
+	</servlet-mapping>
 
 </web-app>
