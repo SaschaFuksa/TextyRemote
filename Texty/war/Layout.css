@@ -44,3 +44,19 @@ div#Trailer{
 	padding: 5px;
 	background-color: #80bfff;
 }
+
+.login-banner {
+	background-color: #2D2D2D;
+	border-bottom: 1px solid #000;
+	color: #FFF;
+	cursor: auto;
+	font: 11px/27px Arial, sans-serif;
+	font-weight: cursiv;
+	height: 31px;
+	left: 0;
+	opacity: 1;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 990;
+}
