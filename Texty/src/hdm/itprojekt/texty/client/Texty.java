@@ -1,7 +1,7 @@
 package hdm.itprojekt.texty.client;
 
 
-import hdm.itprojekt.texty.client.gui.About;
+import hdm.itprojekt.texty.client.gui.Footer;
 import hdm.itprojekt.texty.client.gui.TextyReport;
 
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ public class Texty implements EntryPoint {
 	//private VerticalPanel vertPanel = new VerticalPanel();
 	//private Button testButton = new Button();
 	
-	private VerticalPanel trailerPanel = new VerticalPanel();
-	private Label aboutLabel = new Label("Impressum");
+	private VerticalPanel footerPanel = new VerticalPanel();
+	private Label footerLabel = new Label("About");
 	
 	/*private static final String SERVER_ERROR = "An error occurred while "
 			+ "attempting to contact the server. Please check your network "
@@ -49,17 +49,17 @@ public class Texty implements EntryPoint {
 	public void onModuleLoad() {
 
 		
-		aboutLabel.addStyleName("About");
-		trailerPanel.add(aboutLabel);
-		RootPanel.get("Trailer").add(aboutLabel);
+		footerLabel.addStyleName("Footer");
+		footerPanel.add(footerLabel);
+		RootPanel.get("Footer").add(footerLabel);
 		
-		aboutLabel.addClickHandler(new ClickHandler() {
+		footerLabel.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 
 				RootPanel.get("Details").clear();
-				RootPanel.get("Details").add(new About());
+				RootPanel.get("Details").add(new Footer());
 
 			}
 		});
