@@ -5,11 +5,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class About extends VerticalPanel{
+public class Footer extends VerticalPanel {
 
-	private VerticalPanel aboutPanel= new VerticalPanel();
+	private VerticalPanel footerPanel = new VerticalPanel();
 	private HTML aboutHtml = new HTML();
-	private String name = "IT-Projekt WS 2015/2016<br>"
+	private String about = "IT-Projekt WS 2015/2016<br>"
 			+ "Texty Messagesystem<br>"
 			+ "Hochschule der Medien Stuttgart<br>"
 			+ "Gruppe 07<br>"
@@ -18,11 +18,12 @@ public class About extends VerticalPanel{
 	// Load
 	public void onLoad() {
 
-		aboutPanel.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
-		aboutHtml.setHTML(name);
-		aboutPanel.add(aboutHtml);
-		aboutPanel.addStyleName("About");
+		footerPanel.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
+		aboutHtml.setHTML(about);
+		aboutHtml.addStyleName("Footer");
+		footerPanel.add(aboutHtml);
+		footerPanel.addStyleName("Footer");
 
-		RootPanel.get("Details").add(aboutPanel);
-}
+		RootPanel.get("Details").add(footerPanel);
+	}
 }
