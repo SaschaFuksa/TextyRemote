@@ -5,9 +5,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class Footer extends VerticalPanel{
+public class Footer extends VerticalPanel {
 
-	private VerticalPanel footerPanel= new VerticalPanel();
+	private VerticalPanel footerPanel = new VerticalPanel();
 	private HTML aboutHtml = new HTML();
 	private String about = "IT-Projekt WS 2015/2016<br>"
 			+ "Texty Messagesystem<br>"
@@ -22,7 +22,8 @@ public class Footer extends VerticalPanel{
 		aboutHtml.setHTML(about);
 		aboutHtml.addStyleName("Footer");
 		footerPanel.add(aboutHtml);
+		footerPanel.addStyleName("Footer");
 
 		RootPanel.get("Details").add(footerPanel);
-}
+	}
 }

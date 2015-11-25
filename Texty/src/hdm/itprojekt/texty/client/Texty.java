@@ -1,14 +1,9 @@
 package hdm.itprojekt.texty.client;
 
-
 import hdm.itprojekt.texty.client.gui.Footer;
 import hdm.itprojekt.texty.client.gui.TextyReport;
 
 import java.util.ArrayList;
-
-
-
-
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.Scheduler;
@@ -24,35 +19,33 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-
 //import hdm.itprojekt.texty.shared.*;
 
-
 public class Texty implements EntryPoint {
-	
-	 
-	//private VerticalPanel vertPanel = new VerticalPanel();
-	//private Button testButton = new Button();
-	
+
+	// private VerticalPanel vertPanel = new VerticalPanel();
+	// private Button testButton = new Button();
+
 	private VerticalPanel footerPanel = new VerticalPanel();
 	private Label footerLabel = new Label("About");
-	
-	/*private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";*/
 
-	
-	/*private final TextyAdministrationAsync textyService = GWT
-			.create(TextyAdministration.class);*/
+	/*
+	 * private static final String SERVER_ERROR = "An error occurred while " +
+	 * "attempting to contact the server. Please check your network " +
+	 * "connection and try again.";
+	 */
 
+	/*
+	 * private final TextyAdministrationAsync textyService = GWT
+	 * .create(TextyAdministration.class);
+	 */
 
 	public void onModuleLoad() {
 
-		
 		footerLabel.addStyleName("Footer");
 		footerPanel.add(footerLabel);
 		RootPanel.get("Footer").add(footerLabel);
-		
+
 		footerLabel.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -63,7 +56,7 @@ public class Texty implements EntryPoint {
 
 			}
 		});
-		
+
 		// Menübar einfügen
 
 		Command cmd = new Command() {
@@ -85,7 +78,7 @@ public class Texty implements EntryPoint {
 		subMenu1.addItem("Public Conversation", cmd);
 		subMenu1.addItem("Private Conversations", cmd);
 		subMenu1.setStyleName("menubar");
-		
+
 		// Make some sub-menus that we will cascade from the top menu.
 		MenuBar fooMenu = new MenuBar(true);
 		fooMenu.addItem("New Conversation", cmd);
@@ -114,9 +107,9 @@ public class Texty implements EntryPoint {
 		menu.addItem("Conversation", fooMenu);
 		menu.addItem("Subscription", barMenu);
 		menu.addItem("ReportGenerator", cmdReport);
-		
+
 		menu.setStyleName("menubar");
-		 
+
 		// Add it to the root panel.
 		RootPanel.get("Menu").add(menu);
 	}

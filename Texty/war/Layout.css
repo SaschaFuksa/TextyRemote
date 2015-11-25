@@ -1,48 +1,63 @@
 /** Set layout (size, color) for different div areas */
-div#Logo {
-	height: 100px;
+div#Wrapper {
+	margin: auto;
+	text-align: left;
+	height: 96%;
+}
+
+img#Logo {
 	float: left;
-	padding: 5px;
-	margin-left: 1%;
-	margin-top: 1%;
-	background-color: #003399;	
+	left: 35px;
+	position: absolute;
+	top: 50px;
 }
 
 div#Header {
-	height: 13%;
+	background-color: #003399;
+	clear: left;
+	height: 17%;
 	padding: 5px;
-	background-color: #003399;	
 }
 
-div#Menu{
-	height: 5%;
-	padding: 5px;
+div#Menu {
 	background-color: #80bfff;
-}
-
-div#Wrapper{
-	height: 75%;
-}
-
-div#Navigator{
-	width: 23%;
-	height: 98.5%;
-	float: left;
+	height: 44px;
 	padding: 5px;
+}
+
+div#Navigator {
 	background-color: #0080c0;
+	color: white;
+	height: 77%;
+	float: left;
+	font-family: Texty;
+	font-size: 1.5em;
+	padding: 5px;
+	width: 23%;
 }
 
-div#Details{
-
-	width: 99.35%;
-	height: 98.4%;
+div#Details {
+	height: 77%;
+	font-family: Texty;
+	font-size: 1.5em;
 	padding: 5px;
+	width: 100%;
 }
 
 div#Footer {
-	height: 5%;
-	padding: 5px;
 	background-color: #80bfff;
+	bottom: 0;
+	color: white;
+	cursor: auto;
+	font-family: Texty;
+	font-size: 1.5em;
+	height: 50px;
+	left: 0;
+	opacity: 1;
+	padding: 5px;
+	position: absolute;
+	width: 100%;
+	z-index: 990;
 }
 
 .login-banner {
@@ -50,8 +65,8 @@ div#Footer {
 	border-bottom: 1px solid #000;
 	color: #FFF;
 	cursor: auto;
-	font: 11px/27px Arial, sans-serif;
-	font-weight: cursiv;
+	font-family: Texty;
+	font-size: 1.5em;
 	height: 31px;
 	left: 0;
 	opacity: 1;
