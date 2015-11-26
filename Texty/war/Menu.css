@@ -3,18 +3,13 @@
 	
 }
 
-table {
-	margin-left: auto;
-	margin-right: auto;
-}
-
-td {
+.gwt-MenuItem {
 	background-color: #0080c0;
 	color: white;
 	text-align: center;
 }
 
-td:hover {
+.gwt-MenuItem:hover {
 	background-color: white;
 	color: #0080c0;
 }

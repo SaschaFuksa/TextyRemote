@@ -7,9 +7,11 @@ div#Wrapper {
 
 img#Logo {
 	float: left;
+	height: 10%;
 	left: 35px;
 	position: absolute;
 	top: 50px;
+	width: 5%;
 }
 
 div#Header {
