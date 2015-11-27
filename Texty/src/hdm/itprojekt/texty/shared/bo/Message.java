@@ -6,7 +6,10 @@ public class Message extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 	private String text ="";
-	private ArrayList<Hashtag> listOfHashtag = new ArrayList<Hashtag> ();
+	//private ArrayList<Hashtag> listOfHashtag = new ArrayList<Hashtag> ();
+	private Vector<Hashtag> listOfHashtag = new Vector<Hashtag>();
+	
+
 	private User author = null;
 	//private User receiver =null;
 	private boolean visible =false;
@@ -47,10 +50,23 @@ public class Message extends BusinessObject {
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-	
-	public ArrayList<Hashtag> getListOfHashtag() {
+
+
+	public Vector<Hashtag> getListOfHashtag() {
 		return listOfHashtag;
 	}
+	
+	public void setListOfHashtag(Vector<Hashtag> listOfHashtag) {
+		this.listOfHashtag = listOfHashtag;
+	}
+	
+	
+	/*public ArrayList<Hashtag> getListOfHashtag() {
+		return listOfHashtag;
+	}
+	public void setListOfHashtag(ArrayList<Hashtag> listOfHashtag) {
+		this.listOfHashtag = listOfHashtag;
+	}*/
 	/*public User getReceiver() {
 		return receiver;
 	}

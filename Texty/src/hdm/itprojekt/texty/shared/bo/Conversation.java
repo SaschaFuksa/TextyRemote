@@ -6,19 +6,24 @@ public class Conversation extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 	private boolean publicly = false;
-	private ArrayList<Message> listOfMessage = new ArrayList<Message> ();
-	private ArrayList<User> listOfParticipant = new ArrayList<User> ();
+	private Vector<Message> listOfMessage = new Vector<Message> ();
+	private Vector<User> listOfParticipant = new Vector<User> ();
 	
-	public ArrayList<Message> getListOfMessage() {
+	
+	public Vector<Message> getListOfMessage() {
 		return listOfMessage;
 	}
 	
-	public void setListOfMessage(ArrayList<Message> listOfMessage) {
+	public void setListOfMessage(Vector<Message> listOfMessage) {
 		this.listOfMessage = listOfMessage;
 	}
 	
-	public ArrayList<User> getListOfParticipant() {
+	public Vector<User> getListOfParticipant() {
 		return listOfParticipant;
+	}
+	
+	public void setListOfParticipant(Vector<User> listOfParticipant) {
+		this.listOfParticipant = listOfParticipant;
 	}
 	
 	public boolean isPublicly() {
