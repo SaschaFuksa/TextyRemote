@@ -8,7 +8,21 @@ public class Message extends BusinessObject {
 	private String text ="";
 	private ArrayList<Hashtag> listOfHashtag = new ArrayList<Hashtag> ();
 	private User author = null;
+	//private User receiver =null;
 	private boolean visible =false;
+	
+	public Message() {	
+	}
+	
+	
+	public Message (String text, User author, User receiver, boolean visible ){
+		this.text = text;
+		this.author = author;
+		//this.receiver = receiver;
+		this.visible = visible;
+	}
+	
+	
 	
 	public String getText() {
 		return text;
@@ -37,5 +51,11 @@ public class Message extends BusinessObject {
 	public ArrayList<Hashtag> getListOfHashtag() {
 		return listOfHashtag;
 	}
+	/*public User getReceiver() {
+		return receiver;
+	}
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}*/
 	
 }

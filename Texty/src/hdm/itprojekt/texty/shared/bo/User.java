@@ -39,5 +39,15 @@ public class User extends BusinessObject {
 	public void setGoogleAccountAPI(String googleAccountAPI) {
 		this.googleAccountAPI = googleAccountAPI;
 	}
+	/*
+	 * (non-Javadoc)
+	 * @see hdm.itprojekt.texty.shared.bo.BusinessObject#toString()
+	 * + Vor und Nachname wird ausgegeben. 
+	 * TODO Doku 
+	 */
+	@Override
+	public String toString() {
+		return super.toString() + " " + this.firstName + " " + this.lastName;
+	}
 
 }

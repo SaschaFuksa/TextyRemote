@@ -34,14 +34,12 @@ public abstract class BusinessObject implements Serializable {
 	}
 	
 	@Override
+	/*
+	 * Rückgabe des Klassennamen und der ID, der jeweiligen Instanz.
+	 */
 	public String toString() {
-		StringBuilder str = new StringBuilder();
-		str.append("BusinessObject [id=");
-		str.append(id);
-		str.append(", dateOfCreation=");
-		str.append(dateOfCreation);
-		str.append("]");
-		return str.toString();
+		
+		return this.getClass().getName() + "Id: "+ this.id;
 	}
 	
 	@Override
