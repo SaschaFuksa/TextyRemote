@@ -116,7 +116,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 * TODO Methode muss noch im Mapper erstellt werden
 		 */
 		
-		return this.usMapper.insert(us);
+		//return this.usMapper.insert(us);
+		return null;
 		
 	}
 	
@@ -137,7 +138,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		/*
 		 * TODO Methode muss noch im Mapper erstellt werden
 		 */
-		return this.hsMapper.insert(hs);
+		//return this.hsMapper.insert(hs);
+		return null;
 		
 	}
 	public User createUser(String firstName, String lastName, String email, String googleAccountAPI)throws IllegalArgumentException {
