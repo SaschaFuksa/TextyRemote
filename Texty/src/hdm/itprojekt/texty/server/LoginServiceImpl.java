@@ -7,7 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
-	
+	//help4matteo
 	
 	private static final long serialVersionUID = 1L;
 

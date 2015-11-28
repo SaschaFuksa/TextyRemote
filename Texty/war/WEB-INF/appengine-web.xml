@@ -41,4 +41,4 @@
   <!--  Enables the Google connector -->
   <use-google-connector-j>true</use-google-connector-j>
 
-</appengine-web-app>
+</appengine-web-app> 
