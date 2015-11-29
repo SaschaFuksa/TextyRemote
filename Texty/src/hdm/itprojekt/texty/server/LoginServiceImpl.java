@@ -3,19 +3,26 @@ package hdm.itprojekt.texty.server;
 import hdm.itprojekt.texty.client.LoginInfo;
 import hdm.itprojekt.texty.shared.LoginService;
 
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
+public class LoginServiceImpl extends RemoteServiceServlet implements
+		LoginService {
 
-	//help4matteo
-	
 	private static final long serialVersionUID = 1L;
 
 	public LoginInfo login(String requestUri) {
-		// TODO Auto-generated method stub
-		return null;
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		LoginInfo loginInfo = new LoginInfo();
+
+		loginInfo.setEmailAddress(user.getEmail());
+		loginInfo.setNickname(user.getNickname());
+		loginInfo.setLogoutUrl(userService.createLogoutURL(requestUri));
+
+		return loginInfo;
 	}
 
 }
-
-//TODO gemeinsame Suche nach Ideen zur genauen Implementierung

@@ -62,7 +62,7 @@ div#Footer {
 	z-index: 990;
 }
 
-.login-banner {
+div#Banner {
 	background-color: #2D2D2D;
 	border-bottom: 1px solid #000;
 	color: #FFF;

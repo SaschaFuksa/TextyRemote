@@ -10,5 +10,3 @@ public interface LoginService extends RemoteService {
 
 	public LoginInfo login(String requestUri);
 }
-
-//TODO LoginServiceImpl
