@@ -2,6 +2,8 @@ package hdm.itprojekt.texty.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import java.sql.SQLException;
+
 import hdm.itprojekt.texty.shared.TextyAdministration;
 import hdm.itprojekt.texty.shared.bo.*;
 import hdm.itprojekt.texty.server.db.*;
@@ -142,6 +144,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return null;
 		
 	}
+	//TODO Nächste Woche durchsprechen ob wir diese Methode überhaupt benötigen.
 	public User createUser(String firstName, String lastName, String email, String googleAccountAPI)throws IllegalArgumentException {
 		User u = new User();
 		u.setFirstName(firstName);
@@ -159,6 +162,78 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.uMapper.insert(u);
 			
 	}
+	
+	public Message editMessage(Message message) throws IllegalArgumentException, SQLException {
+		Message res = this.getmMapper().update(message);
+		/*
+		 * TODO Muss das hier  gemacht werden? Methode Fehlt
+		 * DBConnection.closeConnection();
+		 */
+		return res;
+	}
+	 public Conversation editConversation(Conversation conversation) throws IllegalArgumentException, SQLException {
+		 Conversation res = this.getcMapper().update(conversation);
+		 /*
+			 * TODO  Methode Fehlt in DB Connection
+			 * Müssen wir jedes mal closeConnection machen?
+			 * DBConnection.closeConnection();
+			 */
+		 return res;		 
+	 }
+	 
+	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException {
+		 /*
+		  * TODO Methode fehllt in den Mappern @David
+		  */
+		 //return this.uMapper.findHashtags(user);
+		 return null;
+	 }
+	 
+	
+	
+	/**
+	 * @return der ConversationMapper
+	 */
+	public ConversationMapper getcMapper() {
+		return cMapper;
+	}
+
+	/**
+	 * @return der HashtagMapper
+	 */
+	public HashtagMapper gethMapper() {
+		return hMapper;
+	}
+
+	/**
+	 * @return der HashtagsubscriptionMapper
+	 */
+	public HashtagSubscriptionMapper getHsMapper() {
+		return hsMapper;
+	}
+
+	/**
+	 * @return Der Messagemapper
+	 */
+	public MessageMapper getmMapper() {
+		return mMapper;
+	}
+
+	/**
+	 * @return Der UserMapper
+	 */
+	public UserMapper getuMapper() {
+		return uMapper;
+	}
+
+	
+	/**
+	 * @return Der UserSubscriptionMapper
+	 */
+	public UserSubscriptionMapper getUsMapper() {
+		return usMapper;
+	}
+
 	
 
 }

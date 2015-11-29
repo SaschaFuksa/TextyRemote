@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.shared;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -29,6 +30,14 @@ public interface TextyAdministration extends RemoteService {
 	 public HashtagSubscription createHashtagSubscription (Hashtag subscribedHashtag, User subscriber)throws IllegalArgumentException;
 	 
 	 public User createUser(String firstName, String lastName, String email, String googleAccountAPI) throws IllegalArgumentException;
+	 
+	 public Message editMessage(Message message) throws IllegalArgumentException, SQLException;
+	 
+	 public Conversation editConversation(Conversation conversation) throws IllegalArgumentException, SQLException;
+	 
+	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
+	 
+	 
 	 
 	 
 	 

@@ -33,4 +33,12 @@ public interface TextyAdministrationAsync {
 	void createUser(String firstName, String lastName, String email,
 			String googleAccountAPI, AsyncCallback<User> callback);
 
+	void editMessage(Message message, AsyncCallback<Message> callback);
+
+	void editConversation(Conversation conversation,
+			AsyncCallback<Conversation> callback);
+
+	void getAllSubscribedHashtags(User user,
+			AsyncCallback<Vector<Hashtag>> callback);
+
 }
