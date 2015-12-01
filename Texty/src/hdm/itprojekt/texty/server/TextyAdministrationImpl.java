@@ -54,6 +54,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 */
 		m.setId(1);
 		
+		
+		
 		Date now = new Date();
 		m.setDateOfCreation(now);
 		
@@ -171,14 +173,14 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 */
 		return res;
 	}
-	 public Conversation editConversation(Conversation conversation) throws IllegalArgumentException, SQLException {
-		 Conversation res = this.getcMapper().update(conversation);
+	 public Conversation editConversation(Conversation conversation, User user) throws IllegalArgumentException, SQLException {
+		 conversation.removeParticipant(user);
 		 /*
 			 * TODO  Methode Fehlt in DB Connection
 			 * Müssen wir jedes mal closeConnection machen?
 			 * DBConnection.closeConnection();
 			 */
-		 return res;		 
+		 return this.cMapper.update(conversation);		 
 	 }
 	 
 	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException {
@@ -188,6 +190,17 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 //return this.uMapper.findHashtags(user);
 		 return null;
 	 }
+	 
+	 public Message addMessageToConversation(Conversation c, Message m, String text, User author, Boolean visible, Vector<Hashtag> listOfHashtag)
+			 throws IllegalArgumentException {
+		 Message message = createMessage(text,author,visible, listOfHashtag);
+		 c.addMessageToVector(message);
+		 //TODO Mit den anderen besprechen, woher weiß db welche Message zu welcher conversation gehört.
+		 this.mMapper.insert(message);
+		 return null;		 
+	 }
+	 
+	
 	 
 	
 	

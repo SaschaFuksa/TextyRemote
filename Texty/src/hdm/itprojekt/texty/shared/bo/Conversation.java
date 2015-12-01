@@ -34,5 +34,13 @@ public class Conversation extends BusinessObject {
 		this.publicly = publicly;
 	}
 	
+	public void addMessageToVector(Message message){
+		listOfMessage.add(message);
+	}
+	public void removeParticipant(User user){
+		listOfParticipant.remove(user);
+	}
+	
+	
 
 }

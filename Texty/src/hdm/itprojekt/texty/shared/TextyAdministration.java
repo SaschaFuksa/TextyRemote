@@ -33,9 +33,12 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public Message editMessage(Message message) throws IllegalArgumentException, SQLException;
 	 
-	 public Conversation editConversation(Conversation conversation) throws IllegalArgumentException, SQLException;
+	 public Conversation editConversation(Conversation conversation, User user) throws IllegalArgumentException, SQLException;
 	 
 	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
+	 
+	 public Message addMessageToConversation(Conversation c, Message m, String text, User author, Boolean visible, Vector<Hashtag> listOfHashtag)
+			 throws IllegalArgumentException;
 	 
 	 
 	 
