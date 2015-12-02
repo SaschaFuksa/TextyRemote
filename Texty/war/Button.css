@@ -1,14 +1,42 @@
 /** Set ids using widget.getElement().setId("idOfElement") for buttons */
+#addButton {
+	background: url('http://127.0.0.1:8888/icons/icon-add.png');
+	border: 0px outset buttonface;
+	height: 25px;
+	width: 25px;
+}
+
+#addButton:hover {
+	background: url('http://127.0.0.1:8888/icons/icon-add-over.png');
+	border: 0px outset buttonface;
+	height: 25px;
+	width: 25px; 
+}
+
 #editButton {
-  background: url('http://127.0.0.1:8888/icons/icon-edit.png');
-  border: 0px outset buttonface;
-  height: 25px;
-  width: 25px;
+	background: url('http://127.0.0.1:8888/icons/icon-edit.png');
+	border: 0px outset buttonface;
+	height: 25px;
+	width: 25px;
 }
 
 #editButton:hover {
-  background: url('http://127.0.0.1:8888/icons/icon-edit-over.png');
-  border: 0px outset buttonface;
-  height: 25px;
-  width: 25px;
+	background: url('http://127.0.0.1:8888/icons/icon-edit-over.png');
+	border: 0px outset buttonface;
+	height: 25px;
+	width: 25px;
+}
+
+#deleteButton {
+	background: url('http://127.0.0.1:8888/icons/icon-delete.png');
+	border: 0px outset buttonface;
+	height: 25px;
+	width: 25px;
+}
+
+#deleteButton:hover {
+	background: url('http://127.0.0.1:8888/icons/icon-delete-over.png');
+	border: 0px outset buttonface;
+	height: 25px;
+	width: 25px;
 }
