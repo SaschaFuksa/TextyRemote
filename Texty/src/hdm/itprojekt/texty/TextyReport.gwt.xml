@@ -4,8 +4,8 @@
 <module rename-to='textyreports'>
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name='com.google.gwt.user.theme.clean.Clean' />
-	<inherits name="com.google.gwt.logging.Logging" />
 	<entry-point class='hdm.itprojekt.texty.client.gui.TextyReport' />
-	<source path="client" />
+	<source path='client' />
 	<source path='shared' />
+	<add-linker name="xsiframe" />
 </module>
