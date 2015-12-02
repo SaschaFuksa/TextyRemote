@@ -1,10 +1,11 @@
 package hdm.itprojekt.texty.client.gui;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.i18n.client.HasDirection;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
 //Nur zu Testzwecken erstellt. Wird wohl so nicht gebraucht
-public class TextArea extends TextBoxBase  {
+public class TextArea extends TextBoxBase implements HasDirection  {
 
 	private String messageText;
 	

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.TextArea;
 
 //TODO Bei Senden -und Löschenbutton das Verhalten implementieren
 	//Korrekte und geeignete Widgetsuche bzw. implementierung für TextArea und einer Vorschlagssliste 
@@ -43,7 +44,10 @@ public class NewConversation extends VerticalPanel {
 	//private TextArea messageBox = new TextArea();
 	//private TextArea hashtagBox = new TextArea();
 	
-	private TextBox messageBox = new TextBox();
+	//create TextArea element
+	private TextArea messageBox = new TextArea();
+   
+	//create Textbox element
 	private TextBox hashtagBox = new TextBox();
 	
 	//Hier entsteht noch eine Anzeige der Message und der Hashtags 
@@ -55,6 +59,11 @@ public class NewConversation extends VerticalPanel {
 	
 	
 	public void onLoad(){
+		
+		// Größe der TextArea angeben
+		messageBox.setCharacterWidth(80);
+		messageBox.setVisibleLines(15);
+		
 		//Anlegen des Senden Button
 		final Button sendButton= new Button("Send");
 		final Button deleteButton= new Button("Delete");
