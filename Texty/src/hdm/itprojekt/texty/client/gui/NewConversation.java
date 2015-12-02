@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -34,6 +35,7 @@ public class NewConversation extends VerticalPanel {
 	
 	//Wird im Details-Bereich realisiert
 	private VerticalPanel messagePanel = new VerticalPanel();
+	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	//Wird im Navigator-Bereich realisiert
 	private VerticalPanel userPanel = new VerticalPanel();
 	
@@ -119,8 +121,9 @@ public class NewConversation extends VerticalPanel {
 		messagePanel.add(hashtagBox);
 		messagePanel.add(hashtagLabel);
 		messagePanel.add(messageLabel);
-		messagePanel.add(sendButton);
-		messagePanel.add(deleteButton);
+		messagePanel.add(buttonPanel);
+		buttonPanel.add(sendButton);
+		buttonPanel.add(deleteButton);
 		
 		userPanel.add(suggestBox);
 		
