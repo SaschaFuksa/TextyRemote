@@ -45,6 +45,9 @@ public interface TextyAdministrationAsync {
 			User author, Boolean visible, Vector<Hashtag> listOfHashtag,
 			AsyncCallback<Message> callback);
 
+	void deleteMessage(Conversation conversation, Message message,
+			AsyncCallback<Void> callback);
+
 	
 
 	

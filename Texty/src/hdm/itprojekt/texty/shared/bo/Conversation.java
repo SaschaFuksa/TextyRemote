@@ -40,6 +40,9 @@ public class Conversation extends BusinessObject {
 	public void removeParticipant(User user){
 		listOfParticipant.remove(user);
 	}
+	public void removeMessageFromConversation(Message message){
+		listOfMessage.remove(message);
+	}
 	
 	
 

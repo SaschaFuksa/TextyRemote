@@ -40,7 +40,7 @@ public interface TextyAdministration extends RemoteService {
 	 public Message addMessageToConversation(Conversation c, Message m, String text, User author, Boolean visible, Vector<Hashtag> listOfHashtag)
 			 throws IllegalArgumentException;
 	 
-	 
+	 public void deleteMessage(Conversation conversation, Message message) throws IllegalArgumentException, SQLException;
 	 
 	 
 	 
