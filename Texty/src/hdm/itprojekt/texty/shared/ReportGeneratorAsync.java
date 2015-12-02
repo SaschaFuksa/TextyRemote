@@ -1,5 +1,9 @@
 package hdm.itprojekt.texty.shared;
 
-public interface ReportGeneratorAsync {
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+public interface ReportGeneratorAsync {
+	
+	void init(AsyncCallback<Void> callback);
+	
 }
