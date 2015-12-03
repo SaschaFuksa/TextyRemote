@@ -37,17 +37,14 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message createMessage(String text, User author, Boolean visible,
+	public Message createMessage(String text, User author, Vector<User> listOfReceivers,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
 		Message m = new Message();
 		m.setText(text);
 		m.setAuthor(author);
-		m.setVisible(visible);
+		m.setVisible(true);
 		m.setListOfHashtag(listOfHashtag);
-
-		/*
-		 * TODO Mit anderen GUI Methoden besprechen ( Wie wird was übergeben)
-		 */
+		m.setListOfReceivers(listOfReceivers);
 
 		/*
 		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
@@ -56,9 +53,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 */
 		m.setId(1);
 
-		Date now = new Date();
-		m.setDateOfCreation(now);
-
+		
 		return this.mMapper.insert(m);
 	}
 
@@ -73,31 +68,28 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
 		 * David besprechen
 		 */
-		h.setId(1);
-		Date now = new Date();
-		h.setDateOfCreation(now);
+		h.setId(1);		
 
 		return this.hMapper.insert(h);
 	}
 
 	@Override
-	public Conversation createConversation(Boolean publicly,
-			Vector<Message> listOfMessage, Vector<User> listOfParticipant)
+	public Conversation createConversation(Message message)
 			throws IllegalArgumentException {
 		Conversation c = new Conversation();
-
-		c.setPublicly(publicly);
-		c.setListOfMessage(listOfMessage);
-		c.setListOfParticipant(listOfParticipant);
-
+		
+		c.addMessageToConversation(message);
+		if(message.getAuthor() == null) {
+			c.setPublicly(true);
+		}else {
+			c.setPublicly(false);
+		}		
 		/*
 		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
 		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
 		 * David besprechen
 		 */
-		c.setId(1);
-		Date now = new Date();
-		c.setDateOfCreation(now);
+		c.setId(1);		
 
 		return this.cMapper.insert(c);
 	}
@@ -152,21 +144,19 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	// TODO Nächste Woche durchsprechen ob wir diese Methode überhaupt
 	// benötigen.
-	public User createUser(String firstName, String lastName, String email,
-			String googleAccountAPI) throws IllegalArgumentException {
+	public User createUser(String firstName, String lastName, String email) throws IllegalArgumentException {
 		User u = new User();
 		u.setFirstName(firstName);
 		u.setLastName(lastName);
 		u.setEmail(email);
-		u.setGoogleAccountAPI(googleAccountAPI);
+		
 		/*
 		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
 		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
 		 * David besprechen
 		 */
 		u.setId(1);
-		Date now = new Date();
-		u.setDateOfCreation(now);
+		
 		return this.uMapper.insert(u);
 
 	}
@@ -179,17 +169,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 */
 		return res;
 
-	}
-
-	public Conversation editConversation(Conversation conversation, User user)
-			throws IllegalArgumentException, SQLException {
-		conversation.removeParticipant(user);
-		/*
-		 * TODO Methode Fehlt in DB Connection Müssen wir jedes mal
-		 * closeConnection machen? DBConnection.closeConnection();
-		 */
-		return this.cMapper.update(conversation);
-	}
+	}	
 
 	public Vector<Hashtag> getAllSubscribedHashtags(User user)
 			throws IllegalArgumentException {
@@ -200,21 +180,26 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return null;
 	}
 
-	public Message addMessageToConversation(Conversation c, Message m,
-			String text, User author, Boolean visible,
+	public Message addMessageToConversation(Conversation c, String text, User author,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
-		Message message = createMessage(text, author, visible, listOfHashtag);
-		c.addMessageToVector(message);
+		Message m = new Message();
+		m.setText(text);
+		m.setAuthor(author);
+		m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
+		m.setListOfHashtag(listOfHashtag);
+		c.addMessageToConversation(m);
+		
+		
 		// TODO Mit den anderen besprechen, woher weiß db welche Message zu
 		// welcher conversation gehört.
-		this.mMapper.insert(message);
-		return null;
-	}
+		return this.mMapper.insert(m);		
+	} 
 
 	public void deleteMessage(Conversation conversation, Message message)
 			throws IllegalArgumentException {
 		conversation.removeMessageFromConversation(message);
-		this.getmMapper().delete(message);
+		message.setVisible(false);
+		this.getmMapper().update(message);
 		// TODO DBConnection.closeConnection();
 
 	}

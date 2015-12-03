@@ -5,13 +5,13 @@ import java.util.*;
 public class Message extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
-	private String text ="";
-	//private ArrayList<Hashtag> listOfHashtag = new ArrayList<Hashtag> ();
+	private String text ="";	
 	private Vector<Hashtag> listOfHashtag = new Vector<Hashtag>();
+	private Vector<User> listOfReceivers = new Vector<User>();
 	
 
 	private User author = null;
-	//private User receiver =null;
+	
 	private boolean visible =false;
 	
 	public Message() {	
@@ -21,7 +21,7 @@ public class Message extends BusinessObject {
 	public Message (String text, User author, User receiver, boolean visible ){
 		this.text = text;
 		this.author = author;
-		//this.receiver = receiver;
+		
 		this.visible = visible;
 	}
 	
@@ -59,19 +59,20 @@ public class Message extends BusinessObject {
 	public void setListOfHashtag(Vector<Hashtag> listOfHashtag) {
 		this.listOfHashtag = listOfHashtag;
 	}
-	
-	
-	/*public ArrayList<Hashtag> getListOfHashtag() {
-		return listOfHashtag;
+	/**
+	 * @return the listOfReceivers
+	 */
+	public Vector<User> getListOfReceivers() {
+		return listOfReceivers;
 	}
-	public void setListOfHashtag(ArrayList<Hashtag> listOfHashtag) {
-		this.listOfHashtag = listOfHashtag;
-	}*/
-	/*public User getReceiver() {
-		return receiver;
+
+
+	/**
+	 * @param listOfReceivers the listOfReceivers to set
+	 */
+	public void setListOfReceivers(Vector<User> listOfReceivers) {
+		this.listOfReceivers = listOfReceivers;
 	}
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
-	}*/
 	
+		
 }

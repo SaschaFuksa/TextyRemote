@@ -17,27 +17,25 @@ public interface TextyAdministration extends RemoteService {
 
 	 public void init() throws IllegalArgumentException;
 	 
-	 public Message createMessage(String text, User author, Boolean visible, Vector<Hashtag> listOfHashtag) 
+	 public Message createMessage(String text, User author, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag) 
 			 throws IllegalArgumentException;
 	 
 	 public Hashtag createHashtag (String keyword) throws IllegalArgumentException;
 	 
-	 public Conversation createConversation(Boolean publicly, Vector<Message> listOfMessage, Vector<User> listOfParticipant) 
+	 public Conversation createConversation(Message message) 
 			 throws IllegalArgumentException;
 	 
 	 public UserSubscription createUserSubscription (User subscripedUser, User subscriber) throws IllegalArgumentException;
 	 
 	 public HashtagSubscription createHashtagSubscription (Hashtag subscribedHashtag, User subscriber)throws IllegalArgumentException;
 	 
-	 public User createUser(String firstName, String lastName, String email, String googleAccountAPI) throws IllegalArgumentException;
+	 public User createUser(String firstName, String lastName, String email) throws IllegalArgumentException;
 	 
 	 public Message editMessage(Message message) throws IllegalArgumentException, SQLException;
-	 
-	 public Conversation editConversation(Conversation conversation, User user) throws IllegalArgumentException, SQLException;
-	 
+	 	  
 	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
 	 
-	 public Message addMessageToConversation(Conversation c, Message m, String text, User author, Boolean visible, Vector<Hashtag> listOfHashtag)
+	 public Message addMessageToConversation(Conversation c,String text, User author, Vector<Hashtag> listOfHashtag)
 			 throws IllegalArgumentException;
 	 
 	 public void deleteMessage(Conversation conversation, Message message) throws IllegalArgumentException, SQLException;

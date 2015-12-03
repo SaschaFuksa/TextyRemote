@@ -6,7 +6,6 @@ public class User extends BusinessObject {
 	private String firstName = "";
 	private String lastName = "";
 	private String email = "";
-	private String googleAccountAPI = "";
 	
 	public User() {
 		
@@ -40,15 +39,8 @@ public class User extends BusinessObject {
 	
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	
-	public String getGoogleAccountAPI() {
-		return googleAccountAPI;
-	}
-	
-	public void setGoogleAccountAPI(String googleAccountAPI) {
-		this.googleAccountAPI = googleAccountAPI;
-	}
+	}	
+
 	/*
 	 * (non-Javadoc)
 	 * @see hdm.itprojekt.texty.shared.bo.BusinessObject#toString()

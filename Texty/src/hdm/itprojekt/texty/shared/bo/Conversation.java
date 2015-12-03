@@ -7,7 +7,7 @@ public class Conversation extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 	private boolean publicly = false;
 	private Vector<Message> listOfMessage = new Vector<Message> ();
-	private Vector<User> listOfParticipant = new Vector<User> ();
+	//private Vector<User> listOfParticipant = new Vector<User> ();
 	
 	
 	public Vector<Message> getListOfMessage() {
@@ -18,13 +18,13 @@ public class Conversation extends BusinessObject {
 		this.listOfMessage = listOfMessage;
 	}
 	
-	public Vector<User> getListOfParticipant() {
+	/*public Vector<User> getListOfParticipant() {
 		return listOfParticipant;
 	}
 	
 	public void setListOfParticipant(Vector<User> listOfParticipant) {
 		this.listOfParticipant = listOfParticipant;
-	}
+	}*/
 	
 	public boolean isPublicly() {
 		return publicly;
@@ -34,14 +34,15 @@ public class Conversation extends BusinessObject {
 		this.publicly = publicly;
 	}
 	
-	public void addMessageToVector(Message message){
+	public void addMessageToConversation(Message message){
 		listOfMessage.add(message);
 	}
-	public void removeParticipant(User user){
-		listOfParticipant.remove(user);
-	}
+
 	public void removeMessageFromConversation(Message message){
 		listOfMessage.remove(message);
+	}
+	public Message getLastMessage() {
+		return this.listOfMessage.elementAt(listOfMessage.size());
 	}
 	
 	
