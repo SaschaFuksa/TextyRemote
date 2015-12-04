@@ -3,35 +3,22 @@ package hdm.itprojekt.texty.shared.bo;
 public class User extends BusinessObject {
 	
 	private static final long serialVersionUID = 1L;
-	private String firstName = "";
-	private String lastName = "";
+	private String nickName = "";
 	private String email = "";
 	
-	public User() {
-		
-	}
-	
-	public User(String firstName, String lastName, String email){
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public User(){}
+	public User(String nickName, String email){
+		this.nickName = nickName;
 		this.email = email;
 	}
-	
-	public String getFirstName() {
-		return firstName;
+	public String getNickName() {
+		return nickName;
 	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return lastName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}	
+
 	
 	public String getEmail() {
 		return email;
@@ -49,7 +36,7 @@ public class User extends BusinessObject {
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + " " + this.firstName + " " + this.lastName;
+		return super.toString() + " " + this.nickName;
 	}
 
 }

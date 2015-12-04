@@ -29,9 +29,9 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public HashtagSubscription createHashtagSubscription (Hashtag subscribedHashtag, User subscriber)throws IllegalArgumentException;
 	 
-	 public User createUser(String firstName, String lastName, String email) throws IllegalArgumentException;
+	 public User createUser() throws IllegalArgumentException;
 	 
-	 public Message editMessage(Message message) throws IllegalArgumentException, SQLException;
+	 public Message editMessage(Message message, String newText) throws IllegalArgumentException, SQLException;
 	 	  
 	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
 	 
@@ -39,6 +39,14 @@ public interface TextyAdministration extends RemoteService {
 			 throws IllegalArgumentException;
 	 
 	 public void deleteMessage(Conversation conversation, Message message) throws IllegalArgumentException, SQLException;
+	 
+	 public void checkUserData()throws IllegalArgumentException;
+	 
+	 public void updateUserData(User us) throws IllegalArgumentException;
+	 
+	 public void deleteUserSubscription(UserSubscription subscription) throws IllegalArgumentException;
+	 
+	 public void deleteHashtagSubscription(HashtagSubscription subscription) throws IllegalArgumentException;
 	 
 	 
 	 

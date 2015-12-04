@@ -2,6 +2,11 @@ package hdm.itprojekt.texty.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+
+
+
+
+
 import hdm.itprojekt.texty.server.db.DBConnection;
 
 import java.sql.SQLException;
@@ -14,9 +19,7 @@ import java.util.*;
 
 public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		TextyAdministration {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private ConversationMapper cMapper = null;
 	private HashtagMapper hMapper = null;
@@ -35,7 +38,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		this.usMapper = UserSubscriptionMapper.userSubscriptionMapper();
 
 	}
-
+	
 	@Override
 	public Message createMessage(String text, User author, Vector<User> listOfReceivers,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
@@ -106,9 +109,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
 		 * David besprechen
 		 */
-		us.setId(1);
-		Date now = new Date();
-		us.setDateOfCreation(now);
+		us.setId(1);	
 
 		/*
 		 * TODO Methode muss noch im Mapper erstellt werden
@@ -142,13 +143,16 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
-	// TODO Nächste Woche durchsprechen ob wir diese Methode überhaupt
-	// benötigen.
-	public User createUser(String firstName, String lastName, String email) throws IllegalArgumentException {
+	
+	public User createUser() throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		
 		User u = new User();
-		u.setFirstName(firstName);
-		u.setLastName(lastName);
-		u.setEmail(email);
+		u.setNickName(user.getNickname());
+		u.setEmail(user.getEmail());		
 		
 		/*
 		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
@@ -158,16 +162,35 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		u.setId(1);
 		
 		return this.uMapper.insert(u);
-
+	}
+	public void checkUserData()throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		
+		/*TODO in den Mappern fehlt noch die Methode
+		 * if(uMapper.findUserByEmail(user.getEmail())== null) {
+			createUser();
+		}else {
+			updateUserData(uMapper.findUserByEmail(user.getEmail()));
+		}*/
+		
+		
+		
+	}
+	public void updateUserData(User us) throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		us.setNickName(user.getNickname());
+		us.setEmail(user.getEmail());
 	}
 
-	public Message editMessage(Message message) throws IllegalArgumentException {
-		Message res = this.getmMapper().update(message);
+	public Message editMessage(Message message, String newText) throws IllegalArgumentException {
+		message.setText(newText);
 		/*
 		 * TODO Muss das hier gemacht werden? Methode Fehlt
 		 * DBConnection.closeConnection();
 		 */
-		return res;
+		return this.mMapper.update(message);
 
 	}	
 
@@ -203,6 +226,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		// TODO DBConnection.closeConnection();
 
 	}
+	public void deleteUserSubscription(UserSubscription subscription) throws IllegalArgumentException {
+		this.usMapper.delete(subscription);
+	}
+	 public void deleteHashtagSubscription(HashtagSubscription subscription) throws IllegalArgumentException {
+		 this.hsMapper.delete(subscription);
+	 }
 
 	/**
 	 * @return der ConversationMapper

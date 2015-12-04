@@ -30,10 +30,9 @@ public interface TextyAdministrationAsync {
 	void createHashtagSubscription(Hashtag subscribedHashtag, User subscriber,
 			AsyncCallback<HashtagSubscription> callback);
 
-	void createUser(String firstName, String lastName, String email,
-			 AsyncCallback<User> callback);
+	void createUser(AsyncCallback<User> callback);
 
-	void editMessage(Message message, AsyncCallback<Message> callback);
+	void editMessage(Message message, String newText, AsyncCallback<Message> callback);
 	
 	void getAllSubscribedHashtags(User user,
 			AsyncCallback<Vector<Hashtag>> callback);
@@ -43,6 +42,16 @@ public interface TextyAdministrationAsync {
 			AsyncCallback<Message> callback);
 
 	void deleteMessage(Conversation conversation, Message message,
+			AsyncCallback<Void> callback);
+
+	void checkUserData(AsyncCallback<Void> callback);
+
+	void updateUserData(User us, AsyncCallback<Void> callback);
+
+	void deleteUserSubscription(UserSubscription subscription,
+			AsyncCallback<Void> callback);
+
+	void deleteHashtagSubscription(HashtagSubscription subscription,
 			AsyncCallback<Void> callback);
 
 	

@@ -59,12 +59,12 @@ public class ShowHashtagSubscription extends VerticalPanel {
 					    });
 					
 					// Example Users
-					User user1 = new User("Sascha", "Fuksa", "sasa@fufu.de");
-					User user2 = new User("Daniel", "Söööligöör", "dada@sese.de");
-					User user3 = new User("David", "Lightbrandt", "dada@hehe.de");
-					User user4 = new User("Matteo", "Brennholz", "mama@brbr.de");
-					User user5 = new User("Erich", "Meisser", "erer@meme.de");
-					User user6 = new User("Fredchen", "Schneider", "fredchen@schnuschnu.de");
+					User user1 = new User("Sasa", "sasa@fufu.de");
+					User user2 = new User("Daniel", "dada@sese.de");
+					User user3 = new User("David", "dada@hehe.de");
+					User user4 = new User("Matteo", "mama@brbr.de");
+					User user5 = new User("Erich", "erer@meme.de");
+					User user6 = new User("Fred", "fredchen@schnuschnu.de");
 
 					user1.setId(1);
 					user2.setId(2);
@@ -149,7 +149,7 @@ public class ShowHashtagSubscription extends VerticalPanel {
 					// User hinzugefügt werden z.B. mit oracle.addAll(user);
 					// Kleines Beispiel:
 					for (int i = 0; i < listOfUser.size(); i++) {
-						String name = new String(listOfUser.get(i).getFirstName());
+						String name = new String(listOfUser.get(i).getNickName());
 						oracle.add(name);
 					}
 					
