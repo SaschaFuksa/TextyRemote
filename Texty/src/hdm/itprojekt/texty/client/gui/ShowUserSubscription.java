@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 
+import hdm.itprojekt.texty.client.Showcase;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.awt.TextField;
@@ -24,7 +25,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ShowUserSubscription extends VerticalPanel{
+public class ShowUserSubscription extends Showcase{
 		
 	
 		// Wird im Details-Bereich realisiert
@@ -42,7 +43,7 @@ public class ShowUserSubscription extends VerticalPanel{
 		
 		private Button addButton = new Button();
 		
-	public void onLoad(){
+	public void run(){
 	
 				// Größe der TextArea angeben
 				messageBox.setCharacterWidth(80);
@@ -170,4 +171,11 @@ public class ShowUserSubscription extends VerticalPanel{
 				
 				
 	} //Ende onLoad
+
+	@Override
+	protected String getHeadlineText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 } //Ende Klasse

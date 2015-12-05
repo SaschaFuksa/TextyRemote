@@ -78,30 +78,31 @@ public class Texty implements EntryPoint {
 			}
 		};
 		
-		ShowPublicConversation showPublicConv = new ShowPublicConversation();
+		
 		// Submenu fuer Conversation
 		MenuBar subMenu1 = new MenuBar(true);
-		subMenu1.addItem("Public Conversation", command.getCommand(showPublicConv));
-		//subMenu1.addItem("Private Conversations", cmdShowPrivateConv);
+		subMenu1.addItem("Public Conversation", command.getCommand(new ShowPublicConversation()));
+		subMenu1.addItem("Private Conversations", command.getCommand(new ShowPrivateConversation()));
 		subMenu1.setStyleName("menubar");
 		
 		NewConversation newConv = new NewConversation();
 		// Menu für Conversation
 		MenuBar fooMenu = new MenuBar(true);
-		fooMenu.addItem("New Conversation", command.getCommand(newConv));
+		fooMenu.addItem("New Conversation", command.getCommand(new NewConversation()));
 		fooMenu.addItem("Show Conversations", subMenu1);
 		fooMenu.setStyleName("menubar");
 
+		
 		// Submenu fuer Hashtagsubscription
 		MenuBar subMenu2 = new MenuBar(true);
-		//subMenu2.addItem("Create", cmdCreateHashSub);
-		//subMenu2.addItem("Show", cmdShowHashSub);
+		subMenu2.addItem("Create",  command.getCommand(new CreateHashtagSubscription()));
+		subMenu2.addItem("Show", command.getCommand(new ShowHashtagSubscription()));
 		subMenu2.setStyleName("menubar");
 
 		// Submenu fuer Usersubscription
 		MenuBar subMenu3 = new MenuBar(true);
-		//subMenu3.addItem("Create", cmdCreateUserSub);
-		//subMenu3.addItem("Show", cmdShowUserSub);
+		subMenu3.addItem("Create", command.getCommand(new CreateUserSubscription()));
+		subMenu3.addItem("Show", command.getCommand(new ShowUserSubscription()));
 		subMenu3.setStyleName("menubar");
 
 		// Menu für Subscription

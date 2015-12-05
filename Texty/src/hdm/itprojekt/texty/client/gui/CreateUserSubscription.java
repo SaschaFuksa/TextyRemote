@@ -1,5 +1,7 @@
 package hdm.itprojekt.texty.client.gui;
 
+import hdm.itprojekt.texty.client.Showcase;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -12,7 +14,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class CreateUserSubscription {
+public class CreateUserSubscription extends Showcase{
 	
 	//TODO Idee:Testuserdaten -> isElementOf-Überprüfung und damit Createsub. und Createhash. weiter ausbauen
 	
@@ -24,7 +26,7 @@ public class CreateUserSubscription {
 		private Label userLabel = new Label("Abonnierte User");
 
 	
-	public void onLoad(){
+	public void run(){
 		
 		
 		userBox.addKeyUpHandler(new KeyUpHandler() {
@@ -57,4 +59,12 @@ public class CreateUserSubscription {
 				RootPanel.get("Details").add(messagePanel);
 				
 	}
+
+
+	@Override
+	protected String getHeadlineText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

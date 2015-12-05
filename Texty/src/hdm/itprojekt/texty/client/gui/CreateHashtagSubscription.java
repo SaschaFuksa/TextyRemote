@@ -1,5 +1,7 @@
 package hdm.itprojekt.texty.client.gui;
 
+import hdm.itprojekt.texty.client.Showcase;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -12,7 +14,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class CreateHashtagSubscription {
+public class CreateHashtagSubscription extends Showcase{
 	
 	//TODO Überprüfen, ob Hashtag bereits in der Datenbank vorhanden ist?
 	//TODO Idee:Testuserdaten -> isElementOf-Überprüfung und damit Createsub. und Createhash. weiter ausbauen
@@ -25,7 +27,7 @@ public class CreateHashtagSubscription {
 		private TextBox hashtagBox = new TextBox();
 		private Label hashtagLabel = new Label("Abonnierte Hashtags");
 	
-	public void onLoad(){
+	public void run(){
 		
 		hashtagBox.addKeyUpHandler(new KeyUpHandler() {
 			   public void onKeyUp(KeyUpEvent event) {
@@ -53,5 +55,13 @@ public class CreateHashtagSubscription {
 		RootPanel.get("Details").add(messagePanel);
 		
 	}
+
+	@Override
+	protected String getHeadlineText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import hdm.itprojekt.texty.client.Showcase;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.awt.TextField;
@@ -25,7 +26,7 @@ import java.util.Collection;
 import java.util.Vector;
 
 
-public class ShowHashtagSubscription extends VerticalPanel {
+public class ShowHashtagSubscription extends Showcase {
 	
 		
 		// Wird im Details-Bereich realisiert
@@ -42,7 +43,7 @@ public class ShowHashtagSubscription extends VerticalPanel {
 		private Button addButton = new Button();
 		
 			
-		public void onLoad(){
+		public void run(){
 		
 					// Größe der TextArea angeben
 					messageBox.setCharacterWidth(80);
@@ -168,4 +169,12 @@ public class ShowHashtagSubscription extends VerticalPanel {
 		
 					
 		}//Ende onLoad
-	}//Ende Klasse
+
+
+		@Override
+		protected String getHeadlineText() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	}
