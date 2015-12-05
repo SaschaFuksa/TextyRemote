@@ -1,5 +1,7 @@
 package hdm.itprojekt.texty.client.gui;
 
+import hdm.itprojekt.texty.client.Showcase;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -7,7 +9,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ShowPublicConversation {
+public class ShowPublicConversation extends Showcase {
 	
 		//Wird im Details-Bereich realisiert
 		private VerticalPanel messagePanel = new VerticalPanel();
@@ -28,6 +30,18 @@ public class ShowPublicConversation {
 				
 				messagePanel.add(testButton);
 				RootPanel.get("Details").add(messagePanel);
+		
+	}
+
+	@Override
+	protected String getHeadlineText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void run() {
+		// TODO Auto-generated method stub
 		
 	}
 }
