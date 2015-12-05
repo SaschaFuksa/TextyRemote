@@ -1,13 +1,12 @@
-package hdm.itprojekt.texty.client.gui;
+package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.Showcase;
-import hdm.itprojekt.texty.shared.bo.User;
-import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import hdm.itprojekt.texty.shared.bo.User;
+import java.util.Vector;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -15,17 +14,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-//TODO Bei Senden -und Löschenbutton das Verhalten implementieren
-//Korrekte und geeignete Widgetsuche bzw. implementierung für TextArea und einer Vorschlagssliste 
-//für User
-//Löschen Button erst anbieten, wenn Nachricht bereits gesendet!?
-
-
-public class NewConversation extends Showcase {
+public class ShowUserSubscription extends Showcase {
 
 	// Wird im Details-Bereich realisiert
 	private VerticalPanel messagePanel = new VerticalPanel();
@@ -33,28 +25,26 @@ public class NewConversation extends Showcase {
 	// Wird im Navigator-Bereich realisiert
 	private VerticalPanel navigation = new VerticalPanel();
 	private HorizontalPanel addPanel = new HorizontalPanel();
-	// create TextArea element
 	private TextArea messageBox = new TextArea();
-	// create Textbox element
-	private TextBox hashtagBox = new TextBox();
-	
-	// Hier entsteht noch eine Anzeige der Message und der Hashtags
-	private Label messageLabel = new Label(
-			"(Hier wird die Nachricht angezeigt)");
-	private Label hashtagLabel = new Label(
-			"(Hier werden die ausgewaehlten Hashtags angezeigt)");
 
 	MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	SuggestBox suggestBox = new SuggestBox(oracle);
 
 	private Button addButton = new Button();
-	private Button sendButton = new Button("Send");
-
-	public void onLoad() {
+	private Button deleteButton = new Button("Delete Usersubscription");
+	
+	public void run() {
 
 		// Größe der TextArea angeben
 		messageBox.setCharacterWidth(80);
 		messageBox.setVisibleLines(15);
+
+		deleteButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// Weitere Implementierung erforderlich
+				Window.alert("Usersubscription deleted!");
+			}
+		});
 
 		// Example Users
 		User user1 = new User("Sasa", "sasa@fufu.de");
@@ -80,13 +70,6 @@ public class NewConversation extends Showcase {
 		listOfUser.add(user6);
 
 		addButton.getElement().setId("addButton");
-
-		sendButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				// Weitere Implementierung erforderlich
-				Window.alert("Message is sent!");
-			}
-		});
 
 		suggestBox.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
@@ -121,8 +104,6 @@ public class NewConversation extends Showcase {
 			}
 		});
 
-		// Anlegen des Löschen-Button
-
 		addButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				final HorizontalPanel selectedUserPanel = new HorizontalPanel();
@@ -152,22 +133,6 @@ public class NewConversation extends Showcase {
 			}
 		});
 
-		messageBox.addKeyUpHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					Window.alert("Test!");
-				}
-			}
-		});
-
-		hashtagBox.addKeyUpHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					Window.alert("Test!");
-				}
-			}
-		});
-
 		// Befüllen der Suggestbox mit Inhalt. Am Ende sollen hier die
 		// angemeldeten
 		// User hinzugefügt werden z.B. mit oracle.addAll(user);
@@ -179,11 +144,8 @@ public class NewConversation extends Showcase {
 
 		// Hinzufügen der Widgets zu den jeweiligen Bereichen
 		messagePanel.add(messageBox);
-		messagePanel.add(hashtagBox);
-		messagePanel.add(hashtagLabel);
-		messagePanel.add(messageLabel);
 		messagePanel.add(buttonPanel);
-		buttonPanel.add(sendButton);
+		messagePanel.add(deleteButton);
 
 		addPanel.add(suggestBox);
 		addPanel.add(addButton);
@@ -193,7 +155,7 @@ public class NewConversation extends Showcase {
 		RootPanel.get("Details").add(messagePanel);
 		RootPanel.get("Navigator").add(navigation);
 
-	}
+	} // Ende onLoad
 
 	@Override
 	protected String getHeadlineText() {
@@ -201,9 +163,4 @@ public class NewConversation extends Showcase {
 		return null;
 	}
 
-	@Override
-	protected void run() {
-		// TODO Auto-generated method stub
-
-	}
-}
+} // Ende Klasse

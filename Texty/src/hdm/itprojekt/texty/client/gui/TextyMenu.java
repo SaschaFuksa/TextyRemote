@@ -1,5 +1,12 @@
 package hdm.itprojekt.texty.client.gui;
 
+import hdm.itprojekt.texty.client.CreateHashtagSubscription;
+import hdm.itprojekt.texty.client.CreateUserSubscription;
+import hdm.itprojekt.texty.client.ShowHashtagSubscription;
+import hdm.itprojekt.texty.client.ShowPrivateConversation;
+import hdm.itprojekt.texty.client.ShowPublicConversation;
+import hdm.itprojekt.texty.client.ShowUserSubscription;
+
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
 

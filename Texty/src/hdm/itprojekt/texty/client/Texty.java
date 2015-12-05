@@ -1,34 +1,22 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.gui.CreateHashtagSubscription;
-import hdm.itprojekt.texty.client.gui.CreateUserSubscription;
 import hdm.itprojekt.texty.client.gui.Footer;
-import hdm.itprojekt.texty.client.gui.NewConversation;
-import hdm.itprojekt.texty.client.gui.ShowHashtagSubscription;
-import hdm.itprojekt.texty.client.gui.ShowPrivateConversation;
-import hdm.itprojekt.texty.client.gui.ShowPublicConversation;
-import hdm.itprojekt.texty.client.gui.ShowUserSubscription;
-import hdm.itprojekt.texty.client.gui.TextyCommand;
 import hdm.itprojekt.texty.client.gui.TextyMenu;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Texty implements EntryPoint {
-	
+
 	private VerticalPanel footerPanel = new VerticalPanel();
 	private Label footerLabel = new Label("About");
 	private LoginInfo loginInfo = null;
@@ -36,9 +24,9 @@ public class Texty implements EntryPoint {
 	private Label nickname = new Label();
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private TextyMenu menu = new TextyMenu();
-	
+
 	public void onModuleLoad() {
-		
+
 		menu.execute();
 
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
@@ -70,8 +58,6 @@ public class Texty implements EntryPoint {
 			}
 		});
 
-		
-		
 	}
 
 	private void createLoginPanel() {
