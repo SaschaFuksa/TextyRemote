@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client.gui;
 
+import hdm.itprojekt.texty.client.Showcase;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.awt.TextField;
@@ -32,7 +33,7 @@ import com.google.gwt.user.client.ui.TextArea;
 	//für User
 	//Löschen Button erst anbieten, wenn Nachricht bereits gesendet!?
 
-public class NewConversation extends VerticalPanel {
+public class NewConversation extends Showcase {
 	
 	//Wird im Details-Bereich realisiert
 	private VerticalPanel messagePanel = new VerticalPanel();
@@ -194,6 +195,18 @@ public class NewConversation extends VerticalPanel {
 		//Verknüpfung mit der html-Struktur
 		RootPanel.get("Details").add(messagePanel);
 		RootPanel.get("Navigator").add(navigation);
+		
+	}
+
+	@Override
+	protected String getHeadlineText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void run() {
+		// TODO Auto-generated method stub
 		
 	}
 }
