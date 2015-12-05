@@ -30,7 +30,6 @@ public class Texty implements EntryPoint {
 	
 	private VerticalPanel footerPanel = new VerticalPanel();
 	private Label footerLabel = new Label("About");
-
 	private LoginInfo loginInfo = null;
 	private HorizontalPanel loginPanel = new HorizontalPanel();
 	private Label nickname = new Label();
@@ -64,20 +63,11 @@ public class Texty implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
 				RootPanel.get("Details").clear();
 				RootPanel.get("Details").add(new Footer());
-
 			}
 		});
 
-		Command cmdReport = new Command() {
-			public void execute() {
-				Window.Location
-						.assign("http://127.0.0.1:8888/TextyReports.html");
-			}
-		};
-		
 		
 		// Submenu fuer Conversation
 		MenuBar subMenu1 = new MenuBar(true);
@@ -92,7 +82,6 @@ public class Texty implements EntryPoint {
 		fooMenu.addItem("Show Conversations", subMenu1);
 		fooMenu.setStyleName("menubar");
 
-		
 		// Submenu fuer Hashtagsubscription
 		MenuBar subMenu2 = new MenuBar(true);
 		subMenu2.addItem("Create",  command.getCommand(new CreateHashtagSubscription()));
@@ -115,8 +104,7 @@ public class Texty implements EntryPoint {
 		MenuBar menu = new MenuBar();
 		menu.addItem("Conversation", fooMenu);
 		menu.addItem("Subscription", barMenu);
-		menu.addItem("ReportGenerator", cmdReport);
-
+		menu.addItem("ReportGenerator", command.getReportCommand());
 		menu.setStyleName("menubar");
 
 		RootPanel.get("Menu").add(menu);
