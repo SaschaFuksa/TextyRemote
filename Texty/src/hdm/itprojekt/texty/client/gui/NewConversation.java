@@ -1,8 +1,11 @@
 package hdm.itprojekt.texty.client.gui;
 
+import hdm.itprojekt.texty.client.AddSelectedUser;
 import hdm.itprojekt.texty.client.Showcase;
 import hdm.itprojekt.texty.shared.bo.User;
+
 import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -43,15 +46,51 @@ public class NewConversation extends Showcase {
 			"(Hier wird die Nachricht angezeigt)");
 	private Label hashtagLabel = new Label(
 			"(Hier werden die ausgewaehlten Hashtags angezeigt)");
+	private TextyHandler suggestHandler = new TextyHandler();
+	
+	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+	private SuggestBox suggestBox = new SuggestBox(oracle);
+	private KeyUpHandler suggestBoxHandler =  new KeyUpHandler() {
+	      public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					AddSelectedUser addSelectedUser = new AddSelectedUser();
+					addSelectedUser.addUser(suggestBox.getText());
+		      }
+		    }};
 
-	MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	SuggestBox suggestBox = new SuggestBox(oracle);
+	private Button addButton = new Button("", new ClickHandler() {
+	      public void onClick(ClickEvent event) {
+	    	  AddSelectedUser addSelectedUser = new AddSelectedUser();
+	    	  addSelectedUser.addUser(suggestBox.getText());
+		      }
+		    });
+	private Button sendButton = new Button("Send", new ClickHandler() {
+	      public void onClick(ClickEvent event) {
+	    	  Window.alert("Message is sent!");
+		      }
+		    });
+	
+	public void checkHandler(){
+		if (!suggestHandler.isApplicability()){
+			suggestBox.addKeyUpHandler(suggestBoxHandler);
+			suggestHandler.setApplicability(true);
+		}
 
-	private Button addButton = new Button();
-	private Button sendButton = new Button("Send");
-
-	public void onLoad() {
-
+	}
+	
+	/* int i = 0;
+	 * 
+	 * User example = new User(); while(i < listOfUser.size()){
+	 * if(suggestBox
+	 * .getText().equals(listOfUser.get(i+1).getFirstName())){
+	 * example = listOfUser.get(i+1); } else { i++; } }
+	 * deleteButton.setTabIndex(example.getId());
+	 */
+	
+	public void run() {
+		
+		checkHandler();
+		
 		// Größe der TextArea angeben
 		messageBox.setCharacterWidth(80);
 		messageBox.setVisibleLines(15);
@@ -80,77 +119,6 @@ public class NewConversation extends Showcase {
 		listOfUser.add(user6);
 
 		addButton.getElement().setId("addButton");
-
-		sendButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				// Weitere Implementierung erforderlich
-				Window.alert("Message is sent!");
-			}
-		});
-
-		suggestBox.addKeyUpHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					final HorizontalPanel selectedUserPanel = new HorizontalPanel();
-					Label selectedUserLabel = new Label(suggestBox.getText());
-					Button deleteButton = new Button();
-					/*
-					 * int i = 0;
-					 * 
-					 * User example = new User(); while(i < listOfUser.size()){
-					 * if
-					 * (suggestBox.getText().equals(listOfUser.get(i+1).getFirstName
-					 * ())){ example = listOfUser.get(i+1); } else { i++; } }
-					 * deleteButton.setTabIndex(example.getId());
-					 */
-
-					deleteButton.addClickHandler(new ClickHandler() {
-						public void onClick(ClickEvent event) {
-							RootPanel.get("Navigator")
-									.remove(selectedUserPanel);
-						}
-					});
-
-					deleteButton.getElement().setId("deleteButton");
-
-					selectedUserPanel.add(selectedUserLabel);
-					selectedUserPanel.add(deleteButton);
-					RootPanel.get("Navigator").add(selectedUserPanel);
-
-				}
-			}
-		});
-
-		// Anlegen des Löschen-Button
-
-		addButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				final HorizontalPanel selectedUserPanel = new HorizontalPanel();
-				Label selectedUserLabel = new Label(suggestBox.getText());
-				Button deleteButton = new Button();
-				/*
-				 * int i = 0;
-				 * 
-				 * User example = new User(); while(i < listOfUser.size()){
-				 * if(suggestBox
-				 * .getText().equals(listOfUser.get(i+1).getFirstName())){
-				 * example = listOfUser.get(i+1); } else { i++; } }
-				 * deleteButton.setTabIndex(example.getId());
-				 */
-
-				deleteButton.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						RootPanel.get("Navigator").remove(selectedUserPanel);
-					}
-				});
-
-				deleteButton.getElement().setId("deleteButton");
-
-				selectedUserPanel.add(selectedUserLabel);
-				selectedUserPanel.add(deleteButton);
-				RootPanel.get("Navigator").add(selectedUserPanel);
-			}
-		});
 
 		messageBox.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
@@ -201,9 +169,4 @@ public class NewConversation extends Showcase {
 		return null;
 	}
 
-	@Override
-	protected void run() {
-		// TODO Auto-generated method stub
-
 	}
-}

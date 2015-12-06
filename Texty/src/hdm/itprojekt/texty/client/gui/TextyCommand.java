@@ -8,8 +8,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class TextyCommand {
 	
+	private Showcase showcase = null;
+	
 	public Command getCommand(Showcase showcase){
-		final Showcase loadShowcase = showcase;
+		this.showcase = showcase;
+		final Showcase loadShowcase = this.showcase;
 		Command cmd = new Command() {
 			public void execute() {
 				RootPanel.get("Details").clear();
