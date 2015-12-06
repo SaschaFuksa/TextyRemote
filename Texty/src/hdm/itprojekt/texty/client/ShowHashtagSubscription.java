@@ -27,10 +27,10 @@ public class ShowHashtagSubscription extends Showcase {
 	// Wird im Navigator-Bereich realisiert
 	private VerticalPanel navigation = new VerticalPanel();
 	private HorizontalPanel addPanel = new HorizontalPanel();
-	MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	SuggestBox suggestBox = new SuggestBox(oracle);
-	private Button addButton = new Button();
-	private Button deleteButton = new Button("Delete Hashtagsubscription");
+	/*MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+	SuggestBox suggestBox = new SuggestBox(oracle);*/
+	//private Button addButton = new Button();
+	//private Button deleteButton = new Button("Delete Hashtagsubscription");
 	
 	public void run() {
 
@@ -38,7 +38,7 @@ public class ShowHashtagSubscription extends Showcase {
 		messageBox.setCharacterWidth(80);
 		messageBox.setVisibleLines(15);
 
-		deleteButton.addClickHandler(new ClickHandler() {
+		/*deleteButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				// Weitere Implementierung erforderlich
 				Window.alert("Hashtagsubscription deleted!");
@@ -68,15 +68,15 @@ public class ShowHashtagSubscription extends Showcase {
 		listOfUser.add(user5);
 		listOfUser.add(user6);
 
-		addButton.getElement().setId("addButton");
+		addButton.getElement().setId("addButton");*/
 
-		suggestBox.addKeyUpHandler(new KeyUpHandler() {
+		/*suggestBox.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					final HorizontalPanel selectedUserPanel = new HorizontalPanel();
 					Label selectedUserLabel = new Label(suggestBox.getText());
 					Button deleteButton = new Button();
-					/*
+					
 					 * int i = 0;
 					 * 
 					 * User example = new User(); while(i < listOfUser.size()){
@@ -84,7 +84,7 @@ public class ShowHashtagSubscription extends Showcase {
 					 * (suggestBox.getText().equals(listOfUser.get(i+1).getFirstName
 					 * ())){ example = listOfUser.get(i+1); } else { i++; } }
 					 * deleteButton.setTabIndex(example.getId());
-					 */
+					 
 
 					deleteButton.addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
@@ -93,9 +93,9 @@ public class ShowHashtagSubscription extends Showcase {
 						}
 					});
 
-					deleteButton.getElement().setId("deleteButton");
+					deleteButton.getElement().setId("deleteButton");*/
 
-					selectedUserPanel.add(selectedUserLabel);
+					/*selectedUserPanel.add(selectedUserLabel);
 					selectedUserPanel.add(deleteButton);
 					RootPanel.get("Navigator").add(selectedUserPanel);
 
@@ -108,7 +108,7 @@ public class ShowHashtagSubscription extends Showcase {
 				final HorizontalPanel selectedUserPanel = new HorizontalPanel();
 				Label selectedUserLabel = new Label(suggestBox.getText());
 				Button deleteButton = new Button();
-				/*
+				
 				 * int i = 0;
 				 * 
 				 * User example = new User(); while(i < listOfUser.size()){
@@ -116,7 +116,7 @@ public class ShowHashtagSubscription extends Showcase {
 				 * .getText().equals(listOfUser.get(i+1).getFirstName())){
 				 * example = listOfUser.get(i+1); } else { i++; } }
 				 * deleteButton.setTabIndex(example.getId());
-				 */
+				 
 
 				deleteButton.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
@@ -131,24 +131,22 @@ public class ShowHashtagSubscription extends Showcase {
 				RootPanel.get("Navigator").add(selectedUserPanel);
 			}
 		});
-
+*/
 		// Befüllen der Suggestbox mit Inhalt. Am Ende sollen hier die
 		// angemeldeten
 		// User hinzugefügt werden z.B. mit oracle.addAll(user);
 		// Kleines Beispiel:
-		for (int i = 0; i < listOfUser.size(); i++) {
+		/*for (int i = 0; i < listOfUser.size(); i++) {
 			String name = new String(listOfUser.get(i).getNickName());
 			oracle.add(name);
-		}
+		}*/
 
 		// Hinzufügen der Widgets zu den jeweiligen Bereichen
 		messagePanel.add(messageBox);
-		messagePanel.add(deleteButton);
-		messagePanel.add(buttonPanel);
 
-		addPanel.add(suggestBox);
-		addPanel.add(addButton);
-		navigation.add(addPanel);
+		//addPanel.add(suggestBox);
+	//	addPanel.add(addButton);
+	//	navigation.add(addPanel);
 
 		// Verknüpfung mit der html-Struktur
 		RootPanel.get("Details").add(messagePanel);
