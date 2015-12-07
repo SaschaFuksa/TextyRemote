@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.shared;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -47,6 +48,12 @@ public interface TextyAdministration extends RemoteService {
 	 public void deleteUserSubscription(UserSubscription subscription) throws IllegalArgumentException;
 	 
 	 public void deleteHashtagSubscription(HashtagSubscription subscription) throws IllegalArgumentException;
+	 
+	 public Vector<Message> getAllMessagesFromUserByDate(User user, Date startDate, Date endDate) throws IllegalArgumentException;
+	 
+	 public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate) throws IllegalArgumentException;
+	 
+	 public Vector<Message> getAllMessagesFromUser(User user) throws IllegalArgumentException;
 	 
 	 
 	 

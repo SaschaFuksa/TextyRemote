@@ -7,6 +7,11 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
 
+
+
+
+
+
 import hdm.itprojekt.texty.server.db.DBConnection;
 
 import java.sql.SQLException;
@@ -232,6 +237,32 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 public void deleteHashtagSubscription(HashtagSubscription subscription) throws IllegalArgumentException {
 		 this.hsMapper.delete(subscription);
 	 }
+	 
+	 public Vector<Message> getAllMessagesFromUserByDate(User user, Date startDate, Date endDate) throws IllegalArgumentException {		 
+		 Vector<Message> allMessages = this.mMapper.selectAllMessagesFromUser(user);
+		 Vector<Message> MessagesByDate = new Vector<Message>();
+		 for (int i = allMessages.size(); i > 0; i--){
+			 if(allMessages.get(i).getDateOfCreation().after(startDate)
+					 && allMessages.get(i).getDateOfCreation().before(endDate)){
+				 MessagesByDate.add(allMessages.get(i));
+			 }
+		 }		 
+		 return MessagesByDate;		 
+	 }
+	 public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate) throws IllegalArgumentException {
+		 Vector<Message> allMessages = this.mMapper.selectAllMessages();
+		 Vector<Message> MessagesByDate = new Vector<Message>();
+		 for(int i = allMessages.size(); i > 0; i--){
+			 if(allMessages.get(i).getDateOfCreation().after(startDate)
+					 && allMessages.get(i).getDateOfCreation().before(endDate)){
+				 MessagesByDate.add(allMessages.get(i));
+			 }			 
+		 }
+		return MessagesByDate; 
+	 }
+	 public Vector<Message> getAllMessagesFromUser(User user) throws IllegalArgumentException {
+		 return this.mMapper.selectAllMessagesFromUser(user);
+	 }	 
 
 	/**
 	 * @return der ConversationMapper

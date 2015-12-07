@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.shared;
 
 
+import java.util.Date;
 import java.util.Vector;
 
 import hdm.itprojekt.texty.shared.bo.Conversation;
@@ -53,6 +54,15 @@ public interface TextyAdministrationAsync {
 
 	void deleteHashtagSubscription(HashtagSubscription subscription,
 			AsyncCallback<Void> callback);
+
+	void getAllMessagesFromUserByDate(User user, Date startDate, Date endDate,
+			AsyncCallback<Vector<Message>> callback);
+
+	void getAllMessagesByDate(Date startDate, Date endDate,
+			AsyncCallback<Vector<Message>> callback);
+
+	void getAllMessagesFromUser(User user,
+			AsyncCallback<Vector<Message>> callback);
 
 	
 

@@ -2,6 +2,8 @@ package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class MessageMapper {
@@ -34,8 +36,8 @@ public class MessageMapper {
 	}
 
 	// result ist vom Typ ArrayList
-	public ArrayList<Message> selectAllMessagesFromUser(User u) {
-		ArrayList result = new ArrayList();
+	public Vector<Message> selectAllMessagesFromUser(User u) {
+		Vector<Message> result = new Vector<Message>(); 
 		// ...
 
 		return result;
@@ -48,8 +50,8 @@ public class MessageMapper {
 		return result;
 	}
 
-	public ArrayList<Message> selectAllMessagesByDate(Date d) {
-		ArrayList result = new ArrayList();
+	public Vector<Message> selectAllMessages() {
+		Vector<Message> result = new Vector<Message>();
 		// ...
 
 		return result;
