@@ -4,28 +4,33 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+
+//TODO User lassen sich im Navigatorbereich gut in einer CellList darstellen
 
 public class ShowPublicConversation extends Showcase {
 
-	// Wird im Details-Bereich realisiert
-	private VerticalPanel messagePanel = new VerticalPanel();
-	// Wird im Navigator-Bereich realisiert
-	private VerticalPanel userPanel = new VerticalPanel();
-	private Button testButton = new Button("Show public Conversation");
-	
+	private MessageForm messageForm = new MessageForm();
+
 	public void onLoad() {
 
-		testButton.addClickHandler(new ClickHandler() {
+		messageForm.onLoad();
+
+		// Anlegen des Bearbeiten Button
+		final Button editButton = new Button("Edit");
+
+		editButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				// Weitere Implementierung erforderlich
-				Window.alert("Test!");
+				Window.alert("Test");
 			}
 		});
 
-		messagePanel.add(testButton);
-		RootPanel.get("Details").add(messagePanel);
+		editButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// Weitere Implementierung erforderlich
+				Window.alert("Test");
+			}
+		});
 	}
 
 	@Override
