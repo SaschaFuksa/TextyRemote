@@ -1,13 +1,15 @@
 package hdm.itprojekt.texty.client.gui;
 
+import com.google.gwt.user.client.ui.RootPanel;
+
 import hdm.itprojekt.texty.client.AddUserForm;
 import hdm.itprojekt.texty.client.MessageForm;
 import hdm.itprojekt.texty.client.Showcase;
 
 public class NewConversation extends Showcase {
 
-	private AddUserForm addUserForm = new AddUserForm();
-	private MessageForm messageForm = new MessageForm();
+	private Showcase addUserForm = new AddUserForm();
+	private Showcase messageForm = new MessageForm();
 
 	/*
 	 * // Hier entsteht noch eine Anzeige der Message und der Hashtags private
@@ -28,9 +30,9 @@ public class NewConversation extends Showcase {
 	public void run() {
 
 		// Dieser Aufruf erzeugt die Suggestbox im Navigator-Bereich.
-		addUserForm.onLoad();
+		RootPanel.get("Navigator").add(addUserForm);
+		RootPanel.get("Details").add(messageForm);
 		// Dieser Aufruf erzeugt eine neue Message im Navigator-Bereich.
-		messageForm.onLoad();
 
 		/*
 		 * messagePanel.add(hashtagLabel); messagePanel.add(messageLabel);

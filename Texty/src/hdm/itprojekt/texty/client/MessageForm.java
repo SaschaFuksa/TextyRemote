@@ -70,6 +70,6 @@ public class MessageForm extends Showcase{
 		@Override
 		protected String getHeadlineText() {
 			
-			return null;
+			return "New Message";
 		}
 }

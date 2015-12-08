@@ -74,7 +74,7 @@ public class AddUserForm extends Showcase {
 	@Override
 	protected String getHeadlineText() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Add User";
 	}
 
 	// Wird automatisch bei der Objekterzeugung ausgeführt
