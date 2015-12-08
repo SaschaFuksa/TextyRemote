@@ -3,13 +3,13 @@ package hdm.itprojekt.texty.client.gui;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import hdm.itprojekt.texty.client.AddUserForm;
-import hdm.itprojekt.texty.client.MessageForm;
+import hdm.itprojekt.texty.client.AddMessageForm;
 import hdm.itprojekt.texty.client.Showcase;
 
 public class NewConversation extends Showcase {
 
 	private Showcase addUserForm = new AddUserForm();
-	private Showcase messageForm = new MessageForm();
+	private Showcase messageForm = new AddMessageForm();
 
 	/*
 	 * // Hier entsteht noch eine Anzeige der Message und der Hashtags private

@@ -1,10 +1,10 @@
 package hdm.itprojekt.texty.client;
 
 //Nicht verwendete Imports nicht rauslöschen, werden eventuell noch gebraucht. 
-import hdm.itprojekt.texty.shared.bo.User;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -38,15 +38,15 @@ public class CreateHashtagSubscription extends Showcase {
 	//TODO Ideensammlung wie die beiden Widgets in Kombination ihren Zweck erfüllen können
 	//TODO Ideensammlung zur weiteren Modularisierung des Bereichs CreateHashtagSubscription. 
 
-	private AddUserForm addUserForm = new AddUserForm();
-
+	
+	private AddHashtagForm addHashtagForm = new AddHashtagForm();
 	// Erzeugt eine CellList
 	CellList<String> cellList = new CellList<String>(new TextCell());
 
 	public void run() {
 		
-		//Aufruf der Suggestbox
-		addUserForm.run();
+		
+		addHashtagForm.run();
 
 		// Create a list data provider.
 		final ListDataProvider<String> dataProvider = new ListDataProvider<String>();
@@ -77,8 +77,8 @@ public class CreateHashtagSubscription extends Showcase {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						String selected = selectionModel.getSelectedObject();
 						if (selected != null) {
-							ShowHashtagSubscription test = new ShowHashtagSubscription();
-							test.run();
+							AddMessageForm messageForm = new AddMessageForm();
+							messageForm.onLoad();
 						}
 					}
 				});

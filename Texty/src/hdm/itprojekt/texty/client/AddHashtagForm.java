@@ -1,9 +1,9 @@
 package hdm.itprojekt.texty.client;
 
-import java.util.Vector;
-
 import hdm.itprojekt.texty.client.gui.TextyHandler;
-import hdm.itprojekt.texty.shared.bo.User;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
+
+import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -17,15 +17,16 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 /**
- * Diese Klasse beinhaltet die Vorlage für eine Vorschlagsbox, die die verfügbaren User anzeigt. 
+ * Diese Klasse beinhaltet die Vorlage für eine Vorschlagsbox, die die verfügbaren Hashtags anzeigt. 
  * 
  *
  */
-public class AddUserForm extends Showcase {
+public class AddHashtagForm extends Showcase{
 
-	private HorizontalPanel selectedUserPanel = new HorizontalPanel();
-	private Label selectedUserLabel = new Label();
+	private HorizontalPanel selectedHashtagPanel = new HorizontalPanel();
+	private Label selectedHashtagLabel = new Label();
 	private Button deleteButton = new Button();
 
 	//private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
@@ -34,50 +35,51 @@ public class AddUserForm extends Showcase {
 
 	private VerticalPanel navigation = new VerticalPanel();
 	private HorizontalPanel addPanel = new HorizontalPanel();
-
-	public void addUser(String text) {
-		selectedUserLabel.setText(text);
+	
+	public void addHashtag(String text) {
+		selectedHashtagLabel.setText(text);
 
 		deleteButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				RootPanel.get("Navigator").remove(selectedUserPanel);
+				RootPanel.get("Navigator").remove(selectedHashtagPanel);
 			}
 		});
 
 		deleteButton.getElement().setId("deleteButton");
 
-		selectedUserPanel.add(selectedUserLabel);
-		selectedUserPanel.add(deleteButton);
-		RootPanel.get("Navigator").add(selectedUserPanel);
+		selectedHashtagPanel.add(selectedHashtagLabel);
+		selectedHashtagPanel.add(deleteButton);
+		RootPanel.get("Navigator").add(selectedHashtagPanel);
 	}
 
 	/*private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 		public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				AddUserForm addSelectedUser = new AddUserForm();
-				addSelectedUser.addUser(suggestBox.getText());
+				AddHashtagForm addSelectedHashtag = new AddHashtagForm();
+				addSelectedHashtag.addHashtag(suggestBox.getText());
 			}
 		}
-	};*/
+	};
 
-	/*private Button addButton = new Button("", new ClickHandler() {
+	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
-			AddUserForm addSelectedUser = new AddUserForm();
-			addSelectedUser.addUser(suggestBox.getText());
+			AddHashtagForm addSelectedHashtag = new AddHashtagForm();
+			addSelectedHashtag.addHashtag(suggestBox.getText());
 		}
-	});
+	});*/
 
-	public void checkHandler() {
+	/*public void checkHandler() {
 		if (!suggestHandler.isApplicability()) {
 			suggestBox.addKeyUpHandler(suggestBoxHandler);
 			suggestHandler.setApplicability(true);
 		}
+
 	}*/
 
 	@Override
 	protected String getHeadlineText() {
 		// TODO Auto-generated method stub
-		return "Add User";
+		return "Add Hashtag";
 	}
 
 	// Wird automatisch bei der Objekterzeugung ausgeführt
@@ -85,28 +87,28 @@ public class AddUserForm extends Showcase {
 
 		//checkHandler();
 
-		// Example Users
-		User user1 = new User("Sasa", "sasa@fufu.de");
-		User user2 = new User("Daniel", "dada@sese.de");
-		User user3 = new User("David", "dada@hehe.de");
-		User user4 = new User("Matteo", "mama@brbr.de");
-		User user5 = new User("Erich", "erer@meme.de");
-		User user6 = new User("Fred", "fredchen@schnuschnu.de");
+		// Example Hashtags
+		Hashtag hashtag1 = new Hashtag("VfB");
+		Hashtag hashtag2 = new Hashtag("BVBaeh");
+		Hashtag hashtag3 = new Hashtag("FCB");
+		Hashtag hashtag4 = new Hashtag("VfBohWeh");
+		Hashtag hashtag5 = new Hashtag("FCBaeh");
+		Hashtag hashtag6 = new Hashtag("Vereinslos");
 
-		user1.setId(1);
-		user2.setId(2);
-		user3.setId(3);
-		user4.setId(4);
-		user5.setId(5);
-		user6.setId(6);
+		hashtag1.setId(1);
+		hashtag2.setId(2);
+		hashtag3.setId(3);
+		hashtag4.setId(4);
+		hashtag5.setId(5);
+		hashtag6.setId(6);
 
-		Vector<User> listOfUser = new Vector<User>();
-		listOfUser.add(user1);
-		listOfUser.add(user2);
-		listOfUser.add(user3);
-		listOfUser.add(user4);
-		listOfUser.add(user5);
-		listOfUser.add(user6);
+		Vector<Hashtag> listOfHashtag = new Vector<Hashtag>();
+		listOfHashtag.add(hashtag1);
+		listOfHashtag.add(hashtag2);
+		listOfHashtag.add(hashtag3);
+		listOfHashtag.add(hashtag4);
+		listOfHashtag.add(hashtag5);
+		listOfHashtag.add(hashtag6);
 
 		//addButton.getElement().setId("addButton");
 
@@ -114,14 +116,16 @@ public class AddUserForm extends Showcase {
 		// angemeldeten
 		// User hinzugefügt werden z.B. mit oracle.addAll(user);
 		// Kleines Beispiel:
-		/*for (int i = 0; i < listOfUser.size(); i++) {
-			String name = new String(listOfUser.get(i).getNickName());
-			oracle.add(name);
+		/*for (int i = 0; i < listOfHashtag.size(); i++) {
+			String keyword = new String(listOfHashtag.get(i).getKeyword());
+			oracle.add(keyword);
 		}*/
 
 		//addPanel.add(suggestBox);
 		//addPanel.add(addButton);
 		navigation.add(addPanel);
 		RootPanel.get("Navigator").add(navigation);
+		
 	}
+
 }

@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Button;
 
 public class ShowPrivateConversation extends Showcase {
 
-	private MessageForm messageForm = new MessageForm();
+	private AddMessageForm messageForm = new AddMessageForm();
 
 	public void run() {
 

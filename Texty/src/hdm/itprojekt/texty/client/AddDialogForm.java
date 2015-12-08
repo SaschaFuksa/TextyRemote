@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  * 
  * Alternative Window.alert? 
  */
-public class DialogBoxForm implements EntryPoint, ClickHandler {
+public class AddDialogForm implements EntryPoint, ClickHandler {
 
 	  private static class MyDialog extends DialogBox {
 
