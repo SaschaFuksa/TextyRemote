@@ -1,7 +1,8 @@
 package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.Vector;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class HashtagSubscriptionMapper {
@@ -19,18 +20,40 @@ public class HashtagSubscriptionMapper {
 		return hashtagSubscriptionMapper;
 	}
 
-	public ArrayList<HashtagSubscription> select(User u) {
-		ArrayList result = new ArrayList();
-		// ...
-		return result;
-	}
+	public HashtagSubscription insert(HashtagSubscription hs) {
+		Connection con = DBConnection.connection();
 
-	public void insert(HashtagSubscription hs) {
-		// ...
-	}
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT userId, hashtagId "
+					+ "FROM hashtagsubscription " + "WHERE userId"
+					+ "<> userId=" + hs.getSubscriber() + "AND hashtagId"
+					+ "<> hashtagId=" + hs.getSubscribedHashtag());
 
+			if (rs.next()) {
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO hashtagsubscription (userId, hashtagId) "
+						+ "VALUES ("
+						+ hs.getSubscriber()
+						+ ",'"
+						+ hs.getSubscribedHashtag() + "')");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return hs;
+	}
+	
 	public void delete(HashtagSubscription hs) {
-		// ...
-	}
+		Connection con = DBConnection.connection();
 
+		try {
+			Statement stmt = con.createStatement();
+			//HashtagSubscription gets deleted 
+			stmt.executeUpdate("DELETE FROM hashtagsubscription " + "WHERE userId="
+					+ hs.getSubscriber() +"AND hashtagId=" + hs.getSubscribedHashtag());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

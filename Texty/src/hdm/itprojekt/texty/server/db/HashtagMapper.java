@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
+import java.util.Vector;
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class HashtagMapper {
@@ -18,31 +19,46 @@ public class HashtagMapper {
 		return hashtagMapper;
 	}
 
-	// anders als im Klassendiagramm werden wegen Einheitlichkeit nur Objekte
-	// hineingegeben
-
 	public Hashtag insert(Hashtag h) {
 		Connection con = DBConnection.connection();
-		// ...
-		return h;
-	}
 
-	public Hashtag select(Hashtag h) {
-		Connection con = DBConnection.connection();
-		// ...
-		return h;
-	}
+		try {
+			Statement stmt = con.createStatement();
+			// Find highest Primarykey
+			ResultSet rs = stmt.executeQuery("SELECT MAX(hashtagId) AS maxid "
+					+ "FROM hashtag ");
 
-	public Hashtag update(Hashtag h) {
-		Connection con = DBConnection.connection();
-		// ...
+			if (rs.next()) {
+
+				h.setId(rs.getInt("maxid") + 1);
+
+				stmt = con.createStatement();
+
+				// Highest Primarykey has been found and set, now we insert it
+				// into the DB
+				stmt.executeUpdate("INSERT INTO hashtag (hashtagId, keyword)"
+						+ "VALUES (" + h.getId() + ", '" + h.getKeyword()
+						+ "')");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return h;
 	}
 
 	public void delete(Hashtag h) {
 		Connection con = DBConnection.connection();
-		// ...
 
+		try {
+			Statement stmt = con.createStatement();
+			//Hashtag gets deleted 
+			stmt.executeUpdate("DELETE FROM hashtag " + "WHERE hashtagId="
+					+ h.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-
+	
+	
 }
