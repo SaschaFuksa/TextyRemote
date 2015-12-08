@@ -87,7 +87,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Conversation c = new Conversation();
 		
 		c.addMessageToConversation(message);
-		if(message.getAuthor() == null) {
+		if(message.getListOfReceivers() == null) {
 			c.setPublicly(true);
 		}else {
 			c.setPublicly(false);
@@ -138,8 +138,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 * David besprechen
 		 */
 		hs.setId(1);
-		Date now = new Date();
-		hs.setDateOfCreation(now);
+		
 		/*
 		 * TODO Methode muss noch im Mapper erstellt werden
 		 */
