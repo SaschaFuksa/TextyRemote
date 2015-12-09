@@ -77,3 +77,13 @@ div#Banner {
 	width: 100%;
 	z-index: 990;
 }
+
+.texty-headline {
+	color: white;
+	font-family: Texty;
+	font-size: 2em;
+}
+
+div#Details .texty-headline{
+	color: black;
+}

@@ -7,10 +7,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class TextyCommand {
-	
+
 	private Showcase showcase = null;
-	
-	public Command getCommand(Showcase showcase){
+
+	public Command getCommand(Showcase showcase) {
 		this.showcase = showcase;
 		final Showcase loadShowcase = this.showcase;
 		Command cmd = new Command() {
@@ -22,8 +22,8 @@ public class TextyCommand {
 		};
 		return cmd;
 	}
-	
-	public Command getReportCommand(){
+
+	public Command getReportCommand() {
 		Command cmdReport = new Command() {
 			public void execute() {
 				Window.Location
@@ -32,12 +32,11 @@ public class TextyCommand {
 		};
 		return cmdReport;
 	}
-	
-	public Command getEditorCommand(){
+
+	public Command getEditorCommand() {
 		Command cmdEditor = new Command() {
 			public void execute() {
-				Window.Location
-						.assign("http://127.0.0.1:8888/Texty.html");
+				Window.Location.assign("http://127.0.0.1:8888/Texty.html");
 			}
 		};
 		return cmdEditor;

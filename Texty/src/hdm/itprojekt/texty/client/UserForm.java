@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -17,11 +18,12 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 /**
- * Diese Klasse beinhaltet ein Modul, welches über eine Vorschlagbox die User des Systems ausgibt und über einen Button auf einen Panel hinzufügen. 
- * TODO Automatische Überprüfung ob Nutzer schon ausgewählt wurde
- * TODO Dummy Daten entfernen
- * TODO CSS
+ * Diese Klasse beinhaltet ein Modul, welches über eine Vorschlagbox die User
+ * des Systems ausgibt und über einen Button auf einen Panel hinzufügen. TODO
+ * Automatische Überprüfung ob Nutzer schon ausgewählt wurde TODO Dummy Daten
+ * entfernen TODO CSS
  */
 public class UserForm extends Showcase {
 
@@ -29,6 +31,8 @@ public class UserForm extends Showcase {
 	private HorizontalPanel userForm = new HorizontalPanel();
 	private VerticalPanel navigation = new VerticalPanel();
 	private Label selectedNameLabel = new Label();
+	private int selectedNameLabelId;
+	private Vector<User> selectedUser = new Vector<User>();
 
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
@@ -41,7 +45,7 @@ public class UserForm extends Showcase {
 			addSelectedUser.addUser(suggestBox.getText());
 		}
 	});
-	
+
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 		public void onKeyUp(KeyUpEvent event) {
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -50,16 +54,21 @@ public class UserForm extends Showcase {
 			}
 		}
 	};
-	
-	public void addUser(String text) {
-		selectedNameLabel.setText(text);
 
+	public void addUser(String userName) {
+		selectedNameLabel.setText(userName);
+		User user = new User();
+		user.setNickName(userName);
+		selectedUser.add(user);
+		selectedNameLabelId = selectedUser.indexOf(user);
 		deleteButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				selectedUser.remove(selectedNameLabelId);
 				RootPanel.get("Navigator").remove(selectedUserPanel);
 			}
-		});
 
+		});
+		System.out.println("nach delete");
 		deleteButton.getElement().setId("deleteButton");
 
 		selectedUserPanel.add(selectedNameLabel);
@@ -76,6 +85,10 @@ public class UserForm extends Showcase {
 
 	protected String getHeadlineText() {
 		return "Add User";
+	}
+
+	public Vector<User> getSelectedUser() {
+		return selectedUser;
 	}
 
 	protected void run() {
@@ -111,7 +124,7 @@ public class UserForm extends Showcase {
 			String name = new String(listOfUser.get(i).getNickName());
 			oracle.add(name);
 		}
-
+		
 		userForm.add(suggestBox);
 		userForm.add(addButton);
 		navigation.add(userForm);

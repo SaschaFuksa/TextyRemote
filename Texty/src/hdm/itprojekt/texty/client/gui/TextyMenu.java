@@ -16,7 +16,6 @@ public class TextyMenu {
 
 	public void execute() {
 
-		// Submenu fuer Conversation
 		MenuBar subMenuConversation = new MenuBar(true);
 		subMenuConversation.addItem("Public Conversation",
 				command.getCommand(new ShowPublicConversation()));
@@ -24,14 +23,12 @@ public class TextyMenu {
 				command.getCommand(new ShowPrivateConversation()));
 		subMenuConversation.setStyleName("menubar");
 
-		// Haupt-Menu fuer Conversation
 		MenuBar mainMenuConversation = new MenuBar(true);
 		mainMenuConversation.addItem("New Conversation",
 				command.getCommand(new NewConversation()));
 		mainMenuConversation.addItem("Show Conversations", subMenuConversation);
 		mainMenuConversation.setStyleName("menubar");
 
-		// Submenu fuer Hashtagsubscription
 		MenuBar subMenuHashtagSubscription = new MenuBar(true);
 		subMenuHashtagSubscription.addItem("Create",
 				command.getCommand(new CreateHashtagSubscription()));
@@ -39,20 +36,20 @@ public class TextyMenu {
 				command.getCommand(new ShowHashtagSubscription()));
 		subMenuHashtagSubscription.setStyleName("menubar");
 
-		// Submenu fuer Usersubscription
 		MenuBar subMenuUserSubscription = new MenuBar(true);
 		subMenuUserSubscription.addItem("Create",
 				command.getCommand(new CreateUserSubscription()));
-		subMenuUserSubscription.addItem("Show", command.getCommand(new ShowUserSubscription()));
+		subMenuUserSubscription.addItem("Show",
+				command.getCommand(new ShowUserSubscription()));
 		subMenuUserSubscription.setStyleName("menubar");
 
-		// Haupt-Menu für Subscription
 		MenuBar mainMenuSubscription = new MenuBar(true);
-		mainMenuSubscription.addItem("Hashtagsubscription", subMenuHashtagSubscription);
-		mainMenuSubscription.addItem("Usersubscription", subMenuUserSubscription);
+		mainMenuSubscription.addItem("Hashtagsubscription",
+				subMenuHashtagSubscription);
+		mainMenuSubscription.addItem("Usersubscription",
+				subMenuUserSubscription);
 		mainMenuSubscription.setStyleName("menubar");
 
-		// Komplette Menübar
 		MenuBar menu = new MenuBar();
 		menu.addItem("Conversation", mainMenuConversation);
 		menu.addItem("Subscription", mainMenuSubscription);
