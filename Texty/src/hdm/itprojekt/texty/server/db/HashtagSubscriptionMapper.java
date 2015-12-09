@@ -35,8 +35,8 @@ public class HashtagSubscriptionMapper {
 				stmt.executeUpdate("INSERT INTO textydb.hashtagsubscription (userId, hashtagId) "
 						+ "VALUES ("
 						+ hashtagSubscription.getSubscriber()
-						+ ",'"
-						+ hashtagSubscription.getSubscribedHashtag() + "')");
+						+ ", "
+						+ hashtagSubscription.getSubscribedHashtag() + ")");
 		
 		} catch (SQLException e) {
 			e.printStackTrace();

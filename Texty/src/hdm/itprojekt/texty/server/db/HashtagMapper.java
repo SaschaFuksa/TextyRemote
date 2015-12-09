@@ -37,8 +37,8 @@ public class HashtagMapper {
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
 				stmt.executeUpdate("INSERT INTO textydb.hashtag (hashtagId, keyword)"
-						+ "VALUES (" + hashtag.getId() + ", '" + hashtag.getKeyword()
-						+ "')");
+						+ "VALUES (" + hashtag.getId() + ", " + hashtag.getKeyword()
+						+ ")");
 			}
 		}
 		catch (SQLException e) {
