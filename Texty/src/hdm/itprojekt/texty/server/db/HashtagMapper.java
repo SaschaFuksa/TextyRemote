@@ -19,7 +19,7 @@ public class HashtagMapper {
 		return hashtagMapper;
 	}
 
-	public Hashtag insert(Hashtag h) {
+	public Hashtag insert(Hashtag hashtag) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -30,31 +30,31 @@ public class HashtagMapper {
 
 			if (rs.next()) {
 
-				h.setId(rs.getInt("maxid") + 1);
+				hashtag.setId(rs.getInt("maxid") + 1);
 
 				stmt = con.createStatement();
 
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
 				stmt.executeUpdate("INSERT INTO hashtag (hashtagId, keyword)"
-						+ "VALUES (" + h.getId() + ", '" + h.getKeyword()
+						+ "VALUES (" + hashtag.getId() + ", '" + hashtag.getKeyword()
 						+ "')");
 			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return h;
+		return hashtag;
 	}
 
-	public void delete(Hashtag h) {
+	public void delete(Hashtag hashtag) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 			//Hashtag gets deleted 
 			stmt.executeUpdate("DELETE FROM hashtag " + "WHERE hashtagId="
-					+ h.getId());
+					+ hashtag.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

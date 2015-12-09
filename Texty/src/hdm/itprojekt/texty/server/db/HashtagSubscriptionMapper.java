@@ -20,38 +20,38 @@ public class HashtagSubscriptionMapper {
 		return hashtagSubscriptionMapper;
 	}
 
-	public HashtagSubscription insert(HashtagSubscription hs) {
+	public HashtagSubscription insert(HashtagSubscription hashtagSubscription) {
 		Connection con = DBConnection.connection();
 
 		try {
-			Statement stmt = con.createStatement();
+			/* Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT userId, hashtagId "
 					+ "FROM hashtagsubscription " + "WHERE userId"
 					+ "<> userId=" + hs.getSubscriber() + "AND hashtagId"
 					+ "<> hashtagId=" + hs.getSubscribedHashtag());
 
-			if (rs.next()) {
-				stmt = con.createStatement();
+			if (rs.next()) { */
+				Statement stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO hashtagsubscription (userId, hashtagId) "
 						+ "VALUES ("
-						+ hs.getSubscriber()
+						+ hashtagSubscription.getSubscriber()
 						+ ",'"
-						+ hs.getSubscribedHashtag() + "')");
-			}
+						+ hashtagSubscription.getSubscribedHashtag() + "')");
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return hs;
+		return hashtagSubscription;
 	}
 	
-	public void delete(HashtagSubscription hs) {
+	public void delete(HashtagSubscription hashtagSubscription) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 			//HashtagSubscription gets deleted 
 			stmt.executeUpdate("DELETE FROM hashtagsubscription " + "WHERE userId="
-					+ hs.getSubscriber() +"AND hashtagId=" + hs.getSubscribedHashtag());
+					+ hashtagSubscription.getSubscriber() +"AND hashtagId=" + hashtagSubscription.getSubscribedHashtag());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
