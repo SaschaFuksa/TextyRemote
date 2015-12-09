@@ -34,10 +34,13 @@ public class ShowHashtagSubscription extends Showcase {
 	private AddHashtagForm addHashtagForm = new AddHashtagForm();
 	// Erzeugt eine CellList
 	CellList<String> cellList = new CellList<String>(new TextCell());
+	AddSubscriptionForm AddSubscriptionForm = new AddSubscriptionForm();
 
 	public void run() {
 
-		messageForm.onLoad();
+		//messageForm.run();
+		
+		AddSubscriptionForm.run();
 		
 		addHashtagForm.run();
 

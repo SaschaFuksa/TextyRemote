@@ -1,8 +1,10 @@
 package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.bo.User;
+
 import java.util.List;
 import java.util.Vector;
+
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -21,15 +23,19 @@ public class ShowUserSubscription extends Showcase {
 	 * MultiWordSuggestOracle oracle = new MultiWordSuggestOracle(); SuggestBox
 	 * suggestBox = new SuggestBox(oracle);
 	 */
-	private MessageForm messageForm = new MessageForm();
+	
 	CellList<String> cellList = new CellList<String>(new TextCell());
 	private UserForm addUserForm = new UserForm();
+	AddSubscriptionForm addSubscriptionForm = new AddSubscriptionForm();
+	
 
 	public void run() {
+		
+		//messageForm.run();
+		
+		addSubscriptionForm.run();
 
-		messageForm.run();
-
-		addUserForm.onLoad();
+		addUserForm.run();
 
 		// Create a list data provider.
 		final ListDataProvider<String> dataProvider = new ListDataProvider<String>();
