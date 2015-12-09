@@ -32,7 +32,7 @@ public class HashtagSubscriptionMapper {
 
 			if (rs.next()) { */
 				Statement stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO hashtagsubscription (userId, hashtagId) "
+				stmt.executeUpdate("INSERT INTO textydb.hashtagsubscription (userId, hashtagId) "
 						+ "VALUES ("
 						+ hashtagSubscription.getSubscriber()
 						+ ",'"
@@ -50,7 +50,7 @@ public class HashtagSubscriptionMapper {
 		try {
 			Statement stmt = con.createStatement();
 			//HashtagSubscription gets deleted 
-			stmt.executeUpdate("DELETE FROM hashtagsubscription " + "WHERE userId="
+			stmt.executeUpdate("DELETE FROM textydb.hashtagsubscription " + "WHERE userId="
 					+ hashtagSubscription.getSubscriber() +"AND hashtagId=" + hashtagSubscription.getSubscribedHashtag());
 		} catch (SQLException e) {
 			e.printStackTrace();

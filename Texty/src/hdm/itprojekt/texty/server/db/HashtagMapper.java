@@ -26,7 +26,7 @@ public class HashtagMapper {
 			Statement stmt = con.createStatement();
 			// Find highest Primarykey
 			ResultSet rs = stmt.executeQuery("SELECT MAX(hashtagId) AS maxid "
-					+ "FROM hashtag ");
+					+ "FROM textydb.hashtag ");
 
 			if (rs.next()) {
 
@@ -36,7 +36,7 @@ public class HashtagMapper {
 
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
-				stmt.executeUpdate("INSERT INTO hashtag (hashtagId, keyword)"
+				stmt.executeUpdate("INSERT INTO textydb.hashtag (hashtagId, keyword)"
 						+ "VALUES (" + hashtag.getId() + ", '" + hashtag.getKeyword()
 						+ "')");
 			}
