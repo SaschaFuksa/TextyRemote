@@ -27,7 +27,7 @@ public class MessageForm extends Showcase {
 
 	private TextArea messageBox = new TextArea();
 	private TextyInstanceControl instanceControl = new TextyInstanceControl();
-	Showcase hashtagForm = new HashtagForm();
+	Showcase hashtagForm = new AddHashtagForm();
 
 	private Button sendButton = new Button("Send Message", new ClickHandler() {
 		public void onClick(ClickEvent event) {
