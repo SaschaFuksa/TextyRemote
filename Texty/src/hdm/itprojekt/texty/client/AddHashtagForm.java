@@ -1,6 +1,6 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.gui.TextyHandler;
+import hdm.itprojekt.texty.client.gui.TextyInstanceControl;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 
 import java.util.Vector;
@@ -31,7 +31,7 @@ public class AddHashtagForm extends Showcase{
 
 	//private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	//private SuggestBox suggestBox = new SuggestBox(oracle);
-	private TextyHandler suggestHandler = new TextyHandler();
+	private TextyInstanceControl suggestHandler = new TextyInstanceControl();
 
 	private VerticalPanel navigation = new VerticalPanel();
 	private HorizontalPanel addPanel = new HorizontalPanel();

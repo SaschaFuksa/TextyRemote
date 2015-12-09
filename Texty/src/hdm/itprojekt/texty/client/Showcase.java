@@ -1,13 +1,13 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.gui.TextyHandler;
+import hdm.itprojekt.texty.client.gui.TextyInstanceControl;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public abstract class Showcase extends VerticalPanel {
 	
-	private TextyHandler showcaseHandler = new TextyHandler();
+	private TextyInstanceControl instanceControl = new TextyInstanceControl();
 	
 	public void onLoad() {
 
@@ -19,9 +19,9 @@ public abstract class Showcase extends VerticalPanel {
 	}
 	
 	protected void checkHeadline(){
-		if (!showcaseHandler.isApplicability()) {
+		if (!instanceControl.isApplicability()) {
 			this.add(this.createHeadline(this.getHeadlineText()));
-			showcaseHandler.setApplicability(true);
+			instanceControl.setApplicability(true);
 		}
 	}
 	

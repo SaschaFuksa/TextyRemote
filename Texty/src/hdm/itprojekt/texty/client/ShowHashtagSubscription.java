@@ -35,7 +35,7 @@ public class ShowHashtagSubscription extends Showcase {
 	 */
 	// private Button addButton = new Button();
 	// private Button deleteButton = new Button("Delete Hashtagsubscription");
-	private AddMessageForm messageForm = new AddMessageForm();
+	private MessageForm messageForm = new MessageForm();
 
 	public void run() {
 

@@ -27,7 +27,7 @@ public class CreateUserSubscription extends Showcase {
 	// Erzeugt eine CellList
 	CellList<String> cellList = new CellList<String>(new TextCell());
 
-	private AddUserForm addUserForm = new AddUserForm();
+	private UserForm addUserForm = new UserForm();
 
 	public void run() {
 
@@ -64,7 +64,7 @@ public class CreateUserSubscription extends Showcase {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						String selected = selectionModel.getSelectedObject();
 						if (selected != null) {
-							AddMessageForm messageForm = new AddMessageForm();
+							MessageForm messageForm = new MessageForm();
 							messageForm.onLoad();
 						}
 					}

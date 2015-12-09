@@ -77,7 +77,7 @@ public class CreateHashtagSubscription extends Showcase {
 					public void onSelectionChange(SelectionChangeEvent event) {
 						String selected = selectionModel.getSelectedObject();
 						if (selected != null) {
-							AddMessageForm messageForm = new AddMessageForm();
+							MessageForm messageForm = new MessageForm();
 							messageForm.onLoad();
 						}
 					}

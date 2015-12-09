@@ -31,7 +31,7 @@ public class ShowUserSubscription extends Showcase {
 	/*MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	SuggestBox suggestBox = new SuggestBox(oracle);*/
 	private Button addButton = new Button();
-	private AddMessageForm messageForm = new AddMessageForm();
+	private MessageForm messageForm = new MessageForm();
 	
 	
 	public void run() {

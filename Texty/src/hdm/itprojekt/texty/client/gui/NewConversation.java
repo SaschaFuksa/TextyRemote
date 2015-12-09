@@ -1,47 +1,27 @@
 package hdm.itprojekt.texty.client.gui;
 
 import com.google.gwt.user.client.ui.RootPanel;
-
-import hdm.itprojekt.texty.client.AddUserForm;
-import hdm.itprojekt.texty.client.AddMessageForm;
+import hdm.itprojekt.texty.client.UserForm;
+import hdm.itprojekt.texty.client.MessageForm;
 import hdm.itprojekt.texty.client.Showcase;
-
+/**
+ * Über New Conversation werden die Module zum erstellen einer Unterhaltung der GUI geladen. 
+ * 
+ * 
+ */
 public class NewConversation extends Showcase {
 
-	private Showcase addUserForm = new AddUserForm();
-	private Showcase messageForm = new AddMessageForm();
-
-	/*
-	 * // Hier entsteht noch eine Anzeige der Message und der Hashtags private
-	 * Label messageLabel = new Label( "(Hier wird die Nachricht angezeigt)");
-	 * private Label hashtagLabel = new Label(
-	 * "(Hier werden die ausgewaehlten Hashtags angezeigt)");
-	 */
-
-	/*
-	 * int i = 0;
-	 * 
-	 * User example = new User(); while(i < listOfUser.size()){ if(suggestBox
-	 * .getText().equals(listOfUser.get(i+1).getFirstName())){ example =
-	 * listOfUser.get(i+1); } else { i++; } }
-	 * deleteButton.setTabIndex(example.getId());
-	 */
+	private Showcase userForm = new UserForm();
+	private Showcase messageForm = new MessageForm();
 
 	public void run() {
 
-		// Dieser Aufruf erzeugt die Suggestbox im Navigator-Bereich.
-		RootPanel.get("Navigator").add(addUserForm);
+		RootPanel.get("Navigator").add(userForm);
 		RootPanel.get("Details").add(messageForm);
-		// Dieser Aufruf erzeugt eine neue Message im Navigator-Bereich.
 
-		/*
-		 * messagePanel.add(hashtagLabel); messagePanel.add(messageLabel);
-		 */
 	}
 
-	@Override
 	protected String getHeadlineText() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

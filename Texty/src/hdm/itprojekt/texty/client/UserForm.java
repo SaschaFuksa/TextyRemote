@@ -2,7 +2,7 @@ package hdm.itprojekt.texty.client;
 
 import java.util.Vector;
 
-import hdm.itprojekt.texty.client.gui.TextyHandler;
+import hdm.itprojekt.texty.client.gui.TextyInstanceControl;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,25 +18,41 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 /**
- * Diese Klasse beinhaltet die Vorlage für eine Vorschlagsbox, die die verfügbaren User anzeigt. 
- * 
- *
+ * Diese Klasse beinhaltet ein Modul, welches über eine Vorschlagbox die User des Systems ausgibt und über einen Button auf einen Panel hinzufügen. 
+ * TODO Automatische Überprüfung ob Nutzer schon ausgewählt wurde
+ * TODO Dummy Daten entfernen
+ * TODO CSS
  */
-public class AddUserForm extends Showcase {
+public class UserForm extends Showcase {
 
 	private HorizontalPanel selectedUserPanel = new HorizontalPanel();
-	private Label selectedUserLabel = new Label();
-	private Button deleteButton = new Button();
-
-	//private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	//private SuggestBox suggestBox = new SuggestBox(oracle);
-	private TextyHandler suggestHandler = new TextyHandler();
-
+	private HorizontalPanel userForm = new HorizontalPanel();
 	private VerticalPanel navigation = new VerticalPanel();
-	private HorizontalPanel addPanel = new HorizontalPanel();
+	private Label selectedNameLabel = new Label();
 
+	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+	private SuggestBox suggestBox = new SuggestBox(oracle);
+	private TextyInstanceControl instanceControl = new TextyInstanceControl();
+
+	private Button deleteButton = new Button();
+	private Button addButton = new Button("", new ClickHandler() {
+		public void onClick(ClickEvent event) {
+			UserForm addSelectedUser = new UserForm();
+			addSelectedUser.addUser(suggestBox.getText());
+		}
+	});
+	
+	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		public void onKeyUp(KeyUpEvent event) {
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				UserForm addSelectedUser = new UserForm();
+				addSelectedUser.addUser(suggestBox.getText());
+			}
+		}
+	};
+	
 	public void addUser(String text) {
-		selectedUserLabel.setText(text);
+		selectedNameLabel.setText(text);
 
 		deleteButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -46,44 +62,25 @@ public class AddUserForm extends Showcase {
 
 		deleteButton.getElement().setId("deleteButton");
 
-		selectedUserPanel.add(selectedUserLabel);
+		selectedUserPanel.add(selectedNameLabel);
 		selectedUserPanel.add(deleteButton);
 		RootPanel.get("Navigator").add(selectedUserPanel);
 	}
 
-	/*private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
-		public void onKeyUp(KeyUpEvent event) {
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				AddUserForm addSelectedUser = new AddUserForm();
-				addSelectedUser.addUser(suggestBox.getText());
-			}
-		}
-	};*/
-
-	/*private Button addButton = new Button("", new ClickHandler() {
-		public void onClick(ClickEvent event) {
-			AddUserForm addSelectedUser = new AddUserForm();
-			addSelectedUser.addUser(suggestBox.getText());
-		}
-	});
-
 	public void checkHandler() {
-		if (!suggestHandler.isApplicability()) {
+		if (!instanceControl.isApplicability()) {
 			suggestBox.addKeyUpHandler(suggestBoxHandler);
-			suggestHandler.setApplicability(true);
+			instanceControl.setApplicability(true);
 		}
-	}*/
+	}
 
-	@Override
 	protected String getHeadlineText() {
-		// TODO Auto-generated method stub
 		return "Add User";
 	}
 
-	// Wird automatisch bei der Objekterzeugung ausgeführt
 	protected void run() {
 
-		//checkHandler();
+		checkHandler();
 
 		// Example Users
 		User user1 = new User("Sasa", "sasa@fufu.de");
@@ -108,20 +105,16 @@ public class AddUserForm extends Showcase {
 		listOfUser.add(user5);
 		listOfUser.add(user6);
 
-		//addButton.getElement().setId("addButton");
+		addButton.getElement().setId("addButton");
 
-		// Befüllen der Suggestbox mit Inhalt. Am Ende sollen hier die
-		// angemeldeten
-		// User hinzugefügt werden z.B. mit oracle.addAll(user);
-		// Kleines Beispiel:
-		/*for (int i = 0; i < listOfUser.size(); i++) {
+		for (int i = 0; i < listOfUser.size(); i++) {
 			String name = new String(listOfUser.get(i).getNickName());
 			oracle.add(name);
-		}*/
+		}
 
-		//addPanel.add(suggestBox);
-		//addPanel.add(addButton);
-		navigation.add(addPanel);
+		userForm.add(suggestBox);
+		userForm.add(addButton);
+		navigation.add(userForm);
 		RootPanel.get("Navigator").add(navigation);
 	}
 }
