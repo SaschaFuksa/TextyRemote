@@ -22,7 +22,7 @@ public class MessageForm extends Showcase {
 
 	private VerticalPanel details = new VerticalPanel();
 	private UserForm userForm = new UserForm();
-	private HashtagForm hashtagForm = new HashtagForm();
+	private AddHashtagForm hashtagForm = new AddHashtagForm();
 	private Button sendButton = new Button("Send Message", new ClickHandler() {
 		public void onClick(ClickEvent event) {
 			String result = new String();

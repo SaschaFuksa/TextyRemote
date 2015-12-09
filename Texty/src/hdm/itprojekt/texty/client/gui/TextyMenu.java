@@ -1,12 +1,9 @@
 package hdm.itprojekt.texty.client.gui;
 
-import hdm.itprojekt.texty.client.CreateHashtagSubscription;
-import hdm.itprojekt.texty.client.CreateUserSubscription;
 import hdm.itprojekt.texty.client.ShowHashtagSubscription;
 import hdm.itprojekt.texty.client.ShowPrivateConversation;
 import hdm.itprojekt.texty.client.ShowPublicConversation;
 import hdm.itprojekt.texty.client.ShowUserSubscription;
-
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -29,16 +26,12 @@ public class TextyMenu {
 		mainMenuConversation.addItem("Show Conversations", subMenuConversation);
 		mainMenuConversation.setStyleName("menubar");
 
-		MenuBar subMenuHashtagSubscription = new MenuBar(true);
-		subMenuHashtagSubscription.addItem("Create",
-				command.getCommand(new CreateHashtagSubscription()));
+		MenuBar subMenuHashtagSubscription = new MenuBar(true);	
 		subMenuHashtagSubscription.addItem("Show",
 				command.getCommand(new ShowHashtagSubscription()));
 		subMenuHashtagSubscription.setStyleName("menubar");
 
 		MenuBar subMenuUserSubscription = new MenuBar(true);
-		subMenuUserSubscription.addItem("Create",
-				command.getCommand(new CreateUserSubscription()));
 		subMenuUserSubscription.addItem("Show",
 				command.getCommand(new ShowUserSubscription()));
 		subMenuUserSubscription.setStyleName("menubar");

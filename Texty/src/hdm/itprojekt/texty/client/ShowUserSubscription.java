@@ -1,50 +1,87 @@
 package hdm.itprojekt.texty.client;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-
 import hdm.itprojekt.texty.shared.bo.User;
-
+import java.util.List;
 import java.util.Vector;
-
+import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ShowUserSubscription extends Showcase {
 
-	// Wird im Details-Bereich realisiert
-	private VerticalPanel messagePanel = new VerticalPanel();
-	private HorizontalPanel buttonPanel = new HorizontalPanel();
-	// Wird im Navigator-Bereich realisiert
-	private VerticalPanel navigation = new VerticalPanel();
-	private HorizontalPanel addPanel = new HorizontalPanel();
-	/*MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	SuggestBox suggestBox = new SuggestBox(oracle);*/
-	private Button addButton = new Button();
+	/*
+	 * MultiWordSuggestOracle oracle = new MultiWordSuggestOracle(); SuggestBox
+	 * suggestBox = new SuggestBox(oracle);
+	 */
 	private MessageForm messageForm = new MessageForm();
-	
-	
+	CellList<String> cellList = new CellList<String>(new TextCell());
+	private UserForm addUserForm = new UserForm();
+
 	public void run() {
 
 		messageForm.run();
-		
-		/*deleteButton.addClickHandler(new ClickHandler() {
+
+		addUserForm.onLoad();
+
+		// Create a list data provider.
+		final ListDataProvider<String> dataProvider = new ListDataProvider<String>();
+
+		// Add the cellList to the dataProvider.
+		dataProvider.addDataDisplay(cellList);
+
+		// Create a form to add values to the data provider.
+		final SuggestBox valueBox = new SuggestBox();
+		valueBox.setText("Enter new User!");
+
+		// Anlegen des Add-Button
+		Button addButton = new Button("", new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				// Weitere Implementierung erforderlich
-				Window.alert("Usersubscription deleted!");
+				String newValue = valueBox.getText();
+				List<String> list = dataProvider.getList();
+				list.add(newValue);
 			}
 		});
-*/
+
+		// Handler, der beim Auswählen eines abonnierten Hashtags eine Instanz
+		// der Klasse ShowHashtagSubscription aufruft
+		// und dessen run-Methode aufruft. Dadurch erscheint z.B. eine
+		// Messagebox, in der alle Nachrichten mit diesem abonnierten
+		// Hashtag erscheinen
+		final SingleSelectionModel<String> selectionModel = new SingleSelectionModel<String>();
+		cellList.setSelectionModel(selectionModel);
+		selectionModel
+				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					public void onSelectionChange(SelectionChangeEvent event) {
+						String selected = selectionModel.getSelectedObject();
+						if (selected != null) {
+							MessageForm messageForm = new MessageForm();
+							messageForm.onLoad();
+						}
+					}
+				});
+
+		// Grafische Formatierung über den Aufruf der ID im CSS
+		addButton.getElement().setId("addButton");
+
+		VerticalPanel vertPanel = new VerticalPanel();
+		vertPanel.add(valueBox);
+		vertPanel.add(addButton);
+		vertPanel.add(cellList);
+		RootPanel.get("Navigator").add(vertPanel);
+
+		/*
+		 * deleteButton.addClickHandler(new ClickHandler() { public void
+		 * onClick(ClickEvent event) { // Weitere Implementierung erforderlich
+		 * Window.alert("Usersubscription deleted!"); } });
+		 */
 		// Example Users
 		User user1 = new User("Sasa", "sasa@fufu.de");
 		User user2 = new User("Daniel", "dada@sese.de");
@@ -68,91 +105,84 @@ public class ShowUserSubscription extends Showcase {
 		listOfUser.add(user5);
 		listOfUser.add(user6);
 
-		//addButton.getElement().setId("addButton");
+		// addButton.getElement().setId("addButton");
 
-		/*suggestBox.addKeyUpHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					final HorizontalPanel selectedUserPanel = new HorizontalPanel();
-					Label selectedUserLabel = new Label(suggestBox.getText());
-					Button deleteButton = new Button();
-					
-					 * int i = 0;
-					 * 
-					 * User example = new User(); while(i < listOfUser.size()){
-					 * if
-					 * (suggestBox.getText().equals(listOfUser.get(i+1).getFirstName
-					 * ())){ example = listOfUser.get(i+1); } else { i++; } }
-					 * deleteButton.setTabIndex(example.getId());
-					 
+		/*
+		 * suggestBox.addKeyUpHandler(new KeyUpHandler() { public void
+		 * onKeyUp(KeyUpEvent event) { if (event.getNativeKeyCode() ==
+		 * KeyCodes.KEY_ENTER) { final HorizontalPanel selectedUserPanel = new
+		 * HorizontalPanel(); Label selectedUserLabel = new
+		 * Label(suggestBox.getText()); Button deleteButton = new Button();
+		 * 
+		 * int i = 0;
+		 * 
+		 * User example = new User(); while(i < listOfUser.size()){ if
+		 * (suggestBox.getText().equals(listOfUser.get(i+1).getFirstName ())){
+		 * example = listOfUser.get(i+1); } else { i++; } }
+		 * deleteButton.setTabIndex(example.getId());
+		 * 
+		 * 
+		 * deleteButton.addClickHandler(new ClickHandler() { public void
+		 * onClick(ClickEvent event) { RootPanel.get("Navigator")
+		 * .remove(selectedUserPanel); } });
+		 */
 
-					deleteButton.addClickHandler(new ClickHandler() {
-						public void onClick(ClickEvent event) {
-							RootPanel.get("Navigator")
-									.remove(selectedUserPanel);
-						}
-					});*/
+		// deleteButton.getElement().setId("deleteButton");
 
-					//deleteButton.getElement().setId("deleteButton");
-
-					/*selectedUserPanel.add(selectedUserLabel);
-					selectedUserPanel.add(deleteButton);
-					RootPanel.get("Navigator").add(selectedUserPanel);
-
-				}
-			}
-		});
-*/
-		/*addButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				final HorizontalPanel selectedUserPanel = new HorizontalPanel();
-				Label selectedUserLabel = new Label(suggestBox.getText());
-				Button deleteButton = new Button();
-				
-				 * int i = 0;
-				 * 
-				 * User example = new User(); while(i < listOfUser.size()){
-				 * if(suggestBox
-				 * .getText().equals(listOfUser.get(i+1).getFirstName())){
-				 * example = listOfUser.get(i+1); } else { i++; } }
-				 * deleteButton.setTabIndex(example.getId());
-				 
-
-				deleteButton.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						RootPanel.get("Navigator").remove(selectedUserPanel);
-					}
-				});
-
-				deleteButton.getElement().setId("deleteButton");
-
-				selectedUserPanel.add(selectedUserLabel);
-				selectedUserPanel.add(deleteButton);
-				RootPanel.get("Navigator").add(selectedUserPanel);
-			}
-		});*/
+		/*
+		 * selectedUserPanel.add(selectedUserLabel);
+		 * selectedUserPanel.add(deleteButton);
+		 * RootPanel.get("Navigator").add(selectedUserPanel);
+		 * 
+		 * } } });
+		 */
+		/*
+		 * addButton.addClickHandler(new ClickHandler() { public void
+		 * onClick(ClickEvent event) { final HorizontalPanel selectedUserPanel =
+		 * new HorizontalPanel(); Label selectedUserLabel = new
+		 * Label(suggestBox.getText()); Button deleteButton = new Button();
+		 * 
+		 * int i = 0;
+		 * 
+		 * User example = new User(); while(i < listOfUser.size()){
+		 * if(suggestBox .getText().equals(listOfUser.get(i+1).getFirstName())){
+		 * example = listOfUser.get(i+1); } else { i++; } }
+		 * deleteButton.setTabIndex(example.getId());
+		 * 
+		 * 
+		 * deleteButton.addClickHandler(new ClickHandler() { public void
+		 * onClick(ClickEvent event) {
+		 * RootPanel.get("Navigator").remove(selectedUserPanel); } });
+		 * 
+		 * deleteButton.getElement().setId("deleteButton");
+		 * 
+		 * selectedUserPanel.add(selectedUserLabel);
+		 * selectedUserPanel.add(deleteButton);
+		 * RootPanel.get("Navigator").add(selectedUserPanel); } });
+		 */
 
 		// Befüllen der Suggestbox mit Inhalt. Am Ende sollen hier die
 		// angemeldeten
 		// User hinzugefügt werden z.B. mit oracle.addAll(user);
 		// Kleines Beispiel:
-		/*for (int i = 0; i < listOfUser.size(); i++) {
-			String name = new String(listOfUser.get(i).getNickName());
-			oracle.add(name);
-		}*/
+		/*
+		 * for (int i = 0; i < listOfUser.size(); i++) { String name = new
+		 * String(listOfUser.get(i).getNickName()); oracle.add(name); }
+		 */
 
 		// Hinzufügen der Widgets zu den jeweiligen Bereichen
-		
-		//messagePanel.add(buttonPanel);
-		//messagePanel.add(deleteButton);
 
-		//addPanel.add(suggestBox);
-		/*addPanel.add(addButton);
-		navigation.add(addPanel);
+		// messagePanel.add(buttonPanel);
+		// messagePanel.add(deleteButton);
 
-		// Verknüpfung mit der html-Struktur
-		RootPanel.get("Details").add(messagePanel);
-		RootPanel.get("Navigator").add(navigation);*/
+		// addPanel.add(suggestBox);
+		/*
+		 * addPanel.add(addButton); navigation.add(addPanel);
+		 * 
+		 * // Verknüpfung mit der html-Struktur
+		 * RootPanel.get("Details").add(messagePanel);
+		 * RootPanel.get("Navigator").add(navigation);
+		 */
 
 	} // Ende onLoad
 
