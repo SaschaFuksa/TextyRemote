@@ -34,7 +34,7 @@ div#Navigator {
 	float: left;
 	font-family: Texty;
 	font-size: 1.5em;
-	padding: 5px;
+	padding: 1%;
 	width: 23%;
 }
 
@@ -82,6 +82,28 @@ div#Banner {
 	color: white;
 	font-family: Texty;
 	font-size: 2em;
+	margin-bottom: 10px;
+}
+
+.errorLabel {
+	color: yellow;
+	font-family: Texty;
+	font-size: 1.5em;
+}
+
+input.gwt-SuggestBox {
+	color: #0080c0;
+	font-family: Texty;
+	font-size: 1.5em;
+	text-align: left;
+	height: 20px;
+}
+
+div.gwt-Label {
+	color: white;
+	font-family: Texty;
+	font-size: 1.5em;
+	text-align: left;
 }
 
 div#Details .texty-headline{

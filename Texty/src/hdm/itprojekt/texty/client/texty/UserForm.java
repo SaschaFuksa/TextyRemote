@@ -4,11 +4,14 @@ import java.util.Vector;
 
 import hdm.itprojekt.texty.shared.bo.User;
 
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -25,6 +28,7 @@ public class UserForm extends TextyForm {
 
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private Label text = new Label("Contact or subscribe new users!");
+	private Label errorLabel = new Label();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private Vector<User> allUser = new Vector<User>();
@@ -32,12 +36,13 @@ public class UserForm extends TextyForm {
 
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
+			errorLabel.setText("");
 			String username = suggestBox.getText();
 			boolean alreadySelected = checkUser(username);
 			if (allUser.isEmpty() || username == "") {
-				Window.alert("Please select a user!");
+				errorLabel.setText("Please select a user!");
 			} else if (alreadySelected) {
-				Window.alert("User is already selected!");
+				errorLabel.setText("User is already selected!");
 			} else {
 				addUser(username);
 			}
@@ -49,12 +54,12 @@ public class UserForm extends TextyForm {
 		String name = username;
 		for (int i = 0; i < allUser.size(); i++) {
 			if (name.equals(allUser.get(i).getNickName())) {
-				int index = i;
+				final int index = i;
 				selectedUser.addElement(allUser.get(i));
 				allUser.remove(i);
-				HorizontalPanel panel = new HorizontalPanel();
+				final HorizontalPanel panel = new HorizontalPanel();
 				Label nameLabel = new Label(username);
-				Button deleteButton = new Button("", new ClickHandler() {
+				final Button deleteButton = new Button("", new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						selectedUser.remove(index);
 						allUser.addElement(selectedUser.get(index));
@@ -69,7 +74,7 @@ public class UserForm extends TextyForm {
 				return;
 			}
 		}
-		Window.alert("User is unknown");
+		errorLabel.setText("User is unknown!");
 	}
 
 	public boolean checkUser(String username) {
@@ -83,7 +88,7 @@ public class UserForm extends TextyForm {
 	}
 
 	protected void run() {
-
+		
 		suggestBox.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -117,14 +122,17 @@ public class UserForm extends TextyForm {
 			String name = new String(allUser.get(i).getNickName());
 			oracle.add(name);
 		}
-
+		
 		addButton.getElement().setId("addButton");
+		errorLabel.setStylePrimaryName("errorLabel");
 
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
 
 		this.add(text);
 		this.add(suggestBoxPanel);
+		this.add(errorLabel);
+		this.add(errorLabel);
 	}
 
 }

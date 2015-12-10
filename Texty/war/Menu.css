@@ -1,6 +1,7 @@
 /** Set style for menubar and table, including gwt.uid's for submenu */
-.menubar {
-	
+.menubar table {
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .gwt-MenuItem {
