@@ -1,9 +1,12 @@
 package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.client.gui.Footer;
-import hdm.itprojekt.texty.client.gui.TextyMenu;
+import hdm.itprojekt.texty.client.texty.HomeForm;
+import hdm.itprojekt.texty.client.texty.TextyMenu;
+//import hdm.itprojekt.texty.client.gui.TextyMenu;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,10 +27,13 @@ public class Texty implements EntryPoint {
 	private Label nickname = new Label();
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private TextyMenu menu = new TextyMenu();
+	private HomeForm home = new HomeForm("Home");
 
 	public void onModuleLoad() {
 
 		menu.execute();
+		
+		RootPanel.get("Navigator").add(home);
 		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
