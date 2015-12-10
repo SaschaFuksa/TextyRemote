@@ -1,8 +1,9 @@
 package hdm.itprojekt.texty.server.db;
 
-import hdm.itprojekt.texty.shared.bo.*;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.Vector;
+
+import hdm.itprojekt.texty.shared.bo.*;
 
 public class UserSubscriptionMapper {
 
@@ -19,18 +20,39 @@ public class UserSubscriptionMapper {
 		return userSubscriptionMapper;
 	}
 
-	public ArrayList<UserSubscription> select(User u) {
-		ArrayList result = new ArrayList();
-		// ...
-		return result;
+	public UserSubscription insert(UserSubscription userSubscription) {
+		Connection con = DBConnection.connection();
+
+		try {
+			// TODO: überprüfen ob die Subscription schon vorhanden ist; oder
+			// schon gui seitig nicht möglich?
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("INSERT INTO textydb.usersubscription (subscriber_userId, subscribed_userId) "
+					+ "VALUES ("
+					+ userSubscription.getSubscriber()
+					+ ", "
+					+ userSubscription.getSubscribedUser() + ")");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userSubscription;
+		// TODO: Timestamp muss mit übergeben werden
 	}
 
-	public void insert(UserSubscription us) {
-		// ...
-	}
+	public void delete(UserSubscription userSubscription) {
+		Connection con = DBConnection.connection();
 
-	public void delete(UserSubscription us) {
-		// ...
+		try {
+			Statement stmt = con.createStatement();
+			// UserSubscription gets deleted
+			stmt.executeUpdate("DELETE FROM textydb.usersubscription "
+					+ "WHERE subscriber_userId="
+					+ userSubscription.getSubscriber()
+					+ "AND subscribed_userId="
+					+ userSubscription.getSubscribedUser());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-
 }

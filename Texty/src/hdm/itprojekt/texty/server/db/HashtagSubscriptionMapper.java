@@ -24,6 +24,8 @@ public class HashtagSubscriptionMapper {
 		Connection con = DBConnection.connection();
 
 		try {
+			// TODO: überprüfen ob die Subscription schon vorhanden ist; oder
+			// schon gui seitig nicht möglich?
 			/* Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT userId, hashtagId "
 					+ "FROM hashtagsubscription " + "WHERE userId"

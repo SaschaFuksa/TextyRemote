@@ -1,7 +1,7 @@
 package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
-
+import java.util.Vector;
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class ConversationMapper {
@@ -18,29 +18,35 @@ public class ConversationMapper {
 		}
 		return conversationMapper;
 	}
-
-	public Conversation insert(Conversation c) {
+	
+	public Conversation insert(Conversation conversation) {
 		Connection con = DBConnection.connection();
-		// ...
-		return c;
-	}
 
-	public Conversation select(Conversation c) {
-		Connection con = DBConnection.connection();
-		// ...
-		return c;
-	}
+		try {
+			Statement stmt = con.createStatement();
+			// Find highest Primarykey
+			ResultSet rs = stmt.executeQuery("SELECT MAX(conversationId) AS maxid "
+					+ "FROM textydb.conversation ");
 
-	public Conversation update(Conversation c) {
-		Connection con = DBConnection.connection();
-		// ...
-		return c;
-	}
+			if (rs.next()) {
 
-	public void delete(Conversation c) {
-		Connection con = DBConnection.connection();
-		// ...
+				conversation.setId(rs.getInt("maxid") + 1);
 
+				stmt = con.createStatement();
+
+				// Highest Primarykey has been found and set, now we insert it
+				// into the DB
+				stmt.executeUpdate("INSERT INTO textydb.conversation (conversationId, publicly)"
+						+ "VALUES ("
+						+ conversation.getId()
+						+ ", "
+						+ conversation.isPublicly() + ")");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return conversation;
 	}
 
 }

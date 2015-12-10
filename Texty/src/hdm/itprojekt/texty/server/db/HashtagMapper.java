@@ -37,11 +37,12 @@ public class HashtagMapper {
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
 				stmt.executeUpdate("INSERT INTO textydb.hashtag (hashtagId, keyword)"
-						+ "VALUES (" + hashtag.getId() + ", " + hashtag.getKeyword()
-						+ ")");
+						+ "VALUES ("
+						+ hashtag.getId()
+						+ ", "
+						+ hashtag.getKeyword() + ")");
 			}
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return hashtag;
@@ -52,13 +53,12 @@ public class HashtagMapper {
 
 		try {
 			Statement stmt = con.createStatement();
-			//Hashtag gets deleted 
+			// Hashtag gets deleted
 			stmt.executeUpdate("DELETE FROM hashtag " + "WHERE hashtagId="
 					+ hashtag.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 }
