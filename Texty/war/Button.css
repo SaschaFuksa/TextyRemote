@@ -1,4 +1,23 @@
 /** Set ids using widget.getElement().setId("idOfElement") for buttons */
+#button {
+	background: none;
+	background-color: #003399;
+	border-radius: 10px;
+	border-color: white;
+	color: white;
+	font-family: Texty;
+	font-size: 1.5em;
+	height: 36px;
+	padding: 5px;
+	text-align: center;
+	width: 150px;
+}
+
+#button:hover {
+	background-color: #80bfff;
+	border-color: white;
+}
+
 #addButton {
 	background: url('http://127.0.0.1:8888/icons/icon-add.png');
 	border: 0px outset buttonface;

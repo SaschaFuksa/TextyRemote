@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -67,15 +66,13 @@ public class UserForm extends TextyForm {
 		String name = username;
 		for (int i = 0; i < allUser.size(); i++) {
 			if (name.equals(allUser.get(i).getNickName())) {
-				final int index = selectedUser.size();
 				selectedUser.addElement(allUser.get(i));
 				allUser.remove(i);
 				final HorizontalPanel panel = new HorizontalPanel();
-				Label nameLabel = new Label(username);
+				final Label nameLabel = new Label(username);
 				final Button deleteButton = new Button("", new ClickHandler() {
 					public void onClick(ClickEvent event) {
-						allUser.addElement(selectedUser.get(index));
-						selectedUser.remove(index);
+						deleteUser(nameLabel.getText());
 						selectionPanel.remove(panel);
 					}
 
@@ -100,6 +97,20 @@ public class UserForm extends TextyForm {
 		}
 		return false;
 	}
+	
+	private void deleteUser(String nickname) {
+		String name = nickname;
+		int indexSelectedUser = 0;
+		for (int i = 0; i < selectedUser.size(); i++) {
+			if (name.equals(selectedUser.get(i).getNickName())) {
+				indexSelectedUser = i;
+			}
+		}
+		
+		allUser.addElement(selectedUser.get(indexSelectedUser));
+		selectedUser.remove(indexSelectedUser);
+		
+	}
 
 	protected void run() {
 
@@ -118,6 +129,13 @@ public class UserForm extends TextyForm {
 		User user5 = new User("Erich", "erer@meme.de");
 		User user6 = new User("Fred", "fredchen@schnuschnu.de");
 
+		user1.setId(1);
+		user2.setId(2);
+		user3.setId(3);
+		user4.setId(4);
+		user5.setId(5);
+		user6.setId(6);
+		
 		allUser.add(user1);
 		allUser.add(user2);
 		allUser.add(user3);
@@ -131,8 +149,9 @@ public class UserForm extends TextyForm {
 		}
 
 		addButton.getElement().setId("addButton");
+		sendMessageButton.getElement().setId("button");
+		subscribeButton.getElement().setId("button");
 		errorLabel.setStylePrimaryName("errorLabel");
-		selectionPanel.setHeight("100");
 
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
