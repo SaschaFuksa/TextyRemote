@@ -14,7 +14,7 @@ public class TextyMenu {
 				command.getCommand(new HomeForm("Home")));
 		menu.addItem("Conversation",
 				command.getCommand(new ConversationForm("Conversations")));
-		menu.addItem("User",
+		menu.addItem("Community",
 				command.getCommand(new UserForm("Users")));
 		menu.addItem("Hashtag",
 				command.getCommand(new HashtagForm("Hashtags")));

@@ -1,10 +1,4 @@
 /** Set layout (size, color) for different div areas */
-div#Wrapper {
-	margin: auto;
-	text-align: left;
-	height: 96%;
-}
-
 img#Logo {
 	float: left;
 	height: 10%;
@@ -12,6 +6,12 @@ img#Logo {
 	position: absolute;
 	top: 50px;
 	width: 5%;
+}
+
+div#Wrapper {
+	margin: auto;
+	text-align: left;
+	height: 96%;
 }
 
 div#Header {
@@ -50,9 +50,6 @@ div#Footer {
 	background-color: #80bfff;
 	bottom: 0;
 	color: white;
-	cursor: auto;
-	font-family: Texty;
-	font-size: 1.5em;
 	height: 50px;
 	left: 0;
 	opacity: 1;
@@ -78,6 +75,32 @@ div#Banner {
 	z-index: 990;
 }
 
+div.gwt-Label {
+	color: white;
+	font-family: Texty;
+	font-size: 1.5em;
+	text-align: left;
+}
+
+div.gwt-Label.Footer {
+	color: white;
+	font-family: Texty;
+	font-size: 1.8em;
+	text-align: center;
+}
+
+div#Details .texty-headline {
+	color: black;
+}
+
+input.gwt-SuggestBox {
+	color: #0080c0;
+	font-family: Texty;
+	font-size: 1.5em;
+	text-align: left;
+	height: 20px;
+}
+
 .texty-headline {
 	color: white;
 	font-family: Texty;
@@ -91,25 +114,39 @@ div#Banner {
 	font-size: 1.5em;
 }
 
-input.gwt-SuggestBox {
-	color: #0080c0;
-	font-family: Texty;
-	font-size: 1.5em;
-	text-align: left;
-	height: 20px;
-}
-
-div.gwt-Label {
+.selectedUserLabel {
+	background-color: #003399;
 	color: white;
 	font-family: Texty;
 	font-size: 1.5em;
-	text-align: left;
+	height: 25px;
+	margin-bottom: 2px;
+	margin-left: 10px;
+	padding-left: 8px;
+	width: 150px;
 }
 
-div#Details .texty-headline{
-	color: black;
+.gwt-Anchor {
+	color: #0080c0;
+	font-family: Texty;
+	font-size: 1.5em;
+	margin-right: 10px;
+}
+
+.gwt-Anchor:hover {
+	color: #80bfff;
 }
 
 .buttonLabel {
 	margin-top: 10px;
+}
+
+.scrollPanel {
+	scrollbar-3dlight-color: #FFD700;
+	scrollbar-arrow-color: #FFFF00;
+	scrollbar-base-color: #FF6347;
+	scrollbar-darkshadow-color: #FFA500;
+	scrollbar-face-color: #008080;
+	scrollbar-highlight-color: #FF69B4;
+	scrollbar-shadow-color: #FF00FF;
 }

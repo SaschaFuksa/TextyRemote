@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -25,8 +26,10 @@ public class UserForm extends TextyForm {
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private VerticalPanel selectionPanel = new VerticalPanel();
+	private VerticalPanel content = new  VerticalPanel();
+	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label("Contact or subscribe new users!");
-	private Label errorLabel = new Label();
+	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private Vector<User> allUser = new Vector<User>();
@@ -34,7 +37,7 @@ public class UserForm extends TextyForm {
 
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
-			errorLabel.setText("");
+			errorLabel.setText("\0");
 			String username = suggestBox.getText();
 			boolean alreadySelected = checkUser(username);
 			if (username == "") {
@@ -72,10 +75,11 @@ public class UserForm extends TextyForm {
 				allUser.remove(i);
 				final HorizontalPanel panel = new HorizontalPanel();
 				final Label nameLabel = new Label(username);
+				nameLabel.setStylePrimaryName("selectedUserLabel");
 				final Button deleteButton = new Button("", new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						deleteUser(nameLabel.getText());
-						selectionPanel.remove(panel);
+						content.remove(panel);
 					}
 
 				});
@@ -84,6 +88,7 @@ public class UserForm extends TextyForm {
 				panel.add(nameLabel);
 				panel.add(deleteButton);
 				selectionPanel.add(panel);
+				content.add(panel);
 				return;
 			}
 		}
@@ -92,8 +97,9 @@ public class UserForm extends TextyForm {
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 		public void onKeyUp(KeyUpEvent event) {
-			errorLabel.setText("");
+			errorLabel.setText("\0");
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				errorLabel.setText("\0");
 				String username = suggestBox.getText();
 				boolean alreadySelected = checkUser(username);
 				if (username == "") {
@@ -168,6 +174,7 @@ public class UserForm extends TextyForm {
 		subscribeButton.getElement().setId("button");
 		errorLabel.setStylePrimaryName("errorLabel");
 		buttonPanel.setStylePrimaryName("buttonLabel");
+		scroll.setHeight("110px");
 
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
@@ -177,6 +184,7 @@ public class UserForm extends TextyForm {
 		this.add(text);
 		this.add(suggestBoxPanel);
 		this.add(errorLabel);
+		this.add(scroll);
 		this.add(selectionPanel);
 		this.add(buttonPanel);
 	}
