@@ -48,20 +48,22 @@ public class UserForm extends TextyForm {
 
 	});
 
-	private Button subscribeButton = new Button("Subscribe", new ClickHandler() {
-		public void onClick(ClickEvent event) {
+	private Button subscribeButton = new Button("Subscribe",
+			new ClickHandler() {
+				public void onClick(ClickEvent event) {
 
-		}
+				}
 
-	});
-	
-	private Button sendMessageButton = new Button("Send Message", new ClickHandler() {
-		public void onClick(ClickEvent event) {
+			});
 
-		}
+	private Button sendMessageButton = new Button("Send Message",
+			new ClickHandler() {
+				public void onClick(ClickEvent event) {
 
-	});
-	
+				}
+
+			});
+
 	public void addUser(String username) {
 		String name = username;
 		for (int i = 0; i < allUser.size(); i++) {
@@ -88,6 +90,23 @@ public class UserForm extends TextyForm {
 		errorLabel.setText("User is unknown!");
 	}
 
+	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		public void onKeyUp(KeyUpEvent event) {
+			errorLabel.setText("");
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				String username = suggestBox.getText();
+				boolean alreadySelected = checkUser(username);
+				if (username == "") {
+					errorLabel.setText("Please select a user!");
+				} else if (alreadySelected) {
+					errorLabel.setText("User is already selected!");
+				} else {
+					addUser(username);
+				}
+			}
+		}
+	};
+
 	public boolean checkUser(String username) {
 		String name = username;
 		for (int i = 0; i < selectedUser.size(); i++) {
@@ -97,7 +116,7 @@ public class UserForm extends TextyForm {
 		}
 		return false;
 	}
-	
+
 	private void deleteUser(String nickname) {
 		String name = nickname;
 		int indexSelectedUser = 0;
@@ -106,21 +125,17 @@ public class UserForm extends TextyForm {
 				indexSelectedUser = i;
 			}
 		}
-		
+
 		allUser.addElement(selectedUser.get(indexSelectedUser));
 		selectedUser.remove(indexSelectedUser);
-		
+
 	}
 
 	protected void run() {
 
-		suggestBox.addKeyUpHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+		suggestBox.addKeyUpHandler(suggestBoxHandler);
 
-				}
-			}
-		});
+		suggestBox.setText("Search for user");
 
 		User user1 = new User("Sasa", "sasa@fufu.de");
 		User user2 = new User("Daniel", "dada@sese.de");
@@ -135,7 +150,7 @@ public class UserForm extends TextyForm {
 		user4.setId(4);
 		user5.setId(5);
 		user6.setId(6);
-		
+
 		allUser.add(user1);
 		allUser.add(user2);
 		allUser.add(user3);
@@ -152,6 +167,7 @@ public class UserForm extends TextyForm {
 		sendMessageButton.getElement().setId("button");
 		subscribeButton.getElement().setId("button");
 		errorLabel.setStylePrimaryName("errorLabel");
+		buttonPanel.setStylePrimaryName("buttonLabel");
 
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
