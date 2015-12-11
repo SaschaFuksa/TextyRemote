@@ -4,21 +4,18 @@ import java.util.Vector;
 
 import hdm.itprojekt.texty.shared.bo.User;
 
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UserForm extends TextyForm {
 
@@ -27,6 +24,8 @@ public class UserForm extends TextyForm {
 	}
 
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
+	private HorizontalPanel buttonPanel = new HorizontalPanel();
+	private VerticalPanel selectionPanel = new VerticalPanel();
 	private Label text = new Label("Contact or subscribe new users!");
 	private Label errorLabel = new Label();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
@@ -39,7 +38,7 @@ public class UserForm extends TextyForm {
 			errorLabel.setText("");
 			String username = suggestBox.getText();
 			boolean alreadySelected = checkUser(username);
-			if (allUser.isEmpty() || username == "") {
+			if (username == "") {
 				errorLabel.setText("Please select a user!");
 			} else if (alreadySelected) {
 				errorLabel.setText("User is already selected!");
@@ -48,29 +47,44 @@ public class UserForm extends TextyForm {
 			}
 		}
 
-	});;
+	});
 
+	private Button subscribeButton = new Button("Subscribe", new ClickHandler() {
+		public void onClick(ClickEvent event) {
+
+		}
+
+	});
+	
+	private Button sendMessageButton = new Button("Send Message", new ClickHandler() {
+		public void onClick(ClickEvent event) {
+
+		}
+
+	});
+	
 	public void addUser(String username) {
 		String name = username;
 		for (int i = 0; i < allUser.size(); i++) {
 			if (name.equals(allUser.get(i).getNickName())) {
-				final int index = i;
+				final int index = selectedUser.size();
 				selectedUser.addElement(allUser.get(i));
 				allUser.remove(i);
 				final HorizontalPanel panel = new HorizontalPanel();
 				Label nameLabel = new Label(username);
 				final Button deleteButton = new Button("", new ClickHandler() {
 					public void onClick(ClickEvent event) {
-						selectedUser.remove(index);
 						allUser.addElement(selectedUser.get(index));
-						RootPanel.get("Navigator").remove(panel);
+						selectedUser.remove(index);
+						selectionPanel.remove(panel);
 					}
 
-				});;
+				});
+				;
 				deleteButton.getElement().setId("deleteButton");
 				panel.add(nameLabel);
 				panel.add(deleteButton);
-				this.add(panel);
+				selectionPanel.add(panel);
 				return;
 			}
 		}
@@ -88,7 +102,7 @@ public class UserForm extends TextyForm {
 	}
 
 	protected void run() {
-		
+
 		suggestBox.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -104,13 +118,6 @@ public class UserForm extends TextyForm {
 		User user5 = new User("Erich", "erer@meme.de");
 		User user6 = new User("Fred", "fredchen@schnuschnu.de");
 
-		user1.setId(1);
-		user2.setId(2);
-		user3.setId(3);
-		user4.setId(4);
-		user5.setId(5);
-		user6.setId(6);
-
 		allUser.add(user1);
 		allUser.add(user2);
 		allUser.add(user3);
@@ -122,17 +129,21 @@ public class UserForm extends TextyForm {
 			String name = new String(allUser.get(i).getNickName());
 			oracle.add(name);
 		}
-		
+
 		addButton.getElement().setId("addButton");
 		errorLabel.setStylePrimaryName("errorLabel");
+		selectionPanel.setHeight("100");
 
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
+		buttonPanel.add(sendMessageButton);
+		buttonPanel.add(subscribeButton);
 
 		this.add(text);
 		this.add(suggestBoxPanel);
 		this.add(errorLabel);
-		this.add(errorLabel);
+		this.add(selectionPanel);
+		this.add(buttonPanel);
 	}
 
 }
