@@ -4,21 +4,28 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
+/**
+ * Hier werden die Commands für die Menübar initalisiert und je nach Tab den
+ * jeweiligen Modul angeordnet
+ * 
+ * 
+ */
 public class TextyCommand {
 
-	public Command getCommand(String form) {
-		final String test = form;
+	public Command getCommand(String moduleName) {
+		final String name = moduleName;
 		Command cmd = new Command() {
 			public void execute() {
 				RootPanel.get("Details").clear();
 				RootPanel.get("Navigator").clear();
-				switch (test) {
+				switch (name) {
 				case "Home":
 					TextyForm home = new HomeForm("Home");
 					RootPanel.get("Navigator").add(home);
 					break;
 				case "Conversation":
-					TextyForm conversation = new ConversationForm("Conversations");
+					TextyForm conversation = new ConversationForm(
+							"Conversations");
 					RootPanel.get("Navigator").add(conversation);
 					break;
 				case "Community":
@@ -43,24 +50,5 @@ public class TextyCommand {
 			}
 		};
 		return cmd;
-	}
-
-	public Command getReportCommand() {
-		Command cmdReport = new Command() {
-			public void execute() {
-				Window.Location
-						.assign("http://127.0.0.1:8888/TextyReports.html");
-			}
-		};
-		return cmdReport;
-	}
-
-	public Command getEditorCommand() {
-		Command cmdEditor = new Command() {
-			public void execute() {
-				Window.Location.assign("http://127.0.0.1:8888/Texty.html");
-			}
-		};
-		return cmdEditor;
 	}
 }

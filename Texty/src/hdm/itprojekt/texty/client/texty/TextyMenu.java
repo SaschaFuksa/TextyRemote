@@ -3,6 +3,11 @@ package hdm.itprojekt.texty.client.texty;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
 
+/**
+ * Die Menübar leitet den User durch Tabs an die jeweilige Kategorien weiter.
+ * 
+ * 
+ */
 public class TextyMenu {
 
 	private TextyCommand command = new TextyCommand();
