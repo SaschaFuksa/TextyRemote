@@ -8,23 +8,17 @@ public class TextyMenu {
 	private TextyCommand command = new TextyCommand();
 
 	public void execute() {
-		
+
 		MenuBar menu = new MenuBar();
-		menu.addItem("Home",
-				command.getCommand(new HomeForm("Home")));
-		menu.addItem("Conversation",
-				command.getCommand(new ConversationForm("Conversations")));
-		menu.addItem("Community",
-				command.getCommand(new UserForm("Users")));
-		menu.addItem("Hashtag",
-				command.getCommand(new HashtagForm("Hashtags")));
-		menu.addItem("Profile",
-				command.getCommand(new ProfileForm("Profile")));
-		menu.addItem("ReportGenerator", command.getReportCommand());
+		menu.addItem("Home", command.getCommand("Home"));
+		menu.addItem("Conversation", command.getCommand("Conversation"));
+		menu.addItem("Community", command.getCommand("Community"));
+		menu.addItem("Hashtag", command.getCommand("Hashtag"));
+		menu.addItem("Profile", command.getCommand("Profile"));
+		menu.addItem("ReportGenerator", command.getCommand("Report"));
 		menu.setStyleName("menubar");
 
 		RootPanel.get("Menu").add(menu);
 	}
 
 }
-
