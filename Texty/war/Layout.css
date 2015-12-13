@@ -129,7 +129,17 @@ input.gwt-SuggestBox {
 }
 
 .errorLabel {
+	color: red;
+	font-family: Texty;
+	font-size: 1.5em;
+}
+
+div#Navigator .errorLabel {
 	color: yellow;
+}
+
+.successLabel {
+	color: #13a84f;
 	font-family: Texty;
 	font-size: 1.5em;
 }
