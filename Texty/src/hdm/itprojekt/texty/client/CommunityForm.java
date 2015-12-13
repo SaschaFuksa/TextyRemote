@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,7 +25,6 @@ public class CommunityForm extends TextyForm {
 
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
-	private VerticalPanel selectionPanel = new VerticalPanel();
 	private VerticalPanel content = new  VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label("Contact or subscribe new users!");
@@ -88,8 +86,9 @@ public class CommunityForm extends TextyForm {
 				deleteButton.getElement().setId("deleteButton");
 				panel.add(nameLabel);
 				panel.add(deleteButton);
-				selectionPanel.add(panel);
 				content.add(panel);
+				suggestBox.setText("");
+				setOracle();
 				return;
 			}
 		}
@@ -137,9 +136,17 @@ public class CommunityForm extends TextyForm {
 		selectedUser.remove(indexSelectedUser);
 
 	}
+	
+	private void setOracle(){
+		oracle.clear();
+		for (int i = 0; i < allUser.size(); i++) {
+			String name = new String(allUser.get(i).getNickName());
+			oracle.add(name);
+		}
+	}
 
 	protected void run() {
-
+		
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
 
 		suggestBox.setText("Search for user");
@@ -165,10 +172,7 @@ public class CommunityForm extends TextyForm {
 		allUser.add(user5);
 		allUser.add(user6);
 
-		for (int i = 0; i < allUser.size(); i++) {
-			String name = new String(allUser.get(i).getNickName());
-			oracle.add(name);
-		}
+		setOracle();
 
 		addButton.getElement().setId("addButton");
 		sendMessageButton.getElement().setId("button");
@@ -186,9 +190,8 @@ public class CommunityForm extends TextyForm {
 		this.add(suggestBoxPanel);
 		this.add(errorLabel);
 		this.add(scroll);
-		this.add(selectionPanel);
 		this.add(buttonPanel);
-		RootPanel.get("Navigation").add(this);
+
 	}
 
 }

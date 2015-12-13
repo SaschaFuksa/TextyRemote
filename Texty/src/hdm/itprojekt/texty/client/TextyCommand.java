@@ -30,7 +30,10 @@ public class TextyCommand {
 					break;
 				case "Community":
 					TextyForm community = new CommunityForm("Users");
+					TextyForm userSubscription = new UserSubscriptionForm(
+							"User Subscriptions");
 					RootPanel.get("Navigator").add(community);
+					RootPanel.get("Details").add(userSubscription);
 					break;
 				case "Hashtag":
 					TextyForm hashtag = new HashtagForm("Hashtags");

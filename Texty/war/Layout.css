@@ -27,23 +27,28 @@ div#Menu {
 	padding: 5px;
 }
 
+div#container {
+	width:100%;
+	height: 77%;
+	display:-webkit-flex;
+	display:flex;
+}
+
 div#Navigator {
 	background-color: #0080c0;
 	color: white;
-	height: 77%;
 	float: left;
 	font-family: Texty;
 	font-size: 1.5em;
 	padding: 1%;
-	width: 23%;
+	flex: 1;
 }
 
 div#Details {
-	height: 77%;
 	font-family: Texty;
 	font-size: 1.5em;
-	padding: 5px;
-	width: 100%;
+	padding: 1%;
+	flex: 3;
 }
 
 div#Footer {
@@ -75,11 +80,37 @@ div#Banner {
 	z-index: 990;
 }
 
+.texty-headline {
+	color: white;
+	font-family: Texty;
+	font-size: 2em;
+	margin-bottom: 10px;
+}
+
+div#Details .texty-headline {
+	color: black;
+}
+
 div.gwt-Label {
 	color: white;
 	font-family: Texty;
 	font-size: 1.5em;
 	text-align: left;
+}
+
+div#Details div.gwt-Label {
+	color: black;
+}
+
+.gwt-HTML {
+	color: white;
+	font-family: Texty;
+	font-size: 1.5em;
+	text-align: left;
+}
+
+div#Details .gwt-HTML {
+	color: black;
 }
 
 div.gwt-Label.Footer {
@@ -89,23 +120,12 @@ div.gwt-Label.Footer {
 	text-align: center;
 }
 
-div#Details .texty-headline {
-	color: black;
-}
-
 input.gwt-SuggestBox {
 	color: #0080c0;
 	font-family: Texty;
 	font-size: 1.5em;
 	text-align: left;
 	height: 20px;
-}
-
-.texty-headline {
-	color: white;
-	font-family: Texty;
-	font-size: 2em;
-	margin-bottom: 10px;
 }
 
 .errorLabel {
