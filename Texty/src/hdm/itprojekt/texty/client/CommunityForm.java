@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,7 +26,7 @@ public class CommunityForm extends TextyForm {
 
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
-	private VerticalPanel content = new  VerticalPanel();
+	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label("Contact or subscribe new users!");
 	private Label errorLabel = new Label("\0");
@@ -53,7 +54,10 @@ public class CommunityForm extends TextyForm {
 	private Button subscribeButton = new Button("Subscribe",
 			new ClickHandler() {
 				public void onClick(ClickEvent event) {
-
+					TextyForm userSubscription = new UserSubscriptionForm(
+							"User Subscriptions", selectedUser);
+					RootPanel.get("Details").clear();
+					RootPanel.get("Details").add(userSubscription);
 				}
 
 			});
@@ -136,8 +140,8 @@ public class CommunityForm extends TextyForm {
 		selectedUser.remove(indexSelectedUser);
 
 	}
-	
-	private void setOracle(){
+
+	private void setOracle() {
 		oracle.clear();
 		for (int i = 0; i < allUser.size(); i++) {
 			String name = new String(allUser.get(i).getNickName());
@@ -146,7 +150,7 @@ public class CommunityForm extends TextyForm {
 	}
 
 	protected void run() {
-		
+
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
 
 		suggestBox.setText("Search for user");
