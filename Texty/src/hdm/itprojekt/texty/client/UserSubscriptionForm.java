@@ -31,8 +31,8 @@ public class UserSubscriptionForm extends TextyForm {
 			"To add new user, use the searchfield on the left! <br> "
 					+ "To delete subscriptions, click on the delete button next to your subscribed user.");
 	private Label errorLabel = new Label("\0");
-	private Label warningLabel = new Label("\0");
-	private Label successLabel = new Label("\0");
+	private Label warningLabel = new Label("");
+	private Label successLabel = new Label("");
 	private Vector<User> selectedUser = new Vector<User>();
 	private Vector<User> subscribedUser = new Vector<User>();
 
@@ -41,25 +41,10 @@ public class UserSubscriptionForm extends TextyForm {
 		String warning = new String("");
 		for (int i = 0; i < selectedUser.size(); i++) {
 			if (checkSubscription(selectedUser.get(i).getNickName())) {
-				final HorizontalPanel panel = new HorizontalPanel();
-				final Label nameLabel = new Label(selectedUser.get(i)
-						.getNickName());
-				nameLabel.setStylePrimaryName("selectedObjectLabel");
-				final Button deleteButton = new Button("", new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						deleteSubscription(nameLabel.getText());
-						content.remove(panel);
-					}
-
-				});
-				;
-				deleteButton.getElement().setId("deleteButton");
-				panel.add(nameLabel);
-				panel.add(deleteButton);
-				content.add(panel);
-				result = result + " " + selectedUser.get(i).getNickName();
+				subscribedUser.add(selectedUser.get(i));
+				result = result + " '" + selectedUser.get(i).getNickName() + "'";
 			} else {
-				warning = warning + " " + selectedUser.get(i).getNickName();
+				warning = warning + " '" + selectedUser.get(i).getNickName() + "'";
 			}
 		}
 		if (result != "") {
@@ -125,6 +110,8 @@ public class UserSubscriptionForm extends TextyForm {
 		subscribedUser.add(user1);
 		subscribedUser.add(user2);
 
+		addUserSubscriptions();
+
 		showSubscriptions();
 
 		warningLabel.setStylePrimaryName("errorLabel");
@@ -136,8 +123,6 @@ public class UserSubscriptionForm extends TextyForm {
 		this.add(scroll);
 		this.add(warningLabel);
 		this.add(successLabel);
-
-		addUserSubscriptions();
 
 	}
 
