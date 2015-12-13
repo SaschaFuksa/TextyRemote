@@ -1,4 +1,4 @@
-package hdm.itprojekt.texty.client.texty;
+package hdm.itprojekt.texty.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;

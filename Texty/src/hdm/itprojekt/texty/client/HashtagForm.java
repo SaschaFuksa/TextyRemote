@@ -1,9 +1,5 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.gui.TextyInstanceControl;
-import hdm.itprojekt.texty.shared.bo.Hashtag;
-import hdm.itprojekt.texty.shared.bo.User;
-
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,109 +11,174 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class HashtagForm extends Showcase {
-	private HorizontalPanel selectedHashtagPanel = new HorizontalPanel();
-	private HorizontalPanel hashtagForm = new HorizontalPanel();
-	private VerticalPanel details = new VerticalPanel();
-	private Label selectedHashtagLabel = new Label();
-	private int selectedNameLabelId;
-	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 
+public class HashtagForm extends TextyForm {
+
+	public HashtagForm(String headline) {
+		super(headline);
+		// TODO Auto-generated constructor stub
+	}
+	
+	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
+	private HorizontalPanel buttonPanel = new HorizontalPanel();
+	private VerticalPanel selectionPanel = new VerticalPanel();
+	private VerticalPanel content = new  VerticalPanel();
+	private ScrollPanel scroll = new ScrollPanel(content);
+	private Label text = new Label("Subscribe new hashtags!");
+	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
-	private TextyInstanceControl instanceControl = new TextyInstanceControl();
-
-	private Button deleteButton = new Button();
+	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
+	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+	
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
-			UserForm addSelectedUser = new UserForm();
-			addSelectedUser.addUser(suggestBox.getText());
+			errorLabel.setText("\0");
+			String keyword = suggestBox.getText();
+			boolean alreadySelected = checkHashtag(keyword);
+			if (keyword == "") {
+				errorLabel.setText("Please select a hashtag!");
+			} else if (alreadySelected) {
+				errorLabel.setText("User is already selected!");
+			} else {
+				addUser(keyword);
+			}
 		}
+
 	});
+
+	private Button subscribeButton = new Button("Subscribe",
+			new ClickHandler() {
+				public void onClick(ClickEvent event) {
+
+				}
+
+			});
+
+	public void addUser(String keyword) {
+		String name = keyword;
+		for (int i = 0; i < allHashtag.size(); i++) {
+			if (name.equals(allHashtag.get(i).getKeyword())) {
+				selectedHashtag.addElement(allHashtag.get(i));
+				allHashtag.remove(i);
+				final HorizontalPanel panel = new HorizontalPanel();
+				final Label keywordLabel = new Label("#" + keyword);
+				keywordLabel.setStylePrimaryName("selectedObjectLabel");
+				final Button deleteButton = new Button("", new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						deleteHashtag(keywordLabel.getText());
+						content.remove(panel);
+					}
+
+				});
+				;
+				deleteButton.getElement().setId("deleteButton");
+				panel.add(keywordLabel);
+				panel.add(deleteButton);
+				selectionPanel.add(panel);
+				content.add(panel);
+				return;
+			}
+		}
+		errorLabel.setText("Hashtag is unknown!");
+	}
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 		public void onKeyUp(KeyUpEvent event) {
+			errorLabel.setText("\0");
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				UserForm addSelectedUser = new UserForm();
-				addSelectedUser.addUser(suggestBox.getText());
+				errorLabel.setText("\0");
+				String keyword = suggestBox.getText();
+				boolean alreadySelected = checkHashtag(keyword);
+				if (keyword == "") {
+					errorLabel.setText("Please select a Hashtag!");
+				} else if (alreadySelected) {
+					errorLabel.setText("Hashtag is already selected!");
+				} else {
+					addUser(keyword);
+				}
 			}
 		}
 	};
 
-	public void addUser(String keyword) {
-		selectedHashtagLabel.setText(keyword);
-		Hashtag hashtag = new Hashtag();
-		hashtag.setKeyword(keyword);
-		selectedHashtag.add(hashtag);
-		selectedNameLabelId = selectedHashtag.indexOf(hashtag);
-		deleteButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				selectedHashtag.remove(selectedNameLabelId);
-				RootPanel.get("Navigator").remove(selectedHashtagPanel);
+	public boolean checkHashtag(String keyword) {
+		String name = keyword;
+		for (int i = 0; i < selectedHashtag.size(); i++) {
+			if (name.equals(selectedHashtag.get(i).getKeyword())) {
+				return true;
 			}
-
-		});
-		System.out.println("nach delete");
-		deleteButton.getElement().setId("deleteButton");
-
-		selectedHashtagPanel.add(selectedHashtagLabel);
-		selectedHashtagPanel.add(deleteButton);
-		RootPanel.get("Navigator").add(selectedHashtagPanel);
-	}
-
-	public void checkHandler() {
-		if (!instanceControl.isApplicability()) {
-			suggestBox.addKeyUpHandler(suggestBoxHandler);
-			instanceControl.setApplicability(true);
 		}
+		return false;
 	}
 
-	protected String getHeadlineText() {
-		return "Add User";
+	private void deleteHashtag(String keyword) {
+		String name = keyword;
+		int indexSelectedHashtag = 0;
+		for (int i = 0; i < selectedHashtag.size(); i++) {
+			if (name.equals(selectedHashtag.get(i).getKeyword())) {
+				indexSelectedHashtag = i;
+			}
+		}
+
+		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
+		selectedHashtag.remove(indexSelectedHashtag);
 	}
 
-	public Vector<Hashtag> getSelectedUser() {
-		return selectedHashtag;
-	}
 
+	@Override
 	protected void run() {
+		suggestBox.addKeyUpHandler(suggestBoxHandler);
 
-		checkHandler();
+		suggestBox.setText("Search for Hashtags");
 
-		// Example Users
-		User user1 = new User("Sasa", "sasa@fufu.de");
-		User user2 = new User("Daniel", "dada@sese.de");
-		User user3 = new User("David", "dada@hehe.de");
-		User user4 = new User("Matteo", "mama@brbr.de");
-		User user5 = new User("Erich", "erer@meme.de");
-		User user6 = new User("Fred", "fredchen@schnuschnu.de");
+		Hashtag hashtag1 = new Hashtag("VfB Abstieg");
+		Hashtag hashtag2 = new Hashtag("Texty");
+		Hashtag hashtag3 = new Hashtag("Pizza");
+		Hashtag hashtag4 = new Hashtag("Yee boi");
+		Hashtag hashtag5 = new Hashtag("Alkohol");
+		Hashtag hashtag6 = new Hashtag("Sprechstunde?");
 
-		user1.setId(1);
-		user2.setId(2);
-		user3.setId(3);
-		user4.setId(4);
-		user5.setId(5);
-		user6.setId(6);
+		hashtag1.setId(1);
+		hashtag2.setId(2);
+		hashtag3.setId(3);
+		hashtag4.setId(4);
+		hashtag5.setId(5);
+		hashtag6.setId(6);
 
-		Vector<User> listOfUser = new Vector<User>();
-		listOfUser.add(user1);
-		listOfUser.add(user2);
-		listOfUser.add(user3);
-		listOfUser.add(user4);
-		listOfUser.add(user5);
-		listOfUser.add(user6);
+		allHashtag.add(hashtag1);
+		allHashtag.add(hashtag2);
+		allHashtag.add(hashtag3);
+		allHashtag.add(hashtag4);
+		allHashtag.add(hashtag5);
+		allHashtag.add(hashtag6);
 
-		addButton.getElement().setId("addButton");
-
-		for (int i = 0; i < listOfUser.size(); i++) {
-			String name = new String(listOfUser.get(i).getNickName());
+		for (int i = 0; i < allHashtag.size(); i++) {
+			String name = new String(allHashtag.get(i).getKeyword());
 			oracle.add(name);
 		}
 
+		addButton.getElement().setId("addButton");
+		subscribeButton.getElement().setId("button");
+		errorLabel.setStylePrimaryName("errorLabel");
+		buttonPanel.setStylePrimaryName("buttonLabel");
+		scroll.setSize("250px", "110px");
+
+		suggestBoxPanel.add(suggestBox);
+		suggestBoxPanel.add(addButton);
+		buttonPanel.add(subscribeButton);
+
+		this.add(text);
+		this.add(suggestBoxPanel);
+		this.add(errorLabel);
+		this.add(scroll);
+		this.add(selectionPanel);
+		this.add(buttonPanel);
 		
 	}
+
 }

@@ -1,8 +1,5 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.gui.Footer;
-import hdm.itprojekt.texty.client.texty.HomeForm;
-import hdm.itprojekt.texty.client.texty.TextyMenu;
 //import hdm.itprojekt.texty.client.gui.TextyMenu;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;

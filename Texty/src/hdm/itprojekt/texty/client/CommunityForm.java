@@ -1,4 +1,4 @@
-package hdm.itprojekt.texty.client.texty;
+package hdm.itprojekt.texty.client;
 
 import java.util.Vector;
 
@@ -13,13 +13,14 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class UserForm extends TextyForm {
+public class CommunityForm extends TextyForm {
 
-	public UserForm(String headline) {
+	public CommunityForm(String headline) {
 		super(headline);
 	}
 
@@ -75,7 +76,7 @@ public class UserForm extends TextyForm {
 				allUser.remove(i);
 				final HorizontalPanel panel = new HorizontalPanel();
 				final Label nameLabel = new Label(username);
-				nameLabel.setStylePrimaryName("selectedUserLabel");
+				nameLabel.setStylePrimaryName("selectedObjectLabel");
 				final Button deleteButton = new Button("", new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						deleteUser(nameLabel.getText());
@@ -174,7 +175,7 @@ public class UserForm extends TextyForm {
 		subscribeButton.getElement().setId("button");
 		errorLabel.setStylePrimaryName("errorLabel");
 		buttonPanel.setStylePrimaryName("buttonLabel");
-		scroll.setHeight("110px");
+		scroll.setSize("250px", "110px");
 
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
@@ -187,6 +188,7 @@ public class UserForm extends TextyForm {
 		this.add(scroll);
 		this.add(selectionPanel);
 		this.add(buttonPanel);
+		RootPanel.get("Navigation").add(this);
 	}
 
 }

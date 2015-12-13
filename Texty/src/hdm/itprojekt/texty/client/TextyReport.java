@@ -1,6 +1,5 @@
-package hdm.itprojekt.texty.client.gui;
+package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.LoginInfo;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
 

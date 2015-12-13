@@ -1,4 +1,4 @@
-package hdm.itprojekt.texty.client.texty;
+package hdm.itprojekt.texty.client;
 
 public class ProfileForm extends TextyForm {
 
