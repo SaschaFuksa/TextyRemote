@@ -2,6 +2,9 @@ package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
 import java.util.Vector;
+
+import com.google.gwt.user.client.Window;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class UserMapper {
@@ -37,15 +40,15 @@ public class UserMapper {
 				
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
-				stmt.executeUpdate("INSERT INTO textydb.user (userId, givenName, lastName email)"
+				stmt.executeUpdate("INSERT INTO textydb.user (userId, givenName, familyName, email)"
 						+ "VALUES ("
 						+ user.getId()
 						+ ", "
-						+ user.getFirstName()
+						+ "'" + user.getFirstName() + "'"
 						+ ", "
-						+ user.getLastName()
+						+ "'" + user.getLastName() + "'"
 						+ ", " 
-						+ user.getEmail() + ")");
+						+ "'" + user.getEmail() + "')");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

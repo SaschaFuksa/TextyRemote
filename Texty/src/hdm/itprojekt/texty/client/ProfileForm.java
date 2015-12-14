@@ -1,10 +1,18 @@
 package hdm.itprojekt.texty.client;
 
+import java.util.logging.Level;
+
+import hdm.itprojekt.texty.shared.TextyAdministration;
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.User;
+import hdm.itprojekt.texty.server.TextyAdministrationImpl;
 import hdm.itprojekt.texty.server.db.UserMapper;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -21,7 +29,7 @@ public class ProfileForm extends TextyForm {
 	private TextBox firstname = new TextBox();
 	private TextBox lastname = new TextBox();
 	private Button save = new Button("Save");
-	private User user;
+	private static User user;
 	private static String email;
 	
 	public ProfileForm(String headline) {
@@ -31,9 +39,6 @@ public class ProfileForm extends TextyForm {
 	@Override
 	protected void run() {
 		email = Texty.getLoginInfo().getEmailAddress();
-		// TODO: User aus DB laden
-		//user = UserMapper.userMapper().findByEmail(email);
-		user = new User();
 		
 		// Create UI
 		
@@ -53,16 +58,22 @@ public class ProfileForm extends TextyForm {
 			public void onClick(ClickEvent event) {
 				// Implementation für das Speichern eines Users
 				
-				if(user == null) {
-					user = new User();
-					
-					user.setFirstName(firstname.getText());
-					user.setLastName(lastname.getText());
-					user.setEmail(email);
-					
-					// TODO: User in DB speichern
-					//UserMapper.userMapper().insert(user);
+				TextyAdministrationAsync administration = GWT.create(TextyAdministration.class);
+				
+				class checkUserCallback implements AsyncCallback<Void> {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("FAILURE");
+					}
+
+					@Override
+					public void onSuccess(Void nothing) {
+						Window.alert("SUCCESS");
+					}
 				}
+				
+				administration.checkUserData(new checkUserCallback());
 			}
 		});
 		
