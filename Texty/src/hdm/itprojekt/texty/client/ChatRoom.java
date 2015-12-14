@@ -29,10 +29,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * 
- * Diese Klasse zeigt die abonnierten Inhalte in einer FlexTable an 
+ * Diese Klasse zeigt die abonnierten Inhalte in einer FlexTable an
  * 
- * TODO Implementation für das Aktualisieren und Löschen einer Nachricht, ScrollPanel hinzufügen, Headline
- * wird noch nicht angezeigt.
+ * TODO Implementation für das Aktualisieren und Löschen einer Nachricht,
+ * ScrollPanel hinzufügen, Headline wird noch nicht angezeigt.
  */
 public class ChatRoom extends TextyForm {
 
@@ -43,58 +43,108 @@ public class ChatRoom extends TextyForm {
 	private Button addMessageButton = new Button("Send");
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
-	private Vector<Message> messageList = new Vector<Message>();
+	private Vector<String> messageList = new Vector<String>();
 	private TextArea area = new TextArea();
-	//private HorizontalSplitPanel split = new HorizontalSplitPanel();
-
-	// private TextArea textArea = new TextArea();
 
 	public ChatRoom(String headline) {
 		super(headline);
 	}
 
-	// Methode, um eine Nachricht der FlexTable hinzuzufügen
+	protected void run() {
 
-	private void showConversation() {
+		chatFlexTable.setText(0, 0, "Chat");
+		chatFlexTable.setText(0, 1, "   ");
+		chatFlexTable.setText(0, 2, "Delete");
+		chatFlexTable.setText(0, 3, "   ");
+		chatFlexTable.setText(0, 4, "Edit");
 
-		for (int i = 0; i < messageList.size(); i++) {
-			String text = messageList.get(i).getText();
-			// Label textLabel = new Label(text);
-			int row = chatFlexTable.getRowCount();
-			chatFlexTable.setText(row, 0, text);
+		// Diese Messages symbolisieren bereits abonnierte Messages. Diese
+		// werden auf der Startseite Home angezeigt
+		Message m1 = new Message("Hallo");
+		Message m2 = new Message("Hey, wie gehts dir?");
+		Message m3 = new Message("Habe Hunger, #Pizza verbrannt");
+		Message m4 = new Message("Oh nein :(");
+		Message m5 = new Message("Naja wird schon");
+		Message m6 = new Message(
+				"Okay, ich muss los, #VfB spielt gleich #naechsteNiederlage");
 
-			// Delete-Button
-			Button deleteMessageButton = new Button("x");
-			deleteMessageButton.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
+		messageList.add(m1.getText());
+		messageList.add(m2.getText());
+		messageList.add(m3.getText());
+		messageList.add(m4.getText());
+		messageList.add(m5.getText());
+		messageList.add(m6.getText());
 
+		addPanel.add(textBox);
+		addPanel.add(addMessageButton);
+		mainPanel.add(chatFlexTable);
+		mainPanel.add(addPanel);
+
+		textBox.setFocus(true);
+
+		addMessageButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				addNewMessage();
+				textBox.setText("");
+			}
+		});
+
+		// Listen for keyboard events in the input box.
+		textBox.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					addNewMessage();
+					textBox.setText("");
 				}
-			});
+			}
+		});
 
-			// Edit-Button
-			Button editMessageButton = new Button("Edit");
-			editMessageButton.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					// Implementation für das Aktualisieren einer Nachricht
-				}
-			});
+		showConversation();
+		// mainPanel.add(split);
+		RootPanel.get("Details").add(mainPanel);
 
-			chatFlexTable.setWidget(row, 2, deleteMessageButton);
-			chatFlexTable.setWidget(row, 4, editMessageButton);
-			// VerticalPanel message = new VerticalPanel();
-			// message.add(text);
-			// mainPanel.add(message);
-		}
 	}
 
-	private void addMessage() {
+	private void addExistingMessage(String sText) {
+		final String text = sText;
+		int row = chatFlexTable.getRowCount();
+		chatFlexTable.setText(row, 0, text);
+
+		// Delete-Button
+		Button deleteMessageButton = new Button("x");
+		deleteMessageButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.alert("alles kacke");
+				int removedIndex = messageList.indexOf(text);
+				messageList.remove(removedIndex);
+				chatFlexTable.removeRow(removedIndex + 1);
+			}
+		});
+
+		// Edit-Button
+		Button editMessageButton = new Button("Edit");
+		editMessageButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+
+			}
+		});
+		chatFlexTable.setWidget(row, 2, deleteMessageButton);
+		chatFlexTable.setWidget(row, 4, editMessageButton);
+	}
+
+	private void showConversation() {
+		for (int i = 0; i < messageList.size(); i++) {
+			addExistingMessage(messageList.get(i));
+			// addExistingMessage(messageList.get(i).getText()); (Mit
+			// Messageobjekten anstatt Strings
+		} // Ende for-Schleife
+	}
+
+	private void addNewMessage() {
 		final String textFromTextbox = textBox.getText().trim();
 		textBox.setFocus(true);
 
-		if (textFromTextbox.isEmpty()) {
-			Window.alert("Please enter a Message!");
-			return;
-		}
+		messageList.add(textFromTextbox);
 
 		int row = chatFlexTable.getRowCount();
 		chatFlexTable.setText(row, 0, textFromTextbox);
@@ -103,7 +153,12 @@ public class ChatRoom extends TextyForm {
 		Button deleteMessageButton = new Button("x");
 		deleteMessageButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				Window.alert(textFromTextbox);
+
 				int removedIndex = messageList.indexOf(textFromTextbox);
+				Integer removedIndex2 = new Integer(removedIndex);
+				String s = removedIndex2.toString();
+				Window.alert(s);
 				messageList.remove(removedIndex);
 				chatFlexTable.removeRow(removedIndex + 1);
 			}
@@ -122,62 +177,10 @@ public class ChatRoom extends TextyForm {
 		chatFlexTable.setWidget(row, 2, deleteMessageButton);
 		chatFlexTable.setWidget(row, 4, editMessageButton);
 
-	}
-
-	protected void run() {
-
-		chatFlexTable.setText(0, 0, "Chat");
-		chatFlexTable.setText(0, 1, "   ");
-		chatFlexTable.setText(0, 2, "Delete");
-		chatFlexTable.setText(0, 3, "   ");
-		chatFlexTable.setText(0, 4, "Edit");
-
-		// Diese Messages symbolisieren bereits abonnierte Messages. Diese
-		// werden auf der Startseite Home angezeigt
-		Message m1 = new Message("Hallo");
-		Message m2 = new Message("Hey, wie gehts dir?");
-		Message m3 = new Message("Habe Hunger, #Pizza verbrannt");
-		Message m4 = new Message("Oh nein :(");
-		Message m5 = new Message("Naja wird schon");
-		Message m6 = new Message("Okay, ich muss los, #VfB spielt gleich #naechsteNiederlage");
-
-		messageList.add(m1);
-		messageList.add(m2);
-		messageList.add(m3);
-		messageList.add(m4);
-		messageList.add(m5);
-		messageList.add(m6);
-
-		addPanel.add(textBox);
-		addPanel.add(addMessageButton);
-
-		mainPanel.add(chatFlexTable);
-		mainPanel.add(addPanel);
-
-		// Move cursor focus to the input box.
-		textBox.setFocus(true);
-
-		// Listen for mouse events on the Add button.
-		addMessageButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				addMessage();
-				textBox.setText("");
-			}
-		});
-
-		// Listen for keyboard events in the input box.
-		textBox.addKeyDownHandler(new KeyDownHandler() {
-			public void onKeyDown(KeyDownEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					addMessage();
-					textBox.setText("");
-				}
-			}
-		});
-
-		showConversation();
-		//mainPanel.add(split);
-		RootPanel.get("Details").add(mainPanel);
+		if (textFromTextbox.isEmpty()) {
+			Window.alert("Please enter a Message!");
+			return;
+		}
 
 	}
 
