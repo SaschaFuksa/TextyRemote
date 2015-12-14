@@ -37,11 +37,13 @@ public class UserMapper {
 				
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
-				stmt.executeUpdate("INSERT INTO textydb.user (userId, givenName, email)"
+				stmt.executeUpdate("INSERT INTO textydb.user (userId, givenName, lastName email)"
 						+ "VALUES ("
 						+ user.getId()
 						+ ", "
-						+ user.getNickName()
+						+ user.getFirstName()
+						+ ", "
+						+ user.getLastName()
 						+ ", " 
 						+ user.getEmail() + ")");
 			}
