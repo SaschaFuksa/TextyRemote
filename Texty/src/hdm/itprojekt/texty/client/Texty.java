@@ -29,9 +29,9 @@ public class Texty implements EntryPoint {
 	public void onModuleLoad() {
 
 		menu.execute();
-		
+
 		RootPanel.get("Navigator").add(home);
-		
+
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {

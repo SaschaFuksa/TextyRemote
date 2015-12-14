@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -72,6 +71,8 @@ public class UserSubscriptionForm extends TextyForm {
 		for (int i = 0; i < subscribedUser.size(); i++) {
 			if (name.equals(subscribedUser.get(i).getNickName())) {
 				indexSelectedUser = i;
+				successLabel.setText("Subscribed user '" + subscribedUser.get(i).getNickName() + "' sucessful removed!");
+				warningLabel.setText("");
 			}
 		}
 

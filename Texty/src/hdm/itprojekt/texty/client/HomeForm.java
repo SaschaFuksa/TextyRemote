@@ -3,7 +3,7 @@ package hdm.itprojekt.texty.client;
 public class HomeForm extends TextyForm {
 	
 	private ChatRoom chatRoom = new ChatRoom("Chatroom");
-	private ReloadForm reload = new ReloadForm();
+	//private ReloadForm reload = new ReloadForm();
 
 	public HomeForm(String headline) {
 		super(headline);
@@ -19,7 +19,7 @@ public class HomeForm extends TextyForm {
 		chatRoom.run();
 		
 		//Aufruf des Refresh-Button im Footer-Bereich
-		reload.run();
+		//reload.run();
 		
 
 	} 
