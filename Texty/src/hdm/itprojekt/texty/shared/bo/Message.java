@@ -25,8 +25,12 @@ public class Message extends BusinessObject {
 		this.visible = visible;
 	}
 	
-	
-	
+	//Als Test für ChatRoom
+	public Message(String text) {
+		this.text = text;
+	}
+
+
 	public String getText() {
 		return text;
 	}
