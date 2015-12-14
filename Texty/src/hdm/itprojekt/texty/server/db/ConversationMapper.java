@@ -50,9 +50,33 @@ public class ConversationMapper {
 		return conversation;
 	}
 
-	public Vector<Conversation> selectAllConversations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 public Vector<Conversation> findAllConversations() {
+		    Connection con = DBConnection.connection();
+		    // Ergebnisvektor vorbereiten
+		    Vector<Conversation> result = new Vector<Conversation>();
 
+		    try {
+		      Statement stmt = con.createStatement();
+
+		      ResultSet rs = stmt.executeQuery("SELECT conversationId, publicly, dateOfCreation"
+		          + "FROM conversation");
+
+		      // Für jeden Eintrag wird nun ein Conversation-Objekt erstellt.
+		      while (rs.next()) {
+		    	  Conversation conversation = new Conversation();
+		    	conversation.setId(rs.getInt("conversationId"));
+		    	conversation.setPublicly(rs.getBoolean("publicly"));
+		    	conversation.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		        result.addElement(conversation);
+		      }
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+
+		    // Ergebnisvektor zurückgeben
+		    return result;
+		  }
 }

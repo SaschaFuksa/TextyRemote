@@ -73,18 +73,81 @@ public class MessageMapper {
 		}
 	}
 
+	   public Message update(Message message) {
+		    Connection con = DBConnection.connection();
+
+		    try {
+		      Statement stmt = con.createStatement();
+
+		      stmt.executeUpdate("UPDATE message " + "SET messageText=\""
+		          + message.getText() + "WHERE messageId=" + message.getId());
+
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+
+		    return message;
+		  }
+
 	public Vector<Message> selectAllMessagesFromUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		    Connection con = DBConnection.connection();
+		    Vector<Message> result = new Vector<Message>();
 
-	public Message update(Message message) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		    try {
+		      Statement stmt = con.createStatement();
 
-	public Vector<Message> selectAllMessages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		      ResultSet rs = stmt.executeQuery("SELECT messageId, messageText, dateOfCreation"
+		          + "FROM message" + "WHERE author_user=" + user);
+
+		      // Für jeden Eintrag wird nun ein User-Objekt erstellt.
+		      while (rs.next()) {
+		    	 Message message = new Message();
+		    	message.setId(rs.getInt("messageId"));
+		    	message.setText(rs.getString("messageText"));
+		    	message.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+		        result.addElement(message);
+		      }
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+		    
+		    return result;
+		  }
+	
+	  public Vector<Message> selectAllMessages() {
+		    Connection con = DBConnection.connection();
+		    Vector<Message> result = new Vector<Message>();
+
+		    try {
+		      Statement stmt = con.createStatement();
+
+		      ResultSet rs = stmt.executeQuery("SELECT messageId, messageText, author_userId, conversationId, visibility dateOfCreation"
+		          + "FROM message");
+
+		      // Für jeden Eintrag wird nun ein Message-Objekt erstellt.
+		      while (rs.next()) {
+			    	 Message message = new Message();
+				   message.setId(rs.getInt("messageId"));
+				   message.setText(rs.getString("messageText"));
+				   //TODO: fix error
+				   //message.setAuthor(rs.getInt("author_userId"));
+				   // TODO: add conversation id Setter
+				   //message.setConversationId(rs.getInt("conversationId"))
+				   message.setVisible(rs.getBoolean("visibility"));
+				   message.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		        result.addElement(message);
+		      }
+		    }
+		    catch (SQLException e) {
+		      e.printStackTrace();
+		    }
+
+		    // Ergebnisvektor zurückgeben
+		    return result;
+		  }
 }
