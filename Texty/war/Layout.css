@@ -2,7 +2,7 @@
 img#Logo {
 	float: left;
 	height: 10%;
-	left: 35px;
+	left: 13%;
 	position: absolute;
 	top: 50px;
 	width: 5%;
@@ -11,6 +11,7 @@ img#Logo {
 div#Wrapper {
 	margin: auto;
 	text-align: left;
+	width: 80%;
 	height: 96%;
 }
 
@@ -45,6 +46,7 @@ div#Navigator {
 }
 
 div#Details {
+	background-color: #ffffff;
 	font-family: Texty;
 	font-size: 1.5em;
 	padding: 1%;

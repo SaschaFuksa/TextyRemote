@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class CommunityForm extends TextyForm {
 
@@ -86,7 +88,6 @@ public class CommunityForm extends TextyForm {
 					}
 
 				});
-				;
 				deleteButton.getElement().setId("deleteButton");
 				panel.add(nameLabel);
 				panel.add(deleteButton);
@@ -149,9 +150,19 @@ public class CommunityForm extends TextyForm {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void run() {
-
+		
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
+		suggestBox.addFocusListener( new FocusListener() {
+            public void onFocus(Widget arg1) {
+            	suggestBox.setText("");
+            }
+
+            public void onLostFocus(Widget arg1) {
+            	suggestBox.setText("Search for user");
+            }
+        } );
 
 		suggestBox.setText("Search for user");
 

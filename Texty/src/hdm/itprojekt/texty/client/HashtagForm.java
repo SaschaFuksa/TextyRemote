@@ -8,12 +8,15 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 
@@ -21,13 +24,11 @@ public class HashtagForm extends TextyForm {
 
 	public HashtagForm(String headline) {
 		super(headline);
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
-	private VerticalPanel selectionPanel = new VerticalPanel();
-	private VerticalPanel content = new  VerticalPanel();
+	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label("Subscribe new hashtags!");
 	private Label errorLabel = new Label("\0");
@@ -35,7 +36,7 @@ public class HashtagForm extends TextyForm {
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
-	
+
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
 			errorLabel.setText("\0");
@@ -44,7 +45,7 @@ public class HashtagForm extends TextyForm {
 			if (keyword == "") {
 				errorLabel.setText("Please select a hashtag!");
 			} else if (alreadySelected) {
-				errorLabel.setText("User is already selected!");
+				errorLabel.setText("Hashtag is already selected!");
 			} else {
 				addUser(keyword);
 			}
@@ -55,7 +56,10 @@ public class HashtagForm extends TextyForm {
 	private Button subscribeButton = new Button("Subscribe",
 			new ClickHandler() {
 				public void onClick(ClickEvent event) {
-
+					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
+							"Hashtag Subscriptions", selectedHashtag);
+					RootPanel.get("Details").clear();
+					RootPanel.get("Details").add(hashtagSubscription);
 				}
 
 			});
@@ -76,12 +80,12 @@ public class HashtagForm extends TextyForm {
 					}
 
 				});
-				;
 				deleteButton.getElement().setId("deleteButton");
 				panel.add(keywordLabel);
 				panel.add(deleteButton);
-				selectionPanel.add(panel);
 				content.add(panel);
+				suggestBox.setText("");
+				setOracle();
 				return;
 			}
 		}
@@ -96,7 +100,7 @@ public class HashtagForm extends TextyForm {
 				String keyword = suggestBox.getText();
 				boolean alreadySelected = checkHashtag(keyword);
 				if (keyword == "") {
-					errorLabel.setText("Please select a Hashtag!");
+					errorLabel.setText("Please select a hashtag!");
 				} else if (alreadySelected) {
 					errorLabel.setText("Hashtag is already selected!");
 				} else {
@@ -128,13 +132,30 @@ public class HashtagForm extends TextyForm {
 		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
 		selectedHashtag.remove(indexSelectedHashtag);
 	}
-
-
-	@Override
+	
+	private void setOracle() {
+		oracle.clear();
+		for (int i = 0; i < allHashtag.size(); i++) {
+			String keyword = new String(allHashtag.get(i).getKeyword());
+			oracle.add(keyword);
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
 	protected void run() {
+		
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
+		suggestBox.addFocusListener( new FocusListener() {
+            public void onFocus(Widget arg1) {
+            	suggestBox.setText("");
+            }
 
-		suggestBox.setText("Search for Hashtags");
+            public void onLostFocus(Widget arg1) {
+            	suggestBox.setText("Search for hashtags");
+            }
+        } );
+
+		suggestBox.setText("Search for hashtags");
 
 		Hashtag hashtag1 = new Hashtag("VfB Abstieg");
 		Hashtag hashtag2 = new Hashtag("Texty");
@@ -156,11 +177,8 @@ public class HashtagForm extends TextyForm {
 		allHashtag.add(hashtag4);
 		allHashtag.add(hashtag5);
 		allHashtag.add(hashtag6);
-
-		for (int i = 0; i < allHashtag.size(); i++) {
-			String name = new String(allHashtag.get(i).getKeyword());
-			oracle.add(name);
-		}
+		
+		setOracle();
 
 		addButton.getElement().setId("addButton");
 		subscribeButton.getElement().setId("button");
@@ -176,9 +194,8 @@ public class HashtagForm extends TextyForm {
 		this.add(suggestBoxPanel);
 		this.add(errorLabel);
 		this.add(scroll);
-		this.add(selectionPanel);
 		this.add(buttonPanel);
-		
+
 	}
 
 }
