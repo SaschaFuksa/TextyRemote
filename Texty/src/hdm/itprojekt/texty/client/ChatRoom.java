@@ -18,6 +18,8 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -32,7 +34,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * Diese Klasse zeigt die abonnierten Inhalte in einer FlexTable an
  * 
  * TODO Implementation für das Aktualisieren und Löschen einer Nachricht,
- * ScrollPanel hinzufügen, Headline wird noch nicht angezeigt.
+ * ScrollPanel hinzufügen, Headline wird noch nicht angezeigt. Hashtagbox zum
+ * Hinzufügen
  */
 public class ChatRoom extends TextyForm {
 
@@ -52,11 +55,19 @@ public class ChatRoom extends TextyForm {
 
 	protected void run() {
 
-		chatFlexTable.setText(0, 0, "Chat");
-		chatFlexTable.setText(0, 1, "   ");
+		// FlexCellFormatter cellFormatter =
+		// chatFlexTable.getFlexCellFormatter();
+
+		chatFlexTable.setText(0, 0, "Receiver");
+		chatFlexTable.setText(0, 1, "You");
 		chatFlexTable.setText(0, 2, "Delete");
-		chatFlexTable.setText(0, 3, "   ");
-		chatFlexTable.setText(0, 4, "Edit");
+		chatFlexTable.setText(0, 3, "Edit");
+		// chatFlexTable.setText(0, 4, "Test");
+
+		chatFlexTable.setStylePrimaryName("flexTable");
+		chatFlexTable.setWidth("32em");
+		chatFlexTable.setCellSpacing(7);
+		chatFlexTable.setCellPadding(5);
 
 		// Diese Messages symbolisieren bereits abonnierte Messages. Diese
 		// werden auf der Startseite Home angezeigt
@@ -100,65 +111,73 @@ public class ChatRoom extends TextyForm {
 		});
 
 		showConversation();
-		// mainPanel.add(split);
 		RootPanel.get("Details").add(mainPanel);
 
+	}
+	
+	private void showConversation() {
+		for (int i = 0; i < messageList.size(); i++) {
+			addExistingMessage(messageList.get(i));
+		} 
 	}
 
 	private void addExistingMessage(String sText) {
 		final String text = sText;
 		int row = chatFlexTable.getRowCount();
-		chatFlexTable.setText(row, 0, text);
 
-		// Delete-Button
+		chatFlexTable.setText(row, 0, text);
+		//chatFlexTable.setText(row, 1, " ");
+
+		// Delete
 		Button deleteMessageButton = new Button("x");
 		deleteMessageButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				Window.alert("alles kacke");
+				// Window.alert("Test");
 				int removedIndex = messageList.indexOf(text);
 				messageList.remove(removedIndex);
 				chatFlexTable.removeRow(removedIndex + 1);
 			}
 		});
-
-		// Edit-Button
-		Button editMessageButton = new Button("Edit");
-		editMessageButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-
-			}
-		});
+		
+		//Test
+		Label l1 = new Label();
+		l1.setText("hallo");
+		l1.setTitle("Peter");
+		
+		// chatFlexTable.setWidget(row, 1, l1);
 		chatFlexTable.setWidget(row, 2, deleteMessageButton);
-		chatFlexTable.setWidget(row, 4, editMessageButton);
+		//chatFlexTable.setWidget(row, 3, editMessageButton);
+
 	}
 
-	private void showConversation() {
-		for (int i = 0; i < messageList.size(); i++) {
-			addExistingMessage(messageList.get(i));
-			// addExistingMessage(messageList.get(i).getText()); (Mit
-			// Messageobjekten anstatt Strings
-		} // Ende for-Schleife
-	}
-
+	// Hier schreibt der Autor selber eine neue Nachricht
 	private void addNewMessage() {
 		final String textFromTextbox = textBox.getText().trim();
 		textBox.setFocus(true);
 
-		messageList.add(textFromTextbox);
+		if (textFromTextbox.isEmpty()) {
+			Window.alert("Please enter a Message!");
+			return;
+		}
 
+		messageList.add(textFromTextbox);
 		int row = chatFlexTable.getRowCount();
-		chatFlexTable.setText(row, 0, textFromTextbox);
+		
+		// Unterschied zu der Spalte Receiver: Die Nachricht erscheint in der
+		// zweiten Spalte
+		chatFlexTable.setText(row, 1, textFromTextbox);
 
 		// Delete-Button
 		Button deleteMessageButton = new Button("x");
 		deleteMessageButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				Window.alert(textFromTextbox);
+				// Window.alert(textFromTextbox);
 
 				int removedIndex = messageList.indexOf(textFromTextbox);
-				Integer removedIndex2 = new Integer(removedIndex);
-				String s = removedIndex2.toString();
-				Window.alert(s);
+
+				// Integer removedIndex2 = new Integer(removedIndex);
+				// String s = removedIndex2.toString();
+				// Window.alert(s);
 				messageList.remove(removedIndex);
 				chatFlexTable.removeRow(removedIndex + 1);
 			}
@@ -172,10 +191,8 @@ public class ChatRoom extends TextyForm {
 			}
 		});
 
-		// Nachricht hinzufügen
-
 		chatFlexTable.setWidget(row, 2, deleteMessageButton);
-		chatFlexTable.setWidget(row, 4, editMessageButton);
+		chatFlexTable.setWidget(row, 3, editMessageButton);
 
 		if (textFromTextbox.isEmpty()) {
 			Window.alert("Please enter a Message!");
