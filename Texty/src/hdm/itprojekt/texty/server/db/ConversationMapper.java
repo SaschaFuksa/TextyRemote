@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
 import java.util.Vector;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class ConversationMapper {
@@ -47,6 +48,11 @@ public class ConversationMapper {
 			e.printStackTrace();
 		}
 		return conversation;
+	}
+
+	public Vector<Conversation> selectAllConversations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

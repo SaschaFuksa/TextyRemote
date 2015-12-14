@@ -1,5 +1,10 @@
 package hdm.itprojekt.texty.shared.bo;
 
+/**
+ * Die Klasse stellt das Grundgerüst für alle Hashtags dar. 
+ *
+ */
+
 public class Hashtag extends BusinessObject {
 	
 	private static final long serialVersionUID = 1L;

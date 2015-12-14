@@ -1,30 +1,14 @@
 package hdm.itprojekt.texty.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
-
-
-
-
-
-
-
-
-
-
-import hdm.itprojekt.texty.server.db.DBConnection;
-
-import java.sql.SQLException;
-
 import hdm.itprojekt.texty.shared.TextyAdministration;
 import hdm.itprojekt.texty.shared.bo.*;
 import hdm.itprojekt.texty.server.db.*;
-
 import java.util.*;
 
 public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		TextyAdministration {
-	
+
 	private static final long serialVersionUID = 1L;
 	private ConversationMapper cMapper = null;
 	private HashtagMapper hMapper = null;
@@ -43,64 +27,86 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		this.usMapper = UserSubscriptionMapper.userSubscriptionMapper();
 
 	}
-	
+
 	@Override
-	public Message createMessage(String text, User author, Vector<User> listOfReceivers,
-			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
+	public Message createInitialMessage(String text, User author,
+			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
+			throws IllegalArgumentException {
 		Message m = new Message();
 		m.setText(text);
 		m.setAuthor(author);
 		m.setVisible(true);
 		m.setListOfHashtag(listOfHashtag);
 		m.setListOfReceivers(listOfReceivers);
-
-		/*
-		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
-		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
-		 * David besprechen
-		 */
 		m.setId(1);
 
-		
 		return this.mMapper.insert(m);
 	}
 
+	/**
+	 * Methode erzeugt ein neues Hashtagobjekt und ruft die insert-Methode
+	 * {@link hdm.itprojekt.texty.server.db.HashtagMapper#insert(Hashtag)} auf
+	 * um den Hashtag in die Datenbank zu schreiben
+	 * 
+	 * @param keyword
+	 *            Das Hashtag dass der Benutzer in GUI eingibt
+	 * 
+	 * @return Das Erzeugte Hashtag Objekt
+	 */
 	@Override
 	public Hashtag createHashtag(String keyword)
 			throws IllegalArgumentException {
 		Hashtag h = new Hashtag();
 		h.setKeyword(keyword);
-
-		/*
-		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
-		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
-		 * David besprechen
-		 */
-		h.setId(1);		
+		h.setId(1);
 
 		return this.hMapper.insert(h);
 	}
 
+	/**
+	 * Methode erzeugt ein neues Unterhaltungsobjekt
+	 * 
+	 * @param Text
+	 *            Der initale Nachrichtentext mit dem der Benutzer die
+	 *            Unterhaltung erzeugt.
+	 * @param author
+	 *            Der Ersteller der Unterhaltung bzw. der Initalnachricht.
+	 * @param listofReceivers
+	 *            Die gewünschten Adressaten der Unterhaltung. Dieser Wert ist
+	 *            null, wenn es eine öffentliche Unterhaltung ist.
+	 * @param listOfHashtags
+	 *            Die Hashtags die der Nachricht angehängt werden sollen.
+	 * 
+	 * @return Das erzeugt Unterhaltunsobjekt
+	 */
 	@Override
-	public Conversation createConversation(Message message)
+	public Conversation createConversation(String text, User author,
+			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
 		Conversation c = new Conversation();
-		
+		Message message = createInitialMessage(text, author, listOfReceivers,
+				listOfHashtag);
 		c.addMessageToConversation(message);
-		if(message.getListOfReceivers() == null) {
+		if (message.getListOfReceivers() == null) {
 			c.setPublicly(true);
-		}else {
+		} else {
 			c.setPublicly(false);
-		}		
-		/*
-		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
-		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
-		 * David besprechen
-		 */
-		c.setId(1);		
+		}
+		c.setId(1);
 
 		return this.cMapper.insert(c);
 	}
+
+	/**
+	 * Methode erzeugt ein neues Benutzerabo Objekt
+	 * 
+	 * @param subscribedUser
+	 *            Der Benutzer der abonniert werden soll
+	 * @param subscriber
+	 *            Der Benutzer der abonnieren möchte
+	 *            
+	 * @return Das erzeugte Objekt           
+	 */
 
 	public UserSubscription createUserSubscription(User subscribedUser,
 			User subscriber) {
@@ -109,19 +115,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		us.setSubscribedUser(subscribedUser);
 		us.setSubscriber(subscriber);
 
-		/*
-		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
-		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
-		 * David besprechen
-		 */
-		us.setId(1);	
+		us.setId(1);
 
-		/*
-		 * TODO Methode muss noch im Mapper erstellt werden
-		 */
-
-		// return this.usMapper.insert(us);
-		return null;
+		return this.usMapper.insert(us);
 
 	}
 
@@ -132,136 +128,142 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		hs.setSubscribedHashtag(subscribedHashtag);
 		hs.setSubscriber(subscriber);
 
-		/*
-		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
-		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
-		 * David besprechen
-		 */
 		hs.setId(1);
-		
-		/*
-		 * TODO Methode muss noch im Mapper erstellt werden
-		 */
-		// return this.hsMapper.insert(hs);
-		return null;
+
+		return this.hsMapper.insert(hs);
 
 	}
 
-	
 	public User createUser() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
-		
+
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		
+
 		User u = new User();
-		u.setNickName(user.getNickname());
-		u.setEmail(user.getEmail());		
-		
-		/*
-		 * Setzen einer vorläufigen Kundennr. Der insert-Aufruf liefert dann ein
-		 * Objekt, dessen Nummer mit der Datenbank konsistent ist. TODO Mit
-		 * David besprechen
-		 */
+		// u.setNickName(user.getNickname());
+		u.setEmail(user.getEmail());
+		u.setFirstName("");
+		u.setLastName("");
 		u.setId(1);
-		
+
 		return this.uMapper.insert(u);
 	}
-	public void checkUserData()throws IllegalArgumentException {
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory.getUserService();
+
+	public void checkUserData() throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		
-		/*TODO in den Mappern fehlt noch die Methode
-		 * if(uMapper.findUserByEmail(user.getEmail())== null) {
+
+		if (uMapper.findUserByEmail(user.getEmail()) == null) {
 			createUser();
-		}else {
+		} else {
 			updateUserData(uMapper.findUserByEmail(user.getEmail()));
-		}*/
-		
-		
-		
+		}
+
 	}
+
 	public void updateUserData(User us) throws IllegalArgumentException {
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory.getUserService();
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		us.setNickName(user.getNickname());
+		// us.setNickName(user.getNickname());
 		us.setEmail(user.getEmail());
 	}
 
-	public Message editMessage(Message message, String newText) throws IllegalArgumentException {
+	public Message editMessage(Message message, String newText)
+			throws IllegalArgumentException {
 		message.setText(newText);
-		/*
-		 * TODO Muss das hier gemacht werden? Methode Fehlt
-		 * DBConnection.closeConnection();
-		 */
 		return this.mMapper.update(message);
-
-	}	
+	}
 
 	public Vector<Hashtag> getAllSubscribedHashtags(User user)
 			throws IllegalArgumentException {
-		/*
-		 * TODO Methode fehllt in den Mappern @David
-		 */
-		// return this.uMapper.findHashtags(user);
-		return null;
+
+		return this.uMapper.findHashtags(user);
 	}
 
-	public Message addMessageToConversation(Conversation c, String text, User author,
-			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
+	public Message addMessageToConversation(Conversation c, String text,
+			User author, Vector<Hashtag> listOfHashtag)
+			throws IllegalArgumentException {
 		Message m = new Message();
 		m.setText(text);
 		m.setAuthor(author);
 		m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
 		m.setListOfHashtag(listOfHashtag);
 		c.addMessageToConversation(m);
-		
-		
+
 		// TODO Mit den anderen besprechen, woher weiß db welche Message zu
 		// welcher conversation gehört.
-		return this.mMapper.insert(m);		
-	} 
+		return this.mMapper.insert(m);
+	}
 
 	public void deleteMessage(Conversation conversation, Message message)
 			throws IllegalArgumentException {
 		conversation.removeMessageFromConversation(message);
 		message.setVisible(false);
 		this.getmMapper().update(message);
-		// TODO DBConnection.closeConnection();
 
 	}
-	public void deleteUserSubscription(UserSubscription subscription) throws IllegalArgumentException {
+
+	public void deleteUserSubscription(UserSubscription subscription)
+			throws IllegalArgumentException {
 		this.usMapper.delete(subscription);
 	}
-	 public void deleteHashtagSubscription(HashtagSubscription subscription) throws IllegalArgumentException {
-		 this.hsMapper.delete(subscription);
-	 }
-	 
-	 public Vector<Message> getAllMessagesFromUserByDate(User user, Date startDate, Date endDate) throws IllegalArgumentException {		 
-		 Vector<Message> allMessages = this.mMapper.selectAllMessagesFromUser(user);
-		 Vector<Message> MessagesByDate = new Vector<Message>();
-		 for (int i = allMessages.size(); i > 0; i--){
-			 if(allMessages.get(i).getDateOfCreation().after(startDate)
-					 && allMessages.get(i).getDateOfCreation().before(endDate)){
-				 MessagesByDate.add(allMessages.get(i));
-			 }
-		 }		 
-		 return MessagesByDate;		 
-	 }
-	 public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate) throws IllegalArgumentException {
-		 Vector<Message> allMessages = this.mMapper.selectAllMessages();
-		 Vector<Message> MessagesByDate = new Vector<Message>();
-		 for(int i = allMessages.size(); i > 0; i--){
-			 if(allMessages.get(i).getDateOfCreation().after(startDate)
-					 && allMessages.get(i).getDateOfCreation().before(endDate)){
-				 MessagesByDate.add(allMessages.get(i));
-			 }			 
-		 }
-		return MessagesByDate; 
-	 }
-	 public Vector<Message> getAllMessagesFromUser(User user) throws IllegalArgumentException {
-		 return this.mMapper.selectAllMessagesFromUser(user);
-	 }	 
+
+	public void deleteHashtagSubscription(HashtagSubscription subscription)
+			throws IllegalArgumentException {
+		this.hsMapper.delete(subscription);
+	}
+
+	public Vector<Message> getAllMessagesFromUserByDate(User user,
+			Date startDate, Date endDate) throws IllegalArgumentException {
+		Vector<Message> allMessages = this.mMapper
+				.selectAllMessagesFromUser(user);
+		Vector<Message> MessagesByDate = new Vector<Message>();
+		for (int i = allMessages.size(); i > 0; i--) {
+			if (allMessages.get(i).getDateOfCreation().after(startDate)
+					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
+				MessagesByDate.add(allMessages.get(i));
+			}
+		}
+		return MessagesByDate;
+	}
+
+	public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate)
+			throws IllegalArgumentException {
+		Vector<Message> allMessages = this.mMapper.selectAllMessages();
+		Vector<Message> MessagesByDate = new Vector<Message>();
+		for (int i = allMessages.size(); i > 0; i--) {
+			if (allMessages.get(i).getDateOfCreation().after(startDate)
+					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
+				MessagesByDate.add(allMessages.get(i));
+			}
+		}
+		return MessagesByDate;
+	}
+
+	public Vector<Message> getAllMessagesFromUser(User user)
+			throws IllegalArgumentException {
+		return this.mMapper.selectAllMessagesFromUser(user);
+	}
+
+	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
+			throws IllegalArgumentException {
+		Vector<Conversation> allPublicConversations = new Vector<Conversation>();
+		Vector<Conversation> allConversations = this.cMapper
+				.selectAllConversations();
+		for (int i = allConversations.size(); i > 0; i--) {
+			if (allConversations.get(i).isPublicly()) {
+				allPublicConversations.add(allConversations.get(i));
+			}
+		}
+		return allPublicConversations;
+	}
+
+	public Vector<User> getAllUsers() throws IllegalArgumentException {
+		return this.uMapper.selectAllUsers();
+	}
 
 	/**
 	 * @return der ConversationMapper

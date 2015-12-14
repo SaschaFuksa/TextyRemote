@@ -17,13 +17,14 @@ public interface TextyAdministrationAsync {
 
 	void init(AsyncCallback<Void> callback);
 
-	void createMessage(String text, User Author, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag,
+	void createInitialMessage(String text, User Author, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag,
 			AsyncCallback<Message> callback);
 
 	void createHashtag(String keyword, AsyncCallback<Hashtag> callback);
 
-	void createConversation(Message message,
-			 AsyncCallback<Conversation> callback);
+	void createConversation(String text, User author,
+			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag,
+			AsyncCallback<Conversation> callback);
 
 	void createUserSubscription(User subscripedUser, User subscriber,
 			AsyncCallback<UserSubscription> callback);
@@ -63,6 +64,11 @@ public interface TextyAdministrationAsync {
 
 	void getAllMessagesFromUser(User user,
 			AsyncCallback<Vector<Message>> callback);
+
+	void getAllPublicConversationsFromUser(User user,
+			AsyncCallback<Vector<Conversation>> callback);
+
+	void getAllUsers(AsyncCallback<Vector<User>> callback);
 
 	
 

@@ -18,12 +18,13 @@ public interface TextyAdministration extends RemoteService {
 
 	 public void init() throws IllegalArgumentException;
 	 
-	 public Message createMessage(String text, User author, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag) 
+	 public Message createInitialMessage(String text, User author, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag) 
 			 throws IllegalArgumentException;
 	 
 	 public Hashtag createHashtag (String keyword) throws IllegalArgumentException;
 	 
-	 public Conversation createConversation(Message message) 
+	 public Conversation createConversation(String text, User author,
+				Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag) 
 			 throws IllegalArgumentException;
 	 
 	 public UserSubscription createUserSubscription (User subscripedUser, User subscriber) throws IllegalArgumentException;
@@ -32,14 +33,14 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public User createUser() throws IllegalArgumentException;
 	 
-	 public Message editMessage(Message message, String newText) throws IllegalArgumentException, SQLException;
+	 public Message editMessage(Message message, String newText) throws IllegalArgumentException;
 	 	  
 	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
 	 
 	 public Message addMessageToConversation(Conversation c,String text, User author, Vector<Hashtag> listOfHashtag)
 			 throws IllegalArgumentException;
 	 
-	 public void deleteMessage(Conversation conversation, Message message) throws IllegalArgumentException, SQLException;
+	 public void deleteMessage(Conversation conversation, Message message) throws IllegalArgumentException;
 	 
 	 public void checkUserData()throws IllegalArgumentException;
 	 
@@ -55,6 +56,9 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public Vector<Message> getAllMessagesFromUser(User user) throws IllegalArgumentException;
 	 
+	 public Vector<Conversation> getAllPublicConversationsFromUser (User user) throws IllegalArgumentException;
+	 
+	 public Vector<User> getAllUsers() throws IllegalArgumentException;
 	 
 	 
 

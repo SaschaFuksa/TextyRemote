@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
 import java.util.Vector;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class UserMapper {
@@ -47,5 +48,22 @@ public class UserMapper {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	public Vector<Hashtag> findHashtags(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User findUserByEmail(String email) {
+		User user = new User();
+		// TODO Auto-generated method stub
+		return user;
+	}
+
+	public Vector<User> selectAllUsers() {
+		Vector<User> allUsers = new Vector<User>();
+		// TODO Auto-generated method stub
+		return allUsers;
 	}
 }
