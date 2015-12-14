@@ -19,13 +19,13 @@ public class Texty implements EntryPoint {
 
 	private VerticalPanel footerPanel = new VerticalPanel();
 	private Label footerLabel = new Label("About");
-	private LoginInfo loginInfo = null;
+	private static LoginInfo loginInfo = null;
 	private HorizontalPanel loginPanel = new HorizontalPanel();
 	private Label nickname = new Label();
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private TextyMenu menu = new TextyMenu();
 	private HomeForm home = new HomeForm("Home");
-
+	
 	public void onModuleLoad() {
 
 		menu.execute();
@@ -61,6 +61,10 @@ public class Texty implements EntryPoint {
 			}
 		});
 
+	}
+	
+	public static LoginInfo getLoginInfo() {
+		return loginInfo;
 	}
 
 	private void createLoginPanel() {
