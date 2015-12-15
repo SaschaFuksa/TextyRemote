@@ -56,12 +56,15 @@ public class HashtagForm extends TextyForm {
 	private Button subscribeButton = new Button("Subscribe",
 			new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
-							"Hashtag Subscriptions", selectedHashtag);
-					RootPanel.get("Details").clear();
-					RootPanel.get("Details").add(hashtagSubscription);
+					if (selectedHashtag.size() < 1) {
+						errorLabel.setText("Please select a hashtag!");
+					} else {
+						TextyForm hashtagSubscription = new HashtagSubscriptionForm(
+								"Hashtag Subscriptions", selectedHashtag);
+						RootPanel.get("Details").clear();
+						RootPanel.get("Details").add(hashtagSubscription);
+					}
 				}
-
 			});
 
 	public void addUser(String keyword) {
@@ -132,7 +135,7 @@ public class HashtagForm extends TextyForm {
 		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
 		selectedHashtag.remove(indexSelectedHashtag);
 	}
-	
+
 	private void setOracle() {
 		oracle.clear();
 		for (int i = 0; i < allHashtag.size(); i++) {
@@ -140,20 +143,20 @@ public class HashtagForm extends TextyForm {
 			oracle.add(keyword);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	protected void run() {
-		
-		suggestBox.addKeyUpHandler(suggestBoxHandler);
-		suggestBox.addFocusListener( new FocusListener() {
-            public void onFocus(Widget arg1) {
-            	suggestBox.setText("");
-            }
 
-            public void onLostFocus(Widget arg1) {
-            	suggestBox.setText("Search for hashtags");
-            }
-        } );
+		suggestBox.addKeyUpHandler(suggestBoxHandler);
+		suggestBox.addFocusListener(new FocusListener() {
+			public void onFocus(Widget arg1) {
+				suggestBox.setText("");
+			}
+
+			public void onLostFocus(Widget arg1) {
+				suggestBox.setText("Search for hashtags");
+			}
+		});
 
 		suggestBox.setText("Search for hashtags");
 
@@ -177,7 +180,7 @@ public class HashtagForm extends TextyForm {
 		allHashtag.add(hashtag4);
 		allHashtag.add(hashtag5);
 		allHashtag.add(hashtag6);
-		
+
 		setOracle();
 
 		addButton.getElement().setId("addButton");

@@ -56,12 +56,15 @@ public class CommunityForm extends TextyForm {
 	private Button subscribeButton = new Button("Subscribe",
 			new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					TextyForm userSubscription = new UserSubscriptionForm(
-							"User Subscriptions", selectedUser);
-					RootPanel.get("Details").clear();
-					RootPanel.get("Details").add(userSubscription);
+					if (selectedUser.size() < 1) {
+						errorLabel.setText("Please select a user!");
+					} else {
+						TextyForm userSubscription = new UserSubscriptionForm(
+								"User Subscriptions", selectedUser);
+						RootPanel.get("Details").clear();
+						RootPanel.get("Details").add(userSubscription);
+					}
 				}
-
 			});
 
 	private Button sendMessageButton = new Button("Send Message",
@@ -152,17 +155,17 @@ public class CommunityForm extends TextyForm {
 
 	@SuppressWarnings("deprecation")
 	protected void run() {
-		
-		suggestBox.addKeyUpHandler(suggestBoxHandler);
-		suggestBox.addFocusListener( new FocusListener() {
-            public void onFocus(Widget arg1) {
-            	suggestBox.setText("");
-            }
 
-            public void onLostFocus(Widget arg1) {
-            	suggestBox.setText("Search for user");
-            }
-        } );
+		suggestBox.addKeyUpHandler(suggestBoxHandler);
+		suggestBox.addFocusListener(new FocusListener() {
+			public void onFocus(Widget arg1) {
+				suggestBox.setText("");
+			}
+
+			public void onLostFocus(Widget arg1) {
+				suggestBox.setText("Search for user");
+			}
+		});
 
 		suggestBox.setText("Search for user");
 
