@@ -48,7 +48,8 @@ public interface TextyAdministrationAsync {
 
 	void checkUserData(AsyncCallback<Void> callback);
 
-	void updateUserData(User us, AsyncCallback<Void> callback);
+	void updateUserData(String firstName, String lastName,
+			AsyncCallback<Void> callback);
 
 	void deleteUserSubscription(UserSubscription subscription,
 			AsyncCallback<Void> callback);

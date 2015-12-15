@@ -44,7 +44,7 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public void checkUserData()throws IllegalArgumentException;
 	 
-	 public void updateUserData(User us) throws IllegalArgumentException;
+	 public void updateUserData(String firstName, String lastName) throws IllegalArgumentException;
 	 
 	 public void deleteUserSubscription(UserSubscription subscription) throws IllegalArgumentException;
 	 
@@ -58,8 +58,7 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public Vector<Conversation> getAllPublicConversationsFromUser (User user) throws IllegalArgumentException;
 	 
-	 public Vector<User> getAllUsers() throws IllegalArgumentException;
+	 public Vector<User> getAllUsers() throws IllegalArgumentException; 
 	 
 	 
-
 }

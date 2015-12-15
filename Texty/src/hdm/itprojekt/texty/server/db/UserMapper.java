@@ -36,154 +36,160 @@ public class UserMapper {
 
 				stmt = con.createStatement();
 
-				//TODO: firstname lastname ändern
-				
+				// TODO: firstname lastname ändern
+
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
 				stmt.executeUpdate("INSERT INTO textydb.user (userId, givenName, familyName, email)"
 						+ "VALUES ("
 						+ user.getId()
 						+ ", "
-						+ "'" + user.getFirstName() + "'"
+						+ "'"
+						+ user.getFirstName()
+						+ "'"
 						+ ", "
-						+ "'" + user.getLastName() + "'"
-						+ ", " 
-						+ "'" + user.getEmail() + "')");
+						+ "'"
+						+ user.getLastName()
+						+ "'"
+						+ ", "
+						+ "'"
+						+ user.getEmail() + "')");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return user;
 	}
-	
-	   public User update(User user) {
-		    Connection con = DBConnection.connection();
 
-		    try {
-		      Statement stmt = con.createStatement();
+	public User update(User user) {
+		Connection con = DBConnection.connection();
 
-		      stmt.executeUpdate("UPDATE customers " + "SET givenName=\""
-		          + user.getFirstName() + "\", " + "familyName=\"" + user.getLastName() + "\" "
-		          + "WHERE id=" + user.getId());
+		try {
+			Statement stmt = con.createStatement();
 
-		    }
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
+			stmt.executeUpdate("UPDATE customers " + "SET givenName=\""
+					+ user.getFirstName() + "\", " + "familyName=\""
+					+ user.getLastName() + "\" " + "WHERE id=" + user.getId());
 
-		    return user;
-		  }
-	   
-	  public Vector<User> findAll() {
-		    Connection con = DBConnection.connection();
-		    // Ergebnisvektor vorbereiten
-		    Vector<User> result = new Vector<User>();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-		    try {
-		      Statement stmt = con.createStatement();
-
-		      ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-		          + "FROM user");
-
-		      // Für jeden Eintrag wird nun ein User-Objekt erstellt.
-		      while (rs.next()) {
-		    	  User user = new User();
-		    	user.setId(rs.getInt("userId"));
-		    	user.setFirstName(rs.getString("givenName"));
-		    	user.setLastName(rs.getString("familyName")); 
-		    	user.setDateOfCreation(rs.getDate("dateOfCreation"));
-
-		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
-		        result.addElement(user);
-		      }
-		    }
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-
-		    // Ergebnisvektor zurückgeben
-		    return result;
-		  }
-	  
-	  public Vector<User> findById(int userId) {
-		    Connection con = DBConnection.connection();
-		    Vector<User> result = new Vector<User>();
-
-		    try {
-		      Statement stmt = con.createStatement();
-
-		      ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-		          + "FROM user" + "WHERE userId=" + userId);
-
-		      // Für jeden Eintrag wird nun ein User-Objekt erstellt.
-		      while (rs.next()) {
-		    	  User user = new User();
-		    	user.setId(rs.getInt("userId"));
-		    	user.setFirstName(rs.getString("givenName"));
-		    	user.setLastName(rs.getString("familyName")); 
-		    	user.setDateOfCreation(rs.getDate("dateOfCreation"));
-
-		        result.addElement(user);
-		      }
-		    }
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-		    
-		    return result;
-		  }
-	
-	  public User findByEmail(String email) {
-		  Connection con = DBConnection.connection();
-
-		    try {
-				Statement stmt = con.createStatement();
-
-		      ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-			          + "FROM user" + "WHERE email=" + email);
-
-		      if (rs.next()) {
-		        User user = new User();
-		    	user.setId(rs.getInt("userId"));
-		    	user.setFirstName(rs.getString("givenName"));
-		    	user.setLastName(rs.getString("familyName")); 
-		    	user.setDateOfCreation(rs.getDate("dateOfCreation"));
-		        return user;
-		      }
-		    }
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
-		      return null;
-		    }
-
-		    return null;
-		  }
-	  
-	  public Vector<User> findByName(String firstName, String lastName) {
-		    Connection con = DBConnection.connection();
-		    Vector<User> result = new Vector<User>();
-
-		    try {
-		      Statement stmt = con.createStatement();
-
-		      ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-		          + "FROM user" + "WHERE givenName = " + firstName + " AND familyName = " + lastName +"");
-
-		      // Für jeden Eintrag wird nun ein User-Objekt erstellt.
-		      while (rs.next()) {
-		    	  User user = new User();
-		    	user.setId(rs.getInt("userId"));
-		    	user.setFirstName(rs.getString("givenName"));
-		    	user.setLastName(rs.getString("familyName")); 
-		    	user.setDateOfCreation(rs.getDate("dateOfCreation"));
-
-		        result.addElement(user);
-		      }
-		    }
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-		    
-		    return result;
-		  }
+		return user;
 	}
+
+	public Vector<User> findAll() {
+		Connection con = DBConnection.connection();
+		// Ergebnisvektor vorbereiten
+		Vector<User> result = new Vector<User>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt
+					.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
+							+ "FROM user");
+
+			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				user.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+				// Hinzufügen des neuen Objekts zum Ergebnisvektor
+				result.addElement(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Ergebnisvektor zurückgeben
+		return result;
+	}
+
+	public Vector<User> findById(int userId) {
+		Connection con = DBConnection.connection();
+		Vector<User> result = new Vector<User>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt
+					.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
+							+ "FROM user" + "WHERE userId=" + userId);
+
+			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				user.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+				result.addElement(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public User findByEmail(String email) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+		     ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName FROM textydb.user " 
+		    	      + "WHERE email = " + "'" + email + "'");
+
+			if (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				//user.setDateOfCreation(rs.getDate("dateOfCreation"));
+				return user;
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+
+		return null;
+	}
+
+	public Vector<User> findByName(String firstName, String lastName) {
+		Connection con = DBConnection.connection();
+		Vector<User> result = new Vector<User>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt
+					.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
+							+ "FROM user"
+							+ "WHERE givenName = "
+							+ firstName
+							+ " AND familyName = " + lastName + "");
+
+			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				user.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+				result.addElement(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+}

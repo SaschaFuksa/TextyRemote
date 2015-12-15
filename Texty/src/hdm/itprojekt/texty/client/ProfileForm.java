@@ -58,7 +58,7 @@ public class ProfileForm extends TextyForm {
 			public void onClick(ClickEvent event) {
 				// Implementation für das Speichern eines Users
 				
-				TextyAdministrationAsync administration = GWT.create(TextyAdministration.class);
+				TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 				
 				class checkUserCallback implements AsyncCallback<Void> {
 

@@ -3,11 +3,13 @@ package hdm.itprojekt.texty.client;
 //import hdm.itprojekt.texty.client.gui.TextyMenu;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -27,6 +29,10 @@ public class Texty implements EntryPoint {
 	private HomeForm home = new HomeForm("Home");
 	
 	public void onModuleLoad() {
+		
+		TextyAdministrationAsync textyAdmin = ClientsideSettings.getTextyAdministration();
+		
+		textyAdmin.checkUserData(new checkUserDataCallback());
 
 		menu.execute();
 
@@ -73,5 +79,17 @@ public class Texty implements EntryPoint {
 		loginPanel.add(signOutLink);
 		loginPanel.add(nickname);
 		RootPanel.get("Banner").add(loginPanel);
+	}
+}
+class checkUserDataCallback implements AsyncCallback<Void> {
+
+	@Override
+	public void onFailure(Throwable caught) {
+		Window.alert("FAILURE");
+	}
+
+	@Override
+	public void onSuccess(Void nothing) {
+		Window.alert("SUCCESS");
 	}
 }

@@ -151,27 +151,27 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		u.setId(1);
 
 		return this.uMapper.insert(u);
-	}
-
+	}	
+	
 	public void checkUserData() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-
-		if (uMapper.findByEmail(user.getEmail()) == null) {
+		
+		
+		if (this.uMapper.findByEmail(user.getEmail()) == null) {			
 			createUser();
-		} else {
-			updateUserData(uMapper.findByEmail(user.getEmail()));
-		}
-
+		}		
 	}
 
-	public void updateUserData(User us) throws IllegalArgumentException {
+	public void updateUserData(String firstName, String lastName) throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
+
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		// us.setNickName(user.getNickname());
-		us.setEmail(user.getEmail());
+		User us = this.uMapper.findByEmail(user.getEmail());
+		us.setFirstName(firstName);
+		us.setLastName(lastName);		
 	}
 	
 	@Override
