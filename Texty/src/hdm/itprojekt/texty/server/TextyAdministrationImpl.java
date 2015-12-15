@@ -184,6 +184,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return null;
 	}
 
+	public Vector<User> getAllSubscribedUsers(User user)
+			throws IllegalArgumentException {
+		return this.usMapper.selectAllSubscribedUsers(user);
+	}
+
 	public Message editMessage(Message message, String newText)
 			throws IllegalArgumentException {
 		message.setText(newText);

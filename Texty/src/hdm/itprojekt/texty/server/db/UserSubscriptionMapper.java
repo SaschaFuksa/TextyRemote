@@ -85,4 +85,9 @@ public class UserSubscriptionMapper {
 		    
 		    return result;
 		  }
+
+	public Vector<User> selectAllSubscribedUsers(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
