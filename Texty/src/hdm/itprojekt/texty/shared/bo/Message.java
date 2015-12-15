@@ -8,6 +8,7 @@ public class Message extends BusinessObject {
 	private String text ="";	
 	private Vector<Hashtag> listOfHashtag = new Vector<Hashtag>();
 	private Vector<User> listOfReceivers = new Vector<User>();
+	private int conversationID;
 	
 
 	private User author = null;
@@ -77,6 +78,16 @@ public class Message extends BusinessObject {
 	public void setListOfReceivers(Vector<User> listOfReceivers) {
 		this.listOfReceivers = listOfReceivers;
 	}
+	
+	public int getConversationID() {
+		return conversationID;
+	}
+
+
+	public void setConversationID(int conversationID) {
+		this.conversationID = conversationID;
+	}
+
 	
 		
 }

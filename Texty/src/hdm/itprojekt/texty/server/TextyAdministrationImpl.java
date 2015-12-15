@@ -41,6 +41,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setListOfHashtag(listOfHashtag);
 		m.setListOfReceivers(listOfReceivers);
 		m.setId(1);
+		m.setConversationID(1);
 
 		return this.mMapper.insert(m);
 	}
@@ -195,10 +196,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setAuthor(author);
 		m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
 		m.setListOfHashtag(listOfHashtag);
+		m.setId(1);
+		m.setConversationID(c.getLastMessage().getConversationID());
 		c.addMessageToConversation(m);
-
-		// TODO Mit den anderen besprechen, woher weiß db welche Message zu
-		// welcher conversation gehört.
+		
 		return this.mMapper.insert(m);
 	}
 
