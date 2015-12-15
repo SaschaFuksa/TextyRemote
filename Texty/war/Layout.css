@@ -29,10 +29,10 @@ div#Menu {
 }
 
 div#container {
-	width:100%;
+	width: 100%;
 	height: 77%;
-	display:-webkit-flex;
-	display:flex;
+	display: -webkit-flex;
+	display: flex;
 }
 
 div#Navigator {
@@ -181,4 +181,10 @@ div#Navigator .errorLabel {
 	scrollbar-face-color: #008080;
 	scrollbar-highlight-color: #FF69B4;
 	scrollbar-shadow-color: #FF00FF;
+}
+
+textarea {
+	resize: none;
+	width: 400px;
+	height: 200px;
 }

@@ -70,6 +70,10 @@ public class CommunityForm extends TextyForm {
 	private Button sendMessageButton = new Button("Send Message",
 			new ClickHandler() {
 				public void onClick(ClickEvent event) {
+					TextyForm message = new MessageForm("New Message",
+							selectedUser);
+					RootPanel.get("Details").clear();
+					RootPanel.get("Details").add(message);
 
 				}
 
