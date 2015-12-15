@@ -9,7 +9,7 @@ public class DBConnection {
 	private static Connection con = null;
 
 	private static String googleUrl = "jdbc:google:mysql://texty-project:textydb?user=root&password=root";
-	private static String localUrl = "jdbc:mysql://173.194.107.165:3306?user=root&password=root";
+	private static String localUrl = "jdbc:mysql://173.194.107.165:3306/?user=root&password=root";
 
 	public static Connection connection() {
 		if (con == null) {

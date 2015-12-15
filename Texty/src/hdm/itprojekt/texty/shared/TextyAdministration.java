@@ -60,5 +60,6 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public Vector<User> getAllUsers() throws IllegalArgumentException; 
 	 
+	 public User getCurrentUser() throws IllegalArgumentException;
 	 
 }

@@ -67,9 +67,9 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE customers " + "SET givenName=\""
-					+ user.getFirstName() + "\", " + "familyName=\""
-					+ user.getLastName() + "\" " + "WHERE id=" + user.getId());
+			stmt.executeUpdate("UPDATE textydb.user SET givenName = '" + user.getFirstName() + "',"
+					+ "familyName='" + user.getLastName()+ "' "
+					+ "WHERE userid=" + user.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,7 +88,7 @@ public class UserMapper {
 
 			ResultSet rs = stmt
 					.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-							+ "FROM user");
+							+ "FROM textydb.user");
 
 			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
 			while (rs.next()) {
@@ -118,7 +118,7 @@ public class UserMapper {
 
 			ResultSet rs = stmt
 					.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-							+ "FROM user" + "WHERE userId=" + userId);
+							+ "FROM textydb.user WHERE userId=" + userId);
 
 			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
 			while (rs.next()) {
@@ -144,7 +144,7 @@ public class UserMapper {
 			Statement stmt = con.createStatement();
 
 		     ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName FROM textydb.user " 
-		    	      + "WHERE email = " + "'" + email + "'");
+		    	      + "WHERE email = '" + email + "'");
 
 			if (rs.next()) {
 				User user = new User();
@@ -171,7 +171,7 @@ public class UserMapper {
 
 			ResultSet rs = stmt
 					.executeQuery("SELECT userId, givenName, familyName, dateOfCreation"
-							+ "FROM user"
+							+ "FROM textydb.user"
 							+ "WHERE givenName = "
 							+ firstName
 							+ " AND familyName = " + lastName + "");

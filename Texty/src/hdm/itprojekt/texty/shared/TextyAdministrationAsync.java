@@ -71,6 +71,8 @@ public interface TextyAdministrationAsync {
 
 	void getAllUsers(AsyncCallback<Vector<User>> callback);
 
+	void getCurrentUser(AsyncCallback<User> callback);
+
 	
 
 	

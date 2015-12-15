@@ -39,6 +39,22 @@ public class ProfileForm extends TextyForm {
 	@Override
 	protected void run() {
 		email = Texty.getLoginInfo().getEmailAddress();
+		TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
+		class getCurrentUserCallback implements AsyncCallback<User> {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("FAILURE");
+			}
+
+			@Override
+			public void onSuccess(User user) {
+				ProfileForm.user = user;
+				firstname.setText(user.getFirstName());
+				lastname.setText(user.getLastName());
+			}
+		}
+		administration.getCurrentUser(new getCurrentUserCallback());
 		
 		// Create UI
 		
@@ -49,8 +65,13 @@ public class ProfileForm extends TextyForm {
 		
 		// Textboxen
 		chatFlexTable.setWidget(0, 1, mail);
+		mail.setEnabled(false);
 		chatFlexTable.setWidget(1, 1, firstname);
 		chatFlexTable.setWidget(2, 1, lastname);
+		
+		// Textboxen füllen	
+		// E-Mail einfügen
+		mail.setText(email);
 		
 		// Save-Button
 		chatFlexTable.setWidget(3, 1, save);
@@ -69,20 +90,24 @@ public class ProfileForm extends TextyForm {
 
 					@Override
 					public void onSuccess(Void nothing) {
-						Window.alert("SUCCESS");
+					}
+				}
+				class updateUserCallback implements AsyncCallback<Void> {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("FAILURE");
+					}
+
+					@Override
+					public void onSuccess(Void nothing) {
 					}
 				}
 				
 				administration.checkUserData(new checkUserCallback());
+				administration.updateUserData(firstname.getText(), lastname.getText(), new updateUserCallback());
 			}
 		});
-		
-		// E-Mail einfügen
-		mail.setText(email);
-		if(user != null) {
-			firstname.setText(user.getFirstName());
-			lastname.setText(user.getLastName());
-		}
 		
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);

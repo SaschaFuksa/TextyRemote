@@ -107,8 +107,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 *            Der Benutzer der abonniert werden soll
 	 * @param subscriber
 	 *            Der Benutzer der abonnieren möchte
-	 *            
-	 * @return Das erzeugte Objekt           
+	 * 
+	 * @return Das erzeugte Objekt
 	 */
 
 	public UserSubscription createUserSubscription(User subscribedUser,
@@ -151,29 +151,32 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		u.setId(1);
 
 		return this.uMapper.insert(u);
-	}	
-	
+	}
+
 	public void checkUserData() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		
-		
-		if (this.uMapper.findByEmail(user.getEmail()) == null) {			
+
+		if (this.uMapper.findByEmail(user.getEmail()) == null) {
 			createUser();
-		}		
+		}
 	}
 
-	public void updateUserData(String firstName, String lastName) throws IllegalArgumentException {
+	public void updateUserData(String firstName, String lastName)
+			throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
 		User us = this.uMapper.findByEmail(user.getEmail());
-		us.setFirstName(firstName);
-		us.setLastName(lastName);		
+		if (us != null) {
+			us.setFirstName(firstName);
+			us.setLastName(lastName);
+			this.uMapper.update(us);
+		}
 	}
-	
+
 	@Override
 	public Vector<Hashtag> getAllSubscribedHashtags(User user)
 			throws IllegalArgumentException {
@@ -187,7 +190,6 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.mMapper.update(message);
 	}
 
-
 	public Message addMessageToConversation(Conversation c, String text,
 			User author, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
@@ -199,7 +201,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setId(1);
 		m.setConversationID(c.getLastMessage().getConversationID());
 		c.addMessageToConversation(m);
-		
+
 		return this.mMapper.insert(m);
 	}
 
@@ -268,6 +270,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
 		return this.uMapper.findAll();
+	}
+
+	public User getCurrentUser() throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User us = this.uMapper.findByEmail(user.getEmail());
+		return us;
 	}
 
 	/**
