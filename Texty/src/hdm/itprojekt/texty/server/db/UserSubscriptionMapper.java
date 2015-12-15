@@ -85,4 +85,11 @@ public class UserSubscriptionMapper {
 		    
 		    return result;
 		  }
+
+	  
+	  // TODO hier brauchen wir alle Usersubscriptions eines übergebenen Users 
+	public Vector<User> selectAllSubscribedUsers(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
