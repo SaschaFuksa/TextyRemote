@@ -71,7 +71,7 @@ public class HashtagMapper {
 		      Statement stmt = con.createStatement();
 
 		      //TODO: Date of Creation
-		  	ResultSet rs = stmt.executeQuery("SELECT hashtagId, keyword, FROM textydb.hashtag");
+		  	ResultSet rs = stmt.executeQuery("SELECT hashtagId, keyword FROM textydb.hashtag");
 
 
 		      // Für jeden Eintrag wird nun ein Hashtag-Objekt erstellt.

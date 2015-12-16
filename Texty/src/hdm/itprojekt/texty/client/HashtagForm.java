@@ -7,6 +7,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -18,7 +20,9 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.User;
 
 public class HashtagForm extends TextyForm {
 
@@ -34,8 +38,9 @@ public class HashtagForm extends TextyForm {
 	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
-	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
+	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
@@ -146,6 +151,20 @@ public class HashtagForm extends TextyForm {
 
 	@SuppressWarnings("deprecation")
 	protected void run() {
+		
+		class selectAllHashtagCallback implements AsyncCallback<Vector<Hashtag>> {
+
+			public void onFailure(Throwable caught) {
+				Window.alert("FAILURE");
+			}
+
+			public void onSuccess(Vector<Hashtag> allHashtag) {
+				HashtagForm.allHashtag = allHashtag;
+				setOracle();
+			}
+		}
+		
+		administration.getAllHashtags(new selectAllHashtagCallback());
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
 		suggestBox.addFocusListener(new FocusListener() {
@@ -159,29 +178,6 @@ public class HashtagForm extends TextyForm {
 		});
 
 		suggestBox.setText("Search for hashtags");
-
-		Hashtag hashtag1 = new Hashtag("VfB Abstieg");
-		Hashtag hashtag2 = new Hashtag("Texty");
-		Hashtag hashtag3 = new Hashtag("Pizza");
-		Hashtag hashtag4 = new Hashtag("Yee boi");
-		Hashtag hashtag5 = new Hashtag("Alkohol");
-		Hashtag hashtag6 = new Hashtag("Sprechstunde?");
-
-		hashtag1.setId(1);
-		hashtag2.setId(2);
-		hashtag3.setId(3);
-		hashtag4.setId(4);
-		hashtag5.setId(5);
-		hashtag6.setId(6);
-
-		allHashtag.add(hashtag1);
-		allHashtag.add(hashtag2);
-		allHashtag.add(hashtag3);
-		allHashtag.add(hashtag4);
-		allHashtag.add(hashtag5);
-		allHashtag.add(hashtag6);
-
-		setOracle();
 
 		addButton.getElement().setId("addButton");
 		subscribeButton.getElement().setId("button");

@@ -29,7 +29,7 @@ public interface TextyAdministrationAsync {
 	void createUserSubscription(User subscripedUser, User subscriber,
 			AsyncCallback<UserSubscription> callback);
 
-	void createHashtagSubscription(Hashtag subscribedHashtag, User subscriber,
+	void createHashtagSubscription(Hashtag subscribedHashtag,
 			AsyncCallback<HashtagSubscription> callback);
 
 	void createUser(AsyncCallback<User> callback);

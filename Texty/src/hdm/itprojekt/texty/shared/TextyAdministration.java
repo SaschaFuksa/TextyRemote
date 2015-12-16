@@ -29,7 +29,7 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public UserSubscription createUserSubscription (User subscripedUser, User subscriber) throws IllegalArgumentException;
 	 
-	 public HashtagSubscription createHashtagSubscription (Hashtag subscribedHashtag, User subscriber)throws IllegalArgumentException;
+	 public HashtagSubscription createHashtagSubscription (Hashtag subscribedHashtag)throws IllegalArgumentException;
 	 
 	 public User createUser() throws IllegalArgumentException;
 	 

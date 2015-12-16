@@ -130,11 +130,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	public HashtagSubscription createHashtagSubscription(
-			Hashtag subscribedHashtag, User subscriber) {
+			Hashtag subscribedHashtag) {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
 		HashtagSubscription hs = new HashtagSubscription();
 
 		hs.setSubscribedHashtag(subscribedHashtag);
-		hs.setSubscriber(subscriber);
+		hs.setSubscriber(this.uMapper.findByEmail(user.getEmail()));
 
 		hs.setId(1);
 

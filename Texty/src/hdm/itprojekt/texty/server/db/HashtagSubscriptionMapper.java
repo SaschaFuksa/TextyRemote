@@ -24,23 +24,16 @@ public class HashtagSubscriptionMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			// TODO: überprüfen ob die Subscription schon vorhanden ist; oder
-			// schon gui seitig nicht möglich?
-			/* Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT userId, hashtagId "
-					+ "FROM hashtagsubscription " + "WHERE userId"
-					+ "<> userId=" + hs.getSubscriber() + "AND hashtagId"
-					+ "<> hashtagId=" + hs.getSubscribedHashtag());
-
-			if (rs.next()) { */
 				Statement stmt = con.createStatement();
 				
 				stmt.executeUpdate("INSERT INTO textydb.hashtagsubscription (userId, hashtagId)"
 						+ "VALUES ("
-						+ hashtagSubscription.getSubscriber()
+						+"'"
+						+ hashtagSubscription.getSubscriber().getId()
+						+"'"
 						+ ", "
 						+ "'"
-						+ hashtagSubscription.getSubscribedHashtag() + "')");
+						+ hashtagSubscription.getSubscribedHashtag().getId() + "')");
 		
 		} catch (SQLException e) {
 			e.printStackTrace();

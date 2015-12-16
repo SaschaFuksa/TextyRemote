@@ -1,11 +1,15 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -34,6 +38,7 @@ public class HashtagSubscriptionForm extends TextyForm {
 	private Label successLabel = new Label("");
 	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
 	private Vector<Hashtag> subscribedHashtag = new Vector<Hashtag>();
+	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 
 	public void addHashtagSubscriptions() {
 		String result = new String("");
@@ -41,6 +46,7 @@ public class HashtagSubscriptionForm extends TextyForm {
 		for (int i = 0; i < selectedHashtag.size(); i++) {
 			if (checkSubscription(selectedHashtag.get(i).getKeyword())) {
 				subscribedHashtag.add(selectedHashtag.get(i));
+				administration.createHashtagSubscription(selectedHashtag.get(i), new createHashtagSubscriptionCallback());
 				result = result + " '" + selectedHashtag.get(i).getKeyword() + "'";
 			} else {
 				warning = warning + " '" + selectedHashtag.get(i).getKeyword() + "'";
@@ -102,7 +108,7 @@ public class HashtagSubscriptionForm extends TextyForm {
 	}
 
 	protected void run() {
-
+		
 		Hashtag hashtag1 = new Hashtag("VfB Abstieg");
 		Hashtag hashtag2 = new Hashtag("Texty");
 
@@ -128,4 +134,15 @@ public class HashtagSubscriptionForm extends TextyForm {
 
 	}
 
+}
+
+class createHashtagSubscriptionCallback implements AsyncCallback<HashtagSubscription> {
+
+	public void onFailure(Throwable caught) {
+		Window.alert("FAILURE");
+	}
+
+	public void onSuccess(HashtagSubscription subscription) {
+		
+	}
 }
