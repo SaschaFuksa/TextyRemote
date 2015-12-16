@@ -84,8 +84,9 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
+			//TODO: DateOfCreation fehler
 			ResultSet rs = stmt
-					.executeQuery("SELECT userId, givenName, familyName, email, dateOfCreation FROM textydb.user");
+					.executeQuery("SELECT userId, givenName, familyName, email FROM textydb.user");
 
 			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
 			while (rs.next()) {
@@ -94,7 +95,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getDate("dateOfCreation"));
+				//user.setDateOfCreation(rs.getDate("dateOfCreation"));
 
 				// Hinzufügen des neuen Objekts zum Ergebnisvektor
 				result.addElement(user);
