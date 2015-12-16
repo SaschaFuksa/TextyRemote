@@ -213,7 +213,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
 		m.setListOfHashtag(listOfHashtag);
 		m.setId(1);
-		m.setConversationID(c.getLastMessage().getConversationID());
+		m.setConversationID(1);
 		c.addMessageToConversation(m);
 
 		return this.mMapper.insert(m);
