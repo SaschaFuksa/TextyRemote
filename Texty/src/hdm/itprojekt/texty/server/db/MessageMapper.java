@@ -32,6 +32,7 @@ public class MessageMapper {
 			if (rs.next()) {
 
 				message.setId(rs.getInt("maxid") + 1);
+				
 
 				stmt = con.createStatement();
 
@@ -43,7 +44,7 @@ public class MessageMapper {
 						+ ", "
 						+ message.getAuthor()
 						+ ", "
-						// TODO: add getConversationId + message.getConversationId
+						+ message.getConversationID()
 						+ ", "
 						+ message.getText()
 						+ ", "

@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
 import java.util.Vector;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class HashtagMapper {
@@ -69,15 +70,16 @@ public class HashtagMapper {
 		    try {
 		      Statement stmt = con.createStatement();
 
-		      ResultSet rs = stmt.executeQuery("SELECT hastagId, keyword, dateOfCreation"
-		          + "FROM hashtag");
+		      //TODO: Date of Creation
+		  	ResultSet rs = stmt.executeQuery("SELECT hashtagId, keyword, FROM textydb.hashtag");
+
 
 		      // Für jeden Eintrag wird nun ein Hashtag-Objekt erstellt.
 		      while (rs.next()) {
 		    	  Hashtag hashtag = new Hashtag();
 		    	hashtag.setId(rs.getInt("hashtagId"));
 		    	hashtag.setKeyword(rs.getString("keyword"));
-		    	hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
+		    	//hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
 
 		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
 		        result.addElement(hashtag);

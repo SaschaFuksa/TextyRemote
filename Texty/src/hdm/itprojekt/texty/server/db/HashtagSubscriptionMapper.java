@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.server.db;
 
 import java.sql.*;
 import java.util.Vector;
+
 import hdm.itprojekt.texty.shared.bo.*;
 
 public class HashtagSubscriptionMapper {
@@ -33,11 +34,13 @@ public class HashtagSubscriptionMapper {
 
 			if (rs.next()) { */
 				Statement stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO textydb.hashtagsubscription (userId, hashtagId) "
+				
+				stmt.executeUpdate("INSERT INTO textydb.hashtagsubscription (userId, hashtagId)"
 						+ "VALUES ("
 						+ hashtagSubscription.getSubscriber()
 						+ ", "
-						+ hashtagSubscription.getSubscribedHashtag() + ")");
+						+ "'"
+						+ hashtagSubscription.getSubscribedHashtag() + "')");
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -51,8 +54,9 @@ public class HashtagSubscriptionMapper {
 		try {
 			Statement stmt = con.createStatement();
 			//HashtagSubscription gets deleted 
-			stmt.executeUpdate("DELETE FROM textydb.hashtagsubscription " + "WHERE userId="
-					+ hashtagSubscription.getSubscriber() +"AND hashtagId=" + hashtagSubscription.getSubscribedHashtag());
+			stmt.executeUpdate("DELETE * FROM textydb.hashtagsubscription " + "WHERE userId = '" 
+			+ hashtagSubscription.getSubscriber() + "'" +"AND hashtagId= '" + hashtagSubscription.getSubscribedHashtag() + "'");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,9 +69,9 @@ public class HashtagSubscriptionMapper {
 
 		    try {
 		      Statement stmt = con.createStatement();
+		      //TODO: Date of Creation fehlt
+				ResultSet rs = stmt.executeQuery("SELECT userId, hashtagId, FROM textydb.user");
 
-		      ResultSet rs = stmt.executeQuery("SELECT userId, hashtagId, dateOfCreation"
-		          + "FROM hashtagsubscription");
 
 		      // Für jeden Eintrag wird nun ein HashtagSubscription-Objekt erstellt.
 		      while (rs.next()) {
