@@ -31,12 +31,17 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message createInitialMessage(String text, User author,
+	public Message createInitialMessage(String text,
 			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		
 		Message m = new Message();
 		m.setText(text);
-		m.setAuthor(author);
+		m.setAuthor(this.uMapper.findByEmail(user.getEmail()));
 		m.setVisible(true);
 		m.setListOfHashtag(listOfHashtag);
 		m.setListOfReceivers(listOfReceivers);
@@ -83,11 +88,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 * @return Das erzeugt Unterhaltunsobjekt
 	 */
 	@Override
-	public Conversation createConversation(String text, User author,
+	public Conversation createConversation(String text,
 			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
 		Conversation c = new Conversation();
-		Message message = createInitialMessage(text, author, listOfReceivers,
+		Message message = createInitialMessage(text, listOfReceivers,
 				listOfHashtag);
 		c.addMessageToConversation(message);
 		if (message.getListOfReceivers() == null) {
@@ -196,11 +201,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	public Message addMessageToConversation(Conversation c, String text,
-			User author, Vector<Hashtag> listOfHashtag)
+			Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		
 		Message m = new Message();
 		m.setText(text);
-		m.setAuthor(author);
+		m.setAuthor(this.uMapper.findByEmail(user.getEmail()));
 		m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
 		m.setListOfHashtag(listOfHashtag);
 		m.setId(1);
