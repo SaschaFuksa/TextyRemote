@@ -75,6 +75,8 @@ public interface TextyAdministrationAsync {
 
 	void getAllSubscribedUsers(User user, AsyncCallback<Vector<User>> callback);
 
+	void getAllHashtags(AsyncCallback<Vector<Hashtag>> callback);
+
 	
 
 	
