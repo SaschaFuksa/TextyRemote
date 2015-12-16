@@ -1,11 +1,14 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -32,8 +35,11 @@ public class UserSubscriptionForm extends TextyForm {
 	private Label errorLabel = new Label("\0");
 	private Label warningLabel = new Label("");
 	private Label successLabel = new Label("");
+	private static User currentUser = new User();
 	private Vector<User> selectedUser = new Vector<User>();
-	private Vector<User> subscribedUser = new Vector<User>();
+	private static Vector<User> subscribedUser = new Vector<User>();
+	private final TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
 
 	public void addUserSubscriptions() {
 		String result = new String("");
@@ -102,18 +108,33 @@ public class UserSubscriptionForm extends TextyForm {
 
 	protected void run() {
 
-		User user1 = new User("Matteo", "mama@brbr.de");
-		User user2 = new User("Erich", "erer@meme.de");
+		administration.getCurrentUser(new AsyncCallback<User>() {
+			public void onFailure(Throwable caught) {
 
-		user1.setId(4);
-		user2.setId(5);
+			}
 
-		subscribedUser.add(user1);
-		subscribedUser.add(user2);
+			public void onSuccess(User result) {
+				UserSubscriptionForm.currentUser = result;
+				
+				Window.alert("Current User: " + currentUser.getFirstName());
+				
+				administration.getAllSubscribedUsers(currentUser, new AsyncCallback<Vector<User>>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Fail");
+					}
 
-		addUserSubscriptions();
+					public void onSuccess(Vector<User> result) {
+						Window.alert("Anzahl Sub User: " + result.size());
+						UserSubscriptionForm.subscribedUser = result;
+						
+						addUserSubscriptions();
 
-		showSubscriptions();
+						showSubscriptions();
+
+					}
+				});
+			}
+		});
 
 		warningLabel.setStylePrimaryName("errorLabel");
 		successLabel.setStylePrimaryName("successLabel");

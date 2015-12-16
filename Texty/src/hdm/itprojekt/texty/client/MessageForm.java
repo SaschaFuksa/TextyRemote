@@ -122,10 +122,11 @@ public class MessageForm extends TextyForm {
 		if (availability) {
 			administration.createHashtag(word, new AsyncCallback<Hashtag>() {
 				public void onFailure(Throwable caught) {
-
+					Window.alert("Fail");
 				}
 
 				public void onSuccess(Hashtag result) {
+					Window.alert("Success");
 					MessageForm.selectedHashtag.add(result);
 				}
 			});
