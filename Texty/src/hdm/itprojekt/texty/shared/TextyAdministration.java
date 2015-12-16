@@ -1,7 +1,7 @@
 package hdm.itprojekt.texty.shared;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
+
+
 import java.util.Date;
 import java.util.Vector;
 
@@ -18,12 +18,12 @@ public interface TextyAdministration extends RemoteService {
 
 	 public void init() throws IllegalArgumentException;
 	 
-	 public Message createInitialMessage(String text, User author, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag) 
+	 public Message createInitialMessage(String text, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag) 
 			 throws IllegalArgumentException;
 	 
 	 public Hashtag createHashtag (String keyword) throws IllegalArgumentException;
 	 
-	 public Conversation createConversation(String text, User author,
+	 public Conversation createConversation(String text,
 				Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag) 
 			 throws IllegalArgumentException;
 	 
@@ -37,7 +37,7 @@ public interface TextyAdministration extends RemoteService {
 	 	  
 	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
 	 
-	 public Message addMessageToConversation(Conversation c,String text, User author, Vector<Hashtag> listOfHashtag)
+	 public Message addMessageToConversation(Conversation c,String text, Vector<Hashtag> listOfHashtag)
 			 throws IllegalArgumentException;
 	 
 	 public void deleteMessage(Conversation conversation, Message message) throws IllegalArgumentException;
