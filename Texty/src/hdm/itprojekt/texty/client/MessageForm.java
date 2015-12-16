@@ -1,14 +1,27 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.Widget;
 
 public class MessageForm extends TextyForm {
 
@@ -21,12 +34,56 @@ public class MessageForm extends TextyForm {
 		this.recipientList = recipientList;
 	}
 
+	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
+	private HorizontalPanel content = new HorizontalPanel();
+	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label recipientLabel = new Label();
+	private Label errorLabel = new Label("\0");
+	private Label successLabel = new Label("");
+	private Label addedHashtagLabel = new Label("\0");
 	private TextArea text = new TextArea();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
+	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
+	private static Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
 	private Vector<User> recipientList = new Vector<User>();
 	private String recipient = new String();
+	private final TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
+
+	private Button addButton = new Button("", new ClickHandler() {
+		public void onClick(ClickEvent event) {
+			errorLabel.setText("\0");
+			String keyword = suggestBox.getText();
+			boolean alreadySelected = checkHashtag(keyword);
+			if (keyword == "") {
+				errorLabel.setText("Please select a Hashtag!");
+			} else if (alreadySelected) {
+				errorLabel.setText("Hashtag is already selected!");
+			} else {
+				addHashtag(keyword);
+			}
+		}
+
+	});
+
+	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		public void onKeyUp(KeyUpEvent event) {
+			errorLabel.setText("\0");
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				errorLabel.setText("\0");
+				String keyword = suggestBox.getText();
+				boolean alreadySelected = checkHashtag(keyword);
+				if (keyword == "") {
+					errorLabel.setText("Please select a Hashtag!");
+				} else if (alreadySelected) {
+					errorLabel.setText("Hashtag is already selected!");
+				} else {
+					addHashtag(keyword);
+				}
+			}
+		}
+	};
 
 	private void setRecipientLabel() {
 		if (recipientList.size() < 1) {
@@ -49,11 +106,136 @@ public class MessageForm extends TextyForm {
 		}
 	}
 
+	public void addHashtag(String keyword) {
+		String word = keyword;
+		boolean availability = true;
+		for (int i = 0; i < allHashtag.size(); i++) {
+			if (word.equals(allHashtag.get(i).getKeyword())) {
+				allHashtag.remove(i);
+				selectedHashtag.addElement(allHashtag.get(i));
+				errorLabel.setText("");
+				successLabel.setText("Hashtag successful added!");
+				setOracle();
+				availability = false;
+			}
+		}
+		if (availability) {
+			administration.createHashtag(word, new AsyncCallback<Hashtag>() {
+				public void onFailure(Throwable caught) {
+
+				}
+
+				public void onSuccess(Hashtag result) {
+					MessageForm.selectedHashtag.add(result);
+				}
+			});
+			availability = true;
+			errorLabel.setText("");
+			successLabel.setText("You subscribed a brand new hashtag!");
+		}
+		
+		final HorizontalPanel panel = new HorizontalPanel();
+		final Label keywordLabel = new Label(keyword);
+		panel.setStylePrimaryName("selectedHashtagLabel");
+		final Button deleteButton = new Button("", new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				deleteHashtag(keywordLabel.getText());
+				content.remove(panel);
+			}
+
+		});
+		deleteButton.getElement().setId("deleteButton");
+		panel.add(keywordLabel);
+		panel.add(deleteButton);
+		content.add(panel);
+		suggestBox.setText("");
+		if (addedHashtagLabel.getText() == "\0") {
+			addedHashtagLabel.setText("Added hashtags:");
+		}
+		setOracle();
+
+	}
+
+	public boolean checkHashtag(String keyword) {
+		String word = keyword;
+		for (int i = 0; i < selectedHashtag.size(); i++) {
+			if (word.equals(selectedHashtag.get(i).getKeyword())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void setOracle() {
+		oracle.clear();
+		for (int i = 0; i < allHashtag.size(); i++) {
+			String keyword = new String(allHashtag.get(i).getKeyword());
+			oracle.add(keyword);
+		}
+	}
+
+	private void deleteHashtag(String keyword) {
+		String name = keyword;
+		int indexSelectedHashtag = 0;
+		for (int i = 0; i < selectedHashtag.size(); i++) {
+			if (name.equals(selectedHashtag.get(i).getKeyword())) {
+				indexSelectedHashtag = i;
+			}
+		}
+
+		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
+		selectedHashtag.remove(indexSelectedHashtag);
+
+		if (selectedHashtag.size() < 1) {
+			addedHashtagLabel.setText("\0");
+		}
+	}
+
+	@SuppressWarnings("deprecation")
 	protected void run() {
 
+		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
+			public void onFailure(Throwable caught) {
+
+			}
+
+			public void onSuccess(Vector<Hashtag> result) {
+				MessageForm.allHashtag = result;
+				setOracle();
+
+			}
+		});
+
+		suggestBox.addKeyUpHandler(suggestBoxHandler);
+		suggestBox.addFocusListener(new FocusListener() {
+			public void onFocus(Widget arg1) {
+				suggestBox.setText("");
+				errorLabel.setText("\0");
+				successLabel.setText("");
+			}
+
+			public void onLostFocus(Widget arg1) {
+				suggestBox.setText("Search for hashtags");
+			}
+		});
+
+		suggestBox.setText("Search for hashtags");
+
+		addButton.getElement().setId("addButton");
+		errorLabel.setStylePrimaryName("errorLabel");
+		successLabel.setStylePrimaryName("successLabel");
+		scroll.setSize("400px", "40px");
+
 		setRecipientLabel();
+		suggestBoxPanel.add(suggestBox);
+		suggestBoxPanel.add(addButton);
 		this.add(recipientLabel);
 		this.add(text);
+		this.add(suggestBoxPanel);
+		this.add(errorLabel);
+		this.add(successLabel);
+		this.add(addedHashtagLabel);
+		this.add(scroll);
 
 	}
 

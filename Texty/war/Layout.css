@@ -158,6 +158,10 @@ div#Navigator .errorLabel {
 	width: 150px;
 }
 
+.selectedHashtagLabel{
+	margin-right: 10px;
+}
+
 .gwt-Anchor {
 	color: #0080c0;
 	font-family: Texty;

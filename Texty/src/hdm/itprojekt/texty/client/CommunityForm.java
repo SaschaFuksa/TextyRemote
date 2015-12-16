@@ -2,6 +2,8 @@ package hdm.itprojekt.texty.client;
 
 import java.util.Vector;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -9,6 +11,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -34,8 +37,10 @@ public class CommunityForm extends TextyForm {
 	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
-	private Vector<User> allUser = new Vector<User>();
+	private static Vector<User> allUser = new Vector<User>();
 	private Vector<User> selectedUser = new Vector<User>();
+	private final TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
 
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
@@ -82,7 +87,7 @@ public class CommunityForm extends TextyForm {
 	public void addUser(String username) {
 		String name = username;
 		for (int i = 0; i < allUser.size(); i++) {
-			if (name.equals(allUser.get(i).getNickName())) {
+			if (name.equals(allUser.get(i).getFirstName())) {
 				selectedUser.addElement(allUser.get(i));
 				allUser.remove(i);
 				final HorizontalPanel panel = new HorizontalPanel();
@@ -128,18 +133,18 @@ public class CommunityForm extends TextyForm {
 	public boolean checkUser(String username) {
 		String name = username;
 		for (int i = 0; i < selectedUser.size(); i++) {
-			if (name.equals(selectedUser.get(i).getNickName())) {
+			if (name.equals(selectedUser.get(i).getFirstName())) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private void deleteUser(String nickname) {
-		String name = nickname;
+	private void deleteUser(String firstname) {
+		String name = firstname;
 		int indexSelectedUser = 0;
 		for (int i = 0; i < selectedUser.size(); i++) {
-			if (name.equals(selectedUser.get(i).getNickName())) {
+			if (name.equals(selectedUser.get(i).getFirstName())) {
 				indexSelectedUser = i;
 			}
 		}
@@ -152,8 +157,12 @@ public class CommunityForm extends TextyForm {
 	private void setOracle() {
 		oracle.clear();
 		for (int i = 0; i < allUser.size(); i++) {
-			String name = new String(allUser.get(i).getNickName());
-			oracle.add(name);
+//			String firstName = allUser.get(i).getFirstName();
+//			StringBuffer bufferName = new StringBuffer(allUser.get(i).getEmail());
+//			bufferName.setLength(bufferName.indexOf("@"));
+//			String nickName = bufferName.toString();
+//			String name = new String(firstName + " (" + nickName + ")");
+			oracle.add(allUser.get(i).getFirstName());
 		}
 	}
 
@@ -172,29 +181,18 @@ public class CommunityForm extends TextyForm {
 		});
 
 		suggestBox.setText("Search for user");
+		
+		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
+			public void onFailure(Throwable caught) {
 
-		User user1 = new User("Sasa", "sasa@fufu.de");
-		User user2 = new User("Daniel", "dada@sese.de");
-		User user3 = new User("David", "dada@hehe.de");
-		User user4 = new User("Matteo", "mama@brbr.de");
-		User user5 = new User("Erich", "erer@meme.de");
-		User user6 = new User("Fred", "fredchen@schnuschnu.de");
+			}
 
-		user1.setId(1);
-		user2.setId(2);
-		user3.setId(3);
-		user4.setId(4);
-		user5.setId(5);
-		user6.setId(6);
+			public void onSuccess(Vector<User> result) {
+				CommunityForm.allUser = result;
+				setOracle();
 
-		allUser.add(user1);
-		allUser.add(user2);
-		allUser.add(user3);
-		allUser.add(user4);
-		allUser.add(user5);
-		allUser.add(user6);
-
-		setOracle();
+			}
+		});
 
 		addButton.getElement().setId("addButton");
 		sendMessageButton.getElement().setId("button");

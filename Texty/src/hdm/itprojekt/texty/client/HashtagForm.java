@@ -52,7 +52,7 @@ public class HashtagForm extends TextyForm {
 			} else if (alreadySelected) {
 				errorLabel.setText("Hashtag is already selected!");
 			} else {
-				addUser(keyword);
+				addHashtag(keyword);
 			}
 		}
 
@@ -72,7 +72,7 @@ public class HashtagForm extends TextyForm {
 				}
 			});
 
-	public void addUser(String keyword) {
+	public void addHashtag(String keyword) {
 		String name = keyword;
 		for (int i = 0; i < allHashtag.size(); i++) {
 			if (name.equals(allHashtag.get(i).getKeyword())) {
@@ -112,7 +112,7 @@ public class HashtagForm extends TextyForm {
 				} else if (alreadySelected) {
 					errorLabel.setText("Hashtag is already selected!");
 				} else {
-					addUser(keyword);
+					addHashtag(keyword);
 				}
 			}
 		}
@@ -188,6 +188,7 @@ public class HashtagForm extends TextyForm {
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
 		buttonPanel.add(subscribeButton);
+		scroll.setSize("250px", "110px");
 
 		this.add(text);
 		this.add(suggestBoxPanel);
