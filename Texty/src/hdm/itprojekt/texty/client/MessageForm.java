@@ -126,7 +126,7 @@ public class MessageForm extends TextyForm {
 				}
 
 				public void onSuccess(Hashtag result) {
-					MessageForm.selectedHashtag.add(result);
+					MessageForm.selectedHashtag.add(result);					
 				}
 			});
 			availability = true;

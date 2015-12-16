@@ -41,7 +41,8 @@ public class HashtagMapper {
 						+ "VALUES ("
 						+ hashtag.getId()
 						+ ", "
-						+ hashtag.getKeyword() + ")");
+						+ "'"
+						+ hashtag.getKeyword() + "')");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
