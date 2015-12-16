@@ -285,6 +285,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
 		return this.uMapper.findAll();
 	}
+	
+	public Vector<Hashtag> getAllHashtags() throws IllegalArgumentException {
+		return this.hMapper.findAll();
+		}
 
 	public User getCurrentUser() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
