@@ -85,11 +85,11 @@ class checkUserDataCallback implements AsyncCallback<Void> {
 
 	@Override
 	public void onFailure(Throwable caught) {
-		Window.alert("FAILURE");
+		
 	}
 
 	@Override
 	public void onSuccess(Void nothing) {
-		Window.alert("SUCCESS");
+		
 	}
 }
