@@ -35,6 +35,7 @@ public class MessageForm extends TextyForm {
 	}
 
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
+	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private HorizontalPanel content = new HorizontalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label recipientLabel = new Label();
@@ -66,6 +67,13 @@ public class MessageForm extends TextyForm {
 		}
 
 	});
+	
+	private Button sendButton = new Button("Send", new ClickHandler() {
+		public void onClick(ClickEvent event) {
+			
+		}
+
+	});
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 		public void onKeyUp(KeyUpEvent event) {
@@ -91,14 +99,14 @@ public class MessageForm extends TextyForm {
 		} else if (recipientList.size() < 4) {
 			for (int i = 0; i < recipientList.size(); i++) {
 				recipient = recipient + " '"
-						+ recipientList.get(i).getNickName() + "'";
+						+ recipientList.get(i).getFirstName() + "'";
 			}
 
 			recipientLabel.setText("Private message to: " + recipient);
 		} else {
 			for (int i = 0; i < 3; i++) {
 				recipient = recipient + " '"
-						+ recipientList.get(i).getNickName() + "'";
+						+ recipientList.get(i).getFirstName() + "'";
 			}
 			recipientLabel.setText("Private message to: " + recipient + " and "
 					+ new Integer(recipientList.size() - 3).toString()
@@ -111,8 +119,8 @@ public class MessageForm extends TextyForm {
 		boolean availability = true;
 		for (int i = 0; i < allHashtag.size(); i++) {
 			if (word.equals(allHashtag.get(i).getKeyword())) {
-				allHashtag.remove(i);
 				selectedHashtag.addElement(allHashtag.get(i));
+				allHashtag.remove(i);
 				errorLabel.setText("");
 				successLabel.setText("Hashtag successful added!");
 				setOracle();
@@ -186,6 +194,8 @@ public class MessageForm extends TextyForm {
 
 		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
 		selectedHashtag.remove(indexSelectedHashtag);
+		
+		oracle.add(keyword);
 
 		if (selectedHashtag.size() < 1) {
 			addedHashtagLabel.setText("\0");
@@ -225,14 +235,18 @@ public class MessageForm extends TextyForm {
 		addButton.getElement().setId("addButton");
 		errorLabel.setStylePrimaryName("errorLabel");
 		successLabel.setStylePrimaryName("successLabel");
+		sendButton.getElement().setId("sendButton");
 		scroll.setSize("400px", "40px");
 
 		setRecipientLabel();
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
+		buttonPanel.add(suggestBoxPanel);
+		buttonPanel.add(sendButton);
+		
 		this.add(recipientLabel);
 		this.add(text);
-		this.add(suggestBoxPanel);
+		this.add(buttonPanel);
 		this.add(errorLabel);
 		this.add(successLabel);
 		this.add(addedHashtagLabel);

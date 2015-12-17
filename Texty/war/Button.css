@@ -17,6 +17,24 @@
 	background-color: #80bfff;
 }
 
+#sendButton {
+	background: none;
+	background-color: #003399;
+	border: 0px outset buttonface;
+	color: white;
+	font-family: Texty;
+	font-size: 1.5em;
+	height: 36px;
+	margin-left: 60px;
+	padding: 5px;
+	text-align: center;
+	width: 120px;
+}
+
+#sendButton:hover {
+	background-color: #80bfff;
+}
+
 #addButton {
 	background: url('http://127.0.0.1:8888/icons/icon-add.png');
 	border: 0px outset buttonface;

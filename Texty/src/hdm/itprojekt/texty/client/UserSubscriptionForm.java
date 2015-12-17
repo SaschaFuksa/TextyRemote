@@ -39,11 +39,11 @@ public class UserSubscriptionForm extends TextyForm {
 		String result = new String("");
 		String warning = new String("");
 		for (int i = 0; i < selectedUser.size(); i++) {
-			if (checkSubscription(selectedUser.get(i).getNickName())) {
+			if (checkSubscription(selectedUser.get(i).getFirstName())) {
 				subscribedUser.add(selectedUser.get(i));
-				result = result + " '" + selectedUser.get(i).getNickName() + "'";
+				result = result + " '" + selectedUser.get(i).getFirstName() + "'";
 			} else {
-				warning = warning + " '" + selectedUser.get(i).getNickName() + "'";
+				warning = warning + " '" + selectedUser.get(i).getFirstName() + "'";
 			}
 		}
 		if (result != "") {
@@ -58,7 +58,7 @@ public class UserSubscriptionForm extends TextyForm {
 	public boolean checkSubscription(String username) {
 		String name = username;
 		for (int i = 0; i < subscribedUser.size(); i++) {
-			if (name.equals(subscribedUser.get(i).getNickName())) {
+			if (name.equals(subscribedUser.get(i).getFirstName())) {
 				return false;
 			}
 		}
@@ -69,9 +69,9 @@ public class UserSubscriptionForm extends TextyForm {
 		String name = nickname;
 		int indexSelectedUser = 0;
 		for (int i = 0; i < subscribedUser.size(); i++) {
-			if (name.equals(subscribedUser.get(i).getNickName())) {
+			if (name.equals(subscribedUser.get(i).getFirstName())) {
 				indexSelectedUser = i;
-				successLabel.setText("Subscribed user '" + subscribedUser.get(i).getNickName() + "' sucessful removed!");
+				successLabel.setText("Subscribed user '" + subscribedUser.get(i).getFirstName() + "' sucessful removed!");
 				warningLabel.setText("");
 			}
 		}
@@ -84,7 +84,7 @@ public class UserSubscriptionForm extends TextyForm {
 		for (int i = 0; i < subscribedUser.size(); i++) {
 			final HorizontalPanel panel = new HorizontalPanel();
 			final Label nameLabel = new Label(subscribedUser.get(i)
-					.getNickName());
+					.getFirstName());
 			nameLabel.setStylePrimaryName("selectedObjectLabel");
 			final Button deleteButton = new Button("", new ClickHandler() {
 				public void onClick(ClickEvent event) {
@@ -101,15 +101,6 @@ public class UserSubscriptionForm extends TextyForm {
 	}
 
 	protected void run() {
-
-		User user1 = new User("Matteo", "mama@brbr.de");
-		User user2 = new User("Erich", "erer@meme.de");
-
-		user1.setId(4);
-		user2.setId(5);
-
-		subscribedUser.add(user1);
-		subscribedUser.add(user2);
 
 		addUserSubscriptions();
 

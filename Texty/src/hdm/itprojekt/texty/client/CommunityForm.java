@@ -3,14 +3,13 @@ package hdm.itprojekt.texty.client;
 import java.util.Vector;
 
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
-import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -45,17 +44,23 @@ public class CommunityForm extends TextyForm {
 	private Button addButton = new Button("", new ClickHandler() {
 		public void onClick(ClickEvent event) {
 			errorLabel.setText("\0");
-			String username = suggestBox.getText();
-			boolean alreadySelected = checkUser(username);
-			if (username == "") {
+			if (suggestBox.getText() == "") {
 				errorLabel.setText("Please select a user!");
-			} else if (alreadySelected) {
-				errorLabel.setText("User is already selected!");
 			} else {
-				addUser(username);
+				String nickName = getNickName(suggestBox.getText());
+				User user = getUserOutOfAllUser(nickName);
+				if (user == null) {
+					errorLabel.setText("User is unknown!");
+				} else {
+					boolean alreadySelected = checkUser(user);
+					if (alreadySelected) {
+						errorLabel.setText("User is already selected!");
+					} else {
+						addUser(user);
+					}
+				}
 			}
 		}
-
 	});
 
 	private Button subscribeButton = new Button("Subscribe",
@@ -84,14 +89,13 @@ public class CommunityForm extends TextyForm {
 
 			});
 
-	public void addUser(String username) {
-		String name = username;
+	public void addUser(User user) {
 		for (int i = 0; i < allUser.size(); i++) {
-			if (name.equals(allUser.get(i).getFirstName())) {
-				selectedUser.addElement(allUser.get(i));
+			if (user.equals(allUser.get(i))) {
+				selectedUser.addElement(user);
 				allUser.remove(i);
 				final HorizontalPanel panel = new HorizontalPanel();
-				final Label nameLabel = new Label(username);
+				final Label nameLabel = new Label(user.getFirstName());
 				nameLabel.setStylePrimaryName("selectedObjectLabel");
 				final Button deleteButton = new Button("", new ClickHandler() {
 					public void onClick(ClickEvent event) {
@@ -109,35 +113,47 @@ public class CommunityForm extends TextyForm {
 				return;
 			}
 		}
-		errorLabel.setText("User is unknown!");
 	}
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 		public void onKeyUp(KeyUpEvent event) {
 			errorLabel.setText("\0");
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				errorLabel.setText("\0");
-				String username = suggestBox.getText();
-				boolean alreadySelected = checkUser(username);
-				if (username == "") {
-					errorLabel.setText("Please select a user!");
-				} else if (alreadySelected) {
-					errorLabel.setText("User is already selected!");
+			if (suggestBox.getText() == "") {
+				errorLabel.setText("Please select a user!");
+			} else {
+				String nickName = getNickName(suggestBox.getText());
+				User user = getUserOutOfAllUser(nickName);
+				if (user == null) {
+					errorLabel.setText("User is unknown!");
 				} else {
-					addUser(username);
+					boolean alreadySelected = checkUser(user);
+					if (alreadySelected) {
+						errorLabel.setText("User is already selected!");
+					} else {
+						addUser(user);
+					}
 				}
 			}
 		}
 	};
 
-	public boolean checkUser(String username) {
-		String name = username;
+	public boolean checkUser(User user) {
 		for (int i = 0; i < selectedUser.size(); i++) {
-			if (name.equals(selectedUser.get(i).getFirstName())) {
+			if (user.equals(selectedUser.get(i))) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public User getUserOutOfAllUser(String nickName) {
+		for (int i = 0; i < allUser.size(); i++) {
+			if (nickName.equals(setNickName(allUser.get(i).getEmail()))) {
+				User user = allUser.get(i);
+				return user;
+			}
+		}
+		return null;
 	}
 
 	private void deleteUser(String firstname) {
@@ -157,13 +173,34 @@ public class CommunityForm extends TextyForm {
 	private void setOracle() {
 		oracle.clear();
 		for (int i = 0; i < allUser.size(); i++) {
-//			String firstName = allUser.get(i).getFirstName();
-//			StringBuffer bufferName = new StringBuffer(allUser.get(i).getEmail());
-//			bufferName.setLength(bufferName.indexOf("@"));
-//			String nickName = bufferName.toString();
-//			String name = new String(firstName + " (" + nickName + ")");
-			oracle.add(allUser.get(i).getFirstName());
+			oracle.add(getOracleName(allUser.get(i).getFirstName(), allUser
+					.get(i).getEmail()));
 		}
+	}
+
+	private String getOracleName(String firstName, String email) {
+		StringBuffer bufferName = new StringBuffer(email);
+		bufferName.setLength(bufferName.indexOf("@"));
+		String nickName = bufferName.toString();
+		String name = new String(firstName + " (" + nickName + ")");
+		return name;
+
+	}
+
+	private String getNickName(String text) {
+		StringBuffer bufferName = new StringBuffer(text);
+		int firstIndex = bufferName.indexOf("(");
+		bufferName.delete(0, firstIndex + 1);
+		bufferName.deleteCharAt(bufferName.length() - 1);
+		String nickName = bufferName.toString();
+		return nickName;
+	}
+
+	private String setNickName(String email) {
+		StringBuffer bufferName = new StringBuffer(email);
+		bufferName.setLength(bufferName.indexOf("@"));
+		String nickName = bufferName.toString();
+		return nickName;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -176,12 +213,12 @@ public class CommunityForm extends TextyForm {
 			}
 
 			public void onLostFocus(Widget arg1) {
-				suggestBox.setText("Search for user");
+
 			}
 		});
 
 		suggestBox.setText("Search for user");
-		
+
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
 			public void onFailure(Throwable caught) {
 
