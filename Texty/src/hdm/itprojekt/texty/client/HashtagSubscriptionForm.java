@@ -3,13 +3,11 @@ package hdm.itprojekt.texty.client;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
-import hdm.itprojekt.texty.shared.bo.UserSubscription;
 
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
@@ -47,7 +45,15 @@ public class HashtagSubscriptionForm extends TextyForm {
 		for (int i = 0; i < selectedHashtag.size(); i++) {
 			if (checkSubscription(selectedHashtag.get(i).getKeyword())) {
 				subscribedHashtag.add(selectedHashtag.get(i));
-				administration.createHashtagSubscription(selectedHashtag.get(i), new createHashtagSubscriptionCallback());
+				administration.createHashtagSubscription(selectedHashtag.get(i), new AsyncCallback<HashtagSubscription>() {
+					public void onFailure(Throwable caught) {
+
+					}
+
+					public void onSuccess(HashtagSubscription result) {
+
+					}
+				});
 				result = result + " '" + selectedHashtag.get(i).getKeyword() + "'";
 			} else {
 				warning = warning + " '" + selectedHashtag.get(i).getKeyword() + "'";
@@ -126,17 +132,4 @@ public class HashtagSubscriptionForm extends TextyForm {
 
 	}
 
-}
-
-//TODO 
-
-class createHashtagSubscriptionCallback implements AsyncCallback<HashtagSubscription> {
-
-	public void onFailure(Throwable caught) {
-		Window.alert("FAILURE");
-	}
-
-	public void onSuccess(HashtagSubscription subscription) {
-		
-	}
 }

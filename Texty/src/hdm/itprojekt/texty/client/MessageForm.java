@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("deprecation")
 public class MessageForm extends TextyForm {
 
 	public MessageForm(String headline) {
@@ -202,7 +203,6 @@ public class MessageForm extends TextyForm {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void run() {
 
 		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {

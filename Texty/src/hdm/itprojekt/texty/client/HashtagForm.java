@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
-import hdm.itprojekt.texty.shared.bo.User;
 
+@SuppressWarnings("deprecation")
 public class HashtagForm extends TextyForm {
 
 	public HashtagForm(String headline) {
@@ -149,7 +149,6 @@ public class HashtagForm extends TextyForm {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void run() {
 		
 		class selectAllHashtagCallback implements AsyncCallback<Vector<Hashtag>> {

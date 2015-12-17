@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -23,6 +22,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("deprecation")
 public class CommunityForm extends TextyForm {
 
 	public CommunityForm(String headline) {
@@ -207,7 +207,6 @@ public class CommunityForm extends TextyForm {
 		return nickName;
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void run() {
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
