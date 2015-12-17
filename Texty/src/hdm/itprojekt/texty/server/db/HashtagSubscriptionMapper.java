@@ -112,4 +112,48 @@ public class HashtagSubscriptionMapper {
 		    
 		    return result;
 		  }
+	  
+		public Vector<Hashtag> selectAllSubscribedHashtags(Hashtag subscribedHashtag) {
+			Connection con = DBConnection.connection();
+			Vector<Hashtag> result = new Vector<Hashtag>();
+
+			try {
+				Statement stmt = con.createStatement();
+
+				
+				ResultSet rs = stmt.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword FROM textydb.hashtag INNER JOIN textydb.hashtagsubscription ON hashtag.hashtagId = hashtagsubscription.hashtagId "
+						+ "textydb.hashtagsubscription.userId = " + subscribedHashtag.getId() );
+				
+				// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
+				
+				while (rs.next()) {
+					Hashtag hashtag = new Hashtag();
+					
+					hashtag.setId(rs.getInt("hashtagId"));
+					hashtag.setKeyword(rs.getString("keyword"));
+					// hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+					result.addElement(hashtag);
+
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			return result;
+		}
+		
+		public void delete(Hashtag subscribedHashtag) {
+			Connection con = DBConnection.connection();
+
+			try {
+				Statement stmt = con.createStatement();
+				//HashtagSubscription gets deleted 
+				stmt.executeUpdate("DELETE FROM textydb.hashtagsubscription " + "WHERE userId = " 
+				+ subscribedHashtag.getId() + " AND subscribed_userId = " + subscribedHashtag.getKeyword());
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 }
