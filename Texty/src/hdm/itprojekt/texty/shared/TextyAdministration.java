@@ -48,7 +48,7 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public void deleteUserSubscription(User user) throws IllegalArgumentException;
 	 
-	 public void deleteHashtagSubscription(HashtagSubscription subscription) throws IllegalArgumentException;
+	 public void deleteHashtagSubscription(Hashtag hashtag) throws IllegalArgumentException;
 	 
 	 public Vector<Message> getAllMessagesFromUserByDate(User user, Date startDate, Date endDate) throws IllegalArgumentException;
 	 

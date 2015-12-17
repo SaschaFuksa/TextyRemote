@@ -54,7 +54,7 @@ public interface TextyAdministrationAsync {
 	void deleteUserSubscription(User user,
 			AsyncCallback<Void> callback);
 
-	void deleteHashtagSubscription(HashtagSubscription subscription,
+	void deleteHashtagSubscription(Hashtag hashtag,
 			AsyncCallback<Void> callback);
 
 	void getAllMessagesFromUserByDate(User user, Date startDate, Date endDate,
