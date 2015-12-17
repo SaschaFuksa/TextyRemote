@@ -51,7 +51,7 @@ public interface TextyAdministrationAsync {
 	void updateUserData(String firstName, String lastName,
 			AsyncCallback<Void> callback);
 
-	void deleteUserSubscription(UserSubscription subscription,
+	void deleteUserSubscription(User user,
 			AsyncCallback<Void> callback);
 
 	void deleteHashtagSubscription(HashtagSubscription subscription,
@@ -73,7 +73,7 @@ public interface TextyAdministrationAsync {
 
 	void getCurrentUser(AsyncCallback<User> callback);
 
-	void getAllSubscribedUsers(User user, AsyncCallback<Vector<User>> callback);
+	void getAllSubscribedUsers(AsyncCallback<Vector<User>> callback);
 
 	void getAllHashtags(AsyncCallback<Vector<Hashtag>> callback);
 

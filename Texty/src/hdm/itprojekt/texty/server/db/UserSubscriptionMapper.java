@@ -27,68 +27,62 @@ public class UserSubscriptionMapper {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("INSERT INTO textydb.usersubscription (subscriber_userId, subscribed_userId)"
 					+ "VALUES ("
-					+"'"
-					+ userSubscription.getSubscriber().getId()
-					+"'"
-					+ ", "
 					+ "'"
-					+ userSubscription.getSubscribedUser().getId() + "')");
-	
+					+ userSubscription.getSubscriber().getId()
+					+ "'"
+					+ ", "
+					+ "'" + userSubscription.getSubscribedUser().getId() + "')");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return userSubscription;
 	}
 
-	public void delete(UserSubscription userSubscription) {
+	public Vector<User> selectAllSubscribedUsers(User subscriber) {
+		Connection con = DBConnection.connection();
+		Vector<User> result = new Vector<User>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			
+			ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email FROM textydb.user INNER JOIN textydb.usersubscription ON user.userId = usersubscription.subscribed_userId "
+					+ "WHERE subscriber_userId = " + subscriber.getId());
+			
+			// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
+			
+			while (rs.next()) {
+				
+				User user = new User();
+
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				user.setEmail(rs.getString("email"));
+				// userSubscription.setDateOfCreation(rs.getDate("dateOfCreation"));
+
+				result.addElement(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public void delete(UserSubscription usersubscription) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
-			// UserSubscription gets deleted
-			stmt.executeUpdate("DELETE FROM textydb.usersubscription "
-					+ "WHERE subscriber_userId="
-					+ userSubscription.getSubscriber()
-					+ "AND subscribed_userId="
-					+ userSubscription.getSubscribedUser());
+			//HashtagSubscription gets deleted 
+			stmt.executeUpdate("DELETE FROM textydb.usersubscription " + "WHERE subscriber_userId = " 
+			+ usersubscription.getSubscriber().getId() + " AND subscribed_userId = " + usersubscription.getSubscribedUser().getId());
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	  public Vector<UserSubscription> findBySubscriber(int subscriber) {
-		    Connection con = DBConnection.connection();
-		    Vector<UserSubscription> result = new Vector<UserSubscription>();
-
-		    try {
-		      Statement stmt = con.createStatement();
-
-		      ResultSet rs = stmt.executeQuery("SELECT subscriber_userId, subscribed_userId, dateOfCreation"
-		          + "FROM usersubscription" + "WHERE subscriber_userId=" + subscriber);
-
-		      // Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
-		      while (rs.next()) {
-		    	  UserSubscription userSubscription = new UserSubscription();
-		        /*
-		         * TODO: setter ändern
-		         
-		    	userSubscription.setSubscriber(rs.getInt("susriber_userId"));
-		        userSubscription.setSubscribedUser(rs.getInt("subscribed_userId"));
-		        userSubscription.setDateOfCreation(rs.getDate("dateOfCreation"));
-		         */
-		    	  
-		        result.addElement(userSubscription);
-		      }
-		    }
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-		    
-		    return result;
-		  }
-
-	public Vector<User> selectAllSubscribedUsers(User user) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

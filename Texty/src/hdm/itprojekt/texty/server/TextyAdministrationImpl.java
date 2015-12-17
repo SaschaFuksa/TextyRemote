@@ -197,9 +197,14 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return null;
 	}
 
-	public Vector<User> getAllSubscribedUsers(User user)
+	public Vector<User> getAllSubscribedUsers()
 			throws IllegalArgumentException {
-		return this.usMapper.selectAllSubscribedUsers(user);
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User us = this.uMapper.findByEmail(user.getEmail());
+		return this.usMapper.selectAllSubscribedUsers(us);
 	}
 
 	public Message editMessage(Message message, String newText)
@@ -235,8 +240,19 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
-	public void deleteUserSubscription(UserSubscription subscription)
+	public void deleteUserSubscription(User subscribedUser)
 			throws IllegalArgumentException {
+		UserSubscription subscription = new UserSubscription();
+		
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User subscriber = this.uMapper.findByEmail(user.getEmail());
+		
+		subscription.setSubscriber(subscriber);
+		subscription.setSubscribedUser(subscribedUser);
+		
 		this.usMapper.delete(subscription);
 	}
 

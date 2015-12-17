@@ -3,6 +3,7 @@ package hdm.itprojekt.texty.client;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
+import hdm.itprojekt.texty.shared.bo.UserSubscription;
 
 import java.util.Vector;
 
@@ -108,7 +109,7 @@ public class HashtagSubscriptionForm extends TextyForm {
 	}
 
 	protected void run() {
-
+		
 		addHashtagSubscriptions();
 
 		showSubscriptions();
@@ -126,6 +127,8 @@ public class HashtagSubscriptionForm extends TextyForm {
 	}
 
 }
+
+//TODO 
 
 class createHashtagSubscriptionCallback implements AsyncCallback<HashtagSubscription> {
 

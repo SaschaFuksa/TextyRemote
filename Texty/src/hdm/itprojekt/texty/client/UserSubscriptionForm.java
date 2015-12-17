@@ -36,7 +36,7 @@ public class UserSubscriptionForm extends TextyForm {
 	private Label warningLabel = new Label("");
 	private Label successLabel = new Label("");
 	private Vector<User> selectedUser = new Vector<User>();
-	private Vector<User> subscribedUser = new Vector<User>();
+	private static Vector<User> subscribedUser = new Vector<User>();
 	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 
 	public void addUserSubscriptions() {
@@ -86,6 +86,15 @@ public class UserSubscriptionForm extends TextyForm {
 				indexSelectedUser = i;
 				successLabel.setText("Subscribed user '" + subscribedUser.get(i).getFirstName() + "' sucessful removed!");
 				warningLabel.setText("");
+				administration.deleteUserSubscription(subscribedUser.get(i), new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+
+					}
+
+					public void onSuccess(Void result) {
+						
+					}
+				});
 			}
 		}
 
@@ -115,9 +124,18 @@ public class UserSubscriptionForm extends TextyForm {
 
 	protected void run() {
 		
-		addUserSubscriptions();
+		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
+			public void onFailure(Throwable caught) {
 
-		showSubscriptions();
+			}
+
+			public void onSuccess(Vector<User> result) {
+				UserSubscriptionForm.subscribedUser = result;
+				addUserSubscriptions();
+				showSubscriptions();
+
+			}
+		});
 
 		warningLabel.setStylePrimaryName("errorLabel");
 		successLabel.setStylePrimaryName("successLabel");
