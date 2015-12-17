@@ -26,7 +26,7 @@ public interface TextyAdministrationAsync {
 			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag,
 			AsyncCallback<Conversation> callback);
 
-	void createUserSubscription(User subscripedUser, User subscriber,
+	void createUserSubscription(User subscribedUser, 
 			AsyncCallback<UserSubscription> callback);
 
 	void createHashtagSubscription(Hashtag subscribedHashtag,

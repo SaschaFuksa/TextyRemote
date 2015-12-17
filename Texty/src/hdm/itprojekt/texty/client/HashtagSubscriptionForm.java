@@ -108,15 +108,6 @@ public class HashtagSubscriptionForm extends TextyForm {
 	}
 
 	protected void run() {
-		
-		Hashtag hashtag1 = new Hashtag("VfB Abstieg");
-		Hashtag hashtag2 = new Hashtag("Texty");
-
-		hashtag1.setId(1);
-		hashtag2.setId(2);
-
-		subscribedHashtag.add(hashtag1);
-		subscribedHashtag.add(hashtag2);
 
 		addHashtagSubscriptions();
 

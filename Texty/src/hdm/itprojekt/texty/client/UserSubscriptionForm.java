@@ -1,11 +1,14 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.User;
+import hdm.itprojekt.texty.shared.bo.UserSubscription;
 
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -34,12 +37,22 @@ public class UserSubscriptionForm extends TextyForm {
 	private Label successLabel = new Label("");
 	private Vector<User> selectedUser = new Vector<User>();
 	private Vector<User> subscribedUser = new Vector<User>();
+	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 
 	public void addUserSubscriptions() {
 		String result = new String("");
 		String warning = new String("");
 		for (int i = 0; i < selectedUser.size(); i++) {
 			if (checkSubscription(selectedUser.get(i).getFirstName())) {
+				administration.createUserSubscription(selectedUser.get(i), new AsyncCallback<UserSubscription>() {
+					public void onFailure(Throwable caught) {
+
+					}
+
+					public void onSuccess(UserSubscription result) {
+
+					}
+				});
 				subscribedUser.add(selectedUser.get(i));
 				result = result + " '" + selectedUser.get(i).getFirstName() + "'";
 			} else {
@@ -101,7 +114,7 @@ public class UserSubscriptionForm extends TextyForm {
 	}
 
 	protected void run() {
-
+		
 		addUserSubscriptions();
 
 		showSubscriptions();

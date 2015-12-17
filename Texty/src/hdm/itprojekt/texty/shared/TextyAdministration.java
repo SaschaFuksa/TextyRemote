@@ -27,7 +27,7 @@ public interface TextyAdministration extends RemoteService {
 				Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag) 
 			 throws IllegalArgumentException;
 	 
-	 public UserSubscription createUserSubscription (User subscripedUser, User subscriber) throws IllegalArgumentException;
+	 public UserSubscription createUserSubscription (User subscribedUser) throws IllegalArgumentException;
 	 
 	 public HashtagSubscription createHashtagSubscription (Hashtag subscribedHashtag)throws IllegalArgumentException;
 	 

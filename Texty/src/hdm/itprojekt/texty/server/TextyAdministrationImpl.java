@@ -116,12 +116,16 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 * @return Das erzeugte Objekt
 	 */
 
-	public UserSubscription createUserSubscription(User subscribedUser,
-			User subscriber) {
+	public UserSubscription createUserSubscription(User subscribedUser) {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		
 		UserSubscription us = new UserSubscription();
 
 		us.setSubscribedUser(subscribedUser);
-		us.setSubscriber(subscriber);
+		us.setSubscriber(this.uMapper.findByEmail(user.getEmail()));
 
 		us.setId(1);
 

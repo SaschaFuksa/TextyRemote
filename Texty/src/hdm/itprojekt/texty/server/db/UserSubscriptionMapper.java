@@ -24,15 +24,16 @@ public class UserSubscriptionMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			// TODO: überprüfen ob die Subscription schon vorhanden ist; oder
-			// schon gui seitig nicht möglich?
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO textydb.usersubscription (subscriber_userId, subscribed_userId) "
+			stmt.executeUpdate("INSERT INTO textydb.usersubscription (subscriber_userId, subscribed_userId)"
 					+ "VALUES ("
-					+ userSubscription.getSubscriber()
+					+"'"
+					+ userSubscription.getSubscriber().getId()
+					+"'"
 					+ ", "
-					+ userSubscription.getSubscribedUser() + ")");
-
+					+ "'"
+					+ userSubscription.getSubscribedUser().getId() + "')");
+	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

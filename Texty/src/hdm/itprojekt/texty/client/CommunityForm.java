@@ -7,6 +7,7 @@ import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
@@ -114,28 +115,31 @@ public class CommunityForm extends TextyForm {
 			}
 		}
 	}
-
+	
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
-		public void onKeyUp(KeyUpEvent event) {
-			errorLabel.setText("\0");
-			if (suggestBox.getText() == "") {
-				errorLabel.setText("Please select a user!");
-			} else {
-				String nickName = getNickName(suggestBox.getText());
-				User user = getUserOutOfAllUser(nickName);
-				if (user == null) {
-					errorLabel.setText("User is unknown!");
+ 		public void onKeyUp(KeyUpEvent event) {
+ 			errorLabel.setText("\0");
+ 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+ 				errorLabel.setText("\0");
+ 				if (suggestBox.getText() == "") {
+					errorLabel.setText("Please select a user!");
 				} else {
-					boolean alreadySelected = checkUser(user);
-					if (alreadySelected) {
-						errorLabel.setText("User is already selected!");
+					String nickName = getNickName(suggestBox.getText());
+					User user = getUserOutOfAllUser(nickName);
+					if (user == null) {
+						errorLabel.setText("User is unknown!");
 					} else {
-						addUser(user);
+						boolean alreadySelected = checkUser(user);
+						if (alreadySelected) {
+							errorLabel.setText("User is already selected!");
+						} else {
+							addUser(user);
+						}
 					}
 				}
-			}
-		}
-	};
+ 			}
+ 		}
+ 	};
 
 	public boolean checkUser(User user) {
 		for (int i = 0; i < selectedUser.size(); i++) {
