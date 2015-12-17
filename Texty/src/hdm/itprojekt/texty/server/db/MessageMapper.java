@@ -42,14 +42,20 @@ public class MessageMapper {
 						+ "VALUES ("
 						+ message.getId()
 						+ ", "
+						+ "'"
 						+ message.getAuthor()
+						+ "'"
 						+ ", "
+						+ "'"
 						+ message.getConversationID()
+						+ "'"
 						+ ", "
+						+ "'"
 						+ message.getText()
+						+ "'"
 						+ ", "
-						+ message.isVisible()
-						+ ")");
+						+ "'"
+						+ message.isVisible() + "')");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
