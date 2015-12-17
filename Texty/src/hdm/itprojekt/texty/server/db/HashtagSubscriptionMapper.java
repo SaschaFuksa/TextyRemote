@@ -108,7 +108,7 @@ public class HashtagSubscriptionMapper {
 
 				
 				ResultSet rs = stmt.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword FROM textydb.hashtag INNER JOIN textydb.hashtagsubscription ON hashtag.hashtagId = hashtagsubscription.hashtagId "
-						+ "textydb.hashtagsubscription.userId = " + subscriber.getId() );
+						+ "WHERE hashtagsubscription.userId = " + subscriber.getId() );
 				
 				// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
 				

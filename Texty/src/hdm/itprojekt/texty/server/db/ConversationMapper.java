@@ -22,7 +22,11 @@ public class ConversationMapper {
 	
 	public Conversation insert(Conversation conversation) {
 		Connection con = DBConnection.connection();
-
+		int state = 0;
+		if (conversation.isPublicly()){
+			state = 1;
+		}
+		
 		try {
 			Statement stmt = con.createStatement();
 			// Find highest Primarykey
@@ -37,11 +41,13 @@ public class ConversationMapper {
 
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
-				stmt.executeUpdate("INSERT INTO textydb.conversation (conversationId, publicly)"
+				stmt.executeUpdate("INSERT INTO textydb.conversation (conversationId, visibility, publicly)"
 						+ "VALUES ("
 						+ conversation.getId()
 						+ ", "
-						+ conversation.isPublicly() + ")");
+						+ 1
+						+ ", "
+						+ state + ")");
 			}
 		}
 		catch (SQLException e) {

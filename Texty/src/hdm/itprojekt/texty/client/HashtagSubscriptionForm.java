@@ -3,6 +3,7 @@ package hdm.itprojekt.texty.client;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
+import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
 
@@ -36,7 +37,7 @@ public class HashtagSubscriptionForm extends TextyForm {
 	private Label warningLabel = new Label("");
 	private Label successLabel = new Label("");
 	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
-	private Vector<Hashtag> subscribedHashtag = new Vector<Hashtag>();
+	private static Vector<Hashtag> subscribedHashtag = new Vector<Hashtag>();
 	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 
 	public void addHashtagSubscriptions() {
@@ -87,6 +88,15 @@ public class HashtagSubscriptionForm extends TextyForm {
 				indexSelectedHashtag = i;
 				successLabel.setText("Subscribed user '#" + subscribedHashtag.get(i).getKeyword() + "' sucessful removed!");
 				warningLabel.setText("");
+				administration.deleteHashtagSubscription(subscribedHashtag.get(i), new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+
+					}
+
+					public void onSuccess(Void result) {
+
+					}
+				});
 			}
 		}
 
@@ -116,10 +126,19 @@ public class HashtagSubscriptionForm extends TextyForm {
 
 	protected void run() {
 		
-		addHashtagSubscriptions();
+		administration.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
+			public void onFailure(Throwable caught) {
 
-		showSubscriptions();
+			}
 
+			public void onSuccess(Vector<Hashtag> result) {
+				HashtagSubscriptionForm.subscribedHashtag = result;
+				addHashtagSubscriptions();
+				showSubscriptions();
+
+			}
+		});
+		
 		warningLabel.setStylePrimaryName("errorLabel");
 		successLabel.setStylePrimaryName("successLabel");
 		scroll.setSize("250px", "110px");

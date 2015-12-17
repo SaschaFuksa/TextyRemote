@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
+import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.User;
 
@@ -43,7 +44,7 @@ public class MessageForm extends TextyForm {
 	private Label errorLabel = new Label("\0");
 	private Label successLabel = new Label("");
 	private Label addedHashtagLabel = new Label("\0");
-	private TextArea text = new TextArea();
+	private TextArea textBox = new TextArea();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
@@ -71,9 +72,16 @@ public class MessageForm extends TextyForm {
 	
 	private Button sendButton = new Button("Send", new ClickHandler() {
 		public void onClick(ClickEvent event) {
-			
-		}
+			administration.createConversation(textBox.getText(), recipientList, selectedHashtag, new AsyncCallback<Conversation>() {
+				public void onFailure(Throwable caught) {
+					Window.alert("Fail");
+				}
 
+				public void onSuccess(Conversation result) {
+					Window.alert("Success");
+				}
+			});
+		}
 	});
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
@@ -245,7 +253,7 @@ public class MessageForm extends TextyForm {
 		buttonPanel.add(sendButton);
 		
 		this.add(recipientLabel);
-		this.add(text);
+		this.add(textBox);
 		this.add(buttonPanel);
 		this.add(errorLabel);
 		this.add(successLabel);

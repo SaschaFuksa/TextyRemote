@@ -22,7 +22,11 @@ public class MessageMapper {
 
 	public Message insert(Message message) {
 		Connection con = DBConnection.connection();
-
+		int state = 0;
+		if (message.isVisible()){
+			state = 1;
+		}
+		
 		try {
 			Statement stmt = con.createStatement();
 			// Find highest Primarykey
@@ -42,9 +46,7 @@ public class MessageMapper {
 						+ "VALUES ("
 						+ message.getId()
 						+ ", "
-						+ "'"
-						+ message.getAuthor()
-						+ "'"
+						+ message.getAuthor().getId()
 						+ ", "
 						+ "'"
 						+ message.getConversationID()
@@ -54,8 +56,7 @@ public class MessageMapper {
 						+ message.getText()
 						+ "'"
 						+ ", "
-						+ "'"
-						+ message.isVisible() + "')");
+						+ state + ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
