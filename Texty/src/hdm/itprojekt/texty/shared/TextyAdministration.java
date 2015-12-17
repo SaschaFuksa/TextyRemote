@@ -35,7 +35,7 @@ public interface TextyAdministration extends RemoteService {
 	 
 	 public Message editMessage(Message message, String newText) throws IllegalArgumentException;
 	 	  
-	 public Vector<Hashtag> getAllSubscribedHashtags(User user) throws IllegalArgumentException;
+	 public Vector<Hashtag> getAllSubscribedHashtags() throws IllegalArgumentException;
 	 
 	 public Message addMessageToConversation(Conversation c,String text, Vector<Hashtag> listOfHashtag)
 			 throws IllegalArgumentException;

@@ -191,17 +191,20 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Vector<Hashtag> getAllSubscribedHashtags(User user)
-			throws IllegalArgumentException {		
-		//return this.hsMapper.selectAllSubscribedHashtags(user);
-		return null;
+	public Vector<Hashtag> getAllSubscribedHashtags()
+			throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		
+		User us = this.uMapper.findByEmail(user.getEmail());
+		return this.hsMapper.selectAllSubscribedHashtags(us);		
 	}
 
 	public Vector<User> getAllSubscribedUsers()
 			throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
-
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
 		User us = this.uMapper.findByEmail(user.getEmail());
 		return this.usMapper.selectAllSubscribedUsers(us);

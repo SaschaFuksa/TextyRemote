@@ -36,8 +36,7 @@ public interface TextyAdministrationAsync {
 
 	void editMessage(Message message, String newText, AsyncCallback<Message> callback);
 	
-	void getAllSubscribedHashtags(User user,
-			AsyncCallback<Vector<Hashtag>> callback);
+	void getAllSubscribedHashtags(AsyncCallback<Vector<Hashtag>> callback);
 
 	void addMessageToConversation(Conversation c, String text,
 			Vector<Hashtag> listOfHashtag,

@@ -99,7 +99,7 @@ public class HashtagSubscriptionMapper {
 		    return result;
 		  }
 	  
-		public Vector<Hashtag> selectAllSubscribedHashtags(Hashtag subscribedHashtag) {
+		public Vector<Hashtag> selectAllSubscribedHashtags(User subscriber) {
 			Connection con = DBConnection.connection();
 			Vector<Hashtag> result = new Vector<Hashtag>();
 
@@ -108,7 +108,7 @@ public class HashtagSubscriptionMapper {
 
 				
 				ResultSet rs = stmt.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword FROM textydb.hashtag INNER JOIN textydb.hashtagsubscription ON hashtag.hashtagId = hashtagsubscription.hashtagId "
-						+ "textydb.hashtagsubscription.userId = " + subscribedHashtag.getId() );
+						+ "textydb.hashtagsubscription.userId = " + subscriber.getId() );
 				
 				// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
 				
