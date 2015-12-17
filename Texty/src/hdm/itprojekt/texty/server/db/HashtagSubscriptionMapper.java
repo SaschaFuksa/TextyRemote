@@ -41,20 +41,6 @@ public class HashtagSubscriptionMapper {
 		return hashtagSubscription;
 	}
 	
-	public void delete(HashtagSubscription hashtagSubscription) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-			//HashtagSubscription gets deleted 
-			stmt.executeUpdate("DELETE * FROM textydb.hashtagsubscription " + "WHERE userId = '" 
-			+ hashtagSubscription.getSubscriber() + "'" +"AND hashtagId= '" + hashtagSubscription.getSubscribedHashtag() + "'");
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	  public Vector<HashtagSubscription> findAll() {
 		    Connection con = DBConnection.connection();
 		    // Ergebnisvektor vorbereiten
@@ -143,14 +129,14 @@ public class HashtagSubscriptionMapper {
 			return result;
 		}
 		
-		public void delete(Hashtag subscribedHashtag) {
+		public void delete(HashtagSubscription hashtagSubscription) {
 			Connection con = DBConnection.connection();
 
 			try {
 				Statement stmt = con.createStatement();
 				//HashtagSubscription gets deleted 
 				stmt.executeUpdate("DELETE FROM textydb.hashtagsubscription " + "WHERE userId = " 
-				+ subscribedHashtag.getId() + " AND subscribed_userId = " + subscribedHashtag.getKeyword());
+				+ hashtagSubscription.getSubscriber().getId() + " AND hashtagId = " + hashtagSubscription.getSubscribedHashtag().getId());
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
