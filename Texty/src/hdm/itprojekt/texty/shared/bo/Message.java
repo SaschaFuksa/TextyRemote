@@ -5,24 +5,21 @@ import java.util.*;
 public class Message extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
-	private String text ="";	
+	private String text = "";	
 	private Vector<Hashtag> listOfHashtag = new Vector<Hashtag>();
 	private Vector<User> listOfReceivers = new Vector<User>();
 	private int conversationID;
-	
-
 	private User author = null;
-	
-	private boolean visible =false;
+	private boolean visible = false;
 	
 	public Message() {	
 	}
 	
 	
-	public Message (String text, User author, User receiver, boolean visible ){
+	public Message (String text, User author, Vector<User> listOfReceivers, boolean visible ){
 		this.text = text;
 		this.author = author;
-		
+		this.listOfReceivers = listOfReceivers;
 		this.visible = visible;
 	}
 	

@@ -12,7 +12,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -74,11 +73,11 @@ public class MessageForm extends TextyForm {
 		public void onClick(ClickEvent event) {
 			administration.createConversation(textBox.getText(), recipientList, selectedHashtag, new AsyncCallback<Conversation>() {
 				public void onFailure(Throwable caught) {
-					Window.alert("Fail");
+
 				}
 
 				public void onSuccess(Conversation result) {
-					Window.alert("Success");
+
 				}
 			});
 		}
@@ -139,11 +138,11 @@ public class MessageForm extends TextyForm {
 		if (availability) {
 			administration.createHashtag(word, new AsyncCallback<Hashtag>() {
 				public void onFailure(Throwable caught) {
-					Window.alert("Fail");
+
 				}
 
 				public void onSuccess(Hashtag result) {
-					Window.alert("Success");
+
 					MessageForm.selectedHashtag.add(result);
 				}
 			});

@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusListener;
@@ -154,7 +153,7 @@ public class HashtagForm extends TextyForm {
 		class selectAllHashtagCallback implements AsyncCallback<Vector<Hashtag>> {
 
 			public void onFailure(Throwable caught) {
-				Window.alert("FAILURE");
+
 			}
 
 			public void onSuccess(Vector<Hashtag> allHashtag) {
@@ -187,7 +186,6 @@ public class HashtagForm extends TextyForm {
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
 		buttonPanel.add(subscribeButton);
-		scroll.setSize("250px", "110px");
 
 		this.add(text);
 		this.add(suggestBoxPanel);
