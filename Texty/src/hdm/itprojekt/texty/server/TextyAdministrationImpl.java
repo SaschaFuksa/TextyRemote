@@ -317,6 +317,21 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		}
 		return allPublicConversations;
 	}
+	
+	
+	public Vector<Conversation> getAllConversationsFromUser() 
+			throws IllegalArgumentException{
+				
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User currentuser = this.uMapper.findByEmail(user.getEmail());
+		
+		//return this.cmapper.selectAllConversationsFromUser(currentuser);
+		
+		return null;
+	}
+	
 
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
 		return this.uMapper.findAll();

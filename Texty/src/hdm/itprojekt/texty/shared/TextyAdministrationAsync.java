@@ -77,6 +77,9 @@ public interface TextyAdministrationAsync {
 
 	void getAllHashtags(AsyncCallback<Vector<Hashtag>> callback);
 
+	void getAllConversationsFromUser(
+			AsyncCallback<Vector<Conversation>> callback);
+
 	
 
 	
