@@ -32,7 +32,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Message createInitialMessage(String text,
-			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
+			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag, int conversationId)
 			throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -46,7 +46,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setListOfHashtag(listOfHashtag);
 		m.setListOfReceivers(listOfReceivers);
 		m.setId(1);
-		m.setConversationID(1);
+		m.setConversationID(conversationId);
 
 		return this.mMapper.insert(m);
 	}
@@ -92,8 +92,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
 		Conversation c = new Conversation();
+		Conversation conversation  = this.cMapper.insert(c);
 		Message message = createInitialMessage(text, listOfReceivers,
-				listOfHashtag);
+				listOfHashtag, conversation.getId());
 		c.addMessageToConversation(message);
 		if (message.getListOfReceivers() == null) {
 			c.setPublicly(true);
@@ -102,7 +103,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		}
 		c.setId(1);
 
-		return this.cMapper.insert(c);
+		return conversation;
 	}
 
 	/**

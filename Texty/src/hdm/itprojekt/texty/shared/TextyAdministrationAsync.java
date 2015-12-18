@@ -17,7 +17,8 @@ public interface TextyAdministrationAsync {
 
 	void init(AsyncCallback<Void> callback);
 
-	void createInitialMessage(String text, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag,
+	void createInitialMessage(String text, Vector<User> listOfReceiver,
+			Vector<Hashtag> listOfHashtag, int conversationId,
 			AsyncCallback<Message> callback);
 
 	void createHashtag(String keyword, AsyncCallback<Hashtag> callback);

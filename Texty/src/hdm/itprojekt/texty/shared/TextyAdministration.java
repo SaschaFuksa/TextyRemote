@@ -18,7 +18,7 @@ public interface TextyAdministration extends RemoteService {
 
 	 public void init() throws IllegalArgumentException;
 	 
-	 public Message createInitialMessage(String text, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag) 
+	 public Message createInitialMessage(String text, Vector<User> listOfReceiver, Vector<Hashtag> listOfHashtag, int conversationId) 
 			 throws IllegalArgumentException;
 	 
 	 public Hashtag createHashtag (String keyword) throws IllegalArgumentException;
