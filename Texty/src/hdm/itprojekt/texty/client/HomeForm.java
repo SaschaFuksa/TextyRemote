@@ -2,7 +2,7 @@ package hdm.itprojekt.texty.client;
 
 public class HomeForm extends TextyForm {
 	
-	private ChatRoom chatRoom = new ChatRoom("Chatroom");
+	private FavoriteForm chatRoom = new FavoriteForm("Chatroom");
 	//private ReloadForm reload = new ReloadForm();
 
 	public HomeForm(String headline) {
