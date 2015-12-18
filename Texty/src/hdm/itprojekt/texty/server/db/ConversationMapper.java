@@ -41,11 +41,9 @@ public class ConversationMapper {
 
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
-				stmt.executeUpdate("INSERT INTO textydb.conversation (conversationId, visibility, publicly)"
+				stmt.executeUpdate("INSERT INTO textydb.conversation (conversationId, publicly)"
 						+ "VALUES ("
 						+ conversation.getId()
-						+ ", "
-						+ 1
 						+ ", "
 						+ state + ")");
 			}
@@ -55,6 +53,38 @@ public class ConversationMapper {
 		}
 		return conversation;
 	}
+	
+	public Vector<Conversation> selectAllConversations() {
+		Connection con = DBConnection.connection();
+		Vector<Conversation> result = new Vector<Conversation>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			
+			ResultSet rs = stmt.executeQuery("SELECT conversationId, publicly, dateOfCreation FROM textydb.conversation");
+			
+			// Für jeden Eintrag wird nun ein Conversationobjekt erstellt.
+			
+			while (rs.next()) {
+				
+				Conversation conversation = new Conversation();
+				
+				conversation.setId(rs.getInt("conversationId"));
+				conversation.setPublicly(rs.getBoolean("publicly"));
+				conversation.setDateOfCreation(rs.getTime("dateOfCreation"));
+
+				result.addElement(conversation);
+
+			}
+	    }
+	    catch (SQLException e) {
+	      e.printStackTrace();
+	    }
+
+	    // Ergebnisvektor zurückgeben
+	    return result;
+	  }
 
 	 public Vector<Conversation> findAllConversations() {
 		    Connection con = DBConnection.connection();
