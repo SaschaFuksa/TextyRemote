@@ -221,11 +221,17 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User currentUser = this.uMapper.findByEmail(user.getEmail());
 
 		Message m = new Message();
 		m.setText(text);
-		m.setAuthor(this.uMapper.findByEmail(user.getEmail()));
-		m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
+		m.setAuthor(currentUser);
+		for (int i = 0; c.getListOfMessage().size()> i; i++){
+			if (c.getListOfMessage().get(i).getAuthor().getId() == currentUser.getId()){
+				m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
+			}
+		}
+		
 		m.setListOfHashtag(listOfHashtag);
 		m.setId(1);
 		m.setConversationID(1);
