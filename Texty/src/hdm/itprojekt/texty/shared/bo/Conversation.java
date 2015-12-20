@@ -35,14 +35,14 @@ public class Conversation extends BusinessObject {
 	}
 	
 	public void addMessageToConversation(Message message){
-		listOfMessage.add(message);
+		listOfMessage.addElement(message);
 	}
 
 	public void removeMessageFromConversation(Message message){
 		listOfMessage.remove(message);
 	}
 	public Message getLastMessage() {
-		return this.listOfMessage.elementAt(listOfMessage.size());
+		return this.listOfMessage.elementAt(listOfMessage.size()-1);
 	}
 	
 	

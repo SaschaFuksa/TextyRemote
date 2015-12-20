@@ -327,9 +327,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
 		User currentuser = this.uMapper.findByEmail(user.getEmail());
 		
-		//return this.cmapper.selectAllConversationsFromUser(currentuser);
+		return this.cMapper.selectAllConversationsFromUser(currentuser);
 		
-		return null;
 	}
 	
 

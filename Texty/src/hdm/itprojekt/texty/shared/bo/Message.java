@@ -61,6 +61,10 @@ public class Message extends BusinessObject {
 	public void setListOfHashtag(Vector<Hashtag> listOfHashtag) {
 		this.listOfHashtag = listOfHashtag;
 	}
+	
+	public void addHashtag(Hashtag hashtag) {
+		this.listOfHashtag.addElement(hashtag);;
+	}
 	/**
 	 * @return the listOfReceivers
 	 */
@@ -74,6 +78,10 @@ public class Message extends BusinessObject {
 	 */
 	public void setListOfReceivers(Vector<User> listOfReceivers) {
 		this.listOfReceivers = listOfReceivers;
+	}
+	
+	public void addReceivers(User receiver) {
+		this.listOfReceivers.addElement(receiver);
 	}
 	
 	public int getConversationID() {
