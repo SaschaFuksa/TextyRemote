@@ -86,8 +86,7 @@ public class ConversationForm extends TextyForm {
 					}
 
 					public void onSuccess(Vector<Conversation> result) {
-						ConversationForm.conList = result;
-						Window.alert(result.get(1).getListOfMessage().size() + "" + "Pizza");
+						ConversationForm.conList = result;						
 						showConversation();
 						
 					}

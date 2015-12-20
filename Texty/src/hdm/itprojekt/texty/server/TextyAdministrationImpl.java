@@ -327,8 +327,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				.selectAllMessagesFromUser(currentuser);
 		Vector<Conversation> allConversations = this.cMapper
 				.selectAllConversations();
-		for (int i = 0; allMesssagesFromUser.size()> i; i++) {
-			for (int o = 0; allConversations.size()> o; o++) {				
+		
+		for (int i = 0; (allMesssagesFromUser.size()-1) > i; i++) {
+			for (int o = 0; (allConversations.size()-1) > o; o++) {				
 				if (allMesssagesFromUser.get(i).getConversationID() == allConversations.get(o).getId()) {
 					allConversations.get(o).addMessageToConversation(allMesssagesFromUser.get(i));
 				}
