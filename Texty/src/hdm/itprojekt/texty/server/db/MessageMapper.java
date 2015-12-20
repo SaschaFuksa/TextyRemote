@@ -104,8 +104,8 @@ public class MessageMapper {
 		    try {
 		      Statement stmt = con.createStatement();
 
-		      ResultSet rsMessages = stmt.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation, user.userId, user.givenName, user.familyName, user.email, user.dateOfCreation FROM textydb.message INNER JOIN textydb.user ON message.author_userId = user.userId "
-		    		  + "WHERE user.userId = " + currentuser.getId() + "AND message.visibility = 1" );
+		      ResultSet rsMessages = stmt.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.dateOfCreation, user.userId, user.givenName, user.familyName, user.email, user.dateOfCreation FROM textydb.message INNER JOIN textydb.user ON message.author_userId = user.userId "
+		    		  + "WHERE user.userId = " + currentuser.getId());
 
 		      // Für jeden Eintrag wird nun ein Message-Objekt erstellt.
 		      while (rsMessages.next()) {
@@ -119,7 +119,7 @@ public class MessageMapper {
 		    	 
 		    	 allmessages.setText(rsMessages.getString("message.messageText"));
 		    	 allmessages.setConversationID(rsMessages.getInt("message.conversationId"));
-		    	 allmessages.setVisible(rsMessages.getBoolean("message.visibility"));
+		    	 //allmessages.setVisible(rsMessages.getBoolean("message.visibility"));
 		    	 allmessages.setDateOfCreation(rsMessages.getTime("message.dateOfCreation"));  	 
 
 		        resultMessage.addElement(allmessages);
@@ -140,7 +140,7 @@ public class MessageMapper {
 	          Statement stmt = con.createStatement();
 
 		      ResultSet rs = stmt.executeQuery("SELECT user.userId, user.givenName, user.familyName, user.email, user.dateOfCreation FROM textydb.message INNER JOIN textydb.user ON message.author_userId = user.userId "
-		    		  + "WHERE message.messageId = " + message.getId() + "AND message.visibility = 1");
+		    		  + "WHERE message.messageId = " + message.getId());
 
 	          if (rs.next()) {
 	            User user = new User();
@@ -170,7 +170,7 @@ public class MessageMapper {
 		      Statement stmt = con.createStatement();
 		      
 		      ResultSet rs = stmt.executeQuery("SELECT user.userId, user.givenName, user.familyName, user.email, user.dateOfCreation FROM textydb.message INNER JOIN textydb.receiver ON message.messageId = receiver.messageId INNER JOIN textydb.user ON receiver.receiver_userId = user.userId "
-		    		  + "WHERE message.messageId = " + message.getId() + "AND message.visibility = 1");
+		    		  + "WHERE message.messageId = " + message.getId());
 
 		      // Für jeden Eintrag wird nun ein Message-Objekt erstellt.
 		      while (rs.next()) {
@@ -200,7 +200,7 @@ public class MessageMapper {
 		      Statement stmt = con.createStatement();
 		      
 		      ResultSet rs = stmt.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword, hashtag.dateOfCreation, message.messageId FROM textydb.hashtag INNER JOIN textydb.hashtag_in_message ON hashtag.hashtagId = hashtag_in_message.hashtagId INNER JOIN textydb.message ON hashtag_in_message.messageId = message.messageId "
-		    		  + "WHERE message.messageId = " + message.getId() + "AND message.visibility = 1");
+		    		  + "WHERE message.messageId = " + message.getId());
 
 		      // Für jeden Eintrag wird nun ein Message-Objekt erstellt.
 		      while (rs.next()) {
@@ -228,7 +228,7 @@ public class MessageMapper {
 	      Statement stmt = con.createStatement();
 
 	      ResultSet rsMessages = stmt.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation, user.userId, user.givenName, user.familyName, user.email, user.dateOfCreation FROM textydb.message INNER JOIN textydb.user ON message.author_userId = user.userId "
-	    		  + "WHERE message.visibility = 1");
+	    		  );
 
 	      // Für jeden Eintrag wird nun ein Message-Objekt erstellt.
 	      while (rsMessages.next()) {
