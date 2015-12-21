@@ -171,9 +171,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				listOfHashtag, conversation.getId());
 		c.addMessageToConversation(message);
 		if (message.getListOfReceivers().size() > 0) {
-			c.setPublicly(true);
-		} else {
 			c.setPublicly(false);
+		} else {
+			c.setPublicly(true);
 		}
 		c.setId(1);
 
