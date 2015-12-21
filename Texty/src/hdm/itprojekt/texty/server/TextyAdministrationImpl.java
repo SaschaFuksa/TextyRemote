@@ -170,7 +170,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Message message = createInitialMessage(text, listOfReceivers,
 				listOfHashtag, conversation.getId());
 		c.addMessageToConversation(message);
-		if (message.getListOfReceivers() == null) {
+		if (message.getListOfReceivers().size() > 0) {
 			c.setPublicly(true);
 		} else {
 			c.setPublicly(false);
