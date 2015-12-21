@@ -27,25 +27,16 @@ public class ConversationForm extends TextyForm {
 	public void showConversation() {
 		for (int i = 0; i < conList.size(); i++) {
 			VerticalPanel conversationPanel = new VerticalPanel();
-			Window.alert(" " + 1);
 			HorizontalPanel header = new HorizontalPanel();
-			Window.alert("Size receiver " + conList.get(i).getLastMessage().getListOfReceivers().size());
 			String receiver = setRecipient(conList.get(i).getLastMessage()
 					.getListOfReceivers());
-			Window.alert(" " + 2);
 			Label receivers = new Label(receiver);
 			Label author = new Label(conList.get(i).getLastMessage()
 					.getAuthor().getFirstName());
-			Window.alert("Author "
-					+ conList.get(i).getLastMessage().getAuthor()
-							.getFirstName());
 			Label text = new Label(conList.get(i).getLastMessage().getText());
-			Window.alert("Text " + conList.get(i).getLastMessage().getText());
 
 			header.add(author);
 			header.add(receivers);
-
-			Window.alert(" " + receiver);
 
 			conversationPanel.add(header);
 			conversationPanel.add(text);
@@ -86,6 +77,10 @@ public class ConversationForm extends TextyForm {
 					}
 
 					public void onSuccess(Vector<Conversation> result) {
+						Window.alert("größe con: " + result.size());
+						Window.alert("mes größe con1: " + result.get(0).getListOfMessage().size());
+						Window.alert("mes größe con2: " + result.get(1).getListOfMessage().size());
+						Window.alert("mes größe con3: " + result.get(2).getListOfMessage().size());
 						ConversationForm.conList = result;						
 						showConversation();
 						
