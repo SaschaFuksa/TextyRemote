@@ -444,11 +444,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Vector<Conversation> allConversations = this.cMapper
 				.selectAllConversations();
 
-		for (int i = 0; (allMesssagesFromUser.size() - 1) > i; i++) {
-			for (int o = 0; (allConversations.size() - 1) > o; o++) {
+		for (int i = 0; i < allMesssagesFromUser.size(); i++) {
+			for (int x = 0; x < allConversations.size(); x++) {
 				if (allMesssagesFromUser.get(i).getConversationID() == allConversations
-						.get(o).getId()) {
-					allConversations.get(o).addMessageToConversation(
+						.get(x).getId()) {
+					allConversations.get(x).addMessageToConversation(
 							allMesssagesFromUser.get(i));
 				}
 			}

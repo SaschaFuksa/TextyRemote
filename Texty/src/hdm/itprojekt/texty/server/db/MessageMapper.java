@@ -25,6 +25,8 @@ public class MessageMapper {
 		int state = 0;
 		if (message.isVisible()) {
 			state = 1;
+			
+		
 		}
 
 		try {
@@ -32,13 +34,13 @@ public class MessageMapper {
 			// Find highest Primarykey
 			ResultSet rs = stmt.executeQuery("SELECT MAX(messageId) AS maxid "
 					+ "FROM textydb.message ");
-
+		
 			if (rs.next()) {
 
 				message.setId(rs.getInt("maxid") + 1);
 
 				stmt = con.createStatement();
-
+				
 				// Highest Primarykey has been found and set, now we insert it
 				// into the DB
 				stmt.executeUpdate("INSERT INTO textydb.message (messageId, author_userId, conversationId, messageText, visibility)"
@@ -54,6 +56,27 @@ public class MessageMapper {
 						+ "'"
 						+ message.getText() + "'" + ", " + state + ")");
 			}
+			
+			Statement stmtReceiver = con.createStatement();
+			   for (int i = 0; i < message.getListOfReceivers().size(); i++){
+			    stmtReceiver.executeUpdate("INSERT INTO textydb.receiver (receiver_userId, messageId)"
+			      +"VALUES ("
+			      + message.getListOfReceivers().get(i).getId()
+			      + ", "
+			      + message.getId()
+			      + ")");
+			   
+			   }
+			   
+			   Statement stmtHashtag = con.createStatement();
+			   for (int i = 0; i < message.getListOfHashtag().size(); i++){
+				    stmtHashtag.executeUpdate("INSERT INTO textydb.hashtag_in_message (messageId, hashtagId)"
+				      +"VALUES ("
+				      + message.getId()
+				      + ", "
+				      + message.getListOfHashtag().get(i).getId()
+				      + ")");
+			   }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
