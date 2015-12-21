@@ -1,5 +1,7 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.client.Report.SubscriptionReport;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;

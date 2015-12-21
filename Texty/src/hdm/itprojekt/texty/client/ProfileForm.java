@@ -28,7 +28,7 @@ public class ProfileForm extends TextyForm {
 	private TextBox firstname = new TextBox();
 	private TextBox lastname = new TextBox();
 	private Button save = new Button("Save");
-	private static User user;
+	public static User user;
 	private static String email;
 	
 	public ProfileForm(String headline) {
