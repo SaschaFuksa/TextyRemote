@@ -12,12 +12,51 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		TextyAdministration {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Referenz auf den DatenbankMapper, welcher Unterhaltungsobjekte mit der
+	 * Datenbank abgleicht.
+	 */
 	private ConversationMapper cMapper = null;
+	/**
+	 * Referenz auf den DatenbankMapper, welcher Hashtagobjekte mit der
+	 * Datenbank abgleicht.
+	 */
 	private HashtagMapper hMapper = null;
+	/**
+	 * Referenz auf den DatenbankMapper, welcher Hashtagsaboobjekte mit der
+	 * Datenbank abgleicht.
+	 */
 	private HashtagSubscriptionMapper hsMapper = null;
+	/**
+	 * Referenz auf den DatenbankMapper, welcher Nachrichtenobjekte mit der
+	 * Datenbank abgleicht.
+	 */
 	private MessageMapper mMapper = null;
+	/**
+	 * Referenz auf den DatenbankMapper, welcher Benutzerobjekte mit der
+	 * Datenbank abgleicht.
+	 */
 	private UserMapper uMapper = null;
+	/**
+	 * Referenz auf den DatenbankMapper, welcher Benutzeraboobjekte mit der
+	 * Datenbank abgleicht.
+	 */
 	private UserSubscriptionMapper usMapper = null;
+
+	/*
+	 * ************************************************************************
+	 * ABSCHNITT, Beginn: Initialisierung
+	 * **************************************** *******************************
+	 */
+
+	/**
+	 * No-Argument Konstruktor.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             Benötigt für RPC-Core
+	 */
+	public TextyAdministrationImpl() throws IllegalArgumentException {
+	}
 
 	@Override
 	public void init() throws IllegalArgumentException {
@@ -29,6 +68,18 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		this.usMapper = UserSubscriptionMapper.userSubscriptionMapper();
 
 	}
+
+	/*
+	 * **********************************************************************
+	 * ABSCHNITT, Ende: Initialisierung
+	 * **********************************************************************
+	 */
+
+	/*
+	 * ************************************************************************
+	 * ABSCHNITT, Beginn: Methoden zum erzeugen von allen Business Objekten
+	 * **************************************** *******************************
+	 */
 
 	@Override
 	public Message createInitialMessage(String text,
@@ -47,6 +98,31 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setListOfReceivers(listOfReceivers);
 		m.setId(1);
 		m.setConversationID(conversationId);
+
+		return this.mMapper.insert(m);
+	}
+
+	public Message addMessageToConversation(Conversation c, String text,
+			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User currentUser = this.uMapper.findByEmail(user.getEmail());
+
+		Message m = new Message();
+		m.setText(text);
+		m.setAuthor(currentUser);
+		for (int i = 0; c.getListOfMessage().size() > i; i++) {
+			if (c.getListOfMessage().get(i).getAuthor().getId() == currentUser
+					.getId()) {
+				m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
+			}
+		}
+
+		m.setListOfHashtag(listOfHashtag);
+		m.setId(1);
+		m.setConversationID(1);
+		c.addMessageToConversation(m);
 
 		return this.mMapper.insert(m);
 	}
@@ -77,15 +153,13 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 * @param Text
 	 *            Der initale Nachrichtentext mit dem der Benutzer die
 	 *            Unterhaltung erzeugt.
-	 * @param author
-	 *            Der Ersteller der Unterhaltung bzw. der Initalnachricht.
 	 * @param listofReceivers
 	 *            Die gewünschten Adressaten der Unterhaltung. Dieser Wert ist
 	 *            null, wenn es eine öffentliche Unterhaltung ist.
 	 * @param listOfHashtags
 	 *            Die Hashtags die der Nachricht angehängt werden sollen.
 	 * 
-	 * @return Das erzeugt Unterhaltunsobjekt
+	 * @return Das erzeugte Unterhaltunsobjekt
 	 */
 	@Override
 	public Conversation createConversation(String text,
@@ -107,16 +181,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Methode erzeugt ein neues Benutzerabo Objekt
+	 * Methode erzeugt ein neues Benutzerabo Objekt der abonnierende ist immer
+	 * der aktuell eingeloggte User.
 	 * 
 	 * @param subscribedUser
 	 *            Der Benutzer der abonniert werden soll
-	 * @param subscriber
-	 *            Der Benutzer der abonnieren möchte
 	 * 
 	 * @return Das erzeugte Objekt
 	 */
-
+	@Override
 	public UserSubscription createUserSubscription(User subscribedUser) {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -134,6 +207,16 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
+	/**
+	 * Methode zum erzeugen eines neuen Hashtagabonnements. Der abonnierende ist
+	 * immer der aktuell eingeloggte Benutzer.
+	 * 
+	 * @param subscribedHashtags
+	 *            Das Hashtag das erzeugt werden soll.
+	 * 
+	 * @return Das erzeugte Objekt vom Typ HashtagSubscribtion
+	 */
+	@Override
 	public HashtagSubscription createHashtagSubscription(
 			Hashtag subscribedHashtag) {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
@@ -151,6 +234,14 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
+	/**
+	 * Methode zum erzeugen neuer Benutzer. Die E-Mail Adresse wird dabei von
+	 * der Google Accounts Api abgerufen.
+	 * 
+	 * @return Das erzeugte User Objekt
+	 */
+
+	@Override
 	public User createUser() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -167,6 +258,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.uMapper.insert(u);
 	}
 
+	/**
+	 * Methode überprüft ob der eingeloggte Google Benutzer bereits in der
+	 * Datenbank vorhanden ist und initalisiert ggf. das anlegen des Benutzer.
+	 */
+	@Override
 	public void checkUserData() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -177,6 +273,24 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	/*
+	 * ************************************************************************
+	 * ABSCHNITT, Ende: Methoden zum erzeugen von allen Business Objekten
+	 * **************************************** *******************************
+	 */
+	/**
+	 * Methode zum aktualiesieren oder setzen des Vor- und Nachnamen des
+	 * eingeloggten Benutzers. Vor- und Nachname kann ein Nutzer in der GUI per
+	 * eingabe selber festlegen.
+	 * 
+	 * @param firstName
+	 *            Der eingebebene Vorname des Benutzers
+	 * 
+	 * @param lastName
+	 *            der eingebene Nachname des Benutzers
+	 *
+	 */
+	@Override
 	public void updateUserData(String firstName, String lastName)
 			throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
@@ -191,6 +305,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	/**
+	 * Methode zum auslesen aller Hashtagabonnements des eingeloggten Benutzers
+	 * 
+	 * @return Eine Liste mit den abonnierten Hashtags
+	 */
 	@Override
 	public Vector<Hashtag> getAllSubscribedHashtags()
 			throws IllegalArgumentException {
@@ -202,6 +321,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.hsMapper.selectAllSubscribedHashtags(us);
 	}
 
+	/**
+	 * Methode zum auslesen aller Nutzerabonnements des eingeloggten Benutzers
+	 * 
+	 * @return Einen User-Vector mit allen abonnierten Benutzern
+	 */
+	@Override
 	public Vector<User> getAllSubscribedUsers() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -210,36 +335,14 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.usMapper.selectAllSubscribedUsers(us);
 	}
 
+	@Override
 	public Message editMessage(Message message, String newText)
 			throws IllegalArgumentException {
 		message.setText(newText);
 		return this.mMapper.update(message);
 	}
 
-	public Message addMessageToConversation(Conversation c, String text,
-			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		User currentUser = this.uMapper.findByEmail(user.getEmail());
-
-		Message m = new Message();
-		m.setText(text);
-		m.setAuthor(currentUser);
-		for (int i = 0; c.getListOfMessage().size()> i; i++){
-			if (c.getListOfMessage().get(i).getAuthor().getId() == currentUser.getId()){
-				m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
-			}
-		}
-		
-		m.setListOfHashtag(listOfHashtag);
-		m.setId(1);
-		m.setConversationID(1);
-		c.addMessageToConversation(m);
-
-		return this.mMapper.insert(m);
-	}
-
+	@Override
 	public void deleteMessage(Conversation conversation, Message message)
 			throws IllegalArgumentException {
 		conversation.removeMessageFromConversation(message);
@@ -248,6 +351,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
+	@Override
 	public void deleteUserSubscription(User subscribedUser)
 			throws IllegalArgumentException {
 		UserSubscription subscription = new UserSubscription();
@@ -264,6 +368,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		this.usMapper.delete(subscription);
 	}
 
+	@Override
 	public void deleteHashtagSubscription(Hashtag hashtag)
 			throws IllegalArgumentException {
 		HashtagSubscription subscription = new HashtagSubscription();
@@ -277,6 +382,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		this.hsMapper.delete(subscription);
 	}
 
+	@Override
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException {
 		Vector<Message> allMessages = this.mMapper
@@ -291,6 +397,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return MessagesByDate;
 	}
 
+	@Override
 	public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate)
 			throws IllegalArgumentException {
 		Vector<Message> allMessages = this.mMapper.selectAllMessages();
@@ -304,11 +411,13 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return MessagesByDate;
 	}
 
+	@Override
 	public Vector<Message> getAllMessagesFromUser(User user)
 			throws IllegalArgumentException {
 		return this.mMapper.selectAllMessagesFromUser(user);
 	}
 
+	@Override
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException {
 		Vector<Conversation> allPublicConversations = new Vector<Conversation>();
@@ -321,6 +430,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return allPublicConversations;
 	}
 
+	@Override
 	public Vector<Conversation> getAllConversationsFromUser()
 			throws IllegalArgumentException {
 
@@ -333,11 +443,13 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				.selectAllMessagesFromUser(currentuser);
 		Vector<Conversation> allConversations = this.cMapper
 				.selectAllConversations();
-		
-		for (int i = 0; (allMesssagesFromUser.size()-1) > i; i++) {
-			for (int o = 0; (allConversations.size()-1) > o; o++) {				
-				if (allMesssagesFromUser.get(i).getConversationID() == allConversations.get(o).getId()) {
-					allConversations.get(o).addMessageToConversation(allMesssagesFromUser.get(i));
+
+		for (int i = 0; (allMesssagesFromUser.size() - 1) > i; i++) {
+			for (int o = 0; (allConversations.size() - 1) > o; o++) {
+				if (allMesssagesFromUser.get(i).getConversationID() == allConversations
+						.get(o).getId()) {
+					allConversations.get(o).addMessageToConversation(
+							allMesssagesFromUser.get(i));
 				}
 			}
 		}
@@ -345,14 +457,17 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
+	@Override
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
 		return this.uMapper.findAll();
 	}
 
+	@Override
 	public Vector<Hashtag> getAllHashtags() throws IllegalArgumentException {
 		return this.hMapper.findAll();
 	}
 
+	@Override
 	public User getCurrentUser() throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
