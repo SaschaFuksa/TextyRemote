@@ -1,5 +1,8 @@
-package hdm.itprojekt.texty.client;
+package hdm.itprojekt.texty.client.Report;
 
+
+import hdm.itprojekt.texty.client.Footer;
+import hdm.itprojekt.texty.client.LoginInfo;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
 
@@ -26,8 +29,11 @@ public class TextyReport implements EntryPoint {
 	private HorizontalPanel loginPanel = new HorizontalPanel();
 	private Label nickname = new Label();
 	private Anchor signOutLink = new Anchor("Sign Out");
+	private TextyReportMenu reportMenu = new TextyReportMenu();
 	
 	public void onModuleLoad() {
+		
+		reportMenu.execute();
 		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
@@ -58,9 +64,11 @@ public class TextyReport implements EntryPoint {
 				RootPanel.get("Details").add(new Footer());
 
 			}
-		});
+		});}
 		
-		Command cmd = new Command() {
+
+		
+		/*Command cmd = new Command() {
 			public void execute() {
 				Window.alert("You selected a menu item!");
 			}
@@ -71,21 +79,25 @@ public class TextyReport implements EntryPoint {
 				Window.Location.assign("http://127.0.0.1:8888/Texty.html");
 			}
 		};
+		
+		TextyCommand test = new TextyCommand();
 
+		
 		// Make some sub-menus that we will cascade from the top menu.
 		MenuBar fooMenu = new MenuBar(true);
-		fooMenu.addItem("HashtagReport", cmd);
 		fooMenu.addItem("Back", cmdEditor);
 
 		// Make a new menu bar, adding a few cascading menus to it.
 		MenuBar menuReport = new MenuBar();
-		menuReport.addItem("Report", fooMenu);
+		menuReport.addItem("MessageReport", fooMenu);
+		menuReport.addItem("SubscriptionReport",test.getCommand("SubscriptionReport"));
+		menuReport.addItem("Editor", cmdEditor);
 		menuReport.setStyleName("menubar");
 
 		// Add it to the root panel.
 		RootPanel.get("Menu").add(menuReport);
 
-	}
+	}*/
 	
 	private void createLoginPanel() {
 		signOutLink.setHref(loginInfo.getLogoutUrl());
