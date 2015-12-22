@@ -8,21 +8,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.cell.client.NumberCell;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 
-public class CellTableForm extends TextyForm {
+public class TimelineTableForm extends TextyForm {
 
-	public CellTableForm(String headline) {
+	public TimelineTableForm(String headline) {
 		super(headline);
 
 	}
+	
+	Button cancelButton = new Button("Cancel");
+
+	private CellTable<User> userTable = new CellTable<User>();
 
 	private Vector<User> userList = new Vector<User>();
 	private Vector<Conversation> allPublicConversationList = new Vector<Conversation>();
@@ -30,14 +38,39 @@ public class CellTableForm extends TextyForm {
 
 	public void run() {
 		
-		User u1 = new User();
+				// Spalte für den Namen
+				Column<User, String> nameColumn = new Column<User, String>(
+						new TextCell()) {
 
+					public String getValue(User object) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+				};
+				userTable.addColumn(nameColumn, "Favorite User");
+				
+		
+		//Beispieldaten User
+		User u1 = new User();
+		User u2 = new User();
+		User u3 = new User();
+		
+		u1.setFirstName("Daniel");
+		u2.setFirstName("Lisa");
+		u3.setFirstName("Gandalf");
+		
+		userList.addElement(u1);
+		userList.addElement(u2);
+		userList.addElement(u3);
+
+		//Neue CellTable mit Userobjekten wird erzeugt
 		CellTable<User> cellTable = new CellTable<User>();
+		
 		cellTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+	    cellTable.setWidth("100%", true);
 
 		addTitleColumn(cellTable);
-		// addDepartmentColumn(cellTable);
-		// addLocationColumn(cellTable);
+	
 
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<User> singleSelectionModel = new SingleSelectionModel<User>();
@@ -65,6 +98,7 @@ public class CellTableForm extends TextyForm {
 		RootPanel.get("Details").add(cellTable);
 	}
 
+	//Methode zum Festlegen der Spaltenüberschrift
 	private void addTitleColumn(CellTable<User> cellTable) {
 		TextColumn<User> titleColumn = new TextColumn<User>() {
 
@@ -75,8 +109,8 @@ public class CellTableForm extends TextyForm {
 
 		};
 
-		// Add column to table
-		
+		// Zwei Spalten hinzufügen
+		cellTable.addColumn(titleColumn, "Public Posting");
 		cellTable.addColumn(titleColumn, "Your comment");
 	}
 
