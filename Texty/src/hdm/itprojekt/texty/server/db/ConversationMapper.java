@@ -63,7 +63,7 @@ public class ConversationMapper {
 			Statement stmt = con.createStatement();
 
 			ResultSet rs = stmt
-					.executeQuery("SELECT conversationId, publicly, dateOfCreation FROM textydb.conversation");
+					.executeQuery("SELECT conversationId, publicly, dateOfCreation FROM textydb.conversation WHERE publicly = 0");
 
 			// Für jeden Eintrag wird nun ein Conversationobjekt erstellt.
 

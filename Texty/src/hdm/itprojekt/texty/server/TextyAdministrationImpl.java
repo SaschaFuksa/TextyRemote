@@ -166,14 +166,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
 		Conversation c = new Conversation();
-		System.out.println(listOfReceivers.size());
 		if (listOfReceivers.size() == 0){
 			c.setPublicly(true);
 		}
 		else {
 			c.setPublicly(false);
 		}
-		System.out.println(c.isPublicly());
 		Conversation conversation = this.cMapper.insert(c);
 		Message message = createInitialMessage(text, listOfReceivers,
 				listOfHashtag, conversation.getId());

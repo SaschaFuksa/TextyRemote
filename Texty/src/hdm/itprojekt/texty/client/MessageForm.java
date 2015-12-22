@@ -58,28 +58,31 @@ public class MessageForm extends TextyForm {
 			errorLabel.setText("\0");
 			String keyword = suggestBox.getText();
 			boolean alreadySelected = checkHashtag(keyword);
-			if (keyword == "") {
-				errorLabel.setText("Please select a Hashtag!");
+			if (keyword == "" || keyword.equals("Search for hashtags")) {
+				errorLabel.setText("Please select a hashtag!");
 			} else if (alreadySelected) {
 				errorLabel.setText("Hashtag is already selected!");
 			} else {
 				addHashtag(keyword);
+				suggestBox.setText("Search for hashtags");
 			}
 		}
 
 	});
-	
+
 	private Button sendButton = new Button("Send", new ClickHandler() {
 		public void onClick(ClickEvent event) {
-			administration.createConversation(textBox.getText(), recipientList, selectedHashtag, new AsyncCallback<Conversation>() {
-				public void onFailure(Throwable caught) {
+			administration.createConversation(textBox.getText(), recipientList,
+					selectedHashtag, new AsyncCallback<Conversation>() {
+						public void onFailure(Throwable caught) {
 
-				}
+						}
 
-				public void onSuccess(Conversation result) {
-
-				}
-			});
+						public void onSuccess(Conversation result) {
+							selectedHashtag.removeAllElements();
+							ClientsideSettings.getLogger().severe("Message is send!");
+						}
+					});
 		}
 	});
 
@@ -90,8 +93,8 @@ public class MessageForm extends TextyForm {
 				errorLabel.setText("\0");
 				String keyword = suggestBox.getText();
 				boolean alreadySelected = checkHashtag(keyword);
-				if (keyword == "") {
-					errorLabel.setText("Please select a Hashtag!");
+				if (keyword == "" || keyword.equals("Search for hashtags")) {
+					errorLabel.setText("Please select a hashtag!");
 				} else if (alreadySelected) {
 					errorLabel.setText("Hashtag is already selected!");
 				} else {
@@ -150,7 +153,7 @@ public class MessageForm extends TextyForm {
 			errorLabel.setText("");
 			successLabel.setText("You subscribed a brand new hashtag!");
 		}
-		
+
 		final HorizontalPanel panel = new HorizontalPanel();
 		final Label keywordLabel = new Label(keyword);
 		panel.setStylePrimaryName("selectedHashtagLabel");
@@ -165,6 +168,8 @@ public class MessageForm extends TextyForm {
 		panel.add(keywordLabel);
 		panel.add(deleteButton);
 		content.add(panel);
+		keywordLabel.setStylePrimaryName("hashtagPanel");
+		panel.setStylePrimaryName("hashtagPanel");
 		suggestBox.setText("");
 		if (addedHashtagLabel.getText() == "\0") {
 			addedHashtagLabel.setText("Added hashtags:");
@@ -202,7 +207,7 @@ public class MessageForm extends TextyForm {
 
 		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
 		selectedHashtag.remove(indexSelectedHashtag);
-		
+
 		oracle.add(keyword);
 
 		if (selectedHashtag.size() < 1) {
@@ -233,7 +238,7 @@ public class MessageForm extends TextyForm {
 			}
 
 			public void onLostFocus(Widget arg1) {
-				suggestBox.setText("Search for hashtags");
+
 			}
 		});
 
@@ -243,14 +248,14 @@ public class MessageForm extends TextyForm {
 		errorLabel.setStylePrimaryName("errorLabel");
 		successLabel.setStylePrimaryName("successLabel");
 		sendButton.getElement().setId("sendButton");
-		scroll.setSize("400px", "40px");
+		scroll.setSize("400px", "60px");
 
 		setRecipientLabel();
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
 		buttonPanel.add(suggestBoxPanel);
 		buttonPanel.add(sendButton);
-		
+
 		this.add(recipientLabel);
 		this.add(textBox);
 		this.add(buttonPanel);

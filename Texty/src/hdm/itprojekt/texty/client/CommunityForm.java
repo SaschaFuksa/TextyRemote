@@ -206,6 +206,14 @@ public class CommunityForm extends TextyForm {
 		String nickName = bufferName.toString();
 		return nickName;
 	}
+	
+	private void removeCurrentUser(User currentUser){
+		for (int i = 0; i < allUser.size(); i++){
+			if (currentUser.getId() == allUser.get(i).getId()){
+				allUser.remove(i);
+			}
+		}
+	}
 
 	protected void run() {
 
@@ -229,7 +237,18 @@ public class CommunityForm extends TextyForm {
 
 			public void onSuccess(Vector<User> result) {
 				CommunityForm.allUser = result;
-				setOracle();
+				
+				administration.getCurrentUser(new AsyncCallback<User>() {
+					public void onFailure(Throwable caught) {
+
+					}
+
+					public void onSuccess(User result) {
+						removeCurrentUser(result);
+						setOracle();
+
+					}
+				});
 
 			}
 		});

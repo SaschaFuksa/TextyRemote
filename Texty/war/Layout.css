@@ -219,9 +219,17 @@ div#Navigator .errorLabel {
 }
 
 .conversationScroll {
-	height: 78%;
+	height: 300px;
 	margin-top: 10px;
 	padding: 5px;
+}
+
+.hashtagPanel {
+	background-color: #80bfff;
+	border-radius: 10px;
+	color: #ffffff;
+	margin-right: 3px;
+	padding: 3px;
 }
 
 textarea {
