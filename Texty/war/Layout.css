@@ -224,6 +224,14 @@ div#Navigator .errorLabel {
 	padding: 5px;
 }
 
+.hashtagPanel {
+	background-color: #80bfff;
+	border-radius: 10px;
+	color: #ffffff;
+	margin-right: 3px;
+	padding: 3px;
+}
+
 textarea {
 	resize: none;
 	width: 400px;
