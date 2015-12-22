@@ -47,6 +47,8 @@ public class Timeline extends TextyForm {
 	private Label messageLabel = new Label();
     private Label messageLabel2 = new Label();
     
+    CellTreeForm cellTree = new CellTreeForm("Tree");
+    
    // private FavoriteForm form = new FavoriteForm("");
     
     private TimelineTableForm cellTable = new TimelineTableForm("");
@@ -60,7 +62,8 @@ public class Timeline extends TextyForm {
 	@Override
 	protected void run() {
 		
-		cellTable.run();
+		cellTree.run();
+		//cellTable.run();
 		
 		/*//Post 1
 		timeLabel.setText("13:15");

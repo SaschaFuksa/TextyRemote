@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+//TODO Public posting of (jeweiliger User)
 
 public class TimelineTableForm extends TextyForm {
 
@@ -27,54 +28,49 @@ public class TimelineTableForm extends TextyForm {
 		super(headline);
 
 	}
-	
+
 	Button cancelButton = new Button("Cancel");
 
-	private CellTable<User> userTable = new CellTable<User>();
-
+	private CellTable<Conversation> conversationTable = new CellTable<Conversation>();
 	private Vector<User> userList = new Vector<User>();
 	private Vector<Conversation> allPublicConversationList = new Vector<Conversation>();
 
-
 	public void run() {
-		
-				// Spalte für den Namen
-				Column<User, String> nameColumn = new Column<User, String>(
-						new TextCell()) {
 
-					public String getValue(User object) {
-						// TODO Auto-generated method stub
-						return null;
-					}
-				};
-				userTable.addColumn(nameColumn, "Favorite User");
-				
+		/*// Spalte fuer die Conversationliste der jeweiligen ausgewählten User
+		Column<Conversation, String> postingColumn = new Column<Conversation, String>(
+				new TextCell()) {
+			//public String getValue(Conversation conversation) {
+				//return conversation.getListOfMessage();
+			}
+		};
+		conversationTable.addColumn(postingColumn, "Favorite User");*/
 		
-		//Beispieldaten User
+
+		// Beispieldaten User
 		User u1 = new User();
 		User u2 = new User();
 		User u3 = new User();
-		
+
 		u1.setFirstName("Daniel");
 		u2.setFirstName("Lisa");
 		u3.setFirstName("Gandalf");
-		
+
 		userList.addElement(u1);
 		userList.addElement(u2);
 		userList.addElement(u3);
 
-		//Neue CellTable mit Userobjekten wird erzeugt
+		// Neue CellTable mit Userobjekten wird erzeugt
 		CellTable<User> cellTable = new CellTable<User>();
-		
+
 		cellTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-	    cellTable.setWidth("100%", true);
+		cellTable.setWidth("100%", true);
 
 		addTitleColumn(cellTable);
-	
 
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<User> singleSelectionModel = new SingleSelectionModel<User>();
-		
+
 		cellTable.setSelectionModel(singleSelectionModel);
 		singleSelectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
@@ -82,13 +78,14 @@ public class TimelineTableForm extends TextyForm {
 						User user = singleSelectionModel.getSelectedObject();
 						if (user != null) {
 							Window.alert("Selected: " + user.getFirstName());
-							
+
 						}
 					}
 				});
 
 		// Set the total row count. This isn't strictly necessary, but it
-		// affects paging calculations, so its good habit to keep the row count up to
+		// affects paging calculations, so its good habit to keep the row count
+		// up to
 		// date.
 		cellTable.setRowCount(userList.size(), true);
 
@@ -98,7 +95,7 @@ public class TimelineTableForm extends TextyForm {
 		RootPanel.get("Details").add(cellTable);
 	}
 
-	//Methode zum Festlegen der Spaltenüberschrift
+	// Methode zum Festlegen der Spaltenüberschrift
 	private void addTitleColumn(CellTable<User> cellTable) {
 		TextColumn<User> titleColumn = new TextColumn<User>() {
 
