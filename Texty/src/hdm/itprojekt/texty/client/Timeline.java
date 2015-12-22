@@ -49,7 +49,8 @@ public class Timeline extends TextyForm {
     
    // private FavoriteForm form = new FavoriteForm("");
     
-    private CellTableForm cellTable = new CellTableForm("");
+    private TimelineTableForm cellTable = new TimelineTableForm("");
+
     
 	public Timeline(String headline) {
 		super(headline);

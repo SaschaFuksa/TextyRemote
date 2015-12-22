@@ -53,6 +53,7 @@ public class FavoriteForm extends TextyForm {
 						String selected = selectionModelUser
 								.getSelectedObject();
 						if (selected != null) {
+							RootPanel.get("Details").clear();
 							timeLine.run();
 						}
 					}
@@ -67,6 +68,7 @@ public class FavoriteForm extends TextyForm {
 						String selected = selectionModelHashtags
 								.getSelectedObject();
 						if (selected != null) {
+							RootPanel.get("Details").clear();
 							timeLine.run();
 						}
 					}
