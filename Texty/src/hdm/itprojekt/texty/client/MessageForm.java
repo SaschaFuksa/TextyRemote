@@ -58,12 +58,13 @@ public class MessageForm extends TextyForm {
 			errorLabel.setText("\0");
 			String keyword = suggestBox.getText();
 			boolean alreadySelected = checkHashtag(keyword);
-			if (keyword == "") {
-				errorLabel.setText("Please select a Hashtag!");
+			if (keyword == "" || keyword.equals("Search for hashtags")) {
+				errorLabel.setText("Please select a hashtag!");
 			} else if (alreadySelected) {
 				errorLabel.setText("Hashtag is already selected!");
 			} else {
 				addHashtag(keyword);
+				suggestBox.setText("Search for hashtags");
 			}
 		}
 
@@ -77,7 +78,7 @@ public class MessageForm extends TextyForm {
 				}
 
 				public void onSuccess(Conversation result) {
-
+					selectedHashtag.removeAllElements();
 				}
 			});
 		}
@@ -90,12 +91,13 @@ public class MessageForm extends TextyForm {
 				errorLabel.setText("\0");
 				String keyword = suggestBox.getText();
 				boolean alreadySelected = checkHashtag(keyword);
-				if (keyword == "") {
-					errorLabel.setText("Please select a Hashtag!");
+				if (keyword == "" || keyword.equals("Search for hashtags")) {
+					errorLabel.setText("Please select a hashtag!");
 				} else if (alreadySelected) {
 					errorLabel.setText("Hashtag is already selected!");
 				} else {
 					addHashtag(keyword);
+					suggestBox.setText("Search for hashtags");
 				}
 			}
 		}
@@ -233,7 +235,7 @@ public class MessageForm extends TextyForm {
 			}
 
 			public void onLostFocus(Widget arg1) {
-				suggestBox.setText("Search for hashtags");
+				
 			}
 		});
 

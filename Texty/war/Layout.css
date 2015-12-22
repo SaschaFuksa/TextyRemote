@@ -219,7 +219,7 @@ div#Navigator .errorLabel {
 }
 
 .conversationScroll {
-	height: 78%;
+	height: 300px;
 	margin-top: 10px;
 	padding: 5px;
 }
