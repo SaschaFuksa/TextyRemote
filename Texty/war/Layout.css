@@ -50,7 +50,17 @@ div#Details {
 	font-family: Texty;
 	font-size: 1.5em;
 	padding: 1%;
-	flex: 3;
+	flex: 2;
+}
+
+div#Info {
+	background-color: #0080c0;
+	color: white;
+	float: left;
+	font-family: Texty;
+	font-size: 1.5em;
+	padding: 1%;
+	flex: 1;
 }
 
 div#Footer {
@@ -177,14 +187,40 @@ div#Navigator .errorLabel {
 	margin-top: 10px;
 }
 
-.scrollPanel {
-	scrollbar-3dlight-color: #FFD700;
-	scrollbar-arrow-color: #FFFF00;
-	scrollbar-base-color: #FF6347;
-	scrollbar-darkshadow-color: #FFA500;
-	scrollbar-face-color: #008080;
-	scrollbar-highlight-color: #FF69B4;
-	scrollbar-shadow-color: #FF00FF;
+.conversation {
+	background-color: #003399;
+	margin-bottom: 10px;
+	padding: 5px;
+	width: 100%;
+}
+
+.conversation:hover {
+	background-color: #80bfff;
+}
+
+.conversationHead {
+	color: #ffffff;
+	font-size: 0.9em;
+	padding: 2px;
+}
+
+/* .conversationDate {
+	color: #ffffff;
+	font-size: 0.9em;
+	padding: 2px;
+	text-align: right;
+} */
+
+.conversationBody {
+	background-color: #ffffff;
+	color: #0080c0;
+	font-size: 1.1em;
+	padding: 5px;
+}
+
+.conversationScroll {
+	margin-top: 10px;
+	padding: 5px;
 }
 
 textarea {
