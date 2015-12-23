@@ -72,7 +72,7 @@ public class HashtagMapper {
 		      Statement stmt = con.createStatement();
 
 		      //TODO: Date of Creation
-		  	ResultSet rs = stmt.executeQuery("SELECT hashtagId, keyword FROM textydb.hashtag");
+		  	ResultSet rs = stmt.executeQuery("SELECT hashtagId, keyword, dateOfCreation FROM textydb.hashtag");
 
 
 		      // Für jeden Eintrag wird nun ein Hashtag-Objekt erstellt.
@@ -80,7 +80,7 @@ public class HashtagMapper {
 		    	  Hashtag hashtag = new Hashtag();
 		    	hashtag.setId(rs.getInt("hashtagId"));
 		    	hashtag.setKeyword(rs.getString("keyword"));
-		    	//hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
+		    	hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
 		        result.addElement(hashtag);
@@ -108,7 +108,7 @@ public class HashtagMapper {
 		    	  Hashtag hashtag = new Hashtag();
 		    	hashtag.setId(rs.getInt("hashtagId"));
 		    	hashtag.setKeyword(rs.getString("keyword"));
-		    	hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
+		    	hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 		        result.addElement(hashtag);
 		      }
@@ -134,7 +134,7 @@ public class HashtagMapper {
 		    	  Hashtag hashtag = new Hashtag();
 		    	hashtag.setId(rs.getInt("hashtagId"));
 		    	hashtag.setKeyword(rs.getString("keyword"));
-		    	hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
+		    	hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 		        result.addElement(hashtag);
 		      }

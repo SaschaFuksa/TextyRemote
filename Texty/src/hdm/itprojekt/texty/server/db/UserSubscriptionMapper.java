@@ -39,6 +39,8 @@ public class UserSubscriptionMapper {
 		return userSubscription;
 	}
 
+	// Returns all subscribed Users from a User
+	// Will also be used for the Report generator!
 	public Vector<User> selectAllSubscribedUsers(User subscriber) {
 		Connection con = DBConnection.connection();
 		Vector<User> result = new Vector<User>();
@@ -47,7 +49,7 @@ public class UserSubscriptionMapper {
 			Statement stmt = con.createStatement();
 
 			
-			ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email FROM textydb.user INNER JOIN textydb.usersubscription ON user.userId = usersubscription.subscribed_userId "
+			ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email, user.dateOfCreation FROM textydb.user INNER JOIN textydb.usersubscription ON user.userId = usersubscription.subscribed_userId "
 					+ "WHERE subscriber_userId = " + subscriber.getId());
 			
 			// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
@@ -60,7 +62,7 @@ public class UserSubscriptionMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				// userSubscription.setDateOfCreation(rs.getDate("dateOfCreation"));
+				user.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 				result.addElement(user);
 

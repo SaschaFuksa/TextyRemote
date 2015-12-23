@@ -99,6 +99,8 @@ public class HashtagSubscriptionMapper {
 		    return result;
 		  }
 	  
+	  // Returns all subscribed Hashtags from a User
+	  // Will also be used for the Report generator!
 		public Vector<Hashtag> selectAllSubscribedHashtags(User subscriber) {
 			Connection con = DBConnection.connection();
 			Vector<Hashtag> result = new Vector<Hashtag>();
@@ -107,7 +109,7 @@ public class HashtagSubscriptionMapper {
 				Statement stmt = con.createStatement();
 
 				
-				ResultSet rs = stmt.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword FROM textydb.hashtag INNER JOIN textydb.hashtagsubscription ON hashtag.hashtagId = hashtagsubscription.hashtagId "
+				ResultSet rs = stmt.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword, hashtag.dateOfCreation FROM textydb.hashtag INNER JOIN textydb.hashtagsubscription ON hashtag.hashtagId = hashtagsubscription.hashtagId "
 						+ "WHERE hashtagsubscription.userId = " + subscriber.getId() );
 				
 				// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
@@ -117,7 +119,7 @@ public class HashtagSubscriptionMapper {
 					
 					hashtag.setId(rs.getInt("hashtagId"));
 					hashtag.setKeyword(rs.getString("keyword"));
-					// hashtag.setDateOfCreation(rs.getDate("dateOfCreation"));
+					hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 					result.addElement(hashtag);
 

@@ -84,9 +84,8 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			//TODO: DateOfCreation fehler
 			ResultSet rs = stmt
-					.executeQuery("SELECT userId, givenName, familyName, email FROM textydb.user");
+					.executeQuery("SELECT userId, givenName, familyName, email, dateOfCreation FROM textydb.user");
 
 			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
 			while (rs.next()) {
@@ -95,7 +94,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				//user.setDateOfCreation(rs.getDate("dateOfCreation"));
+				user.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 				// Hinzufügen des neuen Objekts zum Ergebnisvektor
 				result.addElement(user);
@@ -125,7 +124,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getDate("dateOfCreation"));
+				user.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 				result.addElement(user);
 			}
@@ -142,7 +141,7 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-		     ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email FROM textydb.user " 
+		     ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email, dateOfCreation FROM textydb.user " 
 		    	      + "WHERE email = '" + email + "'");
 
 			if (rs.next()) {
@@ -151,7 +150,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				//user.setDateOfCreation(rs.getDate("dateOfCreation"));
+				user.setDateOfCreation(rs.getTime("dateOfCreation"));
 				return user;
 			}
 		} catch (SQLException e2) {
@@ -169,7 +168,7 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-		     ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email FROM textydb.user " 
+		     ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email, dateOfCreation FROM textydb.user " 
 		    	      + "WHERE givenName = '" + firstName + "'" + "AND familyName = '" + lastName + "'");
 
 			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
@@ -179,7 +178,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getDate("dateOfCreation"));
+				user.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 				result.addElement(user);
 			}
