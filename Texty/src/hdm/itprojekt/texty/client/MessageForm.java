@@ -1,9 +1,7 @@
 package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
-import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
-import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
 
@@ -22,111 +20,74 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MessageForm extends TextyForm {
+public class MessageForm extends VerticalPanel {
 
-	public MessageForm(String headline) {
-		super(headline);
-	}
-
-	public MessageForm(String headline, Vector<User> recipientList) {
-		super(headline);
-		this.recipientList = recipientList;
-	}
-
+	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
+	private static Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+	private Button addButton = createAddButton();
+	Button sendButton = new Button("Send");
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private HorizontalPanel content = new HorizontalPanel();
+
+	private KeyUpHandler suggestBoxHandler = createKeyUp();
 	private ScrollPanel scroll = new ScrollPanel(content);
-	private Label recipientLabel = new Label();
 	private Label errorLabel = new Label("\0");
 	private Label successLabel = new Label("");
 	private Label addedHashtagLabel = new Label("\0");
 	private TextArea textBox = new TextArea();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
-	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
-	private static Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
-	private Vector<User> recipientList = new Vector<User>();
-	private String recipient = new String();
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
-	private Button addButton = new Button("", new ClickHandler() {
-		@Override
-		public void onClick(ClickEvent event) {
-			errorLabel.setText("\0");
-			String keyword = suggestBox.getText();
-			boolean alreadySelected = checkHashtag(keyword);
-			if (keyword == "" || keyword.equals("Search for hashtags")) {
-				errorLabel.setText("Please select a hashtag!");
-			} else if (alreadySelected) {
-				errorLabel.setText("Hashtag is already selected!");
-			} else {
-				addHashtag(keyword);
-				suggestBox.setText("Search for hashtags");
+	public MessageForm() {
+		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+
 			}
-		}
 
-	});
+			@Override
+			public void onSuccess(Vector<Hashtag> result) {
+				MessageForm.allHashtag = result;
+				setOracle();
 
-	private Button sendButton = new Button("Send", new ClickHandler() {
-		@Override
-		public void onClick(ClickEvent event) {
-			administration.createConversation(textBox.getText(), recipientList,
-					selectedHashtag, new AsyncCallback<Conversation>() {
-						@Override
-						public void onFailure(Throwable caught) {
+			}
+		});
 
-						}
-
-						@Override
-						public void onSuccess(Conversation result) {
-							selectedHashtag.removeAllElements();
-							ClientsideSettings.getLogger().severe("Message is send!");
-						}
-					});
-		}
-	});
-
-	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
-		@Override
-		public void onKeyUp(KeyUpEvent event) {
-			errorLabel.setText("\0");
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+		suggestBox.addKeyUpHandler(suggestBoxHandler);
+		suggestBox.getValueBox().addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				suggestBox.setText("");
 				errorLabel.setText("\0");
-				String keyword = suggestBox.getText();
-				boolean alreadySelected = checkHashtag(keyword);
-				if (keyword == "" || keyword.equals("Search for hashtags")) {
-					errorLabel.setText("Please select a hashtag!");
-				} else if (alreadySelected) {
-					errorLabel.setText("Hashtag is already selected!");
-				} else {
-					addHashtag(keyword);
-				}
-			}
-		}
-	};
+				successLabel.setText("");
 
-	private void setRecipientLabel() {
-		if (recipientList.size() < 1) {
-			recipientLabel.setText("Public message to all users.");
-		} else if (recipientList.size() < 4) {
-			for (int i = 0; i < recipientList.size(); i++) {
-				recipient = recipient + " '"
-						+ recipientList.get(i).getFirstName() + "'";
 			}
+		});
 
-			recipientLabel.setText("Private message to: " + recipient);
-		} else {
-			for (int i = 0; i < 3; i++) {
-				recipient = recipient + " '"
-						+ recipientList.get(i).getFirstName() + "'";
-			}
-			recipientLabel.setText("Private message to: " + recipient + " and "
-					+ new Integer(recipientList.size() - 3).toString()
-					+ " more recipient(s).");
-		}
+		suggestBox.setText("Search for hashtags");
+
+		addButton.getElement().setId("addButton");
+		errorLabel.setStylePrimaryName("errorLabel");
+		successLabel.setStylePrimaryName("successLabel");
+		sendButton.getElement().setId("sendButton");
+		scroll.setSize("400px", "60px");
+
+		suggestBoxPanel.add(suggestBox);
+		suggestBoxPanel.add(addButton);
+		buttonPanel.add(suggestBoxPanel);
+		buttonPanel.add(sendButton);
+
+		this.add(textBox);
+		this.add(buttonPanel);
+		this.add(errorLabel);
+		this.add(successLabel);
+		this.add(addedHashtagLabel);
+		this.add(scroll);
 	}
 
 	public void addHashtag(String keyword) {
@@ -195,12 +156,50 @@ public class MessageForm extends TextyForm {
 		return false;
 	}
 
-	private void setOracle() {
-		oracle.clear();
-		for (int i = 0; i < allHashtag.size(); i++) {
-			String keyword = new String(allHashtag.get(i).getKeyword());
-			oracle.add(keyword);
-		}
+	public void clearSelectedHashtag() {
+		selectedHashtag.removeAllElements();
+	}
+
+	private Button createAddButton() {
+		Button addButton = new Button("", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				errorLabel.setText("\0");
+				String keyword = suggestBox.getText();
+				boolean alreadySelected = checkHashtag(keyword);
+				if (keyword == "" || keyword.equals("Search for hashtags")) {
+					errorLabel.setText("Please select a hashtag!");
+				} else if (alreadySelected) {
+					errorLabel.setText("Hashtag is already selected!");
+				} else {
+					addHashtag(keyword);
+					suggestBox.setText("Search for hashtags");
+				}
+			}
+
+		});
+		return addButton;
+	}
+
+	private KeyUpHandler createKeyUp() {
+		return suggestBoxHandler = new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				errorLabel.setText("\0");
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					errorLabel.setText("\0");
+					String keyword = suggestBox.getText();
+					boolean alreadySelected = checkHashtag(keyword);
+					if (keyword == "" || keyword.equals("Search for hashtags")) {
+						errorLabel.setText("Please select a hashtag!");
+					} else if (alreadySelected) {
+						errorLabel.setText("Hashtag is already selected!");
+					} else {
+						addHashtag(keyword);
+					}
+				}
+			}
+		};
 	}
 
 	private void deleteHashtag(String keyword) {
@@ -222,56 +221,20 @@ public class MessageForm extends TextyForm {
 		}
 	}
 
-	@Override
-	protected void run() {
+	public Vector<Hashtag> getHashtag() {
+		return selectedHashtag;
+	}
 
-		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
-			@Override
-			public void onFailure(Throwable caught) {
+	public String getText() {
+		return textBox.getText();
+	}
 
-			}
-
-			@Override
-			public void onSuccess(Vector<Hashtag> result) {
-				MessageForm.allHashtag = result;
-				setOracle();
-
-			}
-		});
-
-		suggestBox.addKeyUpHandler(suggestBoxHandler);
-		suggestBox.getValueBox().addFocusHandler(new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent event) {
-				suggestBox.setText("");
-				errorLabel.setText("\0");
-				successLabel.setText("");
-				
-			}
-		});
-
-		suggestBox.setText("Search for hashtags");
-
-		addButton.getElement().setId("addButton");
-		errorLabel.setStylePrimaryName("errorLabel");
-		successLabel.setStylePrimaryName("successLabel");
-		sendButton.getElement().setId("sendButton");
-		scroll.setSize("400px", "60px");
-
-		setRecipientLabel();
-		suggestBoxPanel.add(suggestBox);
-		suggestBoxPanel.add(addButton);
-		buttonPanel.add(suggestBoxPanel);
-		buttonPanel.add(sendButton);
-
-		this.add(recipientLabel);
-		this.add(textBox);
-		this.add(buttonPanel);
-		this.add(errorLabel);
-		this.add(successLabel);
-		this.add(addedHashtagLabel);
-		this.add(scroll);
-
+	private void setOracle() {
+		oracle.clear();
+		for (int i = 0; i < allHashtag.size(); i++) {
+			String keyword = new String(allHashtag.get(i).getKeyword());
+			oracle.add(keyword);
+		}
 	}
 
 }

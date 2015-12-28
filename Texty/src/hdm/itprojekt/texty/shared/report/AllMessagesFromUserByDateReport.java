@@ -3,10 +3,10 @@ package hdm.itprojekt.texty.shared.report;
 import java.io.Serializable;
 
 /**
- * Report, der alle Nachrichten eines ausgewählten Benutzers ab einem bestimmten Datum darstellt.
- * Diese Klasse existiert nur um den Typ eines erstellten Reports
- * deklarieren zu können, implementiert daher keine Attribute oder Methoden.
- * Diese werden in den Superklassen bereits bereitgestellt.
+ * Report, der alle Nachrichten eines ausgewählten Benutzers ab einem bestimmten
+ * Datum darstellt. Diese Klasse existiert nur um den Typ eines erstellten
+ * Reports deklarieren zu können, implementiert daher keine Attribute oder
+ * Methoden. Diese werden in den Superklassen bereits bereitgestellt.
  *
  * @author Friedrich Schneider
  *
@@ -18,8 +18,7 @@ import java.io.Serializable;
  * @see Bankprojekt/SimpleReport,CompositeReport,usw.
  */
 
-public class AllMessagesFromUserByDateReport
-implements Serializable {
+public class AllMessagesFromUserByDateReport implements Serializable {
 
 	/**
 	 * 

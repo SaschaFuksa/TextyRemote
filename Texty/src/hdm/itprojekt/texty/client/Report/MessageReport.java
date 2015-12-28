@@ -2,7 +2,7 @@ package hdm.itprojekt.texty.client.Report;
 
 import hdm.itprojekt.texty.client.TextyForm;
 
-public class MessageReport extends TextyForm{
+public class MessageReport extends TextyForm {
 
 	public MessageReport(String headline) {
 		super(headline);
@@ -12,12 +12,7 @@ public class MessageReport extends TextyForm{
 	@Override
 	protected void run() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	    
 }
-	  
-	
-
-		

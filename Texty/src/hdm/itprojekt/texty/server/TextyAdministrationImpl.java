@@ -70,50 +70,6 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void init() throws IllegalArgumentException {
-		this.cMapper = ConversationMapper.conversationMapper();
-		this.hMapper = HashtagMapper.hashtagMapper();
-		this.hsMapper = HashtagSubscriptionMapper.hashtagSubscriptionMapper();
-		this.mMapper = MessageMapper.messageMapper();
-		this.uMapper = UserMapper.userMapper();
-		this.usMapper = UserSubscriptionMapper.userSubscriptionMapper();
-
-	}
-
-	/*
-	 * **********************************************************************
-	 * ABSCHNITT, Ende: Initialisierung
-	 * **********************************************************************
-	 */
-
-	/*
-	 * ************************************************************************
-	 * ABSCHNITT, Beginn: Methoden zum erzeugen von allen Business Objekten
-	 * **************************************** *******************************
-	 */
-
-	@Override
-	public Message createInitialMessage(String text,
-			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag,
-			int conversationId) throws IllegalArgumentException {
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
-
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-
-		Message m = new Message();
-		m.setText(text);
-		m.setAuthor(this.uMapper.findByEmail(user.getEmail()));
-		m.setVisible(true);
-		m.setListOfHashtag(listOfHashtag);
-		m.setListOfReceivers(listOfReceivers);
-		m.setId(1);
-		m.setConversationID(conversationId);
-
-		return this.mMapper.insert(m);
-	}
-
-	@Override
 	public Message addMessageToConversation(Conversation c, String text,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
@@ -139,24 +95,31 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.mMapper.insert(m);
 	}
 
+	/*
+	 * **********************************************************************
+	 * ABSCHNITT, Ende: Initialisierung
+	 * **********************************************************************
+	 */
+
+	/*
+	 * ************************************************************************
+	 * ABSCHNITT, Beginn: Methoden zum erzeugen von allen Business Objekten
+	 * **************************************** *******************************
+	 */
+
 	/**
-	 * Methode erzeugt ein neues Hashtagobjekt und ruft die insert-Methode
-	 * {@link hdm.itprojekt.texty.server.db.HashtagMapper#insert(Hashtag)} auf
-	 * um den Hashtag in die Datenbank zu schreiben
-	 * 
-	 * @param keyword
-	 *            Das Hashtag dass der Benutzer in GUI eingibt
-	 * 
-	 * @return Das Erzeugte Hashtag Objekt
+	 * Methode überprüft ob der eingeloggte Google Benutzer bereits in der
+	 * Datenbank vorhanden ist und initalisiert ggf. das anlegen des Benutzer.
 	 */
 	@Override
-	public Hashtag createHashtag(String keyword)
-			throws IllegalArgumentException {
-		Hashtag h = new Hashtag();
-		h.setKeyword(keyword);
-		h.setId(1);
+	public void checkUserData() throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
 
-		return this.hMapper.insert(h);
+		if (this.uMapper.findByEmail(user.getEmail()) == null) {
+			createUser();
+		}
 	}
 
 	/**
@@ -178,10 +141,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
 		Conversation c = new Conversation();
-		if (listOfReceivers.size() == 0){
+		if (listOfReceivers.size() == 0) {
 			c.setPublicly(true);
-		}
-		else {
+		} else {
 			c.setPublicly(false);
 		}
 		Conversation conversation = this.cMapper.insert(c);
@@ -199,30 +161,23 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Methode erzeugt ein neues Benutzerabo Objekt der abonnierende ist immer
-	 * der aktuell eingeloggte User.
+	 * Methode erzeugt ein neues Hashtagobjekt und ruft die insert-Methode
+	 * {@link hdm.itprojekt.texty.server.db.HashtagMapper#insert(Hashtag)} auf
+	 * um den Hashtag in die Datenbank zu schreiben
 	 * 
-	 * @param subscribedUser
-	 *            Der Benutzer der abonniert werden soll
+	 * @param keyword
+	 *            Das Hashtag dass der Benutzer in GUI eingibt
 	 * 
-	 * @return Das erzeugte Objekt
+	 * @return Das Erzeugte Hashtag Objekt
 	 */
 	@Override
-	public UserSubscription createUserSubscription(User subscribedUser) {
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
+	public Hashtag createHashtag(String keyword)
+			throws IllegalArgumentException {
+		Hashtag h = new Hashtag();
+		h.setKeyword(keyword);
+		h.setId(1);
 
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-
-		UserSubscription us = new UserSubscription();
-
-		us.setSubscribedUser(subscribedUser);
-		us.setSubscriber(this.uMapper.findByEmail(user.getEmail()));
-
-		us.setId(1);
-
-		return this.usMapper.insert(us);
-
+		return this.hMapper.insert(h);
 	}
 
 	/**
@@ -252,6 +207,27 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	}
 
+	@Override
+	public Message createInitialMessage(String text,
+			Vector<User> listOfReceivers, Vector<Hashtag> listOfHashtag,
+			int conversationId) throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+
+		Message m = new Message();
+		m.setText(text);
+		m.setAuthor(this.uMapper.findByEmail(user.getEmail()));
+		m.setVisible(true);
+		m.setListOfHashtag(listOfHashtag);
+		m.setListOfReceivers(listOfReceivers);
+		m.setId(1);
+		m.setConversationID(conversationId);
+
+		return this.mMapper.insert(m);
+	}
+
 	/**
 	 * Methode zum erzeugen neuer Benutzer. Die E-Mail Adresse wird dabei von
 	 * der Google Accounts Api abgerufen.
@@ -277,50 +253,157 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Methode überprüft ob der eingeloggte Google Benutzer bereits in der
-	 * Datenbank vorhanden ist und initalisiert ggf. das anlegen des Benutzer.
+	 * Methode erzeugt ein neues Benutzerabo Objekt der abonnierende ist immer
+	 * der aktuell eingeloggte User.
+	 * 
+	 * @param subscribedUser
+	 *            Der Benutzer der abonniert werden soll
+	 * 
+	 * @return Das erzeugte Objekt
 	 */
 	@Override
-	public void checkUserData() throws IllegalArgumentException {
+	public UserSubscription createUserSubscription(User subscribedUser) {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
+
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
 
-		if (this.uMapper.findByEmail(user.getEmail()) == null) {
-			createUser();
-		}
+		UserSubscription us = new UserSubscription();
+
+		us.setSubscribedUser(subscribedUser);
+		us.setSubscriber(this.uMapper.findByEmail(user.getEmail()));
+
+		us.setId(1);
+
+		return this.usMapper.insert(us);
+
 	}
 
-	/*
-	 * ************************************************************************
-	 * ABSCHNITT, Ende: Methoden zum erzeugen von allen Business Objekten
-	 * **************************************** *******************************
-	 */
-	/**
-	 * Methode zum aktualiesieren oder setzen des Vor- und Nachnamen des
-	 * eingeloggten Benutzers. Vor- und Nachname kann ein Nutzer in der GUI per
-	 * eingabe selber festlegen.
-	 * 
-	 * @param firstName
-	 *            Der eingebebene Vorname des Benutzers
-	 * 
-	 * @param lastName
-	 *            der eingebene Nachname des Benutzers
-	 *
-	 */
 	@Override
-	public void updateUserData(String firstName, String lastName)
+	public void deleteHashtagSubscription(Hashtag hashtag)
 			throws IllegalArgumentException {
+		HashtagSubscription subscription = new HashtagSubscription();
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User subscriber = this.uMapper.findByEmail(user.getEmail());
+
+		subscription.setSubscriber(subscriber);
+		subscription.setSubscribedHashtag(hashtag);
+		this.hsMapper.delete(subscription);
+	}
+
+	@Override
+	public void deleteMessage(Conversation conversation, Message message)
+			throws IllegalArgumentException {
+		conversation.removeMessageFromConversation(message);
+		message.setVisible(false);
+		this.getmMapper().update(message);
+
+	}
+
+	@Override
+	public void deleteUserSubscription(User subscribedUser)
+			throws IllegalArgumentException {
+		UserSubscription subscription = new UserSubscription();
+
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		User us = this.uMapper.findByEmail(user.getEmail());
-		if (us != null) {
-			us.setFirstName(firstName);
-			us.setLastName(lastName);
-			this.uMapper.update(us);
+		User subscriber = this.uMapper.findByEmail(user.getEmail());
+
+		subscription.setSubscriber(subscriber);
+		subscription.setSubscribedUser(subscribedUser);
+
+		this.usMapper.delete(subscription);
+	}
+
+	@Override
+	public Message editMessage(Message message, String newText)
+			throws IllegalArgumentException {
+		message.setText(newText);
+		return this.mMapper.update(message);
+	}
+
+	@Override
+	public Vector<Conversation> getAllConversationsFromUser()
+			throws IllegalArgumentException {
+
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User currentuser = this.uMapper.findByEmail(user.getEmail());
+
+		Vector<Message> allMesssagesFromUser = this.mMapper
+				.selectAllMessagesFromUser(currentuser);
+		Vector<Conversation> allConversations = this.cMapper
+				.selectAllConversations();
+
+		for (int i = 0; i < allMesssagesFromUser.size(); i++) {
+			for (int x = 0; x < allConversations.size(); x++) {
+				if (allMesssagesFromUser.get(i).getConversationID() == allConversations
+						.get(x).getId()) {
+					allConversations.get(x).addMessageToConversation(
+							allMesssagesFromUser.get(i));
+				}
+			}
 		}
+		return allConversations;
+
+	}
+
+	@Override
+	public Vector<Hashtag> getAllHashtags() throws IllegalArgumentException {
+		return this.hMapper.findAll();
+	}
+
+	@Override
+	public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate)
+			throws IllegalArgumentException {
+		Vector<Message> allMessages = this.mMapper.selectAllMessages();
+		Vector<Message> MessagesByDate = new Vector<Message>();
+		for (int i = allMessages.size(); i > 0; i--) {
+			if (allMessages.get(i).getDateOfCreation().after(startDate)
+					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
+				MessagesByDate.add(allMessages.get(i));
+			}
+		}
+		return MessagesByDate;
+	}
+
+	@Override
+	public Vector<Message> getAllMessagesFromUser(User user)
+			throws IllegalArgumentException {
+		return this.mMapper.selectAllMessagesFromUser(user);
+	}
+
+	@Override
+	public Vector<Message> getAllMessagesFromUserByDate(User user,
+			Date startDate, Date endDate) throws IllegalArgumentException {
+		Vector<Message> allMessages = this.mMapper
+				.selectAllMessagesFromUser(user);
+		Vector<Message> MessagesByDate = new Vector<Message>();
+		for (int i = allMessages.size(); i > 0; i--) {
+			if (allMessages.get(i).getDateOfCreation().after(startDate)
+					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
+				MessagesByDate.add(allMessages.get(i));
+			}
+		}
+		return MessagesByDate;
+	}
+
+	@Override
+	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
+			throws IllegalArgumentException {
+		Vector<Conversation> allPublicConversations = new Vector<Conversation>();
+		/*
+		 * Vector<Conversation> allConversations = this.cMapper
+		 * .findAllConversations(); for (int i = allConversations.size(); i > 0;
+		 * i--) { if (allConversations.get(i).isPublicly()) {
+		 * allPublicConversations.add(allConversations.get(i)); } }
+		 */
+		return allPublicConversations;
 	}
 
 	/**
@@ -354,135 +437,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message editMessage(Message message, String newText)
-			throws IllegalArgumentException {
-		message.setText(newText);
-		return this.mMapper.update(message);
-	}
-
-	@Override
-	public void deleteMessage(Conversation conversation, Message message)
-			throws IllegalArgumentException {
-		conversation.removeMessageFromConversation(message);
-		message.setVisible(false);
-		this.getmMapper().update(message);
-
-	}
-
-	@Override
-	public void deleteUserSubscription(User subscribedUser)
-			throws IllegalArgumentException {
-		UserSubscription subscription = new UserSubscription();
-
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
-
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		User subscriber = this.uMapper.findByEmail(user.getEmail());
-
-		subscription.setSubscriber(subscriber);
-		subscription.setSubscribedUser(subscribedUser);
-
-		this.usMapper.delete(subscription);
-	}
-
-	@Override
-	public void deleteHashtagSubscription(Hashtag hashtag)
-			throws IllegalArgumentException {
-		HashtagSubscription subscription = new HashtagSubscription();
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		User subscriber = this.uMapper.findByEmail(user.getEmail());
-
-		subscription.setSubscriber(subscriber);
-		subscription.setSubscribedHashtag(hashtag);
-		this.hsMapper.delete(subscription);
-	}
-
-	@Override
-	public Vector<Message> getAllMessagesFromUserByDate(User user,
-			Date startDate, Date endDate) throws IllegalArgumentException {
-		Vector<Message> allMessages = this.mMapper
-				.selectAllMessagesFromUser(user);
-		Vector<Message> MessagesByDate = new Vector<Message>();
-		for (int i = allMessages.size(); i > 0; i--) {
-			if (allMessages.get(i).getDateOfCreation().after(startDate)
-					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
-				MessagesByDate.add(allMessages.get(i));
-			}
-		}
-		return MessagesByDate;
-	}
-
-	@Override
-	public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate)
-			throws IllegalArgumentException {
-		Vector<Message> allMessages = this.mMapper.selectAllMessages();
-		Vector<Message> MessagesByDate = new Vector<Message>();
-		for (int i = allMessages.size(); i > 0; i--) {
-			if (allMessages.get(i).getDateOfCreation().after(startDate)
-					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
-				MessagesByDate.add(allMessages.get(i));
-			}
-		}
-		return MessagesByDate;
-	}
-
-	@Override
-	public Vector<Message> getAllMessagesFromUser(User user)
-			throws IllegalArgumentException {
-		return this.mMapper.selectAllMessagesFromUser(user);
-	}
-
-	@Override
-	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
-			throws IllegalArgumentException {
-		Vector<Conversation> allPublicConversations = new Vector<Conversation>();
-		/*
-		 * Vector<Conversation> allConversations = this.cMapper
-		 * .findAllConversations(); for (int i = allConversations.size(); i > 0;
-		 * i--) { if (allConversations.get(i).isPublicly()) {
-		 * allPublicConversations.add(allConversations.get(i)); } }
-		 */
-		return allPublicConversations;
-	}
-
-	@Override
-	public Vector<Conversation> getAllConversationsFromUser()
-			throws IllegalArgumentException {
-
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		User currentuser = this.uMapper.findByEmail(user.getEmail());
-
-		Vector<Message> allMesssagesFromUser = this.mMapper
-				.selectAllMessagesFromUser(currentuser);
-		Vector<Conversation> allConversations = this.cMapper
-				.selectAllConversations();
-
-		for (int i = 0; i < allMesssagesFromUser.size(); i++) {
-			for (int x = 0; x < allConversations.size(); x++) {
-				if (allMesssagesFromUser.get(i).getConversationID() == allConversations
-						.get(x).getId()) {
-					allConversations.get(x).addMessageToConversation(
-							allMesssagesFromUser.get(i));
-				}
-			}
-		}
-		return allConversations;
-
-	}
-
-	@Override
 	public Vector<User> getAllUsers() throws IllegalArgumentException {
 		return this.uMapper.findAll();
 	}
 
-	@Override
-	public Vector<Hashtag> getAllHashtags() throws IllegalArgumentException {
-		return this.hMapper.findAll();
+	/**
+	 * @return der ConversationMapper
+	 */
+	public ConversationMapper getcMapper() {
+		return cMapper;
 	}
 
 	@Override
@@ -493,13 +456,6 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
 		User us = this.uMapper.findByEmail(user.getEmail());
 		return us;
-	}
-
-	/**
-	 * @return der ConversationMapper
-	 */
-	public ConversationMapper getcMapper() {
-		return cMapper;
 	}
 
 	/**
@@ -535,6 +491,49 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 */
 	public UserSubscriptionMapper getUsMapper() {
 		return usMapper;
+	}
+
+	@Override
+	public void init() throws IllegalArgumentException {
+		this.cMapper = ConversationMapper.conversationMapper();
+		this.hMapper = HashtagMapper.hashtagMapper();
+		this.hsMapper = HashtagSubscriptionMapper.hashtagSubscriptionMapper();
+		this.mMapper = MessageMapper.messageMapper();
+		this.uMapper = UserMapper.userMapper();
+		this.usMapper = UserSubscriptionMapper.userSubscriptionMapper();
+
+	}
+
+	/*
+	 * ************************************************************************
+	 * ABSCHNITT, Ende: Methoden zum erzeugen von allen Business Objekten
+	 * **************************************** *******************************
+	 */
+	/**
+	 * Methode zum aktualiesieren oder setzen des Vor- und Nachnamen des
+	 * eingeloggten Benutzers. Vor- und Nachname kann ein Nutzer in der GUI per
+	 * eingabe selber festlegen.
+	 * 
+	 * @param firstName
+	 *            Der eingebebene Vorname des Benutzers
+	 * 
+	 * @param lastName
+	 *            der eingebene Nachname des Benutzers
+	 *
+	 */
+	@Override
+	public void updateUserData(String firstName, String lastName)
+			throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User us = this.uMapper.findByEmail(user.getEmail());
+		if (us != null) {
+			us.setFirstName(firstName);
+			us.setLastName(lastName);
+			this.uMapper.update(us);
+		}
 	}
 
 }

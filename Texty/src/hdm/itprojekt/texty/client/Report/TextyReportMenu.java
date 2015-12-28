@@ -14,15 +14,19 @@ public class TextyReportMenu {
 
 	public void execute() {
 
-		// Make some sub-menus that we will cascade from the top menu.		
+		// Make some sub-menus that we will cascade from the top menu.
 		MenuBar messageReportMenu = new MenuBar(true);
-		messageReportMenu.addItem("MessagesOfUser", reportCommand.getCommand("MessagesOfUser"));
-		messageReportMenu.addItem("MessagesOfPeriod", reportCommand.getCommand("MessagesOfPeriod"));
-		messageReportMenu.addItem("MessagesOfUserInPeriod", reportCommand.getCommand("MessagesOfUserInPeriod"));
-		
+		messageReportMenu.addItem("MessagesOfUser",
+				reportCommand.getCommand("MessagesOfUser"));
+		messageReportMenu.addItem("MessagesOfPeriod",
+				reportCommand.getCommand("MessagesOfPeriod"));
+		messageReportMenu.addItem("MessagesOfUserInPeriod",
+				reportCommand.getCommand("MessagesOfUserInPeriod"));
+
 		MenuBar menu = new MenuBar();
 		menu.addItem("MessageReports", messageReportMenu);
-		menu.addItem("SubscriptionReports", reportCommand.getCommand("SubscriptionReport"));
+		menu.addItem("SubscriptionReports",
+				reportCommand.getCommand("SubscriptionReport"));
 		menu.addItem("Editor", reportCommand.getCommand("Editor"));
 		menu.setStyleName("menubar");
 

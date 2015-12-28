@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ProfileForm extends TextyForm {
 
+	public static User user;
+	private static String email;
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable chatFlexTable = new FlexTable();
 	private HorizontalPanel addPanel = new HorizontalPanel();
@@ -22,9 +24,7 @@ public class ProfileForm extends TextyForm {
 	private TextBox firstname = new TextBox();
 	private TextBox lastname = new TextBox();
 	private Button save = new Button("Save");
-	public static User user;
-	private static String email;
-	
+
 	public ProfileForm(String headline) {
 		super(headline);
 	}
@@ -32,7 +32,8 @@ public class ProfileForm extends TextyForm {
 	@Override
 	protected void run() {
 		email = Texty.getLoginInfo().getEmailAddress();
-		TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
+		TextyAdministrationAsync administration = ClientsideSettings
+				.getTextyAdministration();
 		class getCurrentUserCallback implements AsyncCallback<User> {
 
 			@Override
@@ -48,33 +49,34 @@ public class ProfileForm extends TextyForm {
 			}
 		}
 		administration.getCurrentUser(new getCurrentUserCallback());
-		
+
 		// Create UI
-		
+
 		// Text
 		chatFlexTable.setText(0, 0, "E-Mail");
 		chatFlexTable.setText(1, 0, "Vorname");
 		chatFlexTable.setText(2, 0, "Nachname");
-		
+
 		// Textboxen
 		chatFlexTable.setWidget(0, 1, mail);
 		mail.setEnabled(false);
 		chatFlexTable.setWidget(1, 1, firstname);
 		chatFlexTable.setWidget(2, 1, lastname);
-		
-		// Textboxen füllen	
+
+		// Textboxen füllen
 		// E-Mail einfügen
 		mail.setText(email);
-		
+
 		// Save-Button
 		chatFlexTable.setWidget(3, 1, save);
 		save.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				// Implementation für das Speichern eines Users
-				
-				TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
-				
+
+				TextyAdministrationAsync administration = ClientsideSettings
+						.getTextyAdministration();
+
 				class checkUserCallback implements AsyncCallback<Void> {
 
 					@Override
@@ -97,12 +99,13 @@ public class ProfileForm extends TextyForm {
 					public void onSuccess(Void nothing) {
 					}
 				}
-				
+
 				administration.checkUserData(new checkUserCallback());
-				administration.updateUserData(firstname.getText(), lastname.getText(), new updateUserCallback());
+				administration.updateUserData(firstname.getText(),
+						lastname.getText(), new updateUserCallback());
 			}
 		});
-		
+
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Details").add(mainPanel);

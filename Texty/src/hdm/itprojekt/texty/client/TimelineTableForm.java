@@ -18,29 +18,43 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 public class TimelineTableForm extends TextyForm {
 
+	Button cancelButton = new Button("Cancel");
+
+	private CellTable<Conversation> conversationTable = new CellTable<Conversation>();
+
+	private Vector<User> userList = new Vector<User>();
+	private Vector<Conversation> allPublicConversationList = new Vector<Conversation>();
 	public TimelineTableForm(String headline) {
 		super(headline);
 
 	}
 
-	Button cancelButton = new Button("Cancel");
+	// Methode zum Festlegen der Spaltenüberschrift
+	private void addTitleColumn(CellTable<User> cellTable) {
+		TextColumn<User> titleColumn = new TextColumn<User>() {
 
-	private CellTable<Conversation> conversationTable = new CellTable<Conversation>();
-	private Vector<User> userList = new Vector<User>();
-	private Vector<Conversation> allPublicConversationList = new Vector<Conversation>();
+			@Override
+			public String getValue(User object) {
+				return object.getFirstName();
+			}
+
+		};
+
+		// Zwei Spalten hinzufügen
+		cellTable.addColumn(titleColumn, "Public Posting");
+		cellTable.addColumn(titleColumn, "Your comment");
+	}
 
 	@Override
 	public void run() {
 
-		/*// Spalte fuer die Conversationliste der jeweiligen ausgewählten User
-		Column<Conversation, String> postingColumn = new Column<Conversation, String>(
-				new TextCell()) {
-			//public String getValue(Conversation conversation) {
-				//return conversation.getListOfMessage();
-			}
-		};
-		conversationTable.addColumn(postingColumn, "Favorite User");*/
-		
+		/*
+		 * // Spalte fuer die Conversationliste der jeweiligen ausgewählten User
+		 * Column<Conversation, String> postingColumn = new Column<Conversation,
+		 * String>( new TextCell()) { //public String getValue(Conversation
+		 * conversation) { //return conversation.getListOfMessage(); } };
+		 * conversationTable.addColumn(postingColumn, "Favorite User");
+		 */
 
 		// Beispieldaten User
 		User u1 = new User();
@@ -89,22 +103,6 @@ public class TimelineTableForm extends TextyForm {
 		cellTable.setRowData(0, userList);
 
 		RootPanel.get("Details").add(cellTable);
-	}
-
-	// Methode zum Festlegen der Spaltenüberschrift
-	private void addTitleColumn(CellTable<User> cellTable) {
-		TextColumn<User> titleColumn = new TextColumn<User>() {
-
-			@Override
-			public String getValue(User object) {
-				return object.getFirstName();
-			}
-
-		};
-
-		// Zwei Spalten hinzufügen
-		cellTable.addColumn(titleColumn, "Public Posting");
-		cellTable.addColumn(titleColumn, "Your comment");
 	}
 
 	/*

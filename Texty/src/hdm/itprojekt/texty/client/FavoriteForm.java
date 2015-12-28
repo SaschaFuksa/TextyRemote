@@ -18,18 +18,18 @@ import com.google.gwt.view.client.SingleSelectionModel;
  */
 public class FavoriteForm extends TextyForm {
 
-	private Timeline timeLine = new Timeline("Timeline");
-
-	public FavoriteForm(String headline) {
-		super(headline);
-	}
-
 	private static final List<String> user = Arrays.asList("Erich",
 			"GandalfDerSchwarze", "Saruman", "Homer", "Eumel",
 			"ObamaDerWeisse", "Gundula Gause", "---------- ");
 
 	private static final List<String> hashtags = Arrays.asList("VfB", "BVB",
 			"FCB", "Pizza", "SaureKutteln");
+
+	private Timeline timeLine = new Timeline("Timeline");
+
+	public FavoriteForm(String headline) {
+		super(headline);
+	}
 
 	@Override
 	protected void run() {

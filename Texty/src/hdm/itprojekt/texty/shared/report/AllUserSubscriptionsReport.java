@@ -3,15 +3,14 @@ package hdm.itprojekt.texty.shared.report;
 import java.io.Serializable;
 
 /**
- * Report, der alle abbonierten Benutzer darstellt.
- * Diese Klasse existiert nur um den Typ eines erstellten Reports
- * deklarieren zu können, implementiert daher keine Attribute oder Methoden.
- * Diese werden in den Superklassen bereits bereitgestellt.
+ * Report, der alle abbonierten Benutzer darstellt. Diese Klasse existiert nur
+ * um den Typ eines erstellten Reports deklarieren zu können, implementiert
+ * daher keine Attribute oder Methoden. Diese werden in den Superklassen bereits
+ * bereitgestellt.
  *
  * @author Friedrich Schneider
  *
  */
-
 
 /*
  * TODO SUperklassen bauen, von denen die einzelnen Reportarten erben!
@@ -19,14 +18,11 @@ import java.io.Serializable;
  * @see Bankprojekt/SimpleReport,CompositeReport,usw.
  */
 
-public class AllUserSubscriptionsReport
-	implements Serializable {
+public class AllUserSubscriptionsReport implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
 
 }

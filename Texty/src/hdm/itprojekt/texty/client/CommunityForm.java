@@ -24,10 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CommunityForm extends TextyForm {
 
-	public CommunityForm(String headline) {
-		super(headline);
-	}
-
+	private static Vector<User> allUser = new Vector<User>();
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private VerticalPanel content = new VerticalPanel();
@@ -36,7 +33,6 @@ public class CommunityForm extends TextyForm {
 	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
-	private static Vector<User> allUser = new Vector<User>();
 	private Vector<User> selectedUser = new Vector<User>();
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
@@ -83,7 +79,7 @@ public class CommunityForm extends TextyForm {
 			new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					TextyForm message = new MessageForm("New Message",
+					TextyForm message = new NewMessage("New Message",
 							selectedUser);
 					RootPanel.get("Details").clear();
 					RootPanel.get("Details").add(message);
@@ -91,6 +87,36 @@ public class CommunityForm extends TextyForm {
 				}
 
 			});
+
+	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		@Override
+		public void onKeyUp(KeyUpEvent event) {
+			errorLabel.setText("\0");
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				errorLabel.setText("\0");
+				if (suggestBox.getText() == "") {
+					errorLabel.setText("Please select a user!");
+				} else {
+					String nickName = getNickName(suggestBox.getText());
+					User user = getUserOutOfAllUser(nickName);
+					if (user == null) {
+						errorLabel.setText("User is unknown!");
+					} else {
+						boolean alreadySelected = checkUser(user);
+						if (alreadySelected) {
+							errorLabel.setText("User is already selected!");
+						} else {
+							addUser(user);
+						}
+					}
+				}
+			}
+		}
+	};
+
+	public CommunityForm(String headline) {
+		super(headline);
+	}
 
 	public void addUser(User user) {
 		for (int i = 0; i < allUser.size(); i++) {
@@ -118,32 +144,6 @@ public class CommunityForm extends TextyForm {
 			}
 		}
 	}
-	
-	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
- 		@Override
-		public void onKeyUp(KeyUpEvent event) {
- 			errorLabel.setText("\0");
- 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
- 				errorLabel.setText("\0");
- 				if (suggestBox.getText() == "") {
-					errorLabel.setText("Please select a user!");
-				} else {
-					String nickName = getNickName(suggestBox.getText());
-					User user = getUserOutOfAllUser(nickName);
-					if (user == null) {
-						errorLabel.setText("User is unknown!");
-					} else {
-						boolean alreadySelected = checkUser(user);
-						if (alreadySelected) {
-							errorLabel.setText("User is already selected!");
-						} else {
-							addUser(user);
-						}
-					}
-				}
- 			}
- 		}
- 	};
 
 	public boolean checkUser(User user) {
 		for (int i = 0; i < selectedUser.size(); i++) {
@@ -152,16 +152,6 @@ public class CommunityForm extends TextyForm {
 			}
 		}
 		return false;
-	}
-
-	public User getUserOutOfAllUser(String nickName) {
-		for (int i = 0; i < allUser.size(); i++) {
-			if (nickName.equals(setNickName(allUser.get(i).getEmail()))) {
-				User user = allUser.get(i);
-				return user;
-			}
-		}
-		return null;
 	}
 
 	private void deleteUser(String firstname) {
@@ -178,12 +168,13 @@ public class CommunityForm extends TextyForm {
 
 	}
 
-	private void setOracle() {
-		oracle.clear();
-		for (int i = 0; i < allUser.size(); i++) {
-			oracle.add(getOracleName(allUser.get(i).getFirstName(), allUser
-					.get(i).getEmail()));
-		}
+	private String getNickName(String text) {
+		StringBuffer bufferName = new StringBuffer(text);
+		int firstIndex = bufferName.indexOf("(");
+		bufferName.delete(0, firstIndex + 1);
+		bufferName.deleteCharAt(bufferName.length() - 1);
+		String nickName = bufferName.toString();
+		return nickName;
 	}
 
 	private String getOracleName(String firstName, String email) {
@@ -195,25 +186,19 @@ public class CommunityForm extends TextyForm {
 
 	}
 
-	private String getNickName(String text) {
-		StringBuffer bufferName = new StringBuffer(text);
-		int firstIndex = bufferName.indexOf("(");
-		bufferName.delete(0, firstIndex + 1);
-		bufferName.deleteCharAt(bufferName.length() - 1);
-		String nickName = bufferName.toString();
-		return nickName;
+	public User getUserOutOfAllUser(String nickName) {
+		for (int i = 0; i < allUser.size(); i++) {
+			if (nickName.equals(setNickName(allUser.get(i).getEmail()))) {
+				User user = allUser.get(i);
+				return user;
+			}
+		}
+		return null;
 	}
 
-	private String setNickName(String email) {
-		StringBuffer bufferName = new StringBuffer(email);
-		bufferName.setLength(bufferName.indexOf("@"));
-		String nickName = bufferName.toString();
-		return nickName;
-	}
-	
-	private void removeCurrentUser(User currentUser){
-		for (int i = 0; i < allUser.size(); i++){
-			if (currentUser.getId() == allUser.get(i).getId()){
+	private void removeCurrentUser(User currentUser) {
+		for (int i = 0; i < allUser.size(); i++) {
+			if (currentUser.getId() == allUser.get(i).getId()) {
 				allUser.remove(i);
 			}
 		}
@@ -228,7 +213,7 @@ public class CommunityForm extends TextyForm {
 			@Override
 			public void onFocus(FocusEvent event) {
 				suggestBox.setText("");
-				
+
 			}
 		});
 
@@ -243,7 +228,7 @@ public class CommunityForm extends TextyForm {
 			@Override
 			public void onSuccess(Vector<User> result) {
 				CommunityForm.allUser = result;
-				
+
 				administration.getCurrentUser(new AsyncCallback<User>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -279,6 +264,21 @@ public class CommunityForm extends TextyForm {
 		this.add(scroll);
 		this.add(buttonPanel);
 
+	}
+
+	private String setNickName(String email) {
+		StringBuffer bufferName = new StringBuffer(email);
+		bufferName.setLength(bufferName.indexOf("@"));
+		String nickName = bufferName.toString();
+		return nickName;
+	}
+
+	private void setOracle() {
+		oracle.clear();
+		for (int i = 0; i < allUser.size(); i++) {
+			oracle.add(getOracleName(allUser.get(i).getFirstName(), allUser
+					.get(i).getEmail()));
+		}
 	}
 
 }

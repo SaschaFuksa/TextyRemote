@@ -38,7 +38,8 @@ public class TextyCommand {
 					break;
 				case "Hashtag":
 					TextyForm hashtag = new HashtagForm("Hashtags");
-					TextyForm hashtagSubscription = new HashtagSubscriptionForm("Hashtag Subscriptions");
+					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
+							"Hashtag Subscriptions");
 					RootPanel.get("Navigator").add(hashtag);
 					RootPanel.get("Details").add(hashtagSubscription);
 					break;

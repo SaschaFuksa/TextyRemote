@@ -18,17 +18,76 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ConversationForm extends TextyForm {
 
-	public ConversationForm(String headline) {
-		super(headline);
-	}
-
+	private static Vector<Conversation> conList = new Vector<Conversation>();
 	private Label intro = new Label(
 			"Here you can read and reply to private conversations");
-	private static Vector<Conversation> conList = new Vector<Conversation>();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
+
+	public ConversationForm(String headline) {
+		super(headline);
+	}
+
+	@Override
+	protected void run() {
+
+		administration
+				.getAllConversationsFromUser(new AsyncCallback<Vector<Conversation>>() {
+					@Override
+					public void onFailure(Throwable caught) {
+
+					}
+
+					@Override
+					public void onSuccess(Vector<Conversation> result) {
+						ConversationForm.conList = result;
+						showConversation();
+
+					}
+				});
+
+		scroll.setStylePrimaryName("conversationScroll");
+
+		this.add(intro);
+		this.add(scroll);
+	}
+
+	private String setMessageText(String text) {
+		String messageText = null;
+		if (text.length() < 30) {
+			messageText = text;
+
+		} else {
+
+			StringBuffer bufferName = new StringBuffer(text);
+			bufferName.setLength(30);
+			bufferName.insert(bufferName.length(), "...");
+			messageText = bufferName.toString();
+		}
+		return messageText;
+	}
+
+	private String setRecipient(Vector<User> receiver) {
+		String receivers = " to";
+		if (receiver.size() < 3) {
+			for (int i = 0; i < receiver.size(); i++) {
+				receivers = receivers + " '" + receiver.get(i).getFirstName()
+						+ "'";
+			}
+
+		} else {
+			for (int i = 0; i < 2; i++) {
+				receivers = receivers + " '" + receiver.get(i).getFirstName()
+						+ "'";
+			}
+			receivers = receivers + " and "
+					+ new Integer(receiver.size() - 2).toString()
+					+ " more receiver(s).";
+		}
+		return receivers;
+	}
 
 	public void showConversation() {
 		for (int i = 0; i < conList.size(); i++) {
@@ -70,72 +129,15 @@ public class ConversationForm extends TextyForm {
 				@Override
 				public void onClick(ClickEvent event) {
 					RootPanel.get("Details").clear();
-					RootPanel.get("Details").add(new ShowSingleConversation("Private Conversation", conversation));
+					RootPanel.get("Details").add(
+							new SingleConversationViewer(
+									"Private Conversation", conversation));
 				}
 			});
 
 			content.add(wrapper);
 
 		}
-	}
-
-	private String setRecipient(Vector<User> receiver) {
-		String receivers = " to";
-		if (receiver.size() < 3) {
-			for (int i = 0; i < receiver.size(); i++) {
-				receivers = receivers + " '" + receiver.get(i).getFirstName()
-						+ "'";
-			}
-
-		} else {
-			for (int i = 0; i < 2; i++) {
-				receivers = receivers + " '" + receiver.get(i).getFirstName()
-						+ "'";
-			}
-			receivers = receivers + " and "
-					+ new Integer(receiver.size() - 2).toString()
-					+ " more receiver(s).";
-		}
-		return receivers;
-	}
-
-	private String setMessageText(String text) {
-		String messageText = null;
-		if (text.length() < 30) {
-			messageText = text;
-
-		} else {
-
-			StringBuffer bufferName = new StringBuffer(text);
-			bufferName.setLength(30);
-			bufferName.insert(bufferName.length(), "...");
-			messageText = bufferName.toString();
-		}
-		return messageText;
-	}
-
-	@Override
-	protected void run() {
-
-		administration
-				.getAllConversationsFromUser(new AsyncCallback<Vector<Conversation>>() {
-					@Override
-					public void onFailure(Throwable caught) {
-
-					}
-
-					@Override
-					public void onSuccess(Vector<Conversation> result) {
-						ConversationForm.conList = result;
-						showConversation();
-
-					}
-				});
-
-		scroll.setStylePrimaryName("conversationScroll");
-
-		this.add(intro);
-		this.add(scroll);
 	}
 
 }

@@ -14,10 +14,6 @@ public class MessageMapper {
 
 	private static MessageMapper messageMapper = null;
 
-	protected MessageMapper() {
-
-	}
-
 	public static MessageMapper messageMapper() {
 		if (messageMapper == null) {
 			messageMapper = new MessageMapper();
@@ -25,65 +21,8 @@ public class MessageMapper {
 		return messageMapper;
 	}
 
-	public Message insert(Message message) {
-		Connection con = DBConnection.connection();
-		int state = 0;
-		if (message.isVisible()) {
-			state = 1;
-		}
+	protected MessageMapper() {
 
-		try {
-			Statement stmt = con.createStatement();
-			// Find highest Primarykey
-			ResultSet rs = stmt.executeQuery("SELECT MAX(messageId) AS maxid "
-					+ "FROM textydb.message ");
-		
-			if (rs.next()) {
-
-				message.setId(rs.getInt("maxid") + 1);
-
-				stmt = con.createStatement();
-				
-				// Highest Primarykey has been found and set, now we insert it
-				// into the DB
-				stmt.executeUpdate("INSERT INTO textydb.message (messageId, author_userId, conversationId, messageText, visibility)"
-						+ "VALUES ("
-						+ message.getId()
-						+ ", "
-						+ message.getAuthor().getId()
-						+ ", "
-						+ "'"
-						+ message.getConversationID()
-						+ "'"
-						+ ", "
-						+ "'"
-						+ message.getText() + "'" + ", " + state + ")");
-			}
-			
-			Statement stmtReceiver = con.createStatement();
-			   for (int i = 0; i < message.getListOfReceivers().size(); i++){
-			    stmtReceiver.executeUpdate("INSERT INTO textydb.receiver (receiver_userId, messageId)"
-			      +"VALUES ("
-			      + message.getListOfReceivers().get(i).getId()
-			      + ", "
-			      + message.getId()
-			      + ")");
-			   
-			   }
-			   
-			   Statement stmtHashtag = con.createStatement();
-			   for (int i = 0; i < message.getListOfHashtag().size(); i++){
-				    stmtHashtag.executeUpdate("INSERT INTO textydb.hashtag_in_message (messageId, hashtagId)"
-				      +"VALUES ("
-				      + message.getId()
-				      + ", "
-				      + message.getListOfHashtag().get(i).getId()
-				      + ")");
-			   }
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return message;
 	}
 
 	public void delete(Message message) {
@@ -100,76 +39,11 @@ public class MessageMapper {
 			// see it anymore
 			// TODO: Boolean Wert umwandeln für die DB? Überprüfen!
 			stmt.executeUpdate("UPDATE textydb.message SET message.visibility = "
-					+ stateDelete
-					+ "WHERE messageId = "
-					+ message.getId());
+					+ stateDelete + "WHERE messageId = " + message.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public Message update(Message message) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("UPDATE textydb.message SET message.messageText = "
-					+ "'"
-					+ message.getText()
-					+ "'"
-					+ "WHERE messageId = "
-					+ message.getId());
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return message;
-	}
-
-	public Vector<Message> selectAllMessagesFromUser(User currentuser) {
-		Connection con = DBConnection.connection();
-		Vector<Message> resultMessage = new Vector<Message>();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			ResultSet rsMessages = stmt
-					.executeQuery("SELECT DISTINCT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message INNER JOIN textydb.receiver ON message.messageId = receiver.messageId "
-							+ "WHERE author_userId = "
-							+ currentuser.getId()
-							+ " OR receiver_userId = " + currentuser.getId()
-							+ " AND message.visibility = '1' ");
-
-			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
-			while (rsMessages.next()) {
-				Message allmessages = new Message();
-
-				allmessages.setId(rsMessages.getInt("message.messageId"));
-
-				allmessages.setAuthor(findAuthor(allmessages));
-				allmessages.setListOfReceivers(findReceivers(allmessages));
-				allmessages
-						.setListOfHashtag(findHashtagsInMessage(allmessages));
-
-				allmessages
-						.setText(rsMessages.getString("message.messageText"));
-				allmessages.setConversationID(rsMessages
-						.getInt("message.conversationId"));
-				allmessages.setVisible(rsMessages.getBoolean("message.visibility"));
-				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
-
-				resultMessage.addElement(allmessages);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return resultMessage;
 	}
 
 	public User findAuthor(Message message) {
@@ -199,6 +73,35 @@ public class MessageMapper {
 		}
 
 		return null;
+	}
+
+	public Vector<Hashtag> findHashtagsInMessage(Message message) {
+		Connection con = DBConnection.connection();
+		Vector<Hashtag> result = new Vector<Hashtag>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt
+					.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword, hashtag.dateOfCreation, message.messageId FROM textydb.hashtag INNER JOIN textydb.hashtag_in_message ON hashtag.hashtagId = hashtag_in_message.hashtagId INNER JOIN textydb.message ON hashtag_in_message.messageId = message.messageId "
+							+ "WHERE message.messageId = " + message.getId());
+
+			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
+			while (rs.next()) {
+				Hashtag hashtag = new Hashtag();
+
+				hashtag.setId(rs.getInt("hashtag.hashtagId"));
+				hashtag.setKeyword(rs.getString("hashtag.keyword"));
+				hashtag.setDateOfCreation(rs.getTime("hashtag.dateOfCreation"));
+
+				result.addElement(hashtag);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Ergebnisvektor zurückgeben
+		return result;
 	}
 
 	public Vector<User> findReceivers(Message message) {
@@ -232,33 +135,65 @@ public class MessageMapper {
 		return result;
 	}
 
-	public Vector<Hashtag> findHashtagsInMessage(Message message) {
+	public Message insert(Message message) {
 		Connection con = DBConnection.connection();
-		Vector<Hashtag> result = new Vector<Hashtag>();
+		int state = 0;
+		if (message.isVisible()) {
+			state = 1;
+		}
 
 		try {
 			Statement stmt = con.createStatement();
+			// Find highest Primarykey
+			ResultSet rs = stmt.executeQuery("SELECT MAX(messageId) AS maxid "
+					+ "FROM textydb.message ");
 
-			ResultSet rs = stmt
-					.executeQuery("SELECT hashtag.hashtagId, hashtag.keyword, hashtag.dateOfCreation, message.messageId FROM textydb.hashtag INNER JOIN textydb.hashtag_in_message ON hashtag.hashtagId = hashtag_in_message.hashtagId INNER JOIN textydb.message ON hashtag_in_message.messageId = message.messageId "
-							+ "WHERE message.messageId = " + message.getId());
+			if (rs.next()) {
 
-			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
-			while (rs.next()) {
-				Hashtag hashtag = new Hashtag();
+				message.setId(rs.getInt("maxid") + 1);
 
-				hashtag.setId(rs.getInt("hashtag.hashtagId"));
-				hashtag.setKeyword(rs.getString("hashtag.keyword"));
-				hashtag.setDateOfCreation(rs.getTime("hashtag.dateOfCreation"));
+				stmt = con.createStatement();
 
-				result.addElement(hashtag);
+				// Highest Primarykey has been found and set, now we insert it
+				// into the DB
+				stmt.executeUpdate("INSERT INTO textydb.message (messageId, author_userId, conversationId, messageText, visibility)"
+						+ "VALUES ("
+						+ message.getId()
+						+ ", "
+						+ message.getAuthor().getId()
+						+ ", "
+						+ "'"
+						+ message.getConversationID()
+						+ "'"
+						+ ", "
+						+ "'"
+						+ message.getText() + "'" + ", " + state + ")");
+			}
+
+			Statement stmtReceiver = con.createStatement();
+			for (int i = 0; i < message.getListOfReceivers().size(); i++) {
+				stmtReceiver
+						.executeUpdate("INSERT INTO textydb.receiver (receiver_userId, messageId)"
+								+ "VALUES ("
+								+ message.getListOfReceivers().get(i).getId()
+								+ ", " + message.getId() + ")");
+
+			}
+
+			Statement stmtHashtag = con.createStatement();
+			for (int i = 0; i < message.getListOfHashtag().size(); i++) {
+				stmtHashtag
+						.executeUpdate("INSERT INTO textydb.hashtag_in_message (messageId, hashtagId)"
+								+ "VALUES ("
+								+ message.getId()
+								+ ", "
+								+ message.getListOfHashtag().get(i).getId()
+								+ ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		// Ergebnisvektor zurückgeben
-		return result;
+		return message;
 	}
 
 	public Vector<Message> selectAllMessages() {
@@ -301,11 +236,52 @@ public class MessageMapper {
 
 		return resultMessage;
 	}
-	
-	// -------- Following Code is for the Home Section -----------
-	//   |				|				|			|
-	//   v				v				v			v
-	
+
+	public Vector<Message> selectAllMessagesFromUser(User currentuser) {
+		Connection con = DBConnection.connection();
+		Vector<Message> resultMessage = new Vector<Message>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rsMessages = stmt
+					.executeQuery("SELECT DISTINCT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message INNER JOIN textydb.receiver ON message.messageId = receiver.messageId "
+							+ "WHERE author_userId = "
+							+ currentuser.getId()
+							+ " OR receiver_userId = "
+							+ currentuser.getId()
+							+ " AND message.visibility = '1' ");
+
+			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
+			while (rsMessages.next()) {
+				Message allmessages = new Message();
+
+				allmessages.setId(rsMessages.getInt("message.messageId"));
+
+				allmessages.setAuthor(findAuthor(allmessages));
+				allmessages.setListOfReceivers(findReceivers(allmessages));
+				allmessages
+						.setListOfHashtag(findHashtagsInMessage(allmessages));
+
+				allmessages
+						.setText(rsMessages.getString("message.messageText"));
+				allmessages.setConversationID(rsMessages
+						.getInt("message.conversationId"));
+				allmessages.setVisible(rsMessages
+						.getBoolean("message.visibility"));
+				allmessages.setDateOfCreation(rsMessages
+						.getTime("message.dateOfCreation"));
+
+				resultMessage.addElement(allmessages);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return resultMessage;
+	}
+
 	// Gives back all public Messages from a specific User
 	public Vector<Message> selectAllPublicMessagesFromUser(User user) {
 		Connection con = DBConnection.connection();
@@ -336,7 +312,8 @@ public class MessageMapper {
 						.setText(rsMessages.getString("message.messageText"));
 				allmessages.setConversationID(rsMessages
 						.getInt("message.conversationId"));
-				allmessages.setVisible(rsMessages.getBoolean("message.visibility"));
+				allmessages.setVisible(rsMessages
+						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
 						.getTime("message.dateOfCreation"));
 
@@ -349,52 +326,13 @@ public class MessageMapper {
 
 		return resultMessage;
 	}
-	
-	// Gives back all public Messages that contain a certain hashtag
-	public Vector<Message> selectAllPublicMessagesWithHashtag (Hashtag hashtag) {
-		Connection con = DBConnection.connection();
-		Vector<Message> resultMessage = new Vector<Message>();
 
-		try {
-			Statement stmt = con.createStatement();
+	// -------- Following Code is for the Home Section -----------
+	// | | | |
+	// v v v v
 
-			ResultSet rsMessages = stmt
-					.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message inner join textydb.hashtag_in_message ON message.messageId = hashtag_in_message.messageId inner join textydb.conversation ON message.conversationId = conversation.conversationId "
-							+ "WHERE hashtag_in_message.hashtagId = "
-							+ hashtag.getId()
-							+ " AND conversation.publicly = '1'"
-							+ " AND message.visibility = '1' ");
-
-			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
-			while (rsMessages.next()) {
-				Message allmessages = new Message();
-
-				allmessages.setId(rsMessages.getInt("message.messageId"));
-
-				allmessages.setAuthor(findAuthor(allmessages));
-				allmessages.setListOfReceivers(findReceivers(allmessages));
-				allmessages
-						.setListOfHashtag(findHashtagsInMessage(allmessages));
-
-				allmessages
-						.setText(rsMessages.getString("message.messageText"));
-				allmessages.setConversationID(rsMessages
-						.getInt("message.conversationId"));
-				allmessages.setVisible(rsMessages.getBoolean("message.visibility"));
-				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
-
-				resultMessage.addElement(allmessages);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return resultMessage;
-	}
-	
-	// Gives back all all public Messages from all the subscribed Users from a specific User
+	// Gives back all all public Messages from all the subscribed Users from a
+	// specific User
 	public Vector<Message> selectAllPublicMessagesFromUsersubscription(User user) {
 		Connection con = DBConnection.connection();
 		Vector<Message> resultMessage = new Vector<Message>();
@@ -424,7 +362,8 @@ public class MessageMapper {
 						.setText(rsMessages.getString("message.messageText"));
 				allmessages.setConversationID(rsMessages
 						.getInt("message.conversationId"));
-				allmessages.setVisible(rsMessages.getBoolean("message.visibility"));
+				allmessages.setVisible(rsMessages
+						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
 						.getTime("message.dateOfCreation"));
 
@@ -437,12 +376,78 @@ public class MessageMapper {
 
 		return resultMessage;
 	}
-	
+
+	// Gives back all public Messages that contain a certain hashtag
+	public Vector<Message> selectAllPublicMessagesWithHashtag(Hashtag hashtag) {
+		Connection con = DBConnection.connection();
+		Vector<Message> resultMessage = new Vector<Message>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rsMessages = stmt
+					.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message inner join textydb.hashtag_in_message ON message.messageId = hashtag_in_message.messageId inner join textydb.conversation ON message.conversationId = conversation.conversationId "
+							+ "WHERE hashtag_in_message.hashtagId = "
+							+ hashtag.getId()
+							+ " AND conversation.publicly = '1'"
+							+ " AND message.visibility = '1' ");
+
+			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
+			while (rsMessages.next()) {
+				Message allmessages = new Message();
+
+				allmessages.setId(rsMessages.getInt("message.messageId"));
+
+				allmessages.setAuthor(findAuthor(allmessages));
+				allmessages.setListOfReceivers(findReceivers(allmessages));
+				allmessages
+						.setListOfHashtag(findHashtagsInMessage(allmessages));
+
+				allmessages
+						.setText(rsMessages.getString("message.messageText"));
+				allmessages.setConversationID(rsMessages
+						.getInt("message.conversationId"));
+				allmessages.setVisible(rsMessages
+						.getBoolean("message.visibility"));
+				allmessages.setDateOfCreation(rsMessages
+						.getTime("message.dateOfCreation"));
+
+				resultMessage.addElement(allmessages);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return resultMessage;
+	}
+
+	public Message update(Message message) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("UPDATE textydb.message SET message.messageText = "
+					+ "'"
+					+ message.getText()
+					+ "'"
+					+ "WHERE messageId = "
+					+ message.getId());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return message;
+	}
+
 	// -------- Following Code is for the Report Generator -----------
-	//   |				|				|			|
-	//   v				v				v			v
-	// 
+	// | | | |
+	// v v v v
+	//
 	// TODO: Nachrichten eines Benutzers ausgeben -> Benutzer auswählen
-	// TODO: Nachrichten eines Benutzers zu einem Zeitraumausgeben -> Benutzer/Zeitraum auswählen
+	// TODO: Nachrichten eines Benutzers zu einem Zeitraumausgeben ->
+	// Benutzer/Zeitraum auswählen
 	// TODO: Nachrichten eines Zeitraums ausgeben -> Zeitraum auswählen
 }

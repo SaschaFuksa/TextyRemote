@@ -23,16 +23,19 @@ public class TextyReportCommand {
 				RootPanel.get("Navigator").clear();
 				switch (name) {
 				case "MessagesOfUser":
-					TextyForm messagesOfUser = new MessageReport("MessagesOfUser");
+					TextyForm messagesOfUser = new MessageReport(
+							"MessagesOfUser");
 					RootPanel.get("Navigator").add(messagesOfUser);
 					break;
 				case "MMessagesOfPeriod":
-					TextyForm messagesOfPeriod = new MessageReport("MessagesOfPeriod");
+					TextyForm messagesOfPeriod = new MessageReport(
+							"MessagesOfPeriod");
 					RootPanel.get("Navigator").add(messagesOfPeriod);
 					break;
 				case "MessagesOfUserInPeriod":
-					TextyForm messagesOfUserInPeriod = new MessageReport("MessagesOfUserInPeriod");
-					RootPanel.get("Navigator").add(messagesOfUserInPeriod); 
+					TextyForm messagesOfUserInPeriod = new MessageReport(
+							"MessagesOfUserInPeriod");
+					RootPanel.get("Navigator").add(messagesOfUserInPeriod);
 					break;
 				case "SubscriptionReport":
 					TextyForm subscriptionReport = new SubscriptionReport(
@@ -40,8 +43,7 @@ public class TextyReportCommand {
 					RootPanel.get("Navigator").add(subscriptionReport);
 					break;
 				case "Editor":
-					Window.Location
-							.assign("http://127.0.0.1:8888/Texty.html");
+					Window.Location.assign("http://127.0.0.1:8888/Texty.html");
 					break;
 				default:
 					;

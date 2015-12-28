@@ -13,15 +13,32 @@ public class UserSubscriptionMapper {
 
 	private static UserSubscriptionMapper userSubscriptionMapper = null;
 
-	protected UserSubscriptionMapper() {
-
-	}
-
 	public static UserSubscriptionMapper userSubscriptionMapper() {
 		if (userSubscriptionMapper == null) {
 			userSubscriptionMapper = new UserSubscriptionMapper();
 		}
 		return userSubscriptionMapper;
+	}
+
+	protected UserSubscriptionMapper() {
+
+	}
+
+	public void delete(UserSubscription usersubscription) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			// HashtagSubscription gets deleted
+			stmt.executeUpdate("DELETE FROM textydb.usersubscription "
+					+ "WHERE subscriber_userId = "
+					+ usersubscription.getSubscriber().getId()
+					+ " AND subscribed_userId = "
+					+ usersubscription.getSubscribedUser().getId());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public UserSubscription insert(UserSubscription userSubscription) {
@@ -52,14 +69,14 @@ public class UserSubscriptionMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			
-			ResultSet rs = stmt.executeQuery("SELECT userId, givenName, familyName, email, user.dateOfCreation FROM textydb.user INNER JOIN textydb.usersubscription ON user.userId = usersubscription.subscribed_userId "
-					+ "WHERE subscriber_userId = " + subscriber.getId());
-			
+			ResultSet rs = stmt
+					.executeQuery("SELECT userId, givenName, familyName, email, user.dateOfCreation FROM textydb.user INNER JOIN textydb.usersubscription ON user.userId = usersubscription.subscribed_userId "
+							+ "WHERE subscriber_userId = " + subscriber.getId());
+
 			// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
-			
+
 			while (rs.next()) {
-				
+
 				User user = new User();
 
 				user.setId(rs.getInt("userId"));
@@ -76,19 +93,5 @@ public class UserSubscriptionMapper {
 		}
 
 		return result;
-	}
-	
-	public void delete(UserSubscription usersubscription) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-			//HashtagSubscription gets deleted 
-			stmt.executeUpdate("DELETE FROM textydb.usersubscription " + "WHERE subscriber_userId = " 
-			+ usersubscription.getSubscriber().getId() + " AND subscribed_userId = " + usersubscription.getSubscribedUser().getId());
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 }

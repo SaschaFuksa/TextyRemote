@@ -21,15 +21,15 @@ public class ClientsideSettings extends CommonSettings {
 	private static final String LOGGER_NAME = "Texty Web Client";
 	private static final Logger log = Logger.getLogger(LOGGER_NAME);
 
-	public static Logger getLogger() {
-		return log;
+	public static LoginServiceAsync getBankVerwaltung() {
+		if (loginService == null) {
+			loginService = GWT.create(LoginService.class);
+		}
+		return loginService;
 	}
 
-	public static TextyAdministrationAsync getTextyAdministration() {
-		if (textyAdministration == null) {
-			textyAdministration = GWT.create(TextyAdministration.class);
-		}
-		return textyAdministration;
+	public static Logger getLogger() {
+		return log;
 	}
 
 	public static ReportGeneratorAsync getReportGenerator() {
@@ -56,11 +56,11 @@ public class ClientsideSettings extends CommonSettings {
 		return reportGenerator;
 	}
 
-	public static LoginServiceAsync getBankVerwaltung() {
-		if (loginService == null) {
-			loginService = GWT.create(LoginService.class);
+	public static TextyAdministrationAsync getTextyAdministration() {
+		if (textyAdministration == null) {
+			textyAdministration = GWT.create(TextyAdministration.class);
 		}
-		return loginService;
+		return textyAdministration;
 	}
 
 }

@@ -18,15 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UserSubscriptionForm extends TextyForm {
 
-	public UserSubscriptionForm(String headline) {
-		super(headline);
-	}
-
-	public UserSubscriptionForm(String headline, Vector<User> selectedUser) {
-		super(headline);
-		this.selectedUser = selectedUser;
-	}
-
+	private static Vector<User> subscribedUser = new Vector<User>();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label intro = new HTML(
@@ -36,29 +28,41 @@ public class UserSubscriptionForm extends TextyForm {
 	private Label warningLabel = new Label("");
 	private Label successLabel = new Label("");
 	private Vector<User> selectedUser = new Vector<User>();
-	private static Vector<User> subscribedUser = new Vector<User>();
-	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
+	private TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
+
+	public UserSubscriptionForm(String headline) {
+		super(headline);
+	}
+
+	public UserSubscriptionForm(String headline, Vector<User> selectedUser) {
+		super(headline);
+		this.selectedUser = selectedUser;
+	}
 
 	public void addUserSubscriptions() {
 		String result = new String("");
 		String warning = new String("");
 		for (int i = 0; i < selectedUser.size(); i++) {
 			if (checkSubscription(selectedUser.get(i).getFirstName())) {
-				administration.createUserSubscription(selectedUser.get(i), new AsyncCallback<UserSubscription>() {
-					@Override
-					public void onFailure(Throwable caught) {
+				administration.createUserSubscription(selectedUser.get(i),
+						new AsyncCallback<UserSubscription>() {
+							@Override
+							public void onFailure(Throwable caught) {
 
-					}
+							}
 
-					@Override
-					public void onSuccess(UserSubscription result) {
+							@Override
+							public void onSuccess(UserSubscription result) {
 
-					}
-				});
+							}
+						});
 				subscribedUser.add(selectedUser.get(i));
-				result = result + " '" + selectedUser.get(i).getFirstName() + "'";
+				result = result + " '" + selectedUser.get(i).getFirstName()
+						+ "'";
 			} else {
-				warning = warning + " '" + selectedUser.get(i).getFirstName() + "'";
+				warning = warning + " '" + selectedUser.get(i).getFirstName()
+						+ "'";
 			}
 		}
 		if (result != "") {
@@ -86,19 +90,22 @@ public class UserSubscriptionForm extends TextyForm {
 		for (int i = 0; i < subscribedUser.size(); i++) {
 			if (name.equals(subscribedUser.get(i).getFirstName())) {
 				indexSelectedUser = i;
-				successLabel.setText("Subscribed user '" + subscribedUser.get(i).getFirstName() + "' sucessful removed!");
+				successLabel.setText("Subscribed user '"
+						+ subscribedUser.get(i).getFirstName()
+						+ "' sucessful removed!");
 				warningLabel.setText("");
-				administration.deleteUserSubscription(subscribedUser.get(i), new AsyncCallback<Void>() {
-					@Override
-					public void onFailure(Throwable caught) {
+				administration.deleteUserSubscription(subscribedUser.get(i),
+						new AsyncCallback<Void>() {
+							@Override
+							public void onFailure(Throwable caught) {
 
-					}
+							}
 
-					@Override
-					public void onSuccess(Void result) {
-						
-					}
-				});
+							@Override
+							public void onSuccess(Void result) {
+
+							}
+						});
 			}
 		}
 
@@ -106,30 +113,9 @@ public class UserSubscriptionForm extends TextyForm {
 
 	}
 
-	public void showSubscriptions() {
-		for (int i = 0; i < subscribedUser.size(); i++) {
-			final HorizontalPanel panel = new HorizontalPanel();
-			final Label nameLabel = new Label(subscribedUser.get(i)
-					.getFirstName());
-			nameLabel.setStylePrimaryName("selectedObjectLabel");
-			final Button deleteButton = new Button("", new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					deleteSubscription(nameLabel.getText());
-					content.remove(panel);
-				}
-
-			});
-			deleteButton.getElement().setId("deleteButton");
-			panel.add(nameLabel);
-			panel.add(deleteButton);
-			content.add(panel);
-		}
-	}
-
 	@Override
 	protected void run() {
-		
+
 		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -155,6 +141,27 @@ public class UserSubscriptionForm extends TextyForm {
 		this.add(warningLabel);
 		this.add(successLabel);
 
+	}
+
+	public void showSubscriptions() {
+		for (int i = 0; i < subscribedUser.size(); i++) {
+			final HorizontalPanel panel = new HorizontalPanel();
+			final Label nameLabel = new Label(subscribedUser.get(i)
+					.getFirstName());
+			nameLabel.setStylePrimaryName("selectedObjectLabel");
+			final Button deleteButton = new Button("", new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					deleteSubscription(nameLabel.getText());
+					content.remove(panel);
+				}
+
+			});
+			deleteButton.getElement().setId("deleteButton");
+			panel.add(nameLabel);
+			panel.add(deleteButton);
+			content.add(panel);
+		}
 	}
 
 }

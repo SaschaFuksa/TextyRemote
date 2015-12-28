@@ -18,15 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class HashtagSubscriptionForm extends TextyForm {
 
-	public HashtagSubscriptionForm(String headline) {
-		super(headline);
-	}
-	
-	public HashtagSubscriptionForm(String headline, Vector<Hashtag> selectedHashtag) {
-		super(headline);
-		this.selectedHashtag = selectedHashtag;
-	}
-
+	private static Vector<Hashtag> subscribedHashtag = new Vector<Hashtag>();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label intro = new HTML(
@@ -36,8 +28,18 @@ public class HashtagSubscriptionForm extends TextyForm {
 	private Label warningLabel = new Label("");
 	private Label successLabel = new Label("");
 	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
-	private static Vector<Hashtag> subscribedHashtag = new Vector<Hashtag>();
-	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
+	private TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
+
+	public HashtagSubscriptionForm(String headline) {
+		super(headline);
+	}
+
+	public HashtagSubscriptionForm(String headline,
+			Vector<Hashtag> selectedHashtag) {
+		super(headline);
+		this.selectedHashtag = selectedHashtag;
+	}
 
 	public void addHashtagSubscriptions() {
 		String result = new String("");
@@ -45,27 +47,33 @@ public class HashtagSubscriptionForm extends TextyForm {
 		for (int i = 0; i < selectedHashtag.size(); i++) {
 			if (checkSubscription(selectedHashtag.get(i).getKeyword())) {
 				subscribedHashtag.add(selectedHashtag.get(i));
-				administration.createHashtagSubscription(selectedHashtag.get(i), new AsyncCallback<HashtagSubscription>() {
-					@Override
-					public void onFailure(Throwable caught) {
+				administration.createHashtagSubscription(
+						selectedHashtag.get(i),
+						new AsyncCallback<HashtagSubscription>() {
+							@Override
+							public void onFailure(Throwable caught) {
 
-					}
+							}
 
-					@Override
-					public void onSuccess(HashtagSubscription result) {
+							@Override
+							public void onSuccess(HashtagSubscription result) {
 
-					}
-				});
-				result = result + " '" + selectedHashtag.get(i).getKeyword() + "'";
+							}
+						});
+				result = result + " '" + selectedHashtag.get(i).getKeyword()
+						+ "'";
 			} else {
-				warning = warning + " '" + selectedHashtag.get(i).getKeyword() + "'";
+				warning = warning + " '" + selectedHashtag.get(i).getKeyword()
+						+ "'";
 			}
 		}
 		if (result != "") {
-			successLabel.setText("Hashtag" + result + " successful subscribed!");
+			successLabel
+					.setText("Hashtag" + result + " successful subscribed!");
 		}
 		if (warning != "") {
-			warningLabel.setText("Hashtag" + warning + " is already subscribed!");
+			warningLabel.setText("Hashtag" + warning
+					+ " is already subscribed!");
 		}
 
 	}
@@ -87,19 +95,22 @@ public class HashtagSubscriptionForm extends TextyForm {
 		for (int i = 0; i < subscribedHashtag.size(); i++) {
 			if (word.toString().equals(subscribedHashtag.get(i).getKeyword())) {
 				indexSelectedHashtag = i;
-				successLabel.setText("Subscribed user '#" + subscribedHashtag.get(i).getKeyword() + "' sucessful removed!");
+				successLabel.setText("Subscribed user '#"
+						+ subscribedHashtag.get(i).getKeyword()
+						+ "' sucessful removed!");
 				warningLabel.setText("");
-				administration.deleteHashtagSubscription(subscribedHashtag.get(i), new AsyncCallback<Void>() {
-					@Override
-					public void onFailure(Throwable caught) {
+				administration.deleteHashtagSubscription(
+						subscribedHashtag.get(i), new AsyncCallback<Void>() {
+							@Override
+							public void onFailure(Throwable caught) {
 
-					}
+							}
 
-					@Override
-					public void onSuccess(Void result) {
+							@Override
+							public void onSuccess(Void result) {
 
-					}
-				});
+							}
+						});
 			}
 		}
 
@@ -107,11 +118,42 @@ public class HashtagSubscriptionForm extends TextyForm {
 
 	}
 
+	@Override
+	protected void run() {
+
+		administration
+				.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
+					@Override
+					public void onFailure(Throwable caught) {
+
+					}
+
+					@Override
+					public void onSuccess(Vector<Hashtag> result) {
+						HashtagSubscriptionForm.subscribedHashtag = result;
+						addHashtagSubscriptions();
+						showSubscriptions();
+
+					}
+				});
+
+		warningLabel.setStylePrimaryName("errorLabel");
+		successLabel.setStylePrimaryName("successLabel");
+		scroll.setSize("250px", "110px");
+
+		this.add(intro);
+		this.add(errorLabel);
+		this.add(scroll);
+		this.add(warningLabel);
+		this.add(successLabel);
+
+	}
+
 	public void showSubscriptions() {
 		for (int i = 0; i < subscribedHashtag.size(); i++) {
 			final HorizontalPanel panel = new HorizontalPanel();
-			final Label keywordLabel = new Label("#" + subscribedHashtag.get(i)
-					.getKeyword());
+			final Label keywordLabel = new Label("#"
+					+ subscribedHashtag.get(i).getKeyword());
 			keywordLabel.setStylePrimaryName("selectedObjectLabel");
 			final Button deleteButton = new Button("", new ClickHandler() {
 				@Override
@@ -126,36 +168,6 @@ public class HashtagSubscriptionForm extends TextyForm {
 			panel.add(deleteButton);
 			content.add(panel);
 		}
-	}
-
-	@Override
-	protected void run() {
-		
-		administration.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-
-			}
-
-			@Override
-			public void onSuccess(Vector<Hashtag> result) {
-				HashtagSubscriptionForm.subscribedHashtag = result;
-				addHashtagSubscriptions();
-				showSubscriptions();
-
-			}
-		});
-		
-		warningLabel.setStylePrimaryName("errorLabel");
-		successLabel.setStylePrimaryName("successLabel");
-		scroll.setSize("250px", "110px");
-
-		this.add(intro);
-		this.add(errorLabel);
-		this.add(scroll);
-		this.add(warningLabel);
-		this.add(successLabel);
-
 	}
 
 }

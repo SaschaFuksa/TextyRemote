@@ -1,6 +1,5 @@
 package hdm.itprojekt.texty.client;
 
-//import hdm.itprojekt.texty.client.gui.TextyMenu;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
@@ -16,22 +15,48 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+class checkUserDataCallback implements AsyncCallback<Void> {
+
+	@Override
+	public void onFailure(Throwable caught) {
+
+	}
+
+	@Override
+	public void onSuccess(Void nothing) {
+
+	}
+}
+
 public class Texty implements EntryPoint {
 
+	private static LoginInfo loginInfo = null;
+	public static LoginInfo getLoginInfo() {
+		return loginInfo;
+	}
 	private VerticalPanel footerPanel = new VerticalPanel();
 	private Label footerLabel = new Label("About");
-	private static LoginInfo loginInfo = null;
 	private HorizontalPanel loginPanel = new HorizontalPanel();
 	private Label nickname = new Label();
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private TextyMenu menu = new TextyMenu();
+
 	private HomeForm home = new HomeForm("Home");
-	
+
+	private void createLoginPanel() {
+		signOutLink.setHref(loginInfo.getLogoutUrl());
+		nickname.setText(loginInfo.getEmailAddress());
+		loginPanel.add(signOutLink);
+		loginPanel.add(nickname);
+		RootPanel.get("Banner").add(loginPanel);
+	}
+
 	@Override
 	public void onModuleLoad() {
-		
-		TextyAdministrationAsync textyAdmin = ClientsideSettings.getTextyAdministration();
-		
+
+		TextyAdministrationAsync textyAdmin = ClientsideSettings
+				.getTextyAdministration();
+
 		textyAdmin.checkUserData(new checkUserDataCallback());
 
 		menu.execute();
@@ -69,29 +94,5 @@ public class Texty implements EntryPoint {
 			}
 		});
 
-	}
-	
-	public static LoginInfo getLoginInfo() {
-		return loginInfo;
-	}
-
-	private void createLoginPanel() {
-		signOutLink.setHref(loginInfo.getLogoutUrl());
-		nickname.setText(loginInfo.getEmailAddress());
-		loginPanel.add(signOutLink);
-		loginPanel.add(nickname);
-		RootPanel.get("Banner").add(loginPanel);
-	}
-}
-class checkUserDataCallback implements AsyncCallback<Void> {
-
-	@Override
-	public void onFailure(Throwable caught) {
-		
-	}
-
-	@Override
-	public void onSuccess(Void nothing) {
-		
 	}
 }

@@ -24,10 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class HashtagForm extends TextyForm {
 
-	public HashtagForm(String headline) {
-		super(headline);
-	}
-
+	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private VerticalPanel content = new VerticalPanel();
@@ -36,9 +33,9 @@ public class HashtagForm extends TextyForm {
 	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
-	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
-	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
+	private TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
 
 	private Button addButton = new Button("", new ClickHandler() {
 		@Override
@@ -72,6 +69,29 @@ public class HashtagForm extends TextyForm {
 				}
 			});
 
+	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		@Override
+		public void onKeyUp(KeyUpEvent event) {
+			errorLabel.setText("\0");
+			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				errorLabel.setText("\0");
+				String keyword = suggestBox.getText();
+				boolean alreadySelected = checkHashtag(keyword);
+				if (keyword == "") {
+					errorLabel.setText("Please select a hashtag!");
+				} else if (alreadySelected) {
+					errorLabel.setText("Hashtag is already selected!");
+				} else {
+					addHashtag(keyword);
+				}
+			}
+		}
+	};
+
+	public HashtagForm(String headline) {
+		super(headline);
+	}
+
 	public void addHashtag(String keyword) {
 		String name = keyword;
 		for (int i = 0; i < allHashtag.size(); i++) {
@@ -101,25 +121,6 @@ public class HashtagForm extends TextyForm {
 		errorLabel.setText("Hashtag is unknown!");
 	}
 
-	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
-		@Override
-		public void onKeyUp(KeyUpEvent event) {
-			errorLabel.setText("\0");
-			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				errorLabel.setText("\0");
-				String keyword = suggestBox.getText();
-				boolean alreadySelected = checkHashtag(keyword);
-				if (keyword == "") {
-					errorLabel.setText("Please select a hashtag!");
-				} else if (alreadySelected) {
-					errorLabel.setText("Hashtag is already selected!");
-				} else {
-					addHashtag(keyword);
-				}
-			}
-		}
-	};
-
 	public boolean checkHashtag(String keyword) {
 		String name = keyword;
 		for (int i = 0; i < selectedHashtag.size(); i++) {
@@ -143,19 +144,11 @@ public class HashtagForm extends TextyForm {
 		selectedHashtag.remove(indexSelectedHashtag);
 	}
 
-	private void setOracle() {
-		oracle.clear();
-		for (int i = 0; i < allHashtag.size(); i++) {
-			String keyword = new String(allHashtag.get(i).getKeyword());
-			oracle.add(keyword);
-		}
-	}
-
 	@Override
 	protected void run() {
-		
-		//TODO
-		class selectAllHashtagCallback implements AsyncCallback<Vector<Hashtag>> {
+
+		class selectAllHashtagCallback implements
+				AsyncCallback<Vector<Hashtag>> {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -168,7 +161,7 @@ public class HashtagForm extends TextyForm {
 				setOracle();
 			}
 		}
-		
+
 		administration.getAllHashtags(new selectAllHashtagCallback());
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
@@ -176,7 +169,7 @@ public class HashtagForm extends TextyForm {
 			@Override
 			public void onFocus(FocusEvent event) {
 				suggestBox.setText("");
-				
+
 			}
 		});
 
@@ -198,6 +191,14 @@ public class HashtagForm extends TextyForm {
 		this.add(scroll);
 		this.add(buttonPanel);
 
+	}
+
+	private void setOracle() {
+		oracle.clear();
+		for (int i = 0; i < allHashtag.size(); i++) {
+			String keyword = new String(allHashtag.get(i).getKeyword());
+			oracle.add(keyword);
+		}
 	}
 
 }

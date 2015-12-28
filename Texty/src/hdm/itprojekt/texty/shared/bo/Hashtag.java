@@ -1,20 +1,19 @@
 package hdm.itprojekt.texty.shared.bo;
 
 /**
- * Die Klasse stellt das Grundgerüst für alle Hashtags dar. 
+ * Die Klasse stellt das Grundgerüst für alle Hashtags dar.
  *
  */
 
 public class Hashtag extends BusinessObject {
-	
-	private static final long serialVersionUID = 1L;
-	private String keyword = "";	
 
-	
-	public Hashtag(){
-		
+	private static final long serialVersionUID = 1L;
+	private String keyword = "";
+
+	public Hashtag() {
+
 	}
-	
+
 	public Hashtag(String string) {
 		this.keyword = string;
 	}
@@ -26,7 +25,7 @@ public class Hashtag extends BusinessObject {
 	public String getKeyword() {
 		return keyword;
 	}
-	
+
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}

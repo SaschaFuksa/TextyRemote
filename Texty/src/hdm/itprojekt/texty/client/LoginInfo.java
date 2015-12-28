@@ -9,24 +9,24 @@ public class LoginInfo implements Serializable {
 	private String emailAddress;
 	private String nickname;
 
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
 	public String getLogoutUrl() {
 		return logoutUrl;
 	}
 
-	public void setLogoutUrl(String logoutUrl) {
-		this.logoutUrl = logoutUrl;
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getNickname() {
+		return nickname;
 	}
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public void setLogoutUrl(String logoutUrl) {
+		this.logoutUrl = logoutUrl;
 	}
 
 	public void setNickname(String nickname) {

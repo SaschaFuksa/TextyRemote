@@ -15,15 +15,15 @@ public class ConversationMapper {
 
 	private static ConversationMapper conversationMapper = null;
 
-	protected ConversationMapper() {
-
-	}
-
 	public static ConversationMapper conversationMapper() {
 		if (conversationMapper == null) {
 			conversationMapper = new ConversationMapper();
 		}
 		return conversationMapper;
+	}
+
+	protected ConversationMapper() {
+
 	}
 
 	public Conversation insert(Conversation conversation) {
@@ -220,9 +220,9 @@ public class ConversationMapper {
 				conversation.setDateOfCreation(rs.getTime("dateOfCreation"));
 
 				for (int i = 0; i < messageResult.size(); i++) {
-					if (messageResult.get(i).getConversationID() == conversation.getId()) {
-						message.addElement(messageResult
-								.get(i));
+					if (messageResult.get(i).getConversationID() == conversation
+							.getId()) {
+						message.addElement(messageResult.get(i));
 					}
 				}
 
