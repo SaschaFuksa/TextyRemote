@@ -168,7 +168,7 @@ div#Navigator .errorLabel {
 	width: 150px;
 }
 
-.selectedHashtagLabel{
+.selectedHashtagLabel {
 	margin-right: 10px;
 }
 
@@ -210,7 +210,6 @@ div#Navigator .errorLabel {
 	padding: 2px;
 	text-align: right;
 } */
-
 .conversationBody {
 	background-color: #ffffff;
 	color: #0080c0;
@@ -236,4 +235,20 @@ textarea {
 	resize: none;
 	width: 400px;
 	height: 200px;
+}
+
+.flexTable td {
+	color: #0080c0;
+	font-family: Texty;
+	font-size: 18px;
+	text-align: left;
+	height: 20px;
+}
+
+.gwt-TextBox {
+	color: #0080c0;
+	font-family: Texty;
+	font-size: 1.5em;
+	text-align: left;
+	height: 20px;
 }

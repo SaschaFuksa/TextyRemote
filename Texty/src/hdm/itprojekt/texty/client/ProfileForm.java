@@ -105,7 +105,10 @@ public class ProfileForm extends TextyForm {
 						lastname.getText(), new updateUserCallback());
 			}
 		});
-
+		
+		chatFlexTable.setStyleName("flexTable");
+		save.getElement().setId("sendButton");
+		
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Details").add(mainPanel);
