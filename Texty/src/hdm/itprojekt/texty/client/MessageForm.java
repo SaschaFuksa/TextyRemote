@@ -9,21 +9,20 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.Widget;
 
-@SuppressWarnings("deprecation")
 public class MessageForm extends TextyForm {
 
 	public MessageForm(String headline) {
@@ -54,6 +53,7 @@ public class MessageForm extends TextyForm {
 			.getTextyAdministration();
 
 	private Button addButton = new Button("", new ClickHandler() {
+		@Override
 		public void onClick(ClickEvent event) {
 			errorLabel.setText("\0");
 			String keyword = suggestBox.getText();
@@ -71,13 +71,16 @@ public class MessageForm extends TextyForm {
 	});
 
 	private Button sendButton = new Button("Send", new ClickHandler() {
+		@Override
 		public void onClick(ClickEvent event) {
 			administration.createConversation(textBox.getText(), recipientList,
 					selectedHashtag, new AsyncCallback<Conversation>() {
+						@Override
 						public void onFailure(Throwable caught) {
 
 						}
 
+						@Override
 						public void onSuccess(Conversation result) {
 							selectedHashtag.removeAllElements();
 							ClientsideSettings.getLogger().severe("Message is send!");
@@ -87,6 +90,7 @@ public class MessageForm extends TextyForm {
 	});
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		@Override
 		public void onKeyUp(KeyUpEvent event) {
 			errorLabel.setText("\0");
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -140,10 +144,12 @@ public class MessageForm extends TextyForm {
 		}
 		if (availability) {
 			administration.createHashtag(word, new AsyncCallback<Hashtag>() {
+				@Override
 				public void onFailure(Throwable caught) {
 
 				}
 
+				@Override
 				public void onSuccess(Hashtag result) {
 
 					MessageForm.selectedHashtag.add(result);
@@ -158,6 +164,7 @@ public class MessageForm extends TextyForm {
 		final Label keywordLabel = new Label(keyword);
 		panel.setStylePrimaryName("selectedHashtagLabel");
 		final Button deleteButton = new Button("", new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				deleteHashtag(keywordLabel.getText());
 				content.remove(panel);
@@ -215,13 +222,16 @@ public class MessageForm extends TextyForm {
 		}
 	}
 
+	@Override
 	protected void run() {
 
 		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
+			@Override
 			public void onFailure(Throwable caught) {
 
 			}
 
+			@Override
 			public void onSuccess(Vector<Hashtag> result) {
 				MessageForm.allHashtag = result;
 				setOracle();
@@ -230,15 +240,13 @@ public class MessageForm extends TextyForm {
 		});
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
-		suggestBox.addFocusListener(new FocusListener() {
-			public void onFocus(Widget arg1) {
+		suggestBox.getValueBox().addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
 				suggestBox.setText("");
 				errorLabel.setText("\0");
 				successLabel.setText("");
-			}
-
-			public void onLostFocus(Widget arg1) {
-
+				
 			}
 		});
 

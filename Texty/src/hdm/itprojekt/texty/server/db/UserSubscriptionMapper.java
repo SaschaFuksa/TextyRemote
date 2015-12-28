@@ -1,9 +1,13 @@
 package hdm.itprojekt.texty.server.db;
 
-import java.sql.*;
-import java.util.Vector;
+import hdm.itprojekt.texty.shared.bo.User;
+import hdm.itprojekt.texty.shared.bo.UserSubscription;
 
-import hdm.itprojekt.texty.shared.bo.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 
 public class UserSubscriptionMapper {
 

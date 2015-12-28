@@ -27,6 +27,7 @@ public class Texty implements EntryPoint {
 	private TextyMenu menu = new TextyMenu();
 	private HomeForm home = new HomeForm("Home");
 	
+	@Override
 	public void onModuleLoad() {
 		
 		TextyAdministrationAsync textyAdmin = ClientsideSettings.getTextyAdministration();
@@ -40,9 +41,11 @@ public class Texty implements EntryPoint {
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
+					@Override
 					public void onFailure(Throwable error) {
 					}
 
+					@Override
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;
 						createLoginPanel();

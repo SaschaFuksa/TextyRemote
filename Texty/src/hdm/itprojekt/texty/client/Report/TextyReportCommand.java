@@ -17,6 +17,7 @@ public class TextyReportCommand {
 	public Command getCommand(String moduleName) {
 		final String name = moduleName;
 		Command cmd = new Command() {
+			@Override
 			public void execute() {
 				RootPanel.get("Details").clear();
 				RootPanel.get("Navigator").clear();

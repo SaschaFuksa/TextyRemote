@@ -1,17 +1,11 @@
 package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.bo.Conversation;
-import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.cell.client.NumberCell;
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
@@ -35,6 +29,7 @@ public class TimelineTableForm extends TextyForm {
 	private Vector<User> userList = new Vector<User>();
 	private Vector<Conversation> allPublicConversationList = new Vector<Conversation>();
 
+	@Override
 	public void run() {
 
 		/*// Spalte fuer die Conversationliste der jeweiligen ausgewählten User
@@ -74,6 +69,7 @@ public class TimelineTableForm extends TextyForm {
 		cellTable.setSelectionModel(singleSelectionModel);
 		singleSelectionModel
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					@Override
 					public void onSelectionChange(SelectionChangeEvent event) {
 						User user = singleSelectionModel.getSelectedObject();
 						if (user != null) {

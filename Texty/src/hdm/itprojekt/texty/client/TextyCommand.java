@@ -1,7 +1,5 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.Report.SubscriptionReport;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -17,6 +15,7 @@ public class TextyCommand {
 	public Command getCommand(String moduleName) {
 		final String name = moduleName;
 		Command cmd = new Command() {
+			@Override
 			public void execute() {
 				RootPanel.get("Details").clear();
 				RootPanel.get("Navigator").clear();

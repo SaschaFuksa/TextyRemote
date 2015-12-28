@@ -3,7 +3,6 @@ package hdm.itprojekt.texty.client;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
-import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
 
@@ -47,10 +46,12 @@ public class HashtagSubscriptionForm extends TextyForm {
 			if (checkSubscription(selectedHashtag.get(i).getKeyword())) {
 				subscribedHashtag.add(selectedHashtag.get(i));
 				administration.createHashtagSubscription(selectedHashtag.get(i), new AsyncCallback<HashtagSubscription>() {
+					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 
+					@Override
 					public void onSuccess(HashtagSubscription result) {
 
 					}
@@ -89,10 +90,12 @@ public class HashtagSubscriptionForm extends TextyForm {
 				successLabel.setText("Subscribed user '#" + subscribedHashtag.get(i).getKeyword() + "' sucessful removed!");
 				warningLabel.setText("");
 				administration.deleteHashtagSubscription(subscribedHashtag.get(i), new AsyncCallback<Void>() {
+					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 
+					@Override
 					public void onSuccess(Void result) {
 
 					}
@@ -111,6 +114,7 @@ public class HashtagSubscriptionForm extends TextyForm {
 					.getKeyword());
 			keywordLabel.setStylePrimaryName("selectedObjectLabel");
 			final Button deleteButton = new Button("", new ClickHandler() {
+				@Override
 				public void onClick(ClickEvent event) {
 					deleteSubscription(keywordLabel.getText());
 					content.remove(panel);
@@ -124,13 +128,16 @@ public class HashtagSubscriptionForm extends TextyForm {
 		}
 	}
 
+	@Override
 	protected void run() {
 		
 		administration.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
+			@Override
 			public void onFailure(Throwable caught) {
 
 			}
 
+			@Override
 			public void onSuccess(Vector<Hashtag> result) {
 				HashtagSubscriptionForm.subscribedHashtag = result;
 				addHashtagSubscriptions();

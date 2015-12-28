@@ -10,13 +10,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -31,6 +28,7 @@ public class TextyReport implements EntryPoint {
 	private Anchor signOutLink = new Anchor("Sign Out");
 	private TextyReportMenu reportMenu = new TextyReportMenu();
 	
+	@Override
 	public void onModuleLoad() {
 		
 		reportMenu.execute();
@@ -38,9 +36,11 @@ public class TextyReport implements EntryPoint {
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
+					@Override
 					public void onFailure(Throwable error) {
 					}
 
+					@Override
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;
 						createLoginPanel();

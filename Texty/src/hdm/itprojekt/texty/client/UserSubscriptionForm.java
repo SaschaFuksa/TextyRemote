@@ -45,10 +45,12 @@ public class UserSubscriptionForm extends TextyForm {
 		for (int i = 0; i < selectedUser.size(); i++) {
 			if (checkSubscription(selectedUser.get(i).getFirstName())) {
 				administration.createUserSubscription(selectedUser.get(i), new AsyncCallback<UserSubscription>() {
+					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 
+					@Override
 					public void onSuccess(UserSubscription result) {
 
 					}
@@ -87,10 +89,12 @@ public class UserSubscriptionForm extends TextyForm {
 				successLabel.setText("Subscribed user '" + subscribedUser.get(i).getFirstName() + "' sucessful removed!");
 				warningLabel.setText("");
 				administration.deleteUserSubscription(subscribedUser.get(i), new AsyncCallback<Void>() {
+					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 
+					@Override
 					public void onSuccess(Void result) {
 						
 					}
@@ -109,6 +113,7 @@ public class UserSubscriptionForm extends TextyForm {
 					.getFirstName());
 			nameLabel.setStylePrimaryName("selectedObjectLabel");
 			final Button deleteButton = new Button("", new ClickHandler() {
+				@Override
 				public void onClick(ClickEvent event) {
 					deleteSubscription(nameLabel.getText());
 					content.remove(panel);
@@ -122,13 +127,16 @@ public class UserSubscriptionForm extends TextyForm {
 		}
 	}
 
+	@Override
 	protected void run() {
 		
 		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
+			@Override
 			public void onFailure(Throwable caught) {
 
 			}
 
+			@Override
 			public void onSuccess(Vector<User> result) {
 				UserSubscriptionForm.subscribedUser = result;
 				addUserSubscriptions();

@@ -1,15 +1,15 @@
 package hdm.itprojekt.texty.shared;
 
 
-import java.util.Date;
-import java.util.Vector;
-
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 import hdm.itprojekt.texty.shared.bo.UserSubscription;
+
+import java.util.Date;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

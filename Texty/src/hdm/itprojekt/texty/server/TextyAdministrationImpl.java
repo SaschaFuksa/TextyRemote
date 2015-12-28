@@ -1,12 +1,23 @@
 package hdm.itprojekt.texty.server;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
+import hdm.itprojekt.texty.server.db.ConversationMapper;
+import hdm.itprojekt.texty.server.db.HashtagMapper;
+import hdm.itprojekt.texty.server.db.HashtagSubscriptionMapper;
+import hdm.itprojekt.texty.server.db.MessageMapper;
+import hdm.itprojekt.texty.server.db.UserMapper;
+import hdm.itprojekt.texty.server.db.UserSubscriptionMapper;
 import hdm.itprojekt.texty.shared.TextyAdministration;
-import hdm.itprojekt.texty.shared.bo.*;
-import hdm.itprojekt.texty.server.db.*;
+import hdm.itprojekt.texty.shared.bo.Conversation;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
+import hdm.itprojekt.texty.shared.bo.Message;
+import hdm.itprojekt.texty.shared.bo.User;
+import hdm.itprojekt.texty.shared.bo.UserSubscription;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Vector;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		TextyAdministration {
@@ -102,6 +113,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.mMapper.insert(m);
 	}
 
+	@Override
 	public Message addMessageToConversation(Conversation c, String text,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory

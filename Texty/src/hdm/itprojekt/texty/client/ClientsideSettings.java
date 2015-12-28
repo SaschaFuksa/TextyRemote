@@ -1,10 +1,5 @@
 package hdm.itprojekt.texty.client;
 
-import java.util.logging.Logger;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import hdm.itprojekt.texty.shared.CommonSettings;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
@@ -12,6 +7,11 @@ import hdm.itprojekt.texty.shared.ReportGenerator;
 import hdm.itprojekt.texty.shared.ReportGeneratorAsync;
 import hdm.itprojekt.texty.shared.TextyAdministration;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
+
+import java.util.logging.Logger;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ClientsideSettings extends CommonSettings {
 

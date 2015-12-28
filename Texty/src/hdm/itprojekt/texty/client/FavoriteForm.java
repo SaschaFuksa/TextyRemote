@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.client;
 
 import java.util.Arrays;
 import java.util.List;
+
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
@@ -30,6 +31,7 @@ public class FavoriteForm extends TextyForm {
 	private static final List<String> hashtags = Arrays.asList("VfB", "BVB",
 			"FCB", "Pizza", "SaureKutteln");
 
+	@Override
 	protected void run() {
 
 		// Sorry ;-) Code-Clones müssen natürlich noch behoben werden
@@ -49,6 +51,7 @@ public class FavoriteForm extends TextyForm {
 		cellListUser.setSelectionModel(selectionModelUser);
 		selectionModelUser
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					@Override
 					public void onSelectionChange(SelectionChangeEvent event) {
 						String selected = selectionModelUser
 								.getSelectedObject();
@@ -64,6 +67,7 @@ public class FavoriteForm extends TextyForm {
 		cellListHashtags.setSelectionModel(selectionModelHashtags);
 		selectionModelHashtags
 				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					@Override
 					public void onSelectionChange(SelectionChangeEvent event) {
 						String selected = selectionModelHashtags
 								.getSelectedObject();

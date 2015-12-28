@@ -1,18 +1,19 @@
 package hdm.itprojekt.texty.client;
 
-import java.util.Vector;
-
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -20,9 +21,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-@SuppressWarnings("deprecation")
 public class CommunityForm extends TextyForm {
 
 	public CommunityForm(String headline) {
@@ -43,6 +42,7 @@ public class CommunityForm extends TextyForm {
 			.getTextyAdministration();
 
 	private Button addButton = new Button("", new ClickHandler() {
+		@Override
 		public void onClick(ClickEvent event) {
 			errorLabel.setText("\0");
 			if (suggestBox.getText() == "") {
@@ -66,6 +66,7 @@ public class CommunityForm extends TextyForm {
 
 	private Button subscribeButton = new Button("Subscribe",
 			new ClickHandler() {
+				@Override
 				public void onClick(ClickEvent event) {
 					if (selectedUser.size() < 1) {
 						errorLabel.setText("Please select a user!");
@@ -80,6 +81,7 @@ public class CommunityForm extends TextyForm {
 
 	private Button sendMessageButton = new Button("Send Message",
 			new ClickHandler() {
+				@Override
 				public void onClick(ClickEvent event) {
 					TextyForm message = new MessageForm("New Message",
 							selectedUser);
@@ -99,6 +101,7 @@ public class CommunityForm extends TextyForm {
 				final Label nameLabel = new Label(user.getFirstName());
 				nameLabel.setStylePrimaryName("selectedObjectLabel");
 				final Button deleteButton = new Button("", new ClickHandler() {
+					@Override
 					public void onClick(ClickEvent event) {
 						deleteUser(nameLabel.getText());
 						content.remove(panel);
@@ -117,7 +120,8 @@ public class CommunityForm extends TextyForm {
 	}
 	
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
- 		public void onKeyUp(KeyUpEvent event) {
+ 		@Override
+		public void onKeyUp(KeyUpEvent event) {
  			errorLabel.setText("\0");
  			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
  				errorLabel.setText("\0");
@@ -215,34 +219,38 @@ public class CommunityForm extends TextyForm {
 		}
 	}
 
+	@Override
 	protected void run() {
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
-		suggestBox.addFocusListener(new FocusListener() {
-			public void onFocus(Widget arg1) {
+		suggestBox.getValueBox().addFocusHandler(new FocusHandler() {
+
+			@Override
+			public void onFocus(FocusEvent event) {
 				suggestBox.setText("");
-			}
-
-			public void onLostFocus(Widget arg1) {
-
+				
 			}
 		});
 
 		suggestBox.setText("Search for user");
 
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
+			@Override
 			public void onFailure(Throwable caught) {
 
 			}
 
+			@Override
 			public void onSuccess(Vector<User> result) {
 				CommunityForm.allUser = result;
 				
 				administration.getCurrentUser(new AsyncCallback<User>() {
+					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 
+					@Override
 					public void onSuccess(User result) {
 						removeCurrentUser(result);
 						setOracle();

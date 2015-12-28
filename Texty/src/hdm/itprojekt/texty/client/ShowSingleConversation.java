@@ -1,9 +1,8 @@
 package hdm.itprojekt.texty.client;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Label;
-
 import hdm.itprojekt.texty.shared.bo.Conversation;
+
+import com.google.gwt.user.client.ui.Label;
 
 public class ShowSingleConversation extends TextyForm {
 
@@ -25,6 +24,7 @@ public class ShowSingleConversation extends TextyForm {
 		}
 	}
 	
+	@Override
 	protected void run() {
 		
 		showAllMessages();

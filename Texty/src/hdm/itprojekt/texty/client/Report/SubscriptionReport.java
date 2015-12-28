@@ -1,21 +1,12 @@
 package hdm.itprojekt.texty.client.Report;
 
-import hdm.itprojekt.texty.client.ClientsideSettings;
 import hdm.itprojekt.texty.client.TextyForm;
-import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.User;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -36,6 +27,7 @@ public class SubscriptionReport extends TextyForm{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public void run() {
 		// Create UI
 		

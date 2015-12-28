@@ -1,15 +1,13 @@
 package hdm.itprojekt.texty.client;
 
-import java.util.Vector;
-
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.shared.DateTimeFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -69,6 +67,7 @@ public class ConversationForm extends TextyForm {
 			wrapper.add(conversationPanel);
 			wrapper.addClickHandler(new ClickHandler() {
 
+				@Override
 				public void onClick(ClickEvent event) {
 					RootPanel.get("Details").clear();
 					RootPanel.get("Details").add(new ShowSingleConversation("Private Conversation", conversation));
@@ -115,14 +114,17 @@ public class ConversationForm extends TextyForm {
 		return messageText;
 	}
 
+	@Override
 	protected void run() {
 
 		administration
 				.getAllConversationsFromUser(new AsyncCallback<Vector<Conversation>>() {
+					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 
+					@Override
 					public void onSuccess(Vector<Conversation> result) {
 						ConversationForm.conList = result;
 						showConversation();

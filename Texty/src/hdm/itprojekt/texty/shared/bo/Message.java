@@ -1,6 +1,6 @@
 package hdm.itprojekt.texty.shared.bo;
 
-import java.util.*;
+import java.util.Vector;
 
 public class Message extends BusinessObject {
 

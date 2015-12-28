@@ -1,15 +1,19 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
+
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -17,12 +21,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
-import hdm.itprojekt.texty.shared.bo.Hashtag;
-
-@SuppressWarnings("deprecation")
 public class HashtagForm extends TextyForm {
 
 	public HashtagForm(String headline) {
@@ -42,6 +41,7 @@ public class HashtagForm extends TextyForm {
 	private TextyAdministrationAsync administration = ClientsideSettings.getTextyAdministration();
 
 	private Button addButton = new Button("", new ClickHandler() {
+		@Override
 		public void onClick(ClickEvent event) {
 			errorLabel.setText("\0");
 			String keyword = suggestBox.getText();
@@ -59,6 +59,7 @@ public class HashtagForm extends TextyForm {
 
 	private Button subscribeButton = new Button("Subscribe",
 			new ClickHandler() {
+				@Override
 				public void onClick(ClickEvent event) {
 					if (selectedHashtag.size() < 1) {
 						errorLabel.setText("Please select a hashtag!");
@@ -81,6 +82,7 @@ public class HashtagForm extends TextyForm {
 				final Label keywordLabel = new Label("#" + keyword);
 				keywordLabel.setStylePrimaryName("selectedObjectLabel");
 				final Button deleteButton = new Button("", new ClickHandler() {
+					@Override
 					public void onClick(ClickEvent event) {
 						deleteHashtag(keywordLabel.getText());
 						content.remove(panel);
@@ -100,6 +102,7 @@ public class HashtagForm extends TextyForm {
 	}
 
 	private KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
+		@Override
 		public void onKeyUp(KeyUpEvent event) {
 			errorLabel.setText("\0");
 			if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -148,15 +151,18 @@ public class HashtagForm extends TextyForm {
 		}
 	}
 
+	@Override
 	protected void run() {
 		
 		//TODO
 		class selectAllHashtagCallback implements AsyncCallback<Vector<Hashtag>> {
 
+			@Override
 			public void onFailure(Throwable caught) {
 
 			}
 
+			@Override
 			public void onSuccess(Vector<Hashtag> allHashtag) {
 				HashtagForm.allHashtag = allHashtag;
 				setOracle();
@@ -166,13 +172,11 @@ public class HashtagForm extends TextyForm {
 		administration.getAllHashtags(new selectAllHashtagCallback());
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
-		suggestBox.addFocusListener(new FocusListener() {
-			public void onFocus(Widget arg1) {
+		suggestBox.getValueBox().addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
 				suggestBox.setText("");
-			}
-
-			public void onLostFocus(Widget arg1) {
-				suggestBox.setText("Search for hashtags");
+				
 			}
 		});
 
