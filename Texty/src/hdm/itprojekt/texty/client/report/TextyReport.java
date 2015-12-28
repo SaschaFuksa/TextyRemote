@@ -1,4 +1,4 @@
-package hdm.itprojekt.texty.client.Report;
+package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.client.Footer;
 import hdm.itprojekt.texty.client.LoginInfo;

@@ -1,4 +1,4 @@
-package hdm.itprojekt.texty.client.Report;
+package hdm.itprojekt.texty.client.report;
 
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RootPanel;
