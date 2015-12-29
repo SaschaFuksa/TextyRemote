@@ -248,6 +248,7 @@ public class MessageMapper {
 					.executeQuery("SELECT DISTINCT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message INNER JOIN textydb.receiver ON message.messageId = receiver.messageId "
 							+ "WHERE author_userId = "
 							+ currentuser.getId()
+							+ " AND message.visibility = '1' "
 							+ " OR receiver_userId = "
 							+ currentuser.getId()
 							+ " AND message.visibility = '1' ");
