@@ -231,10 +231,38 @@ div#Navigator .errorLabel {
 	padding: 3px;
 }
 
+.receiverPanel {
+	background-color: #80bfff;
+	border-radius: 10px;
+	color: #ffffff;
+	margin-right: 3px;
+	padding: 3px;
+}
+
+.authorPanel {
+	color: #ffffff;
+	font-weight: bold;
+	margin-right: 3px;
+	padding: 3px;
+}
+
+.senderPanel {
+	background-color: #003399;
+	border-radius: 10px;
+	color: #ffffff;
+	margin-right: 3px;
+	padding: 3px;
+	float: right;
+}
+
+.buttonPanel {
+	float: right;
+}
+
 textarea {
 	resize: none;
 	width: 400px;
-	height: 200px;
+	height: 150px;
 }
 
 .flexTable td {
