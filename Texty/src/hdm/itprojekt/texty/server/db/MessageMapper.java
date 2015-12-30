@@ -28,18 +28,13 @@ public class MessageMapper {
 	public void delete(Message message) {
 		Connection con = DBConnection.connection();
 
-		int stateDelete = 0;
-		if (message.isVisible()) {
-			stateDelete = 1;
-		}
-
 		try {
 			Statement stmt = con.createStatement();
 			// The visibilty of the Message will be changed and users can not
 			// see it anymore
 			// TODO: Boolean Wert umwandeln für die DB? Überprüfen!
 			stmt.executeUpdate("UPDATE textydb.message SET message.visibility = "
-					+ stateDelete + "WHERE messageId = " + message.getId());
+					+ 0 + " WHERE messageId = " + message.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -425,7 +420,7 @@ public class MessageMapper {
 
 	public Message update(Message message) {
 		Connection con = DBConnection.connection();
-
+		
 		try {
 			Statement stmt = con.createStatement();
 

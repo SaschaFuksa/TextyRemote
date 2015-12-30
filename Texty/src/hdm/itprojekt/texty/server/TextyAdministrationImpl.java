@@ -298,7 +298,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			throws IllegalArgumentException {
 		conversation.removeMessageFromConversation(message);
 		message.setVisible(false);
-		this.getmMapper().update(message);
+		this.getmMapper().delete(message);
 
 	}
 
