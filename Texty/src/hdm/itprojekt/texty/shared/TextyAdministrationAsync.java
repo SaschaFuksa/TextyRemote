@@ -76,4 +76,7 @@ public interface TextyAdministrationAsync {
 	void updateUserData(String firstName, String lastName,
 			AsyncCallback<Void> callback);
 
+	void getAllSubscribedUsersFromUser(User selectedUser,
+			AsyncCallback<Vector<User>> callback);
+
 }
