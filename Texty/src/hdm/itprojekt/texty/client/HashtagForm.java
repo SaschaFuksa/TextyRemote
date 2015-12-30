@@ -147,22 +147,20 @@ public class HashtagForm extends TextyForm {
 	@Override
 	protected void run() {
 
-		class selectAllHashtagCallback implements
-				AsyncCallback<Vector<Hashtag>> {
-
+		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
 			@Override
 			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
 
 			}
-
+			
 			@Override
-			public void onSuccess(Vector<Hashtag> allHashtag) {
-				HashtagForm.allHashtag = allHashtag;
+			public void onSuccess(Vector<Hashtag> result) {
+				HashtagForm.allHashtag = result;
 				setOracle();
-			}
-		}
 
-		administration.getAllHashtags(new selectAllHashtagCallback());
+			}
+		});
 
 		suggestBox.addKeyUpHandler(suggestBoxHandler);
 		suggestBox.getValueBox().addFocusHandler(new FocusHandler() {
