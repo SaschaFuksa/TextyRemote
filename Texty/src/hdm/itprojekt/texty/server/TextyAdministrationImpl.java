@@ -81,11 +81,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setText(text);
 		m.setAuthor(currentUser);
 		m.setVisible(true);
-		
-		if (c.getLastMessage().getAuthor().getId() != currentUser.getId()){
+
+		if (c.getLastMessage().getAuthor().getId() != currentUser.getId()) {
 			m.addReceivers(c.getLastMessage().getAuthor());
-			for (User receiver : c.getLastMessage().getListOfReceivers()){
-				if(receiver.getId() != currentUser.getId()){
+			for (User receiver : c.getLastMessage().getListOfReceivers()) {
+				if (receiver.getId() != currentUser.getId()) {
 					m.addReceivers(receiver);
 				}
 			}
@@ -96,7 +96,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		m.setListOfHashtag(listOfHashtag);
 		m.setConversationID(c.getId());
 		c.addMessageToConversation(this.mMapper.insert(m));
-		
+
 		return c;
 	}
 
@@ -427,6 +427,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return this.hsMapper.selectAllSubscribedHashtags(us);
 	}
 
+	public Vector<Hashtag> getAllSubscribedHashtagsFromUser(User selectedUser)
+			throws IllegalArgumentException {
+		return this.hsMapper.selectAllSubscribedHashtags(selectedUser);
+	}
+
 	/**
 	 * Methode zum auslesen aller Nutzerabonnements des eingeloggten Benutzers
 	 * 
@@ -440,9 +445,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		User us = this.uMapper.findByEmail(user.getEmail());
 		return this.usMapper.selectAllSubscribedUsers(us);
 	}
-	
+
 	@Override
-	public Vector<User> getAllSubscribedUsersFromUser(User selectedUser) throws IllegalArgumentException {
+	public Vector<User> getAllSubscribedUsersFromUser(User selectedUser)
+			throws IllegalArgumentException {
 		return this.usMapper.selectAllSubscribedUsers(selectedUser);
 	}
 
