@@ -6,6 +6,7 @@ import hdm.itprojekt.texty.client.ClientsideSettings;
 import hdm.itprojekt.texty.client.CommunityForm;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,7 +31,7 @@ public class SubscriptionReport extends TextyForm {
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private Button Usersubscriptions;
-	private Button Hashtagsubscriptions = new Button("Hashtagsubscriptions");
+	private Button Hashtagsubscriptions ;
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 	private static Vector<User> allUser = new Vector<User>();
@@ -59,7 +60,29 @@ public class SubscriptionReport extends TextyForm {
 					@Override
 					public void onSuccess(Vector<User> result) {
 						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLReportGenerator.generateUserSubscriptionReport(result));
+						RootPanel.get("Details").add(HTMLUserReport.generateUserSubscriptionReport(result));
+					}
+				});
+			};
+		});
+		
+		Hashtagsubscriptions = new Button("Hashtagsubscriptions", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				String nickName = getNickName(suggestBox.getText());
+				User user = getUserOutOfAllUser(nickName);
+				
+				// 
+				administration.getAllSubscribedHashtagsFromUser(user, new AsyncCallback<Vector<Hashtag>>() {
+					@Override
+					public void onFailure(Throwable caught) {
+
+					}
+
+					@Override
+					public void onSuccess(Vector<Hashtag> result) {
+						RootPanel.get("Details").clear();
+						RootPanel.get("Details").add(HTMLHashtagReport.generateHashtagSubscriptionReport(result));
 					}
 				});
 			};

@@ -1,16 +1,15 @@
 package hdm.itprojekt.texty.client.report;
 
-import hdm.itprojekt.texty.shared.bo.User;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 
 import java.util.Date;
 import java.util.Vector;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.HTML;
 
+public class HTMLHashtagReport {
 
-public class HTMLReportGenerator {
-	
 	private static String generateReportHead() {
 		return "<html><head><title></title></head><body>";
 	}
@@ -19,7 +18,7 @@ public class HTMLReportGenerator {
 		return currentReport + "</body></html>";
 	}
 	
-	public static HTML generateUserSubscriptionReport(Vector<User> users) {
+	public static HTML generateHashtagSubscriptionReport(Vector<Hashtag> hashtags) {
 		String report = generateReportHead();
 		
 		report += "<div>";
@@ -28,12 +27,12 @@ public class HTMLReportGenerator {
 	    // A custom date format
 	    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy.MM.dd HH:mm:ss");
 
-		report += "Usersubscriptionreport generated at " + fmt.format(today) + "<br>";
+		report += "Hashtagsubscriptionreport generated at " + fmt.format(today) + "<br>";
 		
-		report += "<table><tr><th>Vorname</th><th>E-Mail</th></tr>";
+		report += "<table><tr><th>Hashtag</th></tr>";
 		
-		for(User user : users) {
-			report += "<tr><td>" + user.getFirstName() + "</td><td>" + user.getEmail() + "</td></tr>";
+		for(Hashtag hashtag : hashtags) {
+			report += "<tr><td>"+ "#" + hashtag.getKeyword() + "</td></tr>";
 		}
 		
 		report += "</table>";
@@ -43,4 +42,5 @@ public class HTMLReportGenerator {
 		report = generateReportEnd(report);
 		return new HTML(report);
 	}
+	
 }
