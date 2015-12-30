@@ -28,7 +28,7 @@ public class SingleConversationViewer extends TextyForm {
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private FlexTable chatFlexTable = new FlexTable();
 	private MessageForm message = new MessageForm();
-	private Conversation conversation = null;
+	private static Conversation conversation = null;
 	private static User currentUser = null;
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
@@ -39,7 +39,7 @@ public class SingleConversationViewer extends TextyForm {
 
 	public SingleConversationViewer(String headline, Conversation conversation) {
 		super(headline);
-		this.conversation = conversation;
+		SingleConversationViewer.conversation = conversation;
 	}
 
 	@Override
@@ -63,17 +63,21 @@ public class SingleConversationViewer extends TextyForm {
 			public void onClick(ClickEvent event) {
 				administration.addMessageToConversation(conversation,
 						message.getText(), message.getHashtag(),
-						new AsyncCallback<Message>() {
+						new AsyncCallback<Conversation>() {
 							@Override
 							public void onFailure(Throwable caught) {
 								LOG.severe("Error: " + caught.getMessage());
 							}
 
 							@Override
-							public void onSuccess(Message result) {
+							public void onSuccess(Conversation result) {
 								LOG.info("Success :"
 										+ result.getClass().getSimpleName());
 								message.clearSelectedHashtag();
+								RootPanel.get("Details").clear();
+								RootPanel.get("Details").add(
+										new SingleConversationViewer(
+												"Private Conversation", result));
 							}
 						});
 			}

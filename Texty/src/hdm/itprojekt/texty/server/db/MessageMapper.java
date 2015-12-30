@@ -132,10 +132,6 @@ public class MessageMapper {
 
 	public Message insert(Message message) {
 		Connection con = DBConnection.connection();
-		int state = 0;
-		if (message.isVisible()) {
-			state = 1;
-		}
 
 		try {
 			Statement stmt = con.createStatement();
@@ -162,7 +158,7 @@ public class MessageMapper {
 						+ "'"
 						+ ", "
 						+ "'"
-						+ message.getText() + "'" + ", " + state + ")");
+						+ message.getText() + "'" + ", " + 1 + ")");
 			}
 
 			Statement stmtReceiver = con.createStatement();

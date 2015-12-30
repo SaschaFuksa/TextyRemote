@@ -16,7 +16,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("administration")
 public interface TextyAdministration extends RemoteService {
 
-	public Message addMessageToConversation(Conversation c, String text,
+	public Conversation addMessageToConversation(Conversation c, String text,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException;
 
 	public void checkUserData() throws IllegalArgumentException;

@@ -70,7 +70,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message addMessageToConversation(Conversation c, String text,
+	public Conversation addMessageToConversation(Conversation c, String text,
 			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -80,19 +80,24 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Message m = new Message();
 		m.setText(text);
 		m.setAuthor(currentUser);
-		for (int i = 0; c.getListOfMessage().size() > i; i++) {
-			if (c.getListOfMessage().get(i).getAuthor().getId() == currentUser
-					.getId()) {
-				m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
+		m.setVisible(true);
+		
+		if (c.getLastMessage().getAuthor().getId() != currentUser.getId()){
+			m.addReceivers(c.getLastMessage().getAuthor());
+			for (User receiver : c.getLastMessage().getListOfReceivers()){
+				if(receiver.getId() != currentUser.getId()){
+					m.addReceivers(receiver);
+				}
 			}
+		} else {
+			m.setListOfReceivers(c.getLastMessage().getListOfReceivers());
 		}
 
 		m.setListOfHashtag(listOfHashtag);
-		m.setId(1);
-		m.setConversationID(1);
-		c.addMessageToConversation(m);
-
-		return this.mMapper.insert(m);
+		m.setConversationID(c.getId());
+		c.addMessageToConversation(this.mMapper.insert(m));
+		
+		return c;
 	}
 
 	/*
