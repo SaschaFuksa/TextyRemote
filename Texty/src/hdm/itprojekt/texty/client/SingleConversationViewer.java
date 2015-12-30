@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Conversation;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
@@ -9,7 +10,6 @@ import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -106,7 +106,6 @@ public class SingleConversationViewer extends TextyForm {
 				text.setStylePrimaryName("senderPanel");
 				messageTable.setStylePrimaryName("senderPanel");
 				Button deleteButton = new Button("");
-				Button editButton = new Button("");
 				deleteButton.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
@@ -129,6 +128,7 @@ public class SingleConversationViewer extends TextyForm {
 										"Private Conversation", conversation));
 					}
 				});
+				Button editButton = new Button("");
 				buttonPanel.setStylePrimaryName("buttonPanel");
 				deleteButton.getElement().setId("deleteButton");
 				editButton.getElement().setId("editButton");
@@ -138,44 +138,47 @@ public class SingleConversationViewer extends TextyForm {
 				messageTable.setWidget(0, 1, buttonPanel);
 				messageTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 				messageTable.setWidget(1, 0, text);
+				
+				if (message.getListOfHashtag().size() > 0){
+					Label hashtagLabel = new Label();
+					String hashtagList = new String();
+					for (Hashtag hashtag : message.getListOfHashtag()){
+						hashtagList = hashtagList + "#" + hashtag.getKeyword() + " ";
+					}
+					
+					hashtagLabel.setText(hashtagList);
+					hashtagLabel.setStylePrimaryName("senderPanel");
+					messageTable.getFlexCellFormatter().setColSpan(2, 0, 2);
+					messageTable.setWidget(2, 0, hashtagLabel);
+				}
+				
 				chatFlexTable.setWidget(i, 1, messageTable);
-			} else {
+				
+			} 
+			else {
 				author.setText(conversation.getListOfMessage().get(i)
 						.getAuthor().getFirstName());
 				text.setStylePrimaryName("receiverPanel");
 				messageTable.setStylePrimaryName("receiverPanel");
 				messageTable.setWidget(0, 0, author);
 				messageTable.setWidget(1, 0, text);
+				
+				if (message.getListOfHashtag().size() > 0){
+					Label hashtagLabel = new Label();
+					String hashtagList = new String();
+					for (Hashtag hashtag : message.getListOfHashtag()){
+						hashtagList = hashtagList + "#" + hashtag.getKeyword() + " ";
+					}
+					
+					hashtagLabel.setText(hashtagList);
+					hashtagLabel.setStylePrimaryName("receiverPanel");
+					messageTable.getFlexCellFormatter().setColSpan(2, 0, 2);
+					messageTable.setWidget(2, 0, hashtagLabel);
+				}
+				
 				chatFlexTable.setWidget(i, 0, messageTable);
 			}
-			
-			// HorizontalPanel header = new HorizontalPanel();
-			// VerticalPanel panel = new VerticalPanel();
-			// Label text = new
-			// Label(conversation.getListOfMessage().get(i).getText());
-			// Label author = new Label();
-			// author.setStylePrimaryName("authorPanel");
-			// header.add(author);
-			// panel.add(header);
-			// panel.add(text);
-			//
-			// if (conversation.getListOfMessage().get(i).getAuthor().getId() ==
-			// currentUser.getId()){
-			// author.setText("You");
-			// text.setStylePrimaryName("senderPanel");
-			// panel.setStylePrimaryName("senderPanel");
-			// chatFlexTable.setWidget(i, 2, panel);
-			// Button delete = new Button("x");
-			// Button edit = new Button("+");
-			// header.add(edit);
-			// header.add(delete);
-			// }
-			// else {
-			// author.setText(conversation.getListOfMessage().get(i).getAuthor().getFirstName());
-			// text.setStylePrimaryName("receiverPanel");
-			// panel.setStylePrimaryName("receiverPanel");
-			// chatFlexTable.setWidget(i, 1, panel);
-			// }
+
 		}
 		scroll.scrollToBottom();
 	}
