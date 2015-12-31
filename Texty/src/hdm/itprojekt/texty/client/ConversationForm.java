@@ -49,7 +49,8 @@ public class ConversationForm extends TextyForm {
 				});
 
 		scroll.getElement().setId("conversationScroll");
-
+		
+		this.add(getHeadline());
 		this.add(intro);
 		this.add(scroll);
 	}
@@ -130,8 +131,7 @@ public class ConversationForm extends TextyForm {
 				public void onClick(ClickEvent event) {
 					RootPanel.get("Details").clear();
 					RootPanel.get("Details").add(
-							new SingleConversationViewer(
-									"Private Conversation", conversation));
+							new SingleConversationViewer("Private Conversation", conversation));
 				}
 			});
 

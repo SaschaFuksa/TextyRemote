@@ -11,10 +11,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public abstract class TextyForm extends VerticalPanel {
 
+	String headline = new String();
+	
 	public TextyForm(String headline) {
-		HTML content = new HTML(headline);
-		content.getElement().setId("texty-headline");
-		this.add(content);
+		this.headline = headline;
 	}
 
 	@Override
@@ -23,6 +23,12 @@ public abstract class TextyForm extends VerticalPanel {
 		super.onLoad();
 
 		this.run();
+	}
+	
+	public HTML getHeadline(){
+		HTML headline = new HTML(this.headline);
+		headline.getElement().setId("texty-headline");
+		return headline;
 	}
 
 	protected abstract void run();

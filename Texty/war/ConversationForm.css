@@ -6,12 +6,11 @@
 }
 
 #conversationWrapper{
-	height: 100% !important;
+	height: 80%;
 	width: 100%;
 }
 
 #conversationScroll {
-	height: 100%;
 	margin-top: 10px;
 	padding: 5px;
 	width: 100%;

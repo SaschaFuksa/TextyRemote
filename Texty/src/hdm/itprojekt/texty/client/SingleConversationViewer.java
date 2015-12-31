@@ -48,13 +48,12 @@ public class SingleConversationViewer extends TextyForm {
 	public SingleConversationViewer(String headline) {
 		super(headline);
 	}
-
+	
 	public SingleConversationViewer(String headline, Conversation conversation) {
 		super(headline);
 		SingleConversationViewer.conversation = conversation;
 	}
 
-	@Override
 	protected void run() {
 
 		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
@@ -103,17 +102,18 @@ public class SingleConversationViewer extends TextyForm {
 								RootPanel.get("Details").clear();
 								RootPanel
 										.get("Details")
-										.add(new SingleConversationViewer(
-												"Private Conversation", result));
+										.add(new SingleConversationViewer("Private Conversation", result));
 							}
 						});
 			}
 		});
 		
-		mainPanel.getElement().setId("conversationForm");
-		scroll.getElement().setId("conversationForm");
+		this.getElement().setId("conversationForm");
+		mainPanel.getElement().setId("conversationWrapper");
+		scroll.getElement().setId("conversationScroll");
 		
 		content.add(chatFlexTable);
+		mainPanel.add(getHeadline());
 		mainPanel.add(scroll);
 		
 		this.add(mainPanel);
@@ -124,9 +124,7 @@ public class SingleConversationViewer extends TextyForm {
 		
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				Window.alert("size: " + mainPanel.getOffsetHeight());
 				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
-				Window.alert("size: " + scroll.getOffsetHeight());
 			}
 		});
 
@@ -180,9 +178,7 @@ public class SingleConversationViewer extends TextyForm {
 								});
 						conversation.removeMessageFromConversation(message);
 						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(
-								new SingleConversationViewer(
-										"Private Conversation", conversation));
+						RootPanel.get("Details").add(new SingleConversationViewer("Private Conversation", conversation));
 					}
 				});
 				Button editButton = new Button("");
