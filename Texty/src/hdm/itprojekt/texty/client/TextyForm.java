@@ -13,7 +13,7 @@ public abstract class TextyForm extends VerticalPanel {
 
 	public TextyForm(String headline) {
 		HTML content = new HTML(headline);
-		content.setStylePrimaryName("texty-headline");
+		content.getElement().setId("texty-headline");
 		this.add(content);
 	}
 

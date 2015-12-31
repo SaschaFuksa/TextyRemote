@@ -5,6 +5,14 @@
 
 @import "Menu.css";
 
+@import "MessageForm.css";
+
+@import "HashtagForm.css";
+
+@import "InfoBox.css";
+
+@import "ConversationForm.css";
+
 @font-face {
 	font-family: Texty;
 	src: url('Texty.otf');

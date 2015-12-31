@@ -1,0 +1,18 @@
+/** CSS for InfoBox */
+.errorLabel {
+	color: red;
+	font-family: Texty;
+	font-size: 1.5em;
+}
+
+.successLabel {
+	color: white;
+	font-family: Texty;
+	font-size: 1.5em;
+}
+
+.warningLabel {
+	color: yellow;
+	font-family: Texty;
+	font-size: 1.5em;
+}

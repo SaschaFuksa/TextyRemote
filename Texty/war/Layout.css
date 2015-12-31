@@ -37,30 +37,26 @@ div#container {
 
 div#Navigator {
 	background-color: #0080c0;
-	color: white;
-	float: left;
-	font-family: Texty;
-	font-size: 1.5em;
+	height: 100%;
 	padding: 1%;
 	flex: 1;
+	width: 100%;
 }
 
 div#Details {
 	background-color: #ffffff;
-	font-family: Texty;
-	font-size: 1.5em;
+	height: 100%;
 	padding: 1%;
 	flex: 2;
+	width: 100%;
 }
 
 div#Info {
 	background-color: #0080c0;
-	color: white;
-	float: left;
-	font-family: Texty;
-	font-size: 1.5em;
+	height: 100%;
 	padding: 1%;
 	flex: 1;
+	width: 100%;
 }
 
 div#Footer {
@@ -92,10 +88,11 @@ div#Banner {
 	z-index: 990;
 }
 
-.texty-headline {
+#texty-headline {
 	color: white;
 	font-family: Texty;
 	font-size: 2em;
+	height: 25px !important;
 	margin-bottom: 10px;
 }
 
@@ -106,7 +103,7 @@ div#Details .texty-headline {
 div.gwt-Label {
 	color: white;
 	font-family: Texty;
-	font-size: 1.5em;
+	font-size: 20px;
 	text-align: left;
 }
 
@@ -140,22 +137,6 @@ input.gwt-SuggestBox {
 	height: 20px;
 }
 
-.errorLabel {
-	color: red;
-	font-family: Texty;
-	font-size: 1.5em;
-}
-
-div#Navigator .errorLabel {
-	color: yellow;
-}
-
-.successLabel {
-	color: #13a84f;
-	font-family: Texty;
-	font-size: 1.5em;
-}
-
 .selectedObjectLabel {
 	background-color: #003399;
 	color: white;
@@ -166,10 +147,6 @@ div#Navigator .errorLabel {
 	margin-left: 10px;
 	padding-left: 8px;
 	width: 150px;
-}
-
-.selectedHashtagLabel {
-	margin-right: 10px;
 }
 
 .gwt-Anchor {
@@ -187,49 +164,7 @@ div#Navigator .errorLabel {
 	margin-top: 10px;
 }
 
-.conversation {
-	background-color: #003399;
-	margin-bottom: 10px;
-	padding: 5px;
-	width: 100%;
-}
 
-.conversation:hover {
-	background-color: #80bfff;
-}
-
-.conversationHead {
-	color: #ffffff;
-	font-size: 0.9em;
-	padding: 2px;
-}
-
-/* .conversationDate {
-	color: #ffffff;
-	font-size: 0.9em;
-	padding: 2px;
-	text-align: right;
-} */
-.conversationBody {
-	background-color: #ffffff;
-	color: #0080c0;
-	font-size: 1.1em;
-	padding: 5px;
-}
-
-.conversationScroll {
-	height: 300px;
-	margin-top: 10px;
-	padding: 5px;
-}
-
-.hashtagPanel {
-	background-color: #80bfff;
-	border-radius: 10px;
-	color: #ffffff;
-	margin-right: 3px;
-	padding: 3px;
-}
 
 .receiverPanel {
 	background-color: #80bfff;
@@ -257,12 +192,6 @@ div#Navigator .errorLabel {
 
 .buttonPanel {
 	float: right;
-}
-
-textarea {
-	resize: none;
-	width: 400px;
-	height: 150px;
 }
 
 .flexTable td {

@@ -1,0 +1,51 @@
+/** CSS for ConversationForm */
+
+#conversationForm{
+	height: 100%;
+	width: 100%;
+}
+
+#conversationWrapper{
+	height: 100% !important;
+	width: 100%;
+}
+
+#conversationScroll {
+	height: 100%;
+	margin-top: 10px;
+	padding: 5px;
+	width: 100%;
+}
+
+
+/////
+
+#conversation {
+	background-color: #003399;
+	margin-bottom: 10px;
+	padding: 5px;
+	width: 100%;
+}
+
+#conversation:hover {
+	background-color: #80bfff;
+}
+
+#conversationHead {
+	color: #ffffff;
+	font-size: 0.9em;
+	padding: 2px;
+}
+
+/* .conversationDate {
+	color: #ffffff;
+	font-size: 0.9em;
+	padding: 2px;
+	text-align: right;
+} */
+#conversationBody {
+	background-color: #ffffff;
+	color: #0080c0;
+	font-size: 1.1em;
+	padding: 5px;
+}

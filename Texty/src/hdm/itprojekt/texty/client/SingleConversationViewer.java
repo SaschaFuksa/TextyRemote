@@ -9,11 +9,13 @@ import hdm.itprojekt.texty.shared.bo.User;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -32,10 +34,12 @@ public class SingleConversationViewer extends TextyForm {
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 
+	private VerticalPanel mainPanel = new VerticalPanel();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private FlexTable chatFlexTable = new FlexTable();
 	private MessageForm message = new MessageForm();
+	private Label header = new Label("New message to reply to conversation");
 	private static Conversation conversation = null;
 	private static User currentUser = null;
 	private final TextyAdministrationAsync administration = ClientsideSettings
@@ -105,11 +109,26 @@ public class SingleConversationViewer extends TextyForm {
 						});
 			}
 		});
-
-		scroll.setStylePrimaryName("conversationScroll");
+		
+		mainPanel.getElement().setId("conversationForm");
+		scroll.getElement().setId("conversationForm");
+		
 		content.add(chatFlexTable);
-		this.add(scroll);
-		this.add(message);
+		mainPanel.add(scroll);
+		
+		this.add(mainPanel);
+		
+		RootPanel.get("Info").clear();
+		RootPanel.get("Info").add(header);
+		RootPanel.get("Info").add(message);
+		
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				Window.alert("size: " + mainPanel.getOffsetHeight());
+				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
+				Window.alert("size: " + scroll.getOffsetHeight());
+			}
+		});
 
 	}
 
@@ -178,7 +197,7 @@ public class SingleConversationViewer extends TextyForm {
 								message.getListOfHashtag(), allHashtag);
 						SuggestBox suggestBox = new SuggestBox(oracle);
 						messageTable.setWidget(2, 0, suggestBox);
-						
+
 					}
 				});
 				buttonPanel.setStylePrimaryName("buttonPanel");
@@ -240,20 +259,19 @@ public class SingleConversationViewer extends TextyForm {
 			Vector<Hashtag> allHashtag) {
 		MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 		Vector<Hashtag> editedHashtagsList = allHashtag;
-		if(selectedHastags.size() < 1){
-			for (Hashtag hashtag : editedHashtagsList){
+		if (selectedHastags.size() < 1) {
+			for (Hashtag hashtag : editedHashtagsList) {
 				oracle.add(hashtag.getKeyword());
 			}
-		}
-		else {
-			for (Hashtag hashtag : editedHashtagsList){
-				for (Hashtag selectedHashtag : selectedHastags){
-					if (selectedHashtag.getId() == hashtag.getId()){
+		} else {
+			for (Hashtag hashtag : editedHashtagsList) {
+				for (Hashtag selectedHashtag : selectedHastags) {
+					if (selectedHashtag.getId() == hashtag.getId()) {
 						editedHashtagsList.remove(selectedHashtag);
 					}
 				}
 			}
-			for (Hashtag hashtag : editedHashtagsList){
+			for (Hashtag hashtag : editedHashtagsList) {
 				oracle.add(hashtag.getKeyword());
 			}
 		}

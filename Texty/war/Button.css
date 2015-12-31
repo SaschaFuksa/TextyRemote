@@ -22,10 +22,10 @@
 	background-color: #003399;
 	border: 0px outset buttonface;
 	color: white;
+	float: right;
 	font-family: Texty;
 	font-size: 18px;
 	height: 36px;
-	margin-left: 60px;
 	padding: 5px;
 	text-align: center;
 	width: 120px;
@@ -80,4 +80,14 @@
 	border: 0px outset buttonface;
 	height: 25px;
 	width: 25px;
+}
+
+#removeButton {
+	font-family: Texty;
+	font-size: 15px;
+	margin-right: 2px;
+}
+
+#removeButton:hover {
+	color: red;
 }

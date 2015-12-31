@@ -48,7 +48,7 @@ public class ConversationForm extends TextyForm {
 					}
 				});
 
-		scroll.setStylePrimaryName("conversationScroll");
+		scroll.getElement().setId("conversationScroll");
 
 		this.add(intro);
 		this.add(scroll);
@@ -109,11 +109,11 @@ public class ConversationForm extends TextyForm {
 							.getFirstName());
 			// Label dateLabel = new Label(date);
 
-			authorLabel.setStylePrimaryName("conversationHead");
-			receiverLabel.setStylePrimaryName("conversationHead");
+			authorLabel.getElement().setId("conversationHead");
+			receiverLabel.getElement().setId("conversationHead");
 			// dateLabel.setStylePrimaryName("conversationDate");
-			textLabel.setStylePrimaryName("conversationBody");
-			conversationPanel.setStylePrimaryName("conversation");
+			textLabel.getElement().setId("conversationBody");
+			conversationPanel.getElement().setId("conversation");
 
 			receiverPanel.add(authorLabel);
 			receiverPanel.add(receiverLabel);
