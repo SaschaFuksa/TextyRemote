@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.FieldVerifier;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 
@@ -191,7 +192,14 @@ public class MessageForm extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				infoBox.clear();
-				String keyword = suggestBox.getText().trim().replaceAll(" ", ""); 
+				
+				String keyword = suggestBox.getText().trim().replaceAll(" ", "");
+				
+				if (!FieldVerifier.isValidHashtag(keyword)) {
+					infoBox.setErrorText("Please add a Hashtag with at least three characters!");
+					return;
+				}
+				
 				if (keyword == "" || keyword.equals("Search for hashtags")) {
 					infoBox.setErrorText("Please select a hashtag!");
 				} else if (checkHashtag(keyword)) {
@@ -213,7 +221,12 @@ public class MessageForm extends VerticalPanel {
 				infoBox.clear();
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					infoBox.clear();
-					String keyword = suggestBox.getText();
+					String keyword = suggestBox.getText().trim().replaceAll(" ", "");
+					
+					if (!FieldVerifier.isValidHashtag(keyword)) {
+						infoBox.setErrorText("Please add a Hashtag with at least three characters!");
+						return;
+					}
 					if (keyword == "" || keyword.equals("Search for hashtags")) {
 						infoBox.setErrorText("Please select a hashtag!");
 					} else if (checkHashtag(keyword)) {
