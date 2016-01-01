@@ -81,8 +81,8 @@ public class CommunityForm extends TextyForm {
 				public void onClick(ClickEvent event) {
 					TextyForm message = new NewMessage("New Message",
 							selectedUser);
-					RootPanel.get("Details").clear();
-					RootPanel.get("Details").add(message);
+					RootPanel.get("Info").clear();
+					RootPanel.get("Info").add(message);
 
 				}
 

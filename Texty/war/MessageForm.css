@@ -4,11 +4,6 @@
 	width: 100%;
 }
 
-#messageFormFlexTable{
-	height: 100%;
-	width: 100%;
-}
-
 #messageFormScroll{
 	height: 55px;
 }
@@ -21,8 +16,3 @@
 	width: 98%;
 	height: 120px;
 }
-
-#recipientLabel{
-	color: black;
-}
-

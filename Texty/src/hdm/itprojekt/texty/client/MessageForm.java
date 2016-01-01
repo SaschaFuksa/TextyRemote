@@ -48,7 +48,7 @@ public class MessageForm extends VerticalPanel {
 			.getTextyAdministration();
 
 	public MessageForm() {
-		
+
 		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -84,7 +84,7 @@ public class MessageForm extends VerticalPanel {
 
 		sendButton.getElement().setId("sendButton");
 		textBox.getElement().setId("messageFormTextarea");
-		messageFormFlexTable.getElement().setId("messageFormFlexTable");
+		messageFormFlexTable.getElement().setId("fullSize");
 		scroll.getElement().setId("messageFormScroll");
 
 		messageFormFlexTable.setWidget(0, 0, textBox);
@@ -247,19 +247,18 @@ public class MessageForm extends VerticalPanel {
 	public String getText() {
 		return textBox.getText();
 	}
-	
+
 	public void setText(String text) {
 		textBox.setText(text);
 	}
-	
+
 	public void setSendButtonName(String text) {
 		sendButton.setText(text);
 	}
-	
+
 	public void removeInfoBox() {
 		this.infoBox.removeFromParent();
 	}
-
 
 	private void setOracle() {
 		oracle.clear();

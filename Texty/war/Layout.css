@@ -103,7 +103,7 @@ div#Details .texty-headline {
 div.gwt-Label {
 	color: white;
 	font-family: Texty;
-	font-size: 16px;
+	font-size: 20px;
 	text-align: left;
 }
 
@@ -174,4 +174,13 @@ input.gwt-SuggestBox {
 	font-size: 1.5em;
 	text-align: left;
 	height: 20px;
+}
+
+#fullSize {
+	height: 100%;
+	width: 100%;
+}
+
+#fullWidth {
+	width: 100%;
 }

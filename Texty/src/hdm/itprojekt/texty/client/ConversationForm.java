@@ -52,7 +52,7 @@ public class ConversationForm extends TextyForm {
 					}
 				});
 
-		this.getElement().setId("conversationForm");
+		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("conversationWrapper");
 		scroll.getElement().setId("conversationScroll");
 		content.getElement().setId("conversationContent");

@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class NewMessage extends TextyForm {
 
@@ -17,6 +18,7 @@ public class NewMessage extends TextyForm {
 	private String recipient = new String();
 	private MessageForm message = new MessageForm();
 	private Vector<User> recipientList = new Vector<User>();
+	private VerticalPanel mainPanel = new VerticalPanel();
 
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
@@ -50,11 +52,18 @@ public class NewMessage extends TextyForm {
 						});
 			}
 		});
-		recipientLabel.getElement().setId("recipientLabel");
+		
 		setRecipientLabel();
-		this.add(getHeadline());
-		this.add(recipientLabel);
-		this.add(message);
+		
+		recipientLabel.getElement().setId("recipientLabel");
+		this.getElement().setId("fullSize");
+		mainPanel.getElement().setId("fullWidth");
+		
+		mainPanel.add(getHeadline());
+		mainPanel.add(recipientLabel);
+		mainPanel.add(message);
+		
+		this.add(mainPanel);
 
 	}
 

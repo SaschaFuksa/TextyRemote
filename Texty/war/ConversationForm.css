@@ -1,9 +1,4 @@
 /** CSS for ConversationForm */
-#conversationForm {
-	height: 100%;
-	width: 100%;
-}
-
 #conversationWrapper {
 	height: 80%;
 	width: 100%;
@@ -72,20 +67,20 @@
 
 #conversationHead {
 	color: #ffffff;
-	font-size: 0.9em;
+	font-size: 14px;
 	padding: 2px;
 }
 
 #conversationDate {
 	color: #ffffff;
 	float: right;
-	font-size: 0.9em;
+	font-size: 14px;
 	padding: 2px;
 }
 
 #conversationBody {
 	background-color: #ffffff;
 	color: #0080c0;
-	font-size: 1.1em;
+	font-size: 18px;
 	padding: 5px;
 }
