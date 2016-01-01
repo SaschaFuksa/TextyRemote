@@ -191,7 +191,7 @@ public class MessageForm extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				infoBox.clear();
-				String keyword = suggestBox.getText().trim();
+				String keyword = suggestBox.getText().trim().replaceAll(" ", ""); 
 				if (keyword == "" || keyword.equals("Search for hashtags")) {
 					infoBox.setErrorText("Please select a hashtag!");
 				} else if (checkHashtag(keyword)) {
