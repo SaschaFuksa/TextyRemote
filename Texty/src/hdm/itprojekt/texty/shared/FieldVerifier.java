@@ -40,4 +40,11 @@ public class FieldVerifier {
 		}
 		return name.length() > 3;
 	}
+	
+	public static boolean isValidHashtag(String keyword) {
+		if (keyword.length() < 3){
+			return false;
+		}
+		return true;
+	}
 }
