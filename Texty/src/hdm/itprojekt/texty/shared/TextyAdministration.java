@@ -49,7 +49,7 @@ public interface TextyAdministration extends RemoteService {
 	public void deleteUserSubscription(User user)
 			throws IllegalArgumentException;
 
-	public Message editMessage(Message message, String newText)
+	public Message editMessage(Message message, String newText, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException;
 
 	public Vector<Conversation> getAllConversationsFromUser()

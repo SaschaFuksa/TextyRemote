@@ -414,9 +414,9 @@ public class MessageMapper {
 		return resultMessage;
 	}
 
-	public Message update(Message message) {
+	public Message update(Vector<Hashtag> listOfHashtag, Message message) {
 		Connection con = DBConnection.connection();
-		
+
 		try {
 			Statement stmt = con.createStatement();
 
@@ -426,6 +426,23 @@ public class MessageMapper {
 					+ "'"
 					+ "WHERE messageId = "
 					+ message.getId());
+
+			Statement stmtDeleteHashtag = con.createStatement();
+
+			stmtDeleteHashtag
+					.executeUpdate("DELETE FROM textydb.hashtag_in_message WHERE "
+							+ "messageId = " + message.getId());
+
+			Statement stmtHashtag = con.createStatement();
+
+			for (Hashtag hashtag : message.getListOfHashtag()) {
+				stmtHashtag
+						.executeUpdate("INSERT INTO textydb.hashtag_in_message (messageId, hashtagId)"
+								+ "VALUES ("
+								+ message.getId()
+								+ ", "
+								+ hashtag.getId() + ")");
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();

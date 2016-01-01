@@ -103,12 +103,8 @@ div#Details .texty-headline {
 div.gwt-Label {
 	color: white;
 	font-family: Texty;
-	font-size: 20px;
+	font-size: 16px;
 	text-align: left;
-}
-
-div#Details div.gwt-Label {
-	color: black;
 }
 
 .gwt-HTML {
@@ -162,36 +158,6 @@ input.gwt-SuggestBox {
 
 .buttonLabel {
 	margin-top: 10px;
-}
-
-
-
-.receiverPanel {
-	background-color: #80bfff;
-	border-radius: 10px;
-	color: #ffffff;
-	margin-right: 3px;
-	padding: 3px;
-}
-
-.authorPanel {
-	color: #ffffff;
-	font-weight: bold;
-	margin-right: 3px;
-	padding: 3px;
-}
-
-.senderPanel {
-	background-color: #003399;
-	border-radius: 10px;
-	color: #ffffff;
-	margin-right: 3px;
-	padding: 3px;
-	float: right;
-}
-
-.buttonPanel {
-	float: right;
 }
 
 .flexTable td {

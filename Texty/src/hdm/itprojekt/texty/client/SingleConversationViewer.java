@@ -6,7 +6,6 @@ import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.Scheduler;
@@ -15,16 +14,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -32,13 +28,12 @@ public class SingleConversationViewer extends TextyForm {
 
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
-	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private FlexTable chatFlexTable = new FlexTable();
-	private MessageForm message = new MessageForm();
+	private MessageForm messageForm = new MessageForm();
 	private Label header = new Label("New message to reply to conversation");
 	private static Conversation conversation = null;
 	private static User currentUser = null;
@@ -48,27 +43,13 @@ public class SingleConversationViewer extends TextyForm {
 	public SingleConversationViewer(String headline) {
 		super(headline);
 	}
-	
+
 	public SingleConversationViewer(String headline, Conversation conversation) {
 		super(headline);
 		SingleConversationViewer.conversation = conversation;
 	}
 
 	protected void run() {
-
-		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				LOG.severe("Error: " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Vector<Hashtag> result) {
-				LOG.info("Success :" + result.getClass().getSimpleName());
-				SingleConversationViewer.allHashtag = result;
-
-			}
-		});
 
 		administration.getCurrentUser(new AsyncCallback<User>() {
 			@Override
@@ -83,11 +64,11 @@ public class SingleConversationViewer extends TextyForm {
 				showAllMessages();
 			}
 		});
-		message.sendButton.addClickHandler(new ClickHandler() {
+		messageForm.sendButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				administration.addMessageToConversation(conversation,
-						message.getText(), message.getHashtag(),
+						messageForm.getText(), messageForm.getHashtag(),
 						new AsyncCallback<Conversation>() {
 							@Override
 							public void onFailure(Throwable caught) {
@@ -98,30 +79,33 @@ public class SingleConversationViewer extends TextyForm {
 							public void onSuccess(Conversation result) {
 								LOG.info("Success :"
 										+ result.getClass().getSimpleName());
-								message.clearSelectedHashtag();
+								messageForm.clearSelectedHashtag();
 								RootPanel.get("Details").clear();
 								RootPanel
 										.get("Details")
-										.add(new SingleConversationViewer("Private Conversation", result));
+										.add(new SingleConversationViewer(
+												"Private Conversation", result));
 							}
 						});
 			}
 		});
-		
+
 		this.getElement().setId("conversationForm");
 		mainPanel.getElement().setId("conversationWrapper");
 		scroll.getElement().setId("conversationScroll");
+		content.getElement().setId("conversationContent");
+		chatFlexTable.getElement().setId("conversationContent");
 		
 		content.add(chatFlexTable);
 		mainPanel.add(getHeadline());
 		mainPanel.add(scroll);
-		
+
 		this.add(mainPanel);
-		
+
 		RootPanel.get("Info").clear();
 		RootPanel.get("Info").add(header);
-		RootPanel.get("Info").add(message);
-		
+		RootPanel.get("Info").add(messageForm);
+
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
@@ -134,12 +118,15 @@ public class SingleConversationViewer extends TextyForm {
 
 		for (int i = 0; i < conversation.getListOfMessage().size(); i++) {
 
-			final Message message = conversation.getListOfMessage().get(i);
+			final int index = i;
+			final Message message = conversation.getListOfMessage().get(index);
 			final FlexTable messageTable = new FlexTable();
 			final Label text = new Label(message.getText());
-			Label author = new Label();
 			final TextBox textBox = new TextBox();
-			author.setStylePrimaryName("authorPanel");
+			final Label hashtagLabel = new Label();
+			Label author = new Label();
+			String hashtagList = new String();
+			author.getElement().setId("authorPanel");
 
 			textBox.addKeyUpHandler(new KeyUpHandler() {
 				@Override
@@ -155,8 +142,8 @@ public class SingleConversationViewer extends TextyForm {
 			if (message.getAuthor().getId() == currentUser.getId()) {
 				HorizontalPanel buttonPanel = new HorizontalPanel();
 				author.setText("You");
-				text.setStylePrimaryName("senderPanel");
-				messageTable.setStylePrimaryName("senderPanel");
+				text.getElement().setId("senderPanel");
+				messageTable.getElement().setId("senderPanel");
 				Button deleteButton = new Button("");
 				deleteButton.addClickHandler(new ClickHandler() {
 					@Override
@@ -178,44 +165,96 @@ public class SingleConversationViewer extends TextyForm {
 								});
 						conversation.removeMessageFromConversation(message);
 						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(new SingleConversationViewer("Private Conversation", conversation));
+						RootPanel.get("Details").add(
+								new SingleConversationViewer(
+										"Private Conversation", conversation));
 					}
 				});
 				Button editButton = new Button("");
 				editButton.addClickHandler(new ClickHandler() {
+					boolean state = true;
+
 					@Override
 					public void onClick(ClickEvent event) {
-						messageTable.remove(text);
-						messageTable.setWidget(1, 0, textBox);
-						textBox.setText(text.getText());
-						textBox.setFocus(true);
-						MultiWordSuggestOracle oracle = setOracle(
-								message.getListOfHashtag(), allHashtag);
-						SuggestBox suggestBox = new SuggestBox(oracle);
-						messageTable.setWidget(2, 0, suggestBox);
+
+						if (state) {
+							final MessageForm editMessage = new MessageForm();
+							editMessage.setText(text.getText());
+							editMessage.setSendButtonName("Edit");
+							editMessage.removeInfoBox();
+							if(message.getListOfHashtag().size() > 0){
+								for (Hashtag hashtag : message.getListOfHashtag()){
+									editMessage.addHashtag(hashtag.getKeyword());
+								}
+							}
+							editMessage.sendButton.addClickHandler(new ClickHandler() {
+								@Override
+								public void onClick(ClickEvent event) {
+									
+									administration.editMessage(message, editMessage.getText(), editMessage.getHashtag(), 
+											new AsyncCallback<Message>() {
+												@Override
+												public void onFailure(Throwable caught) {
+													LOG.severe("Error: " + caught.getMessage());
+												}
+
+												@Override
+												public void onSuccess(Message result) {
+													LOG.info("Success :"
+															+ result.getClass().getSimpleName());
+													String hashtagList = new String();
+													editMessage.clearSelectedHashtag();
+													text.setText(editMessage.getText());
+													if (result.getListOfHashtag().size() > 0) {
+														for (Hashtag hashtag : result.getListOfHashtag()) {
+															hashtagList = hashtagList + "#" + hashtag.getKeyword()
+																	+ " ";
+														}
+
+														hashtagLabel.setText(hashtagList);
+														hashtagLabel.getElement().setId("senderPanel");
+														messageTable.getFlexCellFormatter().setColSpan(3, 0, 2);
+														messageTable.setWidget(3, 0, hashtagLabel);
+													}
+													messageTable.setWidget(2, 0, null);
+													messageTable.setWidget(1, 0, text);
+													messageTable.setWidget(3, 0, hashtagLabel);
+													state = true;
+												}
+											});
+								}
+							});
+							
+							messageTable.setWidget(1, 0, editMessage);
+							messageTable.remove(hashtagLabel);
+							state = false;
+						} else {
+							messageTable.setWidget(2, 0, null);
+							messageTable.setWidget(1, 0, text);
+							messageTable.setWidget(3, 0, hashtagLabel);
+							state = true;
+						}
 
 					}
 				});
-				buttonPanel.setStylePrimaryName("buttonPanel");
+				buttonPanel.getElement().setId("buttonPanel");
 				deleteButton.getElement().setId("deleteButton");
 				editButton.getElement().setId("editButton");
-				buttonPanel.add(deleteButton);
 				buttonPanel.add(editButton);
+				buttonPanel.add(deleteButton);
 				messageTable.setWidget(0, 0, author);
 				messageTable.setWidget(0, 1, buttonPanel);
 				messageTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 				messageTable.setWidget(1, 0, text);
 
 				if (message.getListOfHashtag().size() > 0) {
-					Label hashtagLabel = new Label();
-					String hashtagList = new String();
 					for (Hashtag hashtag : message.getListOfHashtag()) {
 						hashtagList = hashtagList + "#" + hashtag.getKeyword()
 								+ " ";
 					}
 
 					hashtagLabel.setText(hashtagList);
-					hashtagLabel.setStylePrimaryName("senderPanel");
+					hashtagLabel.getElement().setId("senderPanel");
 					messageTable.getFlexCellFormatter().setColSpan(3, 0, 2);
 					messageTable.setWidget(3, 0, hashtagLabel);
 				}
@@ -225,25 +264,24 @@ public class SingleConversationViewer extends TextyForm {
 			} else {
 				author.setText(conversation.getListOfMessage().get(i)
 						.getAuthor().getFirstName());
-				text.setStylePrimaryName("receiverPanel");
-				messageTable.setStylePrimaryName("receiverPanel");
+				text.getElement().setId("receiverPanel");
+				messageTable.getElement().setId("receiverPanel");
 				messageTable.setWidget(0, 0, author);
 				messageTable.setWidget(1, 0, text);
 
 				if (message.getListOfHashtag().size() > 0) {
-					Label hashtagLabel = new Label();
-					String hashtagList = new String();
 					for (Hashtag hashtag : message.getListOfHashtag()) {
 						hashtagList = hashtagList + "#" + hashtag.getKeyword()
 								+ " ";
 					}
 
 					hashtagLabel.setText(hashtagList);
-					hashtagLabel.setStylePrimaryName("receiverPanel");
+					hashtagLabel.getElement().setId("receiverPanel");
 					messageTable.getFlexCellFormatter().setColSpan(3, 0, 2);
 					messageTable.setWidget(3, 0, hashtagLabel);
 				}
-
+				
+				chatFlexTable.getColumnFormatter().addStyleName(i, "chatFlexTableCell");
 				chatFlexTable.setWidget(i, 0, messageTable);
 			}
 
@@ -251,27 +289,5 @@ public class SingleConversationViewer extends TextyForm {
 		scroll.scrollToBottom();
 	}
 
-	private MultiWordSuggestOracle setOracle(Vector<Hashtag> selectedHastags,
-			Vector<Hashtag> allHashtag) {
-		MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-		Vector<Hashtag> editedHashtagsList = allHashtag;
-		if (selectedHastags.size() < 1) {
-			for (Hashtag hashtag : editedHashtagsList) {
-				oracle.add(hashtag.getKeyword());
-			}
-		} else {
-			for (Hashtag hashtag : editedHashtagsList) {
-				for (Hashtag selectedHashtag : selectedHastags) {
-					if (selectedHashtag.getId() == hashtag.getId()) {
-						editedHashtagsList.remove(selectedHashtag);
-					}
-				}
-			}
-			for (Hashtag hashtag : editedHashtagsList) {
-				oracle.add(hashtag.getKeyword());
-			}
-		}
-		return oracle;
-	}
 
 }

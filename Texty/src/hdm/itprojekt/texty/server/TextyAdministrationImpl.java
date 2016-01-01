@@ -325,10 +325,13 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message editMessage(Message message, String newText)
+	public Message editMessage(Message message, String newText, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
-		message.setText(newText);
-		return this.mMapper.update(message);
+		Message editedMessage = new Message();
+		editedMessage.setId(message.getId());
+		editedMessage.setText(newText);
+		editedMessage.setListOfHashtag(listOfHashtag);
+		return this.mMapper.update(message.getListOfHashtag(), editedMessage);
 	}
 
 	@Override

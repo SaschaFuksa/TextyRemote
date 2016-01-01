@@ -48,6 +48,7 @@ public class MessageForm extends VerticalPanel {
 			.getTextyAdministration();
 
 	public MessageForm() {
+		
 		administration.getAllHashtags(new AsyncCallback<Vector<Hashtag>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -133,7 +134,8 @@ public class MessageForm extends VerticalPanel {
 		infoBox.setSuccessText("You subscribed a brand new hashtag!");
 	}
 
-	public Label createDeleteLabel(final String keyword, final HorizontalPanel mainPanel) {
+	public Label createDeleteLabel(final String keyword,
+			final HorizontalPanel mainPanel) {
 		Label label = new Label("x");
 		label.addClickHandler(new ClickHandler() {
 			@Override
@@ -150,15 +152,15 @@ public class MessageForm extends VerticalPanel {
 		final HorizontalPanel mainPanel = new HorizontalPanel();
 		final Label keywordLabel = new Label(keyword);
 		final Label deleteLabel = createDeleteLabel(keyword, mainPanel);
-		
+
 		mainPanel.getElement().setId("hashtagPanel");
 		keywordLabel.getElement().setId("selectedHashtagLabel");
 		deleteLabel.getElement().setId("removeButton");
-		
+
 		mainPanel.add(keywordLabel);
 		mainPanel.add(deleteLabel);
 		content.add(mainPanel);
-		
+
 		suggestBox.setText("");
 
 	}
@@ -230,7 +232,7 @@ public class MessageForm extends VerticalPanel {
 				allHashtag.addElement(hashtag);
 				selectedHashtag.remove(hashtag);
 				break;
-				
+
 			}
 		}
 
@@ -245,6 +247,19 @@ public class MessageForm extends VerticalPanel {
 	public String getText() {
 		return textBox.getText();
 	}
+	
+	public void setText(String text) {
+		textBox.setText(text);
+	}
+	
+	public void setSendButtonName(String text) {
+		sendButton.setText(text);
+	}
+	
+	public void removeInfoBox() {
+		this.infoBox.removeFromParent();
+	}
+
 
 	private void setOracle() {
 		oracle.clear();

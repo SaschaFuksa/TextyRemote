@@ -16,6 +16,43 @@
 	width: 100%;
 }
 
+#conversationContent {
+	width: 100%;
+}
+
+.chatFlexTableCell{
+	width: 50%;
+}
+
+#receiverPanel {
+	background-color: #003399;
+	border-radius: 10px;
+	color: #ffffff;
+	margin-right: 3px;
+	padding: 3px;
+}
+
+#authorPanel {
+	color: #ffffff;
+	font-weight: bold;
+	margin-right: 3px;
+	padding: 3px;
+}
+
+#senderPanel {
+	background-color: #0080c0;
+	border-radius: 10px;
+	color: #ffffff;
+	margin-right: 3px;
+	padding: 3px;
+	float: right;
+}
+
+#buttonPanel {
+	float: right;
+}
+
+
 
 /////
 
