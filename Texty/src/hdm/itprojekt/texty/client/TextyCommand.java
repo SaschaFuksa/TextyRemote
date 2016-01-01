@@ -19,6 +19,7 @@ public class TextyCommand {
 			public void execute() {
 				RootPanel.get("Details").clear();
 				RootPanel.get("Navigator").clear();
+				RootPanel.get("Info").clear();
 				switch (name) {
 				case "Home":
 					TextyForm home = new HomeForm("Home");
@@ -45,7 +46,7 @@ public class TextyCommand {
 					break;
 				case "Profile":
 					TextyForm profile = new ProfileForm("Profile");
-					RootPanel.get("Navigator").add(profile);
+					RootPanel.get("Details").add(profile);
 					break;
 				case "Report":
 					Window.Location

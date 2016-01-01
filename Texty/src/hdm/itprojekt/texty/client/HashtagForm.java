@@ -183,6 +183,7 @@ public class HashtagForm extends TextyForm {
 		suggestBoxPanel.add(addButton);
 		buttonPanel.add(subscribeButton);
 
+		this.add(getHeadline());
 		this.add(text);
 		this.add(suggestBoxPanel);
 		this.add(errorLabel);

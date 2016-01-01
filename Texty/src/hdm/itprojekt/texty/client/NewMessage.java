@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Label;
 
 public class NewMessage extends TextyForm {
 
-	private Label recipientLabel = new Label();
+	private Label recipientLabel = new Label("");
 	private String recipient = new String();
 	private MessageForm message = new MessageForm();
 	private Vector<User> recipientList = new Vector<User>();
@@ -50,7 +50,9 @@ public class NewMessage extends TextyForm {
 						});
 			}
 		});
+		recipientLabel.getElement().setId("recipientLabel");
 		setRecipientLabel();
+		this.add(getHeadline());
 		this.add(recipientLabel);
 		this.add(message);
 

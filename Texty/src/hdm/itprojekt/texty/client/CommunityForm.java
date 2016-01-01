@@ -258,6 +258,7 @@ public class CommunityForm extends TextyForm {
 		buttonPanel.add(sendMessageButton);
 		buttonPanel.add(subscribeButton);
 
+		this.add(getHeadline());
 		this.add(text);
 		this.add(suggestBoxPanel);
 		this.add(errorLabel);

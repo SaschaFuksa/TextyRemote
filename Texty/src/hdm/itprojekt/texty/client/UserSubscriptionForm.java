@@ -135,6 +135,7 @@ public class UserSubscriptionForm extends TextyForm {
 		successLabel.setStylePrimaryName("successLabel");
 		scroll.setSize("250px", "110px");
 
+		this.add(getHeadline());
 		this.add(intro);
 		this.add(errorLabel);
 		this.add(scroll);

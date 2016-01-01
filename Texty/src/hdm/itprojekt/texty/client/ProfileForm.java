@@ -108,10 +108,12 @@ public class ProfileForm extends TextyForm {
 		
 		chatFlexTable.setStyleName("flexTable");
 		save.getElement().setId("sendButton");
-		
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
-		RootPanel.get("Details").add(mainPanel);
+		
+		this.add(getHeadline());
+		this.add(mainPanel);
+
 	}
 
 }
