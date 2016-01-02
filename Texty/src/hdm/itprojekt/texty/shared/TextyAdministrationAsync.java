@@ -82,4 +82,7 @@ public interface TextyAdministrationAsync {
 	void getAllSubscribedHashtagsFromUser(User selectedUser,
 			AsyncCallback<Vector<Hashtag>> callback);
 
+	void getAllPublicConversationsFromCurrentUser(
+			AsyncCallback<Vector<Conversation>> callback);
+
 }

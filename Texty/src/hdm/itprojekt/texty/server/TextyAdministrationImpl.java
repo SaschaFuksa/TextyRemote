@@ -325,8 +325,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message editMessage(Message message, String newText, Vector<Hashtag> listOfHashtag)
-			throws IllegalArgumentException {
+	public Message editMessage(Message message, String newText,
+			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
 		Message editedMessage = new Message();
 		editedMessage.setId(message.getId());
 		editedMessage.setText(newText);
@@ -399,6 +399,25 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			}
 		}
 		return MessagesByDate;
+	}
+
+	@Override
+	public Vector<Conversation> getAllPublicConversationsFromCurrentUser()
+			throws IllegalArgumentException {
+		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
+				.getUserService();
+		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		User currentuser = this.uMapper.findByEmail(user.getEmail());
+		Vector<Conversation> allConFromUser = this.cMapper
+				.selectAllConversationsFromUser(currentuser);
+		Vector<Conversation> allPublicConFromUser = new Vector<Conversation>();
+		for (Conversation elem : allConFromUser) {
+			if (elem.isPublicly() == true) {
+				allPublicConFromUser.add(elem);
+			}
+		}
+		return allPublicConFromUser;
+
 	}
 
 	@Override
