@@ -43,8 +43,8 @@ public interface TextyAdministrationAsync {
 
 	void deleteUserSubscription(User user, AsyncCallback<Void> callback);
 
-	void editMessage(Message message, String newText, Vector<Hashtag> listOfHashtag,
-			AsyncCallback<Message> callback);
+	void editMessage(Message message, String newText,
+			Vector<Hashtag> listOfHashtag, AsyncCallback<Message> callback);
 
 	void getAllConversationsFromUser(
 			AsyncCallback<Vector<Conversation>> callback);
@@ -81,8 +81,5 @@ public interface TextyAdministrationAsync {
 
 	void getAllSubscribedHashtagsFromUser(User selectedUser,
 			AsyncCallback<Vector<Hashtag>> callback);
-
-	void getAllPublicConversationsFromCurrentUser(
-			AsyncCallback<Vector<Conversation>> callback);
 
 }

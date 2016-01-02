@@ -402,14 +402,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Vector<Conversation> getAllPublicConversationsFromCurrentUser()
+	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException {
-		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
-				.getUserService();
-		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		User currentuser = this.uMapper.findByEmail(user.getEmail());
 		Vector<Conversation> allConFromUser = this.cMapper
-				.selectAllConversationsFromUser(currentuser);
+				.selectAllConversationsFromUser(user);
 		Vector<Conversation> allPublicConFromUser = new Vector<Conversation>();
 		for (Conversation elem : allConFromUser) {
 			if (elem.isPublicly() == true) {
@@ -417,20 +413,6 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			}
 		}
 		return allPublicConFromUser;
-
-	}
-
-	@Override
-	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
-			throws IllegalArgumentException {
-		Vector<Conversation> allPublicConversations = new Vector<Conversation>();
-		/*
-		 * Vector<Conversation> allConversations = this.cMapper
-		 * .findAllConversations(); for (int i = allConversations.size(); i > 0;
-		 * i--) { if (allConversations.get(i).isPublicly()) {
-		 * allPublicConversations.add(allConversations.get(i)); } }
-		 */
-		return allPublicConversations;
 	}
 
 	/**

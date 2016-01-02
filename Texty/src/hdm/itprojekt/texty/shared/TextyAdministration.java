@@ -49,8 +49,8 @@ public interface TextyAdministration extends RemoteService {
 	public void deleteUserSubscription(User user)
 			throws IllegalArgumentException;
 
-	public Message editMessage(Message message, String newText, Vector<Hashtag> listOfHashtag)
-			throws IllegalArgumentException;
+	public Message editMessage(Message message, String newText,
+			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException;
 
 	public Vector<Conversation> getAllConversationsFromUser()
 			throws IllegalArgumentException;
@@ -66,19 +66,19 @@ public interface TextyAdministration extends RemoteService {
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException;
 
-	public Vector<Conversation> getAllPublicConversationsFromCurrentUser() throws IllegalArgumentException;
-	
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException;
 
 	public Vector<Hashtag> getAllSubscribedHashtags()
 			throws IllegalArgumentException;
-	
-	public Vector<Hashtag> getAllSubscribedHashtagsFromUser(User selectedUser) throws IllegalArgumentException;
+
+	public Vector<Hashtag> getAllSubscribedHashtagsFromUser(User selectedUser)
+			throws IllegalArgumentException;
 
 	public Vector<User> getAllSubscribedUsers() throws IllegalArgumentException;
-	
-	public Vector<User> getAllSubscribedUsersFromUser(User selectedUser) throws IllegalArgumentException;
+
+	public Vector<User> getAllSubscribedUsersFromUser(User selectedUser)
+			throws IllegalArgumentException;
 
 	public Vector<User> getAllUsers() throws IllegalArgumentException;
 
