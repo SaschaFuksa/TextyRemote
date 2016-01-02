@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy.KeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -52,8 +53,8 @@ public class HomeForm extends TextyForm {
 
 	@Override
 	protected void run() {
-		
-		//Abonnierte User und deren Postings
+
+		// Abonnierte User und deren Postings
 		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -69,7 +70,8 @@ public class HomeForm extends TextyForm {
 		});
 
 		// Abonnierte Hashtags und deren Postings
-		administration.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
+		administration
+				.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -98,54 +100,104 @@ public class HomeForm extends TextyForm {
 	}// Ende Run-Methode
 
 	private void showSubscribedUser() {
-		
+
 		for (User user : userList) {
-			final User userView = user;
-			userVector.add(userView.getFirstName()+ " " + userView.getLastName());
-		}
+			 User userView = user;
+			userVector.add(userView.getFirstName() + " "
+					+ userView.getLastName());
 		
-		cellListUser.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
-		cellListUser.setSelectionModel(selectionModelUser);
-		selectionModelUser.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-					@Override
-					public void onSelectionChange(SelectionChangeEvent event) {
-						String selected = selectionModelUser.getSelectedObject();
-						if (selected != null) {
+
+			final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
+			cellListUser.setSelectionModel(selectionModelUser);
+			
+			selectionModelUser.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+				
+						@Override
+						public void onSelectionChange(SelectionChangeEvent event) {
+							String selected = selectionModelUser.getSelectedObject();
+							if (selected != null) {
+								TextyForm message = new NewMessage("Answer to public Posting");
+								RootPanel.get("Info").clear();
+								RootPanel.get("Info").add(message);
+								
+								
+							}
 						}
-					}
-				});
-		
+						
+					});
+			
+		}
+
 		cellListUser.setRowCount(userVector.size(), true);
 		cellListUser.setRowData(0, userVector);
+		Label label = new Label("User");
+		RootPanel.get("Navigator").add(label);
 		RootPanel.get("Navigator").add(cellListUser);
+
 	}
-	
+
 	private void showSubscribedHashtag() {
-		
+
 		for (Hashtag hashtag : hashtagList) {
 			final Hashtag hashtagView = hashtag;
 			hashtagVector.add(hashtagView.getKeyword());
-		}
-		
-		cellListHashtag.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
-		cellListHashtag.setSelectionModel(selectionModelUser);
-		selectionModelUser.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-					@Override
-					public void onSelectionChange(SelectionChangeEvent event) {
-						String selected = selectionModelUser.getSelectedObject();
-						if (selected != null) {
+			cellListHashtag
+					.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+			cellListHashtag.setPageSize(30);
+			cellListHashtag
+					.setKeyboardPagingPolicy(KeyboardPagingPolicy.INCREASE_RANGE);
+			final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
+			cellListHashtag.setSelectionModel(selectionModelUser);
+			selectionModelUser
+					.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+						@Override
+						public void onSelectionChange(SelectionChangeEvent event) {
+							String selected = selectionModelUser
+									.getSelectedObject();
+							if (selected != null) {
+								TextyForm message = new NewMessage(
+										"Answer to public Posting");
+								RootPanel.get("Info").clear();
+								RootPanel.get("Info").add(message);
+
+								//showConversationSelectedHashtag(hashtagView);
+							}
 						}
-					}
-				});
-		
+					});
+		}
+
 		cellListHashtag.setRowCount(hashtagVector.size(), true);
 		cellListHashtag.setRowData(0, hashtagVector);
+		Label label = new Label("Hashtags");
+		RootPanel.get("Navigator").add(label);
 		RootPanel.get("Navigator").add(cellListHashtag);
-		
-		}
 
 	}
 
+	private void showConversationOfSelectedUser(User user) {
+		//Window.alert("Öffentliche Nachrichten von " + user.getFirstName());
+		administration.getAllPublicConversationsFromUser(user,
+				new AsyncCallback<Vector<Conversation>>() {
+					@Override
+					public void onFailure(Throwable caught) {
 
+					}
+
+					@Override
+					public void onSuccess(Vector<Conversation> result) {
+						HomeForm.conList = result;
+						for (Conversation conversation : conList) {
+						final Conversation conversationView = conversation;
+						FlexTable chatFlexTable = new FlexTable();
+						
+						}
+							
+					}
+
+				});
+		
+	}
+	
+	//TODO private void showConversationSelectedHashtag(Hashtag hashtag){}
+
+}
