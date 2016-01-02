@@ -325,8 +325,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Message editMessage(Message message, String newText, Vector<Hashtag> listOfHashtag)
-			throws IllegalArgumentException {
+	public Message editMessage(Message message, String newText,
+			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
 		Message editedMessage = new Message();
 		editedMessage.setId(message.getId());
 		editedMessage.setText(newText);
@@ -404,14 +404,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException {
-		Vector<Conversation> allPublicConversations = new Vector<Conversation>();
-		/*
-		 * Vector<Conversation> allConversations = this.cMapper
-		 * .findAllConversations(); for (int i = allConversations.size(); i > 0;
-		 * i--) { if (allConversations.get(i).isPublicly()) {
-		 * allPublicConversations.add(allConversations.get(i)); } }
-		 */
-		return allPublicConversations;
+		Vector<Conversation> allConFromUser = this.cMapper
+				.selectAllConversationsFromUser(user);
+		Vector<Conversation> allPublicConFromUser = new Vector<Conversation>();
+		for (Conversation elem : allConFromUser) {
+			if (elem.isPublicly() == true) {
+				allPublicConFromUser.add(elem);
+			}
+		}
+		return allPublicConFromUser;
 	}
 
 	/**
