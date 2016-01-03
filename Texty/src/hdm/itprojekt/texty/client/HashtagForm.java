@@ -30,7 +30,7 @@ public class HashtagForm extends TextyForm {
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
-	private Label text = new Label("Subscribe new hashtags!");
+	private Label text = new Label("Subscribe existing hashtags!");
 	private Label errorLabel = new Label("\0");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);

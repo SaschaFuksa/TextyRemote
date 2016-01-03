@@ -8,6 +8,7 @@ import java.util.Vector;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.cell.client.TextCell;
@@ -16,8 +17,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy.KeyboardPagingPolicy;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -26,24 +25,28 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 
 public class HomeForm extends TextyForm {
 
 	private static Vector<User> userList = new Vector<User>();
 	private static Vector<Hashtag> hashtagList = new Vector<Hashtag>();
-	private static Vector<Conversation> conList = new Vector<Conversation>();
+	private static Vector<Conversation> conversationListofUser = new Vector<Conversation>();
+	private static Vector<Message> messageListofHashtag = new Vector<Message>();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Label intro = new Label(
 			"Here you can see and select your subscribed Hashtags and User");
-	private VerticalPanel content = new VerticalPanel();
-	private ScrollPanel scroll = new ScrollPanel(content);
+	private VerticalPanel contentUser = new VerticalPanel();
+	private VerticalPanel userPanel = new VerticalPanel();
+	private ScrollPanel scrollUser = new ScrollPanel(contentUser);
+	private VerticalPanel contentHashtag = new VerticalPanel();
+	private VerticalPanel hashtagPanel = new VerticalPanel();
+	private ScrollPanel scrollHashtag = new ScrollPanel(contentHashtag);
 	private Vector<String> userVector = new Vector<String>();
 	private Vector<String> hashtagVector = new Vector<String>();
 	private TextCell textCell = new TextCell();
 	private CellList<String> cellListUser = new CellList<String>(textCell);
 	private CellList<String> cellListHashtag = new CellList<String>(textCell);
+	private NewMessage messageForm = new NewMessage("New Message");
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
@@ -84,55 +87,129 @@ public class HomeForm extends TextyForm {
 					}
 
 				});
+		
+//		this.getElement().setId("fullSize");
+//		
+//		mainPanel.getElement().setId("fullSize");
+//		userPanel.getElement().setId("publicConversation");
+//		scrollUser.getElement().setId("conversationScroll");
+//		contentUser.getElement().setId("conversationContent");
+//		hashtagPanel.getElement().setId("publicConversation");
+//		scrollHashtag.getElement().setId("conversationScroll");
+//		contentHashtag.getElement().setId("conversationContent");
+		
+		userPanel.add(scrollUser);
+		hashtagPanel.add(scrollHashtag);
 
 		mainPanel.add(getHeadline());
 		mainPanel.add(intro);
-		mainPanel.add(scroll);
+		mainPanel.add(cellListUser);
+		mainPanel.add(cellListHashtag);
+		
+		contentUser.add(cellListUser);
+		
+		contentHashtag.add(cellListHashtag);
 
 		this.add(mainPanel);
 
-		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-			public void execute() {
-				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
-			}
-		});
+//		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+//			public void execute() {
+//				scrollUser.setHeight(mainPanel.getOffsetHeight()/2 + "px");
+//			}
+//		});
+//		
+//		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+//			public void execute() {
+//				scrollHashtag.setHeight(hashtagPanel.getOffsetHeight() + "px");
+//			}
+//		});
 
 	}// Ende Run-Methode
 
 	private void showSubscribedUser() {
-
-		for (User user : userList) {
-			 User userView = user;
-			userVector.add(userView.getFirstName() + " "
-					+ userView.getLastName());
 		
+		for (User user : userList) {
+			final User userView = user;
+			FlexTable chatFlexTable = new FlexTable();			
+			FocusPanel wrapper = new FocusPanel();
+			
+			String userName = userView.getFirstName() + " "
+					+ userView.getLastName();
+			
+			Label userLabel = new Label(userName);
 
-			final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
-			cellListUser.setSelectionModel(selectionModelUser);
+			userLabel.getElement().setId("conversationHead");
 			
-			selectionModelUser.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-				
-						@Override
-						public void onSelectionChange(SelectionChangeEvent event) {
-							String selected = selectionModelUser.getSelectedObject();
-							if (selected != null) {
-								TextyForm message = new NewMessage("Answer to public Posting");
-								RootPanel.get("Info").clear();
-								RootPanel.get("Info").add(message);
-								
-								
-							}
-						}
-						
-					});
+			wrapper.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					
+						Window.alert("Hallo "
+								+ userView.getFirstName());
+
+						showConversationSelectedUser(userView);
+
+						TextyForm message = new NewMessage("New Message");
+						RootPanel.get("Info").clear();
+						RootPanel.get("Info").add(message);
+					
+				}
+			});
 			
+			chatFlexTable.setWidget(0, 0, userLabel);
+			
+			chatFlexTable.getElement().setId("conversation");
+			
+			wrapper.add(chatFlexTable);
+			
+			contentUser.add(wrapper);
+
 		}
-
-		cellListUser.setRowCount(userVector.size(), true);
-		cellListUser.setRowData(0, userVector);
-		Label label = new Label("User");
-		RootPanel.get("Navigator").add(label);
-		RootPanel.get("Navigator").add(cellListUser);
+		
+//		cellListUser
+//				.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+//		cellListUser.setPageSize(30);
+//		cellListUser
+//				.setKeyboardPagingPolicy(KeyboardPagingPolicy.INCREASE_RANGE);
+//
+//		final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
+//		cellListUser.setSelectionModel(selectionModelUser);
+//
+//		selectionModelUser
+//				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+//					@Override
+//					public void onSelectionChange(SelectionChangeEvent event) {
+//
+//						String selected = selectionModelUser
+//								.getSelectedObject();
+//						if (selectionModelUser.getSelectedObject() != null) {
+//							Window.alert("Hallo "
+//									+ selectionModelUser.getSelectedObject());
+//
+//							// showConversationSelectedUser(userView);
+//
+//							TextyForm message = new NewMessage("New Message");
+//							RootPanel.get("Info").clear();
+//							RootPanel.get("Info").add(message);
+//
+//						}
+//					}
+//
+//				});
+//
+//		for (User user : userList) {
+//			final User userView = user;
+//			userVector.addElement(userView.getFirstName() + " "
+//					+ userView.getLastName());
+//
+//		}
+//
+//		cellListUser.setRowCount(userVector.size(), true);
+//		cellListUser.setRowData(0, userVector);
+//		Label label = new Label("User");
+//		RootPanel.get("Navigator").add(label);
+////		RootPanel.get("Navigator").add(cellListUser);
 
 	}
 
@@ -140,44 +217,47 @@ public class HomeForm extends TextyForm {
 
 		for (Hashtag hashtag : hashtagList) {
 			final Hashtag hashtagView = hashtag;
-			hashtagVector.add(hashtagView.getKeyword());
-			cellListHashtag
-					.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-			cellListHashtag.setPageSize(30);
-			cellListHashtag
-					.setKeyboardPagingPolicy(KeyboardPagingPolicy.INCREASE_RANGE);
-			final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
-			cellListHashtag.setSelectionModel(selectionModelUser);
-			selectionModelUser
-					.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-						@Override
-						public void onSelectionChange(SelectionChangeEvent event) {
-							String selected = selectionModelUser
-									.getSelectedObject();
-							if (selected != null) {
-								TextyForm message = new NewMessage(
-										"Answer to public Posting");
-								RootPanel.get("Info").clear();
-								RootPanel.get("Info").add(message);
+			FlexTable chatFlexTable = new FlexTable();			
+			FocusPanel wrapper = new FocusPanel();
+			
+			String keyword = hashtagView.getKeyword();
+	
+			Label hashtagLabel = new Label(keyword);
 
-								//showConversationSelectedHashtag(hashtagView);
-							}
-						}
-					});
+			hashtagLabel.getElement().setId("conversationHead");
+			
+			wrapper.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					
+						Window.alert("Hallo "
+								+ hashtagView.getKeyword());
+
+						showConversationSelectedHashtag(hashtagView);
+
+						TextyForm message = new NewMessage("New Message");
+						RootPanel.get("Info").clear();
+						RootPanel.get("Info").add(message);
+					
+				}
+			});
+			
+			chatFlexTable.setWidget(0, 0, hashtagLabel);
+			
+			chatFlexTable.getElement().setId("conversation");
+			
+			wrapper.add(chatFlexTable);
+			
+			contentHashtag.add(wrapper);
 		}
-
-		cellListHashtag.setRowCount(hashtagVector.size(), true);
-		cellListHashtag.setRowData(0, hashtagVector);
-		Label label = new Label("Hashtags");
-		RootPanel.get("Navigator").add(label);
-		RootPanel.get("Navigator").add(cellListHashtag);
 
 	}
 
-	private void showConversationOfSelectedUser(User user) {
-		//Window.alert("Öffentliche Nachrichten von " + user.getFirstName());
+	private void showConversationSelectedUser(User user) {
 		administration.getAllPublicConversationsFromUser(user,
 				new AsyncCallback<Vector<Conversation>>() {
+
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -185,19 +265,28 @@ public class HomeForm extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<Conversation> result) {
-						HomeForm.conList = result;
-						for (Conversation conversation : conList) {
-						final Conversation conversationView = conversation;
-						FlexTable chatFlexTable = new FlexTable();
-						
-						}
-							
+						HomeForm.conversationListofUser = result;
 					}
 
 				});
-		
 	}
-	
-	//TODO private void showConversationSelectedHashtag(Hashtag hashtag){}
+		
+		private void showConversationSelectedHashtag(Hashtag hashtag) {
+			administration.getAllPublicMessagesFromHashtag(hashtag,
+					new AsyncCallback<Vector<Message>>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+
+						}
+
+						@Override
+						public void onSuccess(Vector<Message> result) {
+							HomeForm.messageListofHashtag = result;
+						}
+
+					});
+
+	}
 
 }
