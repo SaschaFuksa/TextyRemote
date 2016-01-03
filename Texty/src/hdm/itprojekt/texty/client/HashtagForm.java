@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.FieldVerifier;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 
@@ -41,7 +42,11 @@ public class HashtagForm extends TextyForm {
 		@Override
 		public void onClick(ClickEvent event) {
 			errorLabel.setText("\0");
-			String keyword = suggestBox.getText();
+			String keyword = suggestBox.getText().trim().replaceAll(" ", "");
+			if (!FieldVerifier.isValidHashtag(keyword)) {
+				errorLabel.setText("Please add a Hashtag with at least three characters!");
+				return;
+			}
 			boolean alreadySelected = checkHashtag(keyword);
 			if (keyword == "") {
 				errorLabel.setText("Please select a hashtag!");
