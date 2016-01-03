@@ -449,6 +449,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		User us = this.uMapper.findByEmail(user.getEmail());
 		return this.usMapper.selectAllSubscribedUsers(us);
 	}
+	
+	@Override
+	public Vector<Message> getAllPublicMessagesFromHashtag(Hashtag selectedHashtag) throws IllegalArgumentException {
+		return this.mMapper.selectAllPublicMessagesWithHashtag(selectedHashtag);
+	}
 
 	@Override
 	public Vector<User> getAllSubscribedUsersFromUser(User selectedUser)
