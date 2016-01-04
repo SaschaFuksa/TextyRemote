@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -127,6 +128,10 @@ public class SingleConversationViewer extends TextyForm {
 			Label author = new Label();
 			String hashtagList = new String();
 			author.getElement().setId("authorPanel");
+			String date = DateTimeFormat.getFormat("yyyy.MM.dd 'at' HH:mm:ss").format(message.getDateOfCreation());
+			
+			Label dateLabel = new Label(date);
+			dateLabel.getElement().setId("conversationDate");
 
 			textBox.addKeyUpHandler(new KeyUpHandler() {
 				@Override
@@ -240,6 +245,7 @@ public class SingleConversationViewer extends TextyForm {
 				buttonPanel.getElement().setId("buttonPanel");
 				deleteButton.getElement().setId("deleteButton");
 				editButton.getElement().setId("editButton");
+				buttonPanel.add(dateLabel);
 				buttonPanel.add(editButton);
 				buttonPanel.add(deleteButton);
 				messageTable.setWidget(0, 0, author);
@@ -268,6 +274,7 @@ public class SingleConversationViewer extends TextyForm {
 				messageTable.getElement().setId("receiverPanel");
 				messageTable.setWidget(0, 0, author);
 				messageTable.setWidget(1, 0, text);
+				messageTable.setWidget(0, 1, dateLabel);
 
 				if (message.getListOfHashtag().size() > 0) {
 					for (Hashtag hashtag : message.getListOfHashtag()) {
