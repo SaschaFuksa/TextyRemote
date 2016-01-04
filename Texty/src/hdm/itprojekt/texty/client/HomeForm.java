@@ -61,56 +61,63 @@ public class HomeForm extends TextyForm {
 		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Fail");
+				Window.alert("Fail getAllSubscribedUsers");
 			}
 
 			@Override
 			public void onSuccess(Vector<User> result) {
 				HomeForm.userList = result;
 				showSubscribedUser();
+				
+				// Abonnierte Hashtags und deren Postings
+				administration
+						.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert("Fail getAllSubscribedHashtags");
+							}
+
+							@Override
+							public void onSuccess(Vector<Hashtag> result) {
+								HomeForm.hashtagList = result;
+								showSubscribedHashtag();
+							}
+
+						});
 			}
 
 		});
-
-		// Abonnierte Hashtags und deren Postings
-		administration
-				.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
-					@Override
-					public void onFailure(Throwable caught) {
-
-					}
-
-					@Override
-					public void onSuccess(Vector<Hashtag> result) {
-						HomeForm.hashtagList = result;
-						showSubscribedHashtag();
-					}
-
-				});
 		
-//		this.getElement().setId("fullSize");
-//		
-//		mainPanel.getElement().setId("fullSize");
-//		userPanel.getElement().setId("publicConversation");
-//		scrollUser.getElement().setId("conversationScroll");
-//		contentUser.getElement().setId("conversationContent");
-//		hashtagPanel.getElement().setId("publicConversation");
-//		scrollHashtag.getElement().setId("conversationScroll");
-//		contentHashtag.getElement().setId("conversationContent");
+		this.getElement().setId("fullSize");
+		
+		mainPanel.getElement().setId("fullSize");
+		userPanel.getElement().setId("publicConversation");
+		scrollUser.getElement().setId("conversationScroll");
+		contentUser.getElement().setId("conversationContent");
+		hashtagPanel.getElement().setId("publicConversation");
+		scrollHashtag.getElement().setId("conversationScroll");
+		contentHashtag.getElement().setId("conversationContent");
+
+		contentUser.add(cellListUser);
+		contentHashtag.add(cellListHashtag);
 		
 		userPanel.add(scrollUser);
 		hashtagPanel.add(scrollHashtag);
 
 		mainPanel.add(getHeadline());
 		mainPanel.add(intro);
-		mainPanel.add(cellListUser);
-		mainPanel.add(cellListHashtag);
-		
-		contentUser.add(cellListUser);
-		
-		contentHashtag.add(cellListHashtag);
+		mainPanel.add(userPanel);
+		mainPanel.add(hashtagPanel);
 
 		this.add(mainPanel);
+
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				scrollUser.setHeight(mainPanel.getOffsetHeight()/3 + "px");
+				scrollHashtag.setHeight(mainPanel.getOffsetHeight()/3 + "px");
+			}
+		});
+		
 
 //		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 //			public void execute() {
