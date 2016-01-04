@@ -31,11 +31,6 @@
 		<servlet-class>hdm.itprojekt.texty.server.TextyAdministrationImpl</servlet-class>
 	</servlet>
 
-	<servlet>
-		<servlet-name>reportServlet</servlet-name>
-		<servlet-class>hdm.itprojekt.texty.server.report.ReportGeneratorImpl</servlet-class>
-	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>loginService</servlet-name>
 		<url-pattern>/texty/login</url-pattern>
@@ -46,12 +41,6 @@
 		<servlet-name>administrationServlet</servlet-name>
 		<url-pattern>/texty/administration</url-pattern>
 		<url-pattern>/textyreports/administration</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>reportServlet</servlet-name>
-		<url-pattern>/texty/report</url-pattern>
-		<url-pattern>/textyreports/report</url-pattern>
 	</servlet-mapping>
 
 </web-app>
