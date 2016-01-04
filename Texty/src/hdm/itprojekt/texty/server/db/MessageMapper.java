@@ -58,7 +58,7 @@ public class MessageMapper {
 				user.setFirstName(rs.getString("user.givenName"));
 				user.setLastName(rs.getString("user.familyName"));
 				user.setEmail(rs.getString("user.email"));
-				user.setDateOfCreation(rs.getTime("user.dateOfCreation"));
+				user.setDateOfCreation(rs.getTimestamp("user.dateOfCreation"));
 
 				return user;
 			}
@@ -87,7 +87,7 @@ public class MessageMapper {
 
 				hashtag.setId(rs.getInt("hashtag.hashtagId"));
 				hashtag.setKeyword(rs.getString("hashtag.keyword"));
-				hashtag.setDateOfCreation(rs.getTime("hashtag.dateOfCreation"));
+				hashtag.setDateOfCreation(rs.getTimestamp("hashtag.dateOfCreation"));
 
 				result.addElement(hashtag);
 			}
@@ -152,7 +152,7 @@ public class MessageMapper {
 				receiver.setFirstName(rs.getString("user.givenName"));
 				receiver.setLastName(rs.getString("user.familyName"));
 				receiver.setEmail(rs.getString("user.email"));
-				receiver.setDateOfCreation(rs.getTime("user.dateOfCreation"));
+				receiver.setDateOfCreation(rs.getTimestamp("user.dateOfCreation"));
 
 				result.addElement(receiver);
 			}
@@ -250,7 +250,7 @@ public class MessageMapper {
 				allmessages.setVisible(rsMessages
 						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
+						.getTimestamp("message.dateOfCreation"));
 
 				resultMessage.addElement(allmessages);
 			}
@@ -296,7 +296,7 @@ public class MessageMapper {
 				allmessages.setVisible(rsMessages
 						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
+						.getTimestamp("message.dateOfCreation"));
 
 				resultMessage.addElement(allmessages);
 			}
@@ -341,7 +341,7 @@ public class MessageMapper {
 				allmessages.setVisible(rsMessages
 						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
+						.getTimestamp("message.dateOfCreation"));
 
 				resultMessage.addElement(allmessages);
 			}
@@ -391,7 +391,7 @@ public class MessageMapper {
 				allmessages.setVisible(rsMessages
 						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
+						.getTimestamp("message.dateOfCreation"));
 
 				resultMessage.addElement(allmessages);
 			}
@@ -436,7 +436,7 @@ public class MessageMapper {
 				allmessages.setVisible(rsMessages
 						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
-						.getTime("message.dateOfCreation"));
+						.getTimestamp("message.dateOfCreation"));
 
 				resultMessage.addElement(allmessages);
 			}

@@ -53,7 +53,7 @@ public class HashtagMapper {
 				Hashtag hashtag = new Hashtag();
 				hashtag.setId(rs.getInt("hashtagId"));
 				hashtag.setKeyword(rs.getString("keyword"));
-				hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
+				hashtag.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				// Hinzufügen des neuen Objekts zum Ergebnisvektor
 				result.addElement(hashtag);
@@ -81,7 +81,7 @@ public class HashtagMapper {
 				Hashtag hashtag = new Hashtag();
 				hashtag.setId(rs.getInt("hashtagId"));
 				hashtag.setKeyword(rs.getString("keyword"));
-				hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
+				hashtag.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(hashtag);
 			}
@@ -107,7 +107,7 @@ public class HashtagMapper {
 				Hashtag hashtag = new Hashtag();
 				hashtag.setId(rs.getInt("hashtagId"));
 				hashtag.setKeyword(rs.getString("keyword"));
-				hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
+				hashtag.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(hashtag);
 			}

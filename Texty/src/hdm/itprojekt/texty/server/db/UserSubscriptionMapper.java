@@ -83,7 +83,7 @@ public class UserSubscriptionMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTime("dateOfCreation"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(user);
 

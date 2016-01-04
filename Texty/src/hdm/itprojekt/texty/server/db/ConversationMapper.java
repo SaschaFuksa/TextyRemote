@@ -79,7 +79,7 @@ public class ConversationMapper {
 
 				conversation.setId(rs.getInt("conversationId"));
 				conversation.setPublicly(rs.getBoolean("publicly"));
-				conversation.setDateOfCreation(rs.getTime("dateOfCreation"));
+				conversation.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(conversation);
 
@@ -113,7 +113,7 @@ public class ConversationMapper {
 
 				hashtag.setId(rsHash.getInt("hashtagId"));
 				hashtag.setKeyword(rsHash.getString("keyword"));
-				hashtag.setDateOfCreation(rsHash.getTime("dateOfCreation"));
+				hashtag.setDateOfCreation(rsHash.getTimestamp("dateOfCreation"));
 
 				allHashtagResult.addElement(hashtag);
 
@@ -132,7 +132,7 @@ public class ConversationMapper {
 				user.setFirstName(rsUser.getString("givenName"));
 				user.setLastName(rsUser.getString("familyName"));
 				user.setEmail(rsUser.getString("email"));
-				user.setDateOfCreation(rsUser.getTime("dateOfCreation"));
+				user.setDateOfCreation(rsUser.getTimestamp("dateOfCreation"));
 
 				allUserResult.addElement(user);
 
@@ -217,7 +217,7 @@ public class ConversationMapper {
 
 				conversation.setId(rs.getInt("conversationId"));
 				conversation.setPublicly(rs.getBoolean("publicly"));
-				conversation.setDateOfCreation(rs.getTime("dateOfCreation"));
+				conversation.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				for (int i = 0; i < messageResult.size(); i++) {
 					if (messageResult.get(i).getConversationID() == conversation

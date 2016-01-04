@@ -40,7 +40,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTime("dateOfCreation"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				// Hinzufügen des neuen Objekts zum Ergebnisvektor
 				result.addElement(user);
@@ -69,7 +69,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTime("dateOfCreation"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 				return user;
 			}
 		} catch (SQLException e2) {
@@ -98,7 +98,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTime("dateOfCreation"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(user);
 			}
@@ -130,7 +130,7 @@ public class UserMapper {
 				user.setFirstName(rs.getString("givenName"));
 				user.setLastName(rs.getString("familyName"));
 				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTime("dateOfCreation"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(user);
 			}

@@ -146,7 +146,7 @@ public class HashtagSubscriptionMapper {
 
 				hashtag.setId(rs.getInt("hashtagId"));
 				hashtag.setKeyword(rs.getString("keyword"));
-				hashtag.setDateOfCreation(rs.getTime("dateOfCreation"));
+				hashtag.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				result.addElement(hashtag);
 
