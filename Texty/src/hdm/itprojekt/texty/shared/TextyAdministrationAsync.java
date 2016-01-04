@@ -85,4 +85,7 @@ public interface TextyAdministrationAsync {
 	void getAllPublicMessagesFromHashtag(Hashtag selectedHashtag,
 			AsyncCallback<Vector<Message>> callback);
 
+	void getAllMessagesWhereUserIsAuthor(User user,
+			AsyncCallback<Vector<Message>> callback);
+
 }

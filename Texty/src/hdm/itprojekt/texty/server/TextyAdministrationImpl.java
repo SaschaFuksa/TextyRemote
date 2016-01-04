@@ -385,6 +385,19 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			throws IllegalArgumentException {
 		return this.mMapper.selectAllMessagesFromUser(user);
 	}
+	
+	@Override
+	public Vector<Message> getAllMessagesWhereUserIsAuthor(User user)
+			throws IllegalArgumentException {
+		Vector<Message> allMessagesFromUser = this.mMapper.selectAllMessagesFromUser(user);
+		Vector<Message> allMessagesWhereUserIsAuthor = new Vector<Message>();
+		for (int i = 0; i < allMessagesFromUser.size(); i++) {
+			if (allMessagesFromUser.get(i).getAuthor().getId() == user.getId()) {
+				allMessagesWhereUserIsAuthor.add(allMessagesFromUser.get(i));
+			}
+		}
+		return allMessagesWhereUserIsAuthor;
+	}
 
 	@Override
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
