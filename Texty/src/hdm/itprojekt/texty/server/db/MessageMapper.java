@@ -98,6 +98,40 @@ public class MessageMapper {
 		// Ergebnisvektor zurückgeben
 		return result;
 	}
+	
+	public void removeHashtagInMessage(Message message) {
+		Connection con = DBConnection.connection();
+
+		try {
+			for (int i = 0; i < message.getListOfHashtag().size(); i++) {
+			Statement stmt = con.createStatement();
+			// Hashtag gets removed from the Message
+			stmt.executeUpdate("DELETE FROM hashtag_in_message"
+					+ "WHERE hashtag_in_message.hashtagId = " + message.getListOfHashtag().get(i).getId() + " AND hashtag_in_message.messageId = " + message.getId());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addHashtagToMessage(Message message) {
+		Connection con = DBConnection.connection();
+
+		try {
+			for (int i = 0; i < message.getListOfHashtag().size(); i++) {
+			Statement stmt = con.createStatement();
+			// Hashtag gets removed from the Message
+			stmt.executeUpdate("INSERT INTO textydb.hashtag_in_message (messageId, hashtagId)"
+					+ "VALUES ("
+					+ message.getId()
+					+ ", "
+					+ message.getListOfHashtag().get(i).getId()
+					+ ")");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public Vector<User> findReceivers(Message message) {
 		Connection con = DBConnection.connection();
