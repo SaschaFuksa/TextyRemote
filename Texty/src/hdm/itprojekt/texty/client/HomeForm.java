@@ -14,7 +14,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -63,7 +62,7 @@ public class HomeForm extends TextyForm {
 		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Fail getAllSubscribedUsers");
+
 			}
 
 			@Override
@@ -76,7 +75,7 @@ public class HomeForm extends TextyForm {
 						.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
 							@Override
 							public void onFailure(Throwable caught) {
-								Window.alert("Fail getAllSubscribedHashtags");
+
 							}
 
 							@Override
@@ -138,7 +137,6 @@ public class HomeForm extends TextyForm {
 				@Override
 				public void onClick(ClickEvent event) {
 
-					Window.alert("Hallo " + userView.getFirstName());
 
 					showMessageSelectedUser(userView);
 
@@ -169,7 +167,6 @@ public class HomeForm extends TextyForm {
 				@Override
 				public void onClick(ClickEvent event) {
 
-					Window.alert("Hallo " + hashtagView.getKeyword());
 					showMessageSelectedHashtag(hashtagView);
 				}
 			});
@@ -203,7 +200,6 @@ public class HomeForm extends TextyForm {
 					public void onSuccess(Vector<Conversation> result) {
 						HomeForm.conListofUser = result;
 
-						Window.alert("Vector Conversation: " + conListofUser);
 
 						for (Conversation conversation : conListofUser) {
 							final Conversation conversationView = conversation;
@@ -228,10 +224,6 @@ public class HomeForm extends TextyForm {
 							wrapper.addClickHandler(new ClickHandler() {
 								@Override
 								public void onClick(ClickEvent event) {
-
-									Window.alert("Hallo "
-											+ conversationView
-													.getListOfMessage());
 									
 									RootPanel.get("Info").clear();
 									RootPanel.get("Details").add(textLabel);

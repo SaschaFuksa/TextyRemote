@@ -5,6 +5,7 @@ import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -13,13 +14,15 @@ import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ConversationForm extends TextyForm {
+
+	private static final Logger LOG = Logger
+			.getLogger(SingleConversationViewer.class.getSimpleName());
 
 	private static Vector<Conversation> conList = new Vector<Conversation>();
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -41,11 +44,14 @@ public class ConversationForm extends TextyForm {
 				.getAllConversationsFromUser(new AsyncCallback<Vector<Conversation>>() {
 					@Override
 					public void onFailure(Throwable caught) {
-
+						LOG.severe("Error: " + caught.getMessage());
 					}
 
 					@Override
 					public void onSuccess(Vector<Conversation> result) {
+						LOG.info("Success :"
+								+ result.getClass().getSimpleName());
+
 						ConversationForm.conList = result;
 						showConversation();
 
@@ -56,19 +62,19 @@ public class ConversationForm extends TextyForm {
 		mainPanel.getElement().setId("conversationWrapper");
 		scroll.getElement().setId("conversationScroll");
 		content.getElement().setId("conversationContent");
-		
+
 		mainPanel.add(getHeadline());
 		mainPanel.add(intro);
 		mainPanel.add(scroll);
 
 		this.add(mainPanel);
-		
+
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
 			}
 		});
-		
+
 	}
 
 	private String setMessageText(String text) {
@@ -109,9 +115,9 @@ public class ConversationForm extends TextyForm {
 	public void showConversation() {
 		for (Conversation conversation : conList) {
 			final Conversation conversationView = conversation;
-			FlexTable chatFlexTable = new FlexTable();			
+			FlexTable chatFlexTable = new FlexTable();
 			FocusPanel wrapper = new FocusPanel();
-			
+
 			String receiver = setRecipient(conversationView.getLastMessage()
 					.getListOfReceivers());
 			String text = setMessageText(conversationView.getLastMessage()
@@ -129,30 +135,30 @@ public class ConversationForm extends TextyForm {
 			receiverLabel.getElement().setId("conversationHead");
 			dateLabel.getElement().setId("conversationDate");
 			textLabel.getElement().setId("conversationBody");
-			
-			
+
 			wrapper.addClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
 					RootPanel.get("Details").clear();
 					RootPanel.get("Details").add(
-							new SingleConversationViewer("Private Conversation", conversationView));
+							new SingleConversationViewer(
+									"Private Conversation", conversationView));
 				}
 			});
-			
+
 			chatFlexTable.getElement().setId("conversation");
-			
+
 			chatFlexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 			chatFlexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
-			
+
 			chatFlexTable.setWidget(0, 0, authorLabel);
 			chatFlexTable.setWidget(0, 1, dateLabel);
 			chatFlexTable.setWidget(1, 0, receiverLabel);
 			chatFlexTable.setWidget(2, 0, textLabel);
 
 			wrapper.add(chatFlexTable);
-			
+
 			content.add(wrapper);
 
 		}

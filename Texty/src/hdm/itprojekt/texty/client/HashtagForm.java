@@ -44,7 +44,7 @@ public class HashtagForm extends TextyForm {
 			errorLabel.setText("\0");
 			String keyword = suggestBox.getText().trim().replaceAll(" ", "");
 			if (!FieldVerifier.isValidHashtag(keyword)) {
-				errorLabel.setText("Please add a Hashtag with at least three characters!");
+				errorLabel.setText("Please select a Hashtag with at least three characters!");
 				return;
 			}
 			boolean alreadySelected = checkHashtag(keyword);

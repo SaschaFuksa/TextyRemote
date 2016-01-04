@@ -4,6 +4,7 @@ import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,6 +25,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CommunityForm extends TextyForm {
 
+	private static final Logger LOG = Logger
+			.getLogger(SingleConversationViewer.class.getSimpleName());
+	
 	private static Vector<User> allUser = new Vector<User>();
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -222,21 +226,29 @@ public class CommunityForm extends TextyForm {
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-
+				LOG.severe("Error: " + caught.getMessage());
+				
 			}
 
 			@Override
 			public void onSuccess(Vector<User> result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				
+				
 				CommunityForm.allUser = result;
 
 				administration.getCurrentUser(new AsyncCallback<User>() {
 					@Override
 					public void onFailure(Throwable caught) {
-
+						LOG.severe("Error: " + caught.getMessage());
+						
 					}
 
 					@Override
 					public void onSuccess(User result) {
+						LOG.info("Success :"
+								+ result.getClass().getSimpleName());
+
 						removeCurrentUser(result);
 						setOracle();
 

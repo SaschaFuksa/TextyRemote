@@ -151,7 +151,7 @@ public class MessageForm extends VerticalPanel {
 
 	public void createHashtagPanel(String keyword) {
 		final HorizontalPanel mainPanel = new HorizontalPanel();
-		final Label keywordLabel = new Label(keyword);
+		final Label keywordLabel = new Label("#"+keyword);
 		final Label deleteLabel = createDeleteLabel(keyword, mainPanel);
 
 		mainPanel.getElement().setId("hashtagPanel");
@@ -224,7 +224,7 @@ public class MessageForm extends VerticalPanel {
 					String keyword = suggestBox.getText().trim().replaceAll(" ", "");
 					
 					if (!FieldVerifier.isValidHashtag(keyword)) {
-						infoBox.setErrorText("Please add a Hashtag with at least three characters!");
+						infoBox.setErrorText("Please select a Hashtag with at least three characters!");
 						return;
 					}
 					if (keyword == "" || keyword.equals("Search for hashtags")) {
