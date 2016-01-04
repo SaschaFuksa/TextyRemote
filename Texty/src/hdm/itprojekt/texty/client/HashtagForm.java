@@ -109,7 +109,7 @@ public class HashtagForm extends TextyForm {
 				final Button deleteButton = new Button("", new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						deleteHashtag(keywordLabel.getText());
+						deleteHashtag(getKeyword(keywordLabel.getText()));
 						content.remove(panel);
 					}
 
@@ -147,6 +147,13 @@ public class HashtagForm extends TextyForm {
 
 		allHashtag.addElement(selectedHashtag.get(indexSelectedHashtag));
 		selectedHashtag.remove(indexSelectedHashtag);
+	}
+	
+	private String getKeyword(String keyword) {
+		StringBuffer bufferKeyword = new StringBuffer(keyword);
+		bufferKeyword.deleteCharAt(0);
+		String key = bufferKeyword.toString();
+		return key;
 	}
 
 	@Override
