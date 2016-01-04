@@ -23,7 +23,7 @@ public class TextyReportCommand {
 				RootPanel.get("Navigator").clear();
 				switch (name) {
 				case "MessagesOfUser":
-					TextyForm messagesOfUser = new MessageReport(
+					TextyForm messagesOfUser = new MessagesOfUser(
 							"MessagesOfUser");
 					RootPanel.get("Navigator").add(messagesOfUser);
 					break;
