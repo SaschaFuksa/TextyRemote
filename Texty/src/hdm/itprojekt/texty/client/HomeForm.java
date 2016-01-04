@@ -1,8 +1,5 @@
 package hdm.itprojekt.texty.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
@@ -30,7 +27,7 @@ public class HomeForm extends TextyForm {
 
 	private static Vector<User> userList = new Vector<User>();
 	private static Vector<Hashtag> hashtagList = new Vector<Hashtag>();
-	private static Vector<Conversation> conversationListofUser = new Vector<Conversation>();
+	private static Vector<Conversation> conListofUser = new Vector<Conversation>();
 	private static Vector<Message> messageListofHashtag = new Vector<Message>();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Label intro = new Label(
@@ -47,6 +44,11 @@ public class HomeForm extends TextyForm {
 	private CellList<String> cellListUser = new CellList<String>(textCell);
 	private CellList<String> cellListHashtag = new CellList<String>(textCell);
 	private NewMessage messageForm = new NewMessage("New Message");
+
+	// Detailsbereich
+	private VerticalPanel content = new VerticalPanel();
+	private ScrollPanel scroll = new ScrollPanel(content);
+
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
@@ -68,7 +70,7 @@ public class HomeForm extends TextyForm {
 			public void onSuccess(Vector<User> result) {
 				HomeForm.userList = result;
 				showSubscribedUser();
-				
+
 				// Abonnierte Hashtags und deren Postings
 				administration
 						.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
@@ -87,9 +89,8 @@ public class HomeForm extends TextyForm {
 			}
 
 		});
-		
+
 		this.getElement().setId("fullSize");
-		
 		mainPanel.getElement().setId("fullSize");
 		userPanel.getElement().setId("publicConversation");
 		scrollUser.getElement().setId("conversationScroll");
@@ -100,7 +101,6 @@ public class HomeForm extends TextyForm {
 
 		contentUser.add(cellListUser);
 		contentHashtag.add(cellListHashtag);
-		
 		userPanel.add(scrollUser);
 		hashtagPanel.add(scrollHashtag);
 
@@ -113,156 +113,85 @@ public class HomeForm extends TextyForm {
 
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				scrollUser.setHeight(mainPanel.getOffsetHeight()/3 + "px");
-				scrollHashtag.setHeight(mainPanel.getOffsetHeight()/3 + "px");
+				scrollUser.setHeight(mainPanel.getOffsetHeight() / 3 + "px");
+				scrollHashtag.setHeight(mainPanel.getOffsetHeight() / 3 + "px");
 			}
 		});
-		
-
-//		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-//			public void execute() {
-//				scrollUser.setHeight(mainPanel.getOffsetHeight()/2 + "px");
-//			}
-//		});
-//		
-//		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-//			public void execute() {
-//				scrollHashtag.setHeight(hashtagPanel.getOffsetHeight() + "px");
-//			}
-//		});
 
 	}// Ende Run-Methode
 
+	// Navigatorbereich User
 	private void showSubscribedUser() {
-		
+
 		for (User user : userList) {
 			final User userView = user;
-			FlexTable chatFlexTable = new FlexTable();			
+			FlexTable chatFlexTable = new FlexTable();
 			FocusPanel wrapper = new FocusPanel();
-			
+
 			String userName = userView.getFirstName() + " "
 					+ userView.getLastName();
-			
+
 			Label userLabel = new Label(userName);
-
 			userLabel.getElement().setId("conversationHead");
-			
-			wrapper.addClickHandler(new ClickHandler() {
 
+			wrapper.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					
-						Window.alert("Hallo "
-								+ userView.getFirstName());
 
-						showConversationSelectedUser(userView);
+					Window.alert("Hallo " + userView.getFirstName());
 
-						TextyForm message = new NewMessage("New Message");
-						RootPanel.get("Info").clear();
-						RootPanel.get("Info").add(message);
-					
+					showMessageSelectedUser(userView);
+
 				}
 			});
-			
-			chatFlexTable.setWidget(0, 0, userLabel);
-			
-			chatFlexTable.getElement().setId("conversation");
-			
-			wrapper.add(chatFlexTable);
-			
-			contentUser.add(wrapper);
 
+			chatFlexTable.setWidget(0, 0, userLabel);
+			chatFlexTable.getElement().setId("conversation");
+			wrapper.add(chatFlexTable);
+			contentUser.add(wrapper);
 		}
-		
-//		cellListUser
-//				.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-//		cellListUser.setPageSize(30);
-//		cellListUser
-//				.setKeyboardPagingPolicy(KeyboardPagingPolicy.INCREASE_RANGE);
-//
-//		final SingleSelectionModel<String> selectionModelUser = new SingleSelectionModel<String>();
-//		cellListUser.setSelectionModel(selectionModelUser);
-//
-//		selectionModelUser
-//				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-//					@Override
-//					public void onSelectionChange(SelectionChangeEvent event) {
-//
-//						String selected = selectionModelUser
-//								.getSelectedObject();
-//						if (selectionModelUser.getSelectedObject() != null) {
-//							Window.alert("Hallo "
-//									+ selectionModelUser.getSelectedObject());
-//
-//							// showConversationSelectedUser(userView);
-//
-//							TextyForm message = new NewMessage("New Message");
-//							RootPanel.get("Info").clear();
-//							RootPanel.get("Info").add(message);
-//
-//						}
-//					}
-//
-//				});
-//
-//		for (User user : userList) {
-//			final User userView = user;
-//			userVector.addElement(userView.getFirstName() + " "
-//					+ userView.getLastName());
-//
-//		}
-//
-//		cellListUser.setRowCount(userVector.size(), true);
-//		cellListUser.setRowData(0, userVector);
-//		Label label = new Label("User");
-//		RootPanel.get("Navigator").add(label);
-////		RootPanel.get("Navigator").add(cellListUser);
 
 	}
 
+	// Navigatorbereich Hashtags
 	private void showSubscribedHashtag() {
 
 		for (Hashtag hashtag : hashtagList) {
 			final Hashtag hashtagView = hashtag;
-			FlexTable chatFlexTable = new FlexTable();			
+			FlexTable chatFlexTable = new FlexTable();
 			FocusPanel wrapper = new FocusPanel();
-			
-			String keyword = hashtagView.getKeyword();
-	
-			Label hashtagLabel = new Label(keyword);
 
+			String keyword = hashtagView.getKeyword();
+			Label hashtagLabel = new Label(keyword);
 			hashtagLabel.getElement().setId("conversationHead");
-			
 			wrapper.addClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					
-						Window.alert("Hallo "
-								+ hashtagView.getKeyword());
 
-						showConversationSelectedHashtag(hashtagView);
-
-						TextyForm message = new NewMessage("New Message");
-						RootPanel.get("Info").clear();
-						RootPanel.get("Info").add(message);
-					
+					Window.alert("Hallo " + hashtagView.getKeyword());
+					showMessageSelectedHashtag(hashtagView);
 				}
 			});
-			
+
 			chatFlexTable.setWidget(0, 0, hashtagLabel);
-			
 			chatFlexTable.getElement().setId("conversation");
-			
 			wrapper.add(chatFlexTable);
-			
 			contentHashtag.add(wrapper);
 		}
 
 	}
 
-	private void showConversationSelectedUser(User user) {
-		administration.getAllPublicConversationsFromUser(user,
+	// Holt sich alle Messages des Hashtags und speichert sie in der
+	// messageListofHashtag
+	private void getMessageSelectedHashtag(Hashtag hashtag) {
+		
+	}
+
+	// Hier entsteht die Detailsanzeige der User
+	public void showMessageSelectedUser(User userView) {
+
+		administration.getAllPublicConversationsFromUser(userView,
 				new AsyncCallback<Vector<Conversation>>() {
 
 					@Override
@@ -272,27 +201,81 @@ public class HomeForm extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<Conversation> result) {
-						HomeForm.conversationListofUser = result;
+						HomeForm.conListofUser = result;
+
+						Window.alert("Vector Conversation: " + conListofUser);
+
+						for (Conversation conversation : conListofUser) {
+							final Conversation conversationView = conversation;
+							FlexTable chatFlexTable = new FlexTable();
+							FocusPanel wrapper = new FocusPanel();
+							Vector<Message> messageList = new Vector<Message>();
+
+							String date = DateTimeFormat
+									.getFormat("yyyy-MM-dd").format(
+											conversationView.getLastMessage()
+													.getDateOfCreation());
+							Label dateLabel = new Label(date);
+							messageList = conversationView.getListOfMessage();
+							String text = conversationView.getLastMessage()
+									.getText();
+							text = "hallo";
+							final Label textLabel = new Label(text);
+
+							dateLabel.getElement().setId("conversationDate");
+							// textLabel.getElement().setId("conversationBody");
+
+							wrapper.addClickHandler(new ClickHandler() {
+								@Override
+								public void onClick(ClickEvent event) {
+
+									Window.alert("Hallo "
+											+ conversationView
+													.getListOfMessage());
+									
+									RootPanel.get("Info").clear();
+									RootPanel.get("Details").add(textLabel);
+								}
+							});
+
+							chatFlexTable.getFlexCellFormatter().setColSpan(1,
+									0, 2);
+							chatFlexTable.getFlexCellFormatter().setColSpan(2,
+									0, 2);
+
+							// chatFlexTable.setWidget(0, 0, authorLabel);
+							chatFlexTable.setWidget(0, 1, dateLabel);
+							// chatFlexTable.setWidget(1, 0, receiverLabel);
+							chatFlexTable.setWidget(2, 0, textLabel);
+
+							wrapper.add(chatFlexTable);
+
+							content.add(wrapper);
+							RootPanel.get("Details").add(content);
+							
+						} // Ende for-Schleife
 					}
 
 				});
+
 	}
-		
-		private void showConversationSelectedHashtag(Hashtag hashtag) {
-			administration.getAllPublicMessagesFromHashtag(hashtag,
-					new AsyncCallback<Vector<Message>>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
+	// Hier entsteht die Detailsanzeige der Hashtags
+	public void showMessageSelectedHashtag(Hashtag hashtag) {
+		administration.getAllPublicMessagesFromHashtag(hashtag,
+				new AsyncCallback<Vector<Message>>() {
 
-						}
+					@Override
+					public void onFailure(Throwable caught) {
 
-						@Override
-						public void onSuccess(Vector<Message> result) {
-							HomeForm.messageListofHashtag = result;
-						}
+					}
 
-					});
+					@Override
+					public void onSuccess(Vector<Message> result) {
+						HomeForm.messageListofHashtag = result;
+					}
+
+				});
 
 	}
 
