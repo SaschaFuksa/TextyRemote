@@ -347,17 +347,21 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				.selectAllMessagesFromUser(currentuser);
 		Vector<Conversation> allConversations = this.cMapper
 				.selectAllConversations();
+		Vector<Conversation> result = new Vector<Conversation>();
 
-		for (int i = 0; i < allMesssagesFromUser.size(); i++) {
-			for (int x = 0; x < allConversations.size(); x++) {
-				if (allMesssagesFromUser.get(i).getConversationID() == allConversations
-						.get(x).getId()) {
-					allConversations.get(x).addMessageToConversation(
-							allMesssagesFromUser.get(i));
+		for (Conversation conversation : allConversations) {
+			boolean state = true;
+			for (Message message : allMesssagesFromUser) {
+				if (message.getConversationID() == conversation.getId()) {
+					conversation.addMessageToConversation(message);
+					if (state) {
+						result.add(conversation);
+						state = false;
+					}
 				}
 			}
 		}
-		return allConversations;
+		return result;
 
 	}
 
@@ -385,11 +389,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			throws IllegalArgumentException {
 		return this.mMapper.selectAllMessagesFromUser(user);
 	}
-	
+
 	@Override
 	public Vector<Message> getAllMessagesWhereUserIsAuthor(User user)
 			throws IllegalArgumentException {
-		Vector<Message> allMessagesFromUser = this.mMapper.selectAllMessagesFromUser(user);
+		Vector<Message> allMessagesFromUser = this.mMapper
+				.selectAllMessagesFromUser(user);
 		Vector<Message> allMessagesWhereUserIsAuthor = new Vector<Message>();
 		for (int i = 0; i < allMessagesFromUser.size(); i++) {
 			if (allMessagesFromUser.get(i).getAuthor().getId() == user.getId()) {
@@ -462,9 +467,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		User us = this.uMapper.findByEmail(user.getEmail());
 		return this.usMapper.selectAllSubscribedUsers(us);
 	}
-	
+
 	@Override
-	public Vector<Message> getAllPublicMessagesFromHashtag(Hashtag selectedHashtag) throws IllegalArgumentException {
+	public Vector<Message> getAllPublicMessagesFromHashtag(
+			Hashtag selectedHashtag) throws IllegalArgumentException {
 		return this.mMapper.selectAllPublicMessagesWithHashtag(selectedHashtag);
 	}
 
