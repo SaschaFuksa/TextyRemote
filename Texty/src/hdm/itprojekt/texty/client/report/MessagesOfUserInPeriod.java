@@ -74,32 +74,14 @@ public class MessagesOfUserInPeriod extends TextyForm{
 				DateBox dateBox = new DateBox();
 				    dateBox.setValue(new Date());
 				    
-				    final Label text = new Label();
 				    
-				 // Set the value in the text box when the user selects a date
-				    dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
-				      public void onValueChange(ValueChangeEvent<Date> event) {
-				        Date date = event.getValue();
-				        String dateString = DateTimeFormat.getMediumDateFormat().format(date);
-				        text.setText(dateString);
-				      }
-				    });
+				 
 				    
 				  //Implementierung der Dateboxen zum auswählen des Zeitraums des Reports
 					DateBox dateBox2 = new DateBox();
 					    dateBox.setValue(new Date());
 					    
-					    final Label text2 = new Label();
-					    
-					 // Set the value in the text box when the user selects a date
-					    dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
-					      public void onValueChange(ValueChangeEvent<Date> event) {
-					        Date date = event.getValue();
-					        String dateString = DateTimeFormat.getMediumDateFormat().format(date);
-					        text.setText(dateString);
-					      }
-					    });
-				    
+					  
 				
 		// Text
 		chatFlexTable.setText(0, 0, "Please select User and Dateperiod");
@@ -119,6 +101,19 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		RootPanel.get("Navigator").clear();
 		RootPanel.get("Navigator").add(mainPanel);
 		
+		
+		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+
+			}
+
+			@Override
+			public void onSuccess(Vector<User> result) {
+				MessagesOfUserInPeriod.allUser = result;
+				setOracle();
+			}
+		});
 		
 	}
 	

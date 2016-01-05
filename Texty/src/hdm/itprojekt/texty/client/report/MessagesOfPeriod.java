@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -25,7 +26,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.gwt.user.datepicker.client.DatePicker;
 
 
 public class MessagesOfPeriod extends TextyForm {
@@ -37,6 +37,8 @@ public class MessagesOfPeriod extends TextyForm {
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private Button MessageReport;
+	private Date date1;
+	private Date date2;
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 	private static Vector<User> allUser = new Vector<User>();
@@ -56,9 +58,9 @@ public class MessagesOfPeriod extends TextyForm {
 	    // Set the value in the text box when the user selects a date
 	    dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
-	        Date date = event.getValue();
-	        String dateString = DateTimeFormat.getFormat("dd.MM.yyyy").format(date);
-	        text.setText(dateString);
+	        date1 = event.getValue();
+	        String startDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date1);
+	        text.setText(startDate);
 	      }
 	    });
 
@@ -72,24 +74,35 @@ public class MessagesOfPeriod extends TextyForm {
 	    // Set the value in the text box when the user selects a date
 	    dateBox2.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
-	        Date date = event.getValue();
-	        String dateString = DateTimeFormat.getFormat("dd.MM.yyyy").format(date);
-	        text2.setText(dateString);
+	        date2 = event.getValue();
+	        String endDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date2);
+	        text2.setText(endDate);
 	      }
 	    });
 
 	    // Set the default value
 	    dateBox2.setValue(new Date(), false);
-	    
-	    // Add the widgets to the page
-	    //RootPanel.get("Navigator").add(text);
-	    //RootPanel.get("Navigator").add(datePicker);
-		
+	   
 		
 		// Create UI
-		
-		MessageReport = new Button("Show Messages");
-		//TODO Funktionalität des Buttons
+	    MessageReport = new Button("Show Messages", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+
+				administration.getAllMessagesByDate(date1, date2, new AsyncCallback<Vector<Message>>() {
+					@Override
+					public void onFailure(Throwable caught) {
+
+					}
+					@Override
+					public void onSuccess(Vector<Message> result) {
+						RootPanel.get("Details").clear();
+						RootPanel.get("Details").add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result));
+					}
+				});
+			};
+		});
+	    
 
 		// Text
 		chatFlexTable.setText(0, 0, "Messagereport in Period of:");
@@ -103,9 +116,7 @@ public class MessagesOfPeriod extends TextyForm {
 		chatFlexTable.setWidget(4, 0, MessageReport);
 		
 		
-		// show.addClickHandler(new ClickHandler() {
-		// public void onClick(ClickEvent event) {
-
+		// Add the widgets to the page
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Navigator").clear();

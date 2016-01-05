@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class HTMLMessagesFromUserReport {
 	
+	
 	private static String generateReportHead() {
 		return "<html><head><title></title></head><body>";
 	}
@@ -27,14 +28,15 @@ public class HTMLMessagesFromUserReport {
 		
 		Date today = new Date();
 	    // A custom date format
-	    DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy.MM.dd HH:mm:ss");
+	    DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 
 		report += "Messagereport generated at " + fmt.format(today) + "<br>";
 		
-		report += "<table><tr><th>Message</th><th>Receivers</th></tr>";
+		report += "<table><tr><th>Receivers</th><th>Message</th><th>Date of Creation</th></tr>";
 		
-		for(Message message : messages) {
-			report += "<tr><td>" + message.getText() + "</td><td>" + message.getListOfReceivers() + "</td></tr>";
+		for(Message message : messages) {			
+			report += "<tr><td>" + message.getListOfReceivers() + "</td><td>" + message.getText() + "</td>"
+					+ "<td>" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td></tr>";
 		}
 		
 		report += "</table>";
