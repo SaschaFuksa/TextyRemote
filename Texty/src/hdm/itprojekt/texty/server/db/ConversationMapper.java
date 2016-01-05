@@ -208,7 +208,7 @@ public class ConversationMapper {
 			Statement stmt = con.createStatement();
 
 			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM textydb.conversation Where publicly = 0");
+					.executeQuery("SELECT * FROM textydb.conversation Where publicly = 1");
 
 			while (rs.next()) {
 
@@ -216,7 +216,7 @@ public class ConversationMapper {
 				Vector<Message> message = new Vector<Message>();
 
 				conversation.setId(rs.getInt("conversationId"));
-				conversation.setPublicly(rs.getBoolean("publicly"));
+				conversation.setPublicly(true);
 				conversation.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
 
 				for (int i = 0; i < messageResult.size(); i++) {

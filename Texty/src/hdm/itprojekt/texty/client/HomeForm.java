@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -30,7 +31,7 @@ public class HomeForm extends TextyForm {
 	private static Vector<Message> messageListofHashtag = new Vector<Message>();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Label intro = new Label(
-			"Here you can see and select your subscribed Hashtags and User");
+			"Here you can see and select your subscribed User and Hashtags");
 	private VerticalPanel contentUser = new VerticalPanel();
 	private VerticalPanel userPanel = new VerticalPanel();
 	private ScrollPanel scrollUser = new ScrollPanel(contentUser);
@@ -44,9 +45,9 @@ public class HomeForm extends TextyForm {
 	private CellList<String> cellListHashtag = new CellList<String>(textCell);
 	private NewMessage messageForm = new NewMessage("New Message");
 
-	// Detailsbereich
-	private VerticalPanel content = new VerticalPanel();
-	private ScrollPanel scroll = new ScrollPanel(content);
+	// Detailsbereich für Anzeige der Conversation
+	private VerticalPanel contentConversation = new VerticalPanel();
+	private ScrollPanel scrollConversation = new ScrollPanel(contentConversation);
 
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
@@ -107,6 +108,7 @@ public class HomeForm extends TextyForm {
 		mainPanel.add(intro);
 		mainPanel.add(userPanel);
 		mainPanel.add(hashtagPanel);
+		mainPanel.add(contentConversation);
 
 		this.add(mainPanel);
 
@@ -136,8 +138,7 @@ public class HomeForm extends TextyForm {
 			wrapper.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-
-
+					
 					showMessageSelectedUser(userView);
 
 				}
@@ -187,65 +188,23 @@ public class HomeForm extends TextyForm {
 
 	// Hier entsteht die Detailsanzeige der User
 	public void showMessageSelectedUser(User userView) {
-
+		
+		final User user = userView;
 		administration.getAllPublicConversationsFromUser(userView,
 				new AsyncCallback<Vector<Conversation>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-
+						
 					}
 
 					@Override
 					public void onSuccess(Vector<Conversation> result) {
-						HomeForm.conListofUser = result;
-
-
-						for (Conversation conversation : conListofUser) {
-							final Conversation conversationView = conversation;
-							FlexTable chatFlexTable = new FlexTable();
-							FocusPanel wrapper = new FocusPanel();
-							Vector<Message> messageList = new Vector<Message>();
-
-							String date = DateTimeFormat
-									.getFormat("yyyy-MM-dd").format(
-											conversationView.getLastMessage()
-													.getDateOfCreation());
-							Label dateLabel = new Label(date);
-							messageList = conversationView.getListOfMessage();
-							String text = conversationView.getLastMessage()
-									.getText();
-							text = "hallo";
-							final Label textLabel = new Label(text);
-
-							dateLabel.getElement().setId("conversationDate");
-							// textLabel.getElement().setId("conversationBody");
-
-							wrapper.addClickHandler(new ClickHandler() {
-								@Override
-								public void onClick(ClickEvent event) {
-									
-									RootPanel.get("Info").clear();
-									RootPanel.get("Details").add(textLabel);
-								}
-							});
-
-							chatFlexTable.getFlexCellFormatter().setColSpan(1,
-									0, 2);
-							chatFlexTable.getFlexCellFormatter().setColSpan(2,
-									0, 2);
-
-							// chatFlexTable.setWidget(0, 0, authorLabel);
-							chatFlexTable.setWidget(0, 1, dateLabel);
-							// chatFlexTable.setWidget(1, 0, receiverLabel);
-							chatFlexTable.setWidget(2, 0, textLabel);
-
-							wrapper.add(chatFlexTable);
-
-							content.add(wrapper);
-							RootPanel.get("Details").add(content);
-							
-						} // Ende for-Schleife
+						TextyForm publicConversationViewer = new PublicConversationViewer("Public Postings from " + user.getFirstName(), result);
+						
+						RootPanel.get("Details").clear();
+						RootPanel.get("Details").add(publicConversationViewer);
+						
 					}
 
 				});
