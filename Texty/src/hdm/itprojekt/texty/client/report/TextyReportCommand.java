@@ -27,13 +27,13 @@ public class TextyReportCommand {
 							"MessagesOfUser");
 					RootPanel.get("Navigator").add(messagesOfUser);
 					break;
-				case "MMessagesOfPeriod":
-					TextyForm messagesOfPeriod = new MessageReport(
+				case "MessagesOfPeriod":
+					TextyForm messagesOfPeriod = new MessagesOfPeriod(
 							"MessagesOfPeriod");
 					RootPanel.get("Navigator").add(messagesOfPeriod);
 					break;
 				case "MessagesOfUserInPeriod":
-					TextyForm messagesOfUserInPeriod = new MessageReport(
+					TextyForm messagesOfUserInPeriod = new MessagesOfUserInPeriod(
 							"MessagesOfUserInPeriod");
 					RootPanel.get("Navigator").add(messagesOfUserInPeriod);
 					break;

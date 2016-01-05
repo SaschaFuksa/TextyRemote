@@ -40,6 +40,7 @@ public class MessagesOfUser extends TextyForm {
 
 	@Override
 	public void run() {
+		
 		// Create UI
 		
 		MessageReport = new Button("Show Messages", new ClickHandler() {
