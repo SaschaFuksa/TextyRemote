@@ -424,13 +424,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			throws IllegalArgumentException {
 		Vector<Conversation> allConFromUser = this.cMapper
 				.selectAllConversationsFromUser(user);
-		Vector<Conversation> allPublicConFromUser = new Vector<Conversation>();
-		for (Conversation elem : allConFromUser) {
-			if (elem.isPublicly() == true) {
-				allPublicConFromUser.add(elem);
-			}
-		}
-		return allPublicConFromUser;
+		
+		return allConFromUser;
 	}
 
 	/**
