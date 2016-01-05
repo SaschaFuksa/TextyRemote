@@ -1,4 +1,9 @@
 /** CSS for HashtagForm */
+#hashtagForm{
+	height: 20%;
+	width: 100%;
+}
+
 #hashtagPanel {
 	background-color: #80bfff;
 	border-radius: 10px;

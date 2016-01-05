@@ -99,7 +99,7 @@ div#Details .texty-headline {
 div.gwt-Label {
 	color: white;
 	font-family: Texty;
-	font-size: 20px;
+	font-size: 18px;
 	text-align: left;
 }
 
@@ -127,18 +127,17 @@ input.gwt-SuggestBox {
 	font-size: 1.5em;
 	text-align: left;
 	height: 20px;
+	width: 100%;
 }
 
-.selectedObjectLabel {
-	background-color: #003399;
-	color: white;
-	font-family: Texty;
-	font-size: 1.5em;
+#selectedObjectLabel {
+	background-color: #80bfff;
+	border-radius: 10px;
 	height: 25px;
-	margin-bottom: 2px;
+	margin-top: 5px;
 	margin-left: 10px;
 	padding-left: 8px;
-	width: 150px;
+	width: 50%;
 }
 
 .gwt-Anchor {
@@ -152,7 +151,7 @@ input.gwt-SuggestBox {
 	color: #80bfff;
 }
 
-.buttonLabel {
+#buttonLabel {
 	margin-top: 10px;
 }
 
