@@ -193,7 +193,7 @@ public class MessageForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				infoBox.clear();
 				
-				String keyword = suggestBox.getText().trim().replaceAll(" ", "");
+				String keyword = suggestBox.getText().trim().replaceAll(" ", "").replaceAll("#", "");;
 				
 				if (!FieldVerifier.isValidHashtag(keyword)) {
 					infoBox.setErrorText("Please add a Hashtag with at least three characters!");
