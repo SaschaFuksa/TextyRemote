@@ -91,7 +91,38 @@ public class ConversationMapper {
 		// Ergebnisvektor zurückgeben
 		return result;
 	}
+	
+	public Vector<Conversation> selectAllPublicConversations() {
+		Connection con = DBConnection.connection();
+		Vector<Conversation> result = new Vector<Conversation>();
 
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt
+					.executeQuery("SELECT conversationId, publicly, dateOfCreation FROM textydb.conversation WHERE publicly = 1");
+
+			// Für jeden Eintrag wird nun ein Conversationobjekt erstellt.
+
+			while (rs.next()) {
+
+				Conversation conversation = new Conversation();
+
+				conversation.setId(rs.getInt("conversationId"));
+				conversation.setPublicly(rs.getBoolean("publicly"));
+				conversation.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
+
+				result.addElement(conversation);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Ergebnisvektor zurückgeben
+		return result;
+	}
+	
 	public Vector<Conversation> selectAllConversationsFromUser(User currentuser) {
 		Connection con = DBConnection.connection();
 		Vector<Conversation> result = new Vector<Conversation>();

@@ -1,0 +1,34 @@
+/** CSS for Subscriptions */
+#subscriptionForm {
+	height: 20%;
+	width: 100%;
+}
+
+/* #hashtagPanel { */
+/* 	background-color: #80bfff; */
+/* 	border-radius: 10px; */
+/* 	margin-right: 3px; */
+/* 	padding: 3px; */
+/* } */
+
+/* #selectedhashtaglabel { */
+/* 	color: #ffffff; */
+/* 	font-family: texty; */
+/* 	font-size: 15px; */
+/* 	margin-left: 2px; */
+/* 	margin-right: 4px; */
+/* } */
+
+#selectedObjectLabel {
+	background-color: #80bfff;
+	border-radius: 10px;
+	height: 25px;
+	margin-top: 5px;
+	margin-left: 10px;
+	padding-left: 8px;
+	width: 50%;
+}
+
+.subscriptionFlexTableCell {
+	width: 50%;
+}

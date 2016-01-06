@@ -4,6 +4,7 @@
 	background-color: #003399;
 	border: 0px outset buttonface;
 	color: white;
+	float: right;
 	font-family: Texty;
 	font-size: 1.5em;
 	height: 36px;
@@ -36,8 +37,9 @@
 }
 
 #addButton {
-	background: url('http://127.0.0.1:8888/icons/icon-add.png');
+	background: url('http://texty-project.appspot.com/icons/icon-add.png');
 	border: 0px outset buttonface;
+	float: right;
 	height: 25px;
 	margin-left: 5px;
 	margin-top: 2px;
@@ -45,7 +47,7 @@
 }
 
 #addButton:hover {
-	background: url('http://127.0.0.1:8888/icons/icon-add-over.png');
+	background: url('http://texty-project.appspot.com/icons/icon-add-over.png');
 	border: 0px outset buttonface;
 	height: 25px;
 	margin-left: 5px;
@@ -53,7 +55,7 @@
 }
 
 #editButton {
-	background: url('http://127.0.0.1:8888/icons/icon-edit.png');
+	background: url('http://texty-project.appspot.com/icons/icon-edit.png');
 	border: 0px outset buttonface;
 	height: 25px;
 	margin-left: 10px;
@@ -61,14 +63,14 @@
 }
 
 #editButton:hover {
-	background: url('http://127.0.0.1:8888/icons/icon-edit-over.png');
+	background: url('http://texty-project.appspot.com/icons/icon-edit-over.png');
 	border: 0px outset buttonface;
 	height: 25px;
 	width: 25px;
 }
 
 #deleteButton {
-	background: url('http://127.0.0.1:8888/icons/icon-delete.png');
+	background: url('http://texty-project.appspot.com/icons/icon-delete.png');
 	border: 0px outset buttonface;
 	height: 25px;
 	margin-left: 5px;
@@ -76,7 +78,7 @@
 }
 
 #deleteButton:hover {
-	background: url('http://127.0.0.1:8888/icons/icon-delete-over.png');
+	background: url('http://texty-project.appspot.com/icons/icon-delete-over.png');
 	border: 0px outset buttonface;
 	height: 25px;
 	width: 25px;
@@ -84,8 +86,10 @@
 
 #removeButton {
 	font-family: Texty;
-	font-size: 15px;
-	margin-right: 2px;
+    font-size: 15px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 3px;
 }
 
 #removeButton:hover {
