@@ -420,20 +420,40 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return MessagesByDate;
 	}
 
+	
+	/**
+	 * Methode zum ausgeben aller öffentlichen Conversations (mit Messages) eines Benutzers.
+	 * 
+	 * @return Eine Liste mit allen öffentlichen Conversations
+	 */
 	@Override
+	
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException {
-		Vector<Conversation> allConFromUser = this.cMapper
-				.selectAllConversationsFromUser(user);
-		Vector<Conversation> allPublicConFromUser = new Vector<Conversation>();
-		//TODO slectAllPublicMessages
-		for (Conversation elem : allConFromUser) {
-			if (elem.isPublicly() == true) {
-				allPublicConFromUser.add(elem);
+		
+		Vector<Message> allMessagesFromUser = this.mMapper.selectAllMessagesFromUser(user);
+		
+		Vector<Conversation> allConversations = this.cMapper
+				.selectAllConversations();
+		
+		Vector<Conversation> result = new Vector<Conversation>();
+
+		
+		for (Conversation conversation : allConversations) {
+			boolean state = true;
+			for (Message message : allMessagesFromUser){
+				if (message.getConversationID() == conversation.getId() && conversation.isPublicly()){
+					conversation.addMessageToConversation(message);
+					if (state){
+						result.add(conversation);
+						state = false;
+					}
+				}
 			}
-		}
-		return allPublicConFromUser;
+		} 
+		return result;
 	}
+					
 
 	/**
 	 * Methode zum auslesen aller Hashtagabonnements des eingeloggten Benutzers
