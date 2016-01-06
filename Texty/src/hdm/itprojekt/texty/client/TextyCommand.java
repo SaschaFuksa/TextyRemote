@@ -1,7 +1,6 @@
 package hdm.itprojekt.texty.client;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -30,27 +29,14 @@ public class TextyCommand {
 							"Conversations");
 					RootPanel.get("Navigator").add(conversation);
 					break;
-				case "Community":
-					TextyForm community = new CommunityForm("Users");
-					TextyForm userSubscription = new UserSubscriptionForm(
-							"User Subscriptions");
-					RootPanel.get("Navigator").add(community);
-					RootPanel.get("Details").add(userSubscription);
-					break;
-				case "Hashtag":
-					TextyForm hashtag = new HashtagForm("Hashtags");
-					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
-							"Hashtag Subscriptions");
-					RootPanel.get("Navigator").add(hashtag);
-					RootPanel.get("Info").add(hashtagSubscription);
+				case "Subscription":
+					TextyForm subscriptionForm = new SubscriptionForm(
+							"Subscriptions");
+					RootPanel.get("Details").add(subscriptionForm);
 					break;
 				case "Profile":
 					TextyForm profile = new ProfileForm("Profile");
 					RootPanel.get("Navigator").add(profile);
-					break;
-				case "Report":
-					Window.Location
-							.assign("http://127.0.0.1:8888/TextyReports.html");
 					break;
 				default:
 					;

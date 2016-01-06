@@ -3,6 +3,7 @@ package hdm.itprojekt.texty.client;
 import hdm.itprojekt.texty.shared.FieldVerifier;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -31,7 +32,9 @@ public class HashtagForm extends TextyForm {
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 
-	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
+	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
+	private Vector<Hashtag> allSelectedHashtag = new Vector<Hashtag>();
+	private Vector<Hashtag> allSubscribedHashtag = new Vector<Hashtag>();
 	private Button addButton = createAddButton();
 	private Button subscribeButton = createSubscribeButton();
 	private FlexTable hashtagFormFlexTable = new FlexTable();
@@ -40,16 +43,16 @@ public class HashtagForm extends TextyForm {
 	private InfoBox infoBox = new InfoBox();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
-	private Label text = new Label("Subscribe existing hashtags!");
+	private Label text = new Label("Subscribe new hashtags!");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private Vector<Hashtag> allSelectedHashtag = new Vector<Hashtag>();
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
-	public HashtagForm(String headline) {
+	public HashtagForm(String headline, Vector<Hashtag> allSubscribedHashtag) {
 		super(headline);
+		this.allSubscribedHashtag = allSubscribedHashtag;
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class HashtagForm extends TextyForm {
 		addButton.getElement().setId("addButton");
 		subscribeButton.getElement().setId("button");
 		suggestBoxPanel.getElement().setId("fullWidth");
-		mainPanel.getElement().setId("hashtagForm");
+		mainPanel.getElement().setId("subscriptionForm");
 		hashtagFormFlexTable.getElement().setId("fullSize");
 		content.getElement().setId("fullWidth");
 		scroll.getElement().setId("fullWidth");
@@ -79,6 +82,8 @@ public class HashtagForm extends TextyForm {
 		hashtagFormFlexTable.setWidget(2, 0, scroll);
 		hashtagFormFlexTable.setWidget(3, 0, subscribeButton);
 		hashtagFormFlexTable.setWidget(4, 0, infoBox);
+		
+		subscribeButton.setVisible(false);
 
 		mainPanel.add(getHeadline());
 		mainPanel.add(hashtagFormFlexTable);
@@ -103,17 +108,27 @@ public class HashtagForm extends TextyForm {
 			@Override
 			public void onSuccess(Vector<Hashtag> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
-				allHashtag = result;
+				setAllHashtag(result);
 				setOracle();
 			}
 		};
 		return asyncCallback;
 	}
+	
+	private void setAllHashtag(Vector<Hashtag> allHashtag){
+		for (Hashtag hashtag : allHashtag){
+			for (Hashtag subscribedHashtag : allSubscribedHashtag){
+				if (hashtag.getId() == subscribedHashtag.getId()){
+					allHashtag.remove(hashtag);
+				}
+			}
+		}
+		this.allHashtag = allHashtag;
+	}
 
 	private void addHashtag(String keyword) {
-		String key = keyword;
 		for (Hashtag hashtag : allHashtag) {
-			if (key.equals(hashtag.getKeyword())) {
+			if (keyword.equals(hashtag.getKeyword())) {
 				allSelectedHashtag.addElement(hashtag);
 				allHashtag.remove(hashtag);
 				createHashtagPanel(hashtag);
@@ -135,6 +150,9 @@ public class HashtagForm extends TextyForm {
 			public void onClick(ClickEvent event) {
 				removeHashtag(selectedHashtag);
 				content.remove(hashtagPanel);
+				if (allSelectedHashtag.size() == 0){
+					subscribeButton.setVisible(false);
+				}
 			}
 		});
 		hashtagPanel.getElement().setId("selectedObjectLabel");
@@ -145,9 +163,8 @@ public class HashtagForm extends TextyForm {
 	}
 
 	private boolean checkHashtag(String keyword) {
-		String key = keyword;
 		for (Hashtag hashtag : allSelectedHashtag) {
-			if (key.equals(hashtag.getKeyword())) {
+			if (keyword.equals(hashtag.getKeyword())) {
 				return true;
 			}
 		}
@@ -155,7 +172,7 @@ public class HashtagForm extends TextyForm {
 	}
 
 	private void removeHashtag(Hashtag hashtag) {
-		allHashtag.addElement(hashtag);
+		allHashtag.add(hashtag);
 		allSelectedHashtag.remove(hashtag);
 		setOracle();
 	}
@@ -174,13 +191,15 @@ public class HashtagForm extends TextyForm {
 				infoBox.clear();
 				String keyword = suggestBox.getText().trim()
 						.replaceAll(" ", "");
-				boolean alreadySelected = checkHashtag(keyword);
 				if (!FieldVerifier.isValidHashtag(keyword)) {
 					infoBox.setWarningText("Please select a Hashtag with at least three characters!");
-				} else if (alreadySelected) {
+				} else if (checkHashtag(keyword)) {
 					infoBox.setWarningText("Hashtag is already selected!");
 				} else {
 					addHashtag(keyword);
+					if (!subscribeButton.isVisible()){
+						subscribeButton.setVisible(true);
+					}
 				}
 			}
 
@@ -192,17 +211,10 @@ public class HashtagForm extends TextyForm {
 		Button subscribeButton = new Button("Subscribe", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (allSelectedHashtag.size() < 1) {
+				if (allSelectedHashtag.size() == 0) {
 					infoBox.setWarningText("Please select a hashtag!");
 				} else {
-					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
-							"Hashtag Subscriptions", allSelectedHashtag);
-					TextyForm hashtagForm = new HashtagForm("Hashtags");
-					RootPanel.get("Navigator").clear();
-					RootPanel.get("Navigator").add(hashtagForm);
-					RootPanel.get("Details").clear();
-					RootPanel.get("Info").clear();
-					RootPanel.get("Info").add(hashtagSubscription);
+					addHashtagSubscriptions();
 				}
 			}
 		});
@@ -217,18 +229,66 @@ public class HashtagForm extends TextyForm {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					infoBox.clear();
 					String keyword = suggestBox.getText();
-					boolean alreadySelected = checkHashtag(keyword);
 					if (!FieldVerifier.isValidHashtag(keyword)) {
 						infoBox.setWarningText("Please select a Hashtag with at least three characters!");
-					} else if (alreadySelected) {
+					} else if (checkHashtag(keyword)) {
 						infoBox.setWarningText("Hashtag is already selected!");
 					} else {
 						addHashtag(keyword);
+						if (!subscribeButton.isVisible()){
+							subscribeButton.setVisible(true);
+						}
 					}
 				}
 			}
 		};
 		return suggestBoxHandler;
+	}
+	
+	private void addHashtagSubscriptions() {
+		String result = new String("");
+		String warning = new String("");
+		for (Hashtag hashtag : allSelectedHashtag) {
+			if (checkSubscription(hashtag)) {
+				allSubscribedHashtag.add(hashtag);
+				administration.createHashtagSubscription(hashtag,
+						createHashtagSubscriptionExecute());
+				result = result + " '" + hashtag.getKeyword()
+						+ "'";
+			} else {
+				warning = warning + " '" + hashtag.getKeyword()
+						+ "'";
+			}
+		}
+		if (result != "") {
+			infoBox.setSuccessText("Hashtag" + result
+					+ " successful subscribed!");
+		}
+		if (warning != "") {
+			infoBox.setWarningText("Hashtag" + warning
+					+ " was already subscribed!");
+		}
+
+	}
+
+	private AsyncCallback<HashtagSubscription> createHashtagSubscriptionExecute() {
+		AsyncCallback<HashtagSubscription> asyncCallback = new AsyncCallback<HashtagSubscription>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(HashtagSubscription result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				TextyForm hashtagSubscription = new SubscriptionForm(
+						"Hashtag Subscriptions");
+				RootPanel.get("Details").clear();
+				RootPanel.get("Info").clear();
+				RootPanel.get("Details").add(hashtagSubscription);
+			}
+		};
+		return asyncCallback;
 	}
 
 	private FocusHandler createFocusHandler() {
@@ -239,6 +299,15 @@ public class HashtagForm extends TextyForm {
 			}
 		};
 		return focusHandler;
+	}
+	
+	private boolean checkSubscription(Hashtag hashtag) {
+		for (Hashtag subscribedHashtag : allSubscribedHashtag) {
+			if (hashtag.getId() == subscribedHashtag.getId()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

@@ -12,18 +12,26 @@ public class TextyMenu {
 
 	private TextyCommand command = new TextyCommand();
 
-	public void execute() {
+	public void execute(String client) {
 
-		MenuBar menu = new MenuBar();
-		menu.addItem("Home", command.getCommand("Home"));
-		menu.addItem("Conversation", command.getCommand("Conversation"));
-		menu.addItem("Community", command.getCommand("Community"));
-		menu.addItem("Hashtag", command.getCommand("Hashtag"));
-		menu.addItem("Profile", command.getCommand("Profile"));
-		menu.addItem("ReportGenerator", command.getCommand("Report"));
-		menu.setStyleName("menubar");
+		switch (client) {
+		case "Editor":
 
-		RootPanel.get("Menu").add(menu);
+			MenuBar menu = new MenuBar();
+			menu.addItem("Home", command.getCommand("Home"));
+			menu.addItem("Conversation", command.getCommand("Conversation"));
+			menu.addItem("Subscription", command.getCommand("Subscription"));
+			menu.addItem("Profile", command.getCommand("Profile"));
+			menu.setStyleName("menubar");
+
+			RootPanel.get("Menu").add(menu);
+			break;
+		case "Report":
+			// TODO Reportmenü
+			break;
+		default:
+			;
+		}
 	}
 
 }
