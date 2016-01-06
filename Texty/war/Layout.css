@@ -155,20 +155,25 @@ input.gwt-SuggestBox {
 	margin-top: 10px;
 }
 
-.flexTable td {
-	color: #0080c0;
+.ProfileForm{
+	height: 20px;
+	width: 100%
+}
+
+.ProfileForm td {
+	color: #ffffff;
 	font-family: Texty;
 	font-size: 18px;
 	text-align: left;
-	height: 20px;
 }
 
 .gwt-TextBox {
 	color: #0080c0;
-	font-family: Texty;
-	font-size: 1.5em;
+	font-family: Texty !important;
+	font-size: 18px !important;
 	text-align: left;
 	height: 20px;
+	width: 96%;
 }
 
 #fullSize {

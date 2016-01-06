@@ -5,11 +5,12 @@ import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -18,16 +19,18 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class HashtagSubscriptionForm extends TextyForm {
 
-	private static Vector<Hashtag> subscribedHashtag = new Vector<Hashtag>();
+	private static final Logger LOG = Logger
+			.getLogger(SingleConversationViewer.class.getSimpleName());
+
+	private VerticalPanel mainPanel = new VerticalPanel();
+	private Vector<Hashtag> allSubscribedHashtag = new Vector<Hashtag>();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
-	private Label intro = new HTML(
+	private InfoBox infoBox = new InfoBox();
+	private Label text = new HTML(
 			"To add new hashtags, use the searchfield on the left! <br> "
 					+ "To delete subscriptions, click on the delete button next to your subscribed hashtag.");
-	private Label errorLabel = new Label("\0");
-	private Label warningLabel = new Label("");
-	private Label successLabel = new Label("");
-	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+	private Vector<Hashtag> allSelectedHashtag = new Vector<Hashtag>();
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
@@ -38,137 +41,151 @@ public class HashtagSubscriptionForm extends TextyForm {
 	public HashtagSubscriptionForm(String headline,
 			Vector<Hashtag> selectedHashtag) {
 		super(headline);
-		this.selectedHashtag = selectedHashtag;
-	}
-
-	public void addHashtagSubscriptions() {
-		String result = new String("");
-		String warning = new String("");
-		for (int i = 0; i < selectedHashtag.size(); i++) {
-			if (checkSubscription(selectedHashtag.get(i).getKeyword())) {
-				subscribedHashtag.add(selectedHashtag.get(i));
-				administration.createHashtagSubscription(
-						selectedHashtag.get(i),
-						new AsyncCallback<HashtagSubscription>() {
-							@Override
-							public void onFailure(Throwable caught) {
-
-							}
-
-							@Override
-							public void onSuccess(HashtagSubscription result) {
-
-							}
-						});
-				result = result + " '" + selectedHashtag.get(i).getKeyword()
-						+ "'";
-			} else {
-				warning = warning + " '" + selectedHashtag.get(i).getKeyword()
-						+ "'";
-			}
-		}
-		if (result != "") {
-			successLabel
-					.setText("Hashtag" + result + " successful subscribed!");
-		}
-		if (warning != "") {
-			warningLabel.setText("Hashtag" + warning
-					+ " is already subscribed!");
-		}
-
-	}
-
-	public boolean checkSubscription(String keyword) {
-		String word = keyword;
-		for (int i = 0; i < subscribedHashtag.size(); i++) {
-			if (word.equals(subscribedHashtag.get(i).getKeyword())) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private void deleteSubscription(String keyword) {
-		StringBuffer word = new StringBuffer(keyword);
-		word.deleteCharAt(0);
-		int indexSelectedHashtag = 0;
-		for (int i = 0; i < subscribedHashtag.size(); i++) {
-			if (word.toString().equals(subscribedHashtag.get(i).getKeyword())) {
-				indexSelectedHashtag = i;
-				successLabel.setText("Subscribed user '#"
-						+ subscribedHashtag.get(i).getKeyword()
-						+ "' sucessful removed!");
-				warningLabel.setText("");
-				administration.deleteHashtagSubscription(
-						subscribedHashtag.get(i), new AsyncCallback<Void>() {
-							@Override
-							public void onFailure(Throwable caught) {
-
-							}
-
-							@Override
-							public void onSuccess(Void result) {
-
-							}
-						});
-			}
-		}
-
-		subscribedHashtag.remove(indexSelectedHashtag);
-
+		this.allSelectedHashtag = selectedHashtag;
 	}
 
 	@Override
 	protected void run() {
 
 		administration
-				.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
-					@Override
-					public void onFailure(Throwable caught) {
+				.getAllSubscribedHashtags(getAllSubscribedHashtagsExecute());
 
-					}
+		this.getElement().setId("fullSize");
+		mainPanel.getElement().setId("hashtagForm");
+		content.getElement().setId("fullWidth");
+		scroll.getElement().setId("fullWidth");
 
-					@Override
-					public void onSuccess(Vector<Hashtag> result) {
-						HashtagSubscriptionForm.subscribedHashtag = result;
-						addHashtagSubscriptions();
-						showSubscriptions();
-
-					}
-				});
-
-		warningLabel.setStylePrimaryName("errorLabel");
-		successLabel.setStylePrimaryName("successLabel");
-		scroll.setSize("250px", "110px");
-
-		this.add(getHeadline());
-		this.add(intro);
-		this.add(errorLabel);
-		this.add(scroll);
-		this.add(warningLabel);
-		this.add(successLabel);
+		mainPanel.add(getHeadline());
+		mainPanel.add(text);
+		mainPanel.add(scroll);
+		mainPanel.add(infoBox);
+		
+		this.add(mainPanel);
+		
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
+			}
+		});
 
 	}
 
-	public void showSubscriptions() {
-		for (int i = 0; i < subscribedHashtag.size(); i++) {
-			final HorizontalPanel panel = new HorizontalPanel();
-			final Label keywordLabel = new Label("#"
-					+ subscribedHashtag.get(i).getKeyword());
-			keywordLabel.setStylePrimaryName("selectedObjectLabel");
-			final Button deleteButton = new Button("", new ClickHandler() {
+	private AsyncCallback<Vector<Hashtag>> getAllSubscribedHashtagsExecute() {
+		AsyncCallback<Vector<Hashtag>> asyncCallback = new AsyncCallback<Vector<Hashtag>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Vector<Hashtag> result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				allSubscribedHashtag = result;
+				addHashtagSubscriptions();
+				showSubscriptions();
+			}
+		};
+		return asyncCallback;
+	}
+
+	private void addHashtagSubscriptions() {
+		String result = new String("");
+		String warning = new String("");
+		for (Hashtag hashtag : allSelectedHashtag) {
+			if (checkSubscription(hashtag)) {
+				allSubscribedHashtag.add(hashtag);
+				administration.createHashtagSubscription(hashtag,
+						createHashtagSubscriptionExecute());
+				result = result + " '" + hashtag.getKeyword()
+						+ "'";
+			} else {
+				warning = warning + " '" + hashtag.getKeyword()
+						+ "'";
+			}
+		}
+		if (result != "") {
+			infoBox.setSuccessText("Hashtag" + result
+					+ " successful subscribed!");
+		}
+		if (warning != "") {
+			infoBox.setWarningText("Hashtag" + warning
+					+ " was already subscribed!");
+		}
+
+	}
+
+	private AsyncCallback<HashtagSubscription> createHashtagSubscriptionExecute() {
+		AsyncCallback<HashtagSubscription> asyncCallback = new AsyncCallback<HashtagSubscription>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(HashtagSubscription result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+			}
+		};
+		return asyncCallback;
+	}
+
+	private void showSubscriptions() {
+		for (Hashtag hashtag : allSubscribedHashtag) {
+			final Hashtag selectedHashtag = hashtag;
+			final HorizontalPanel hashtagPanel = new HorizontalPanel();
+			final Label keywordLabel = new Label("#" + hashtag.getKeyword());
+			final Label removeButton = new Label("x");
+			removeButton.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					deleteSubscription(keywordLabel.getText());
-					content.remove(panel);
+					deleteSubscription(selectedHashtag);
+					content.remove(hashtagPanel);
 				}
-
 			});
-			deleteButton.getElement().setId("deleteButton");
-			panel.add(keywordLabel);
-			panel.add(deleteButton);
-			content.add(panel);
+			hashtagPanel.getElement().setId("selectedObjectLabel");
+			removeButton.getElement().setId("removeButton");
+			hashtagPanel.add(keywordLabel);
+			hashtagPanel.add(removeButton);
+			content.add(hashtagPanel);
 		}
+	}
+
+	private void deleteSubscription(Hashtag hashtag) {
+		for (Hashtag subscribedHashtag : allSubscribedHashtag) {
+			if (hashtag.getId() == subscribedHashtag.getId()) {
+				infoBox.clear();
+				infoBox.setSuccessText("Subscribed hahstag '#"
+						+ subscribedHashtag.getKeyword()
+						+ "' sucessful removed!");
+				allSubscribedHashtag.remove(subscribedHashtag);
+				administration.deleteHashtagSubscription(
+						subscribedHashtag, deleteHashtagSubscriptionExecute());
+			}
+		}
+	}
+	
+	private AsyncCallback<Void> deleteHashtagSubscriptionExecute(){
+		AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+			}
+		};
+		return asyncCallback;
+	}
+
+	private boolean checkSubscription(Hashtag hashtag) {
+		for (Hashtag subscribedHashtag : allSubscribedHashtag) {
+			if (hashtag.getId() == subscribedHashtag.getId()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

@@ -42,11 +42,11 @@ public class TextyCommand {
 					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
 							"Hashtag Subscriptions");
 					RootPanel.get("Navigator").add(hashtag);
-					RootPanel.get("Details").add(hashtagSubscription);
+					RootPanel.get("Info").add(hashtagSubscription);
 					break;
 				case "Profile":
 					TextyForm profile = new ProfileForm("Profile");
-					RootPanel.get("Details").add(profile);
+					RootPanel.get("Navigator").add(profile);
 					break;
 				case "Report":
 					Window.Location

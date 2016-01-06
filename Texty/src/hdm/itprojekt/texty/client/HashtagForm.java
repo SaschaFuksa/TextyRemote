@@ -35,15 +35,16 @@ public class HashtagForm extends TextyForm {
 	private Button addButton = createAddButton();
 	private Button subscribeButton = createSubscribeButton();
 	private FlexTable hashtagFormFlexTable = new FlexTable();
-	private InfoBox infoBox = new InfoBox();
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();
+
+	private InfoBox infoBox = new InfoBox();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label("Subscribe existing hashtags!");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+	private Vector<Hashtag> allSelectedHashtag = new Vector<Hashtag>();
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
@@ -92,66 +93,6 @@ public class HashtagForm extends TextyForm {
 
 	}
 
-	private void addHashtag(String keyword) {
-		String key = keyword;
-		for (Hashtag hashtag : allHashtag) {
-			if (key.equals(hashtag.getKeyword())) {
-				selectedHashtag.addElement(hashtag);
-				allHashtag.remove(hashtag);
-				createHashtagPanel(key);
-				suggestBox.setText("");
-				setOracle();
-				return;
-			}
-		}
-		infoBox.setWarningText("Hashtag is unknown!");
-	}
-
-	private void createHashtagPanel(String keyword) {
-		final HorizontalPanel panel = new HorizontalPanel();
-		final Label keywordLabel = new Label("#" + keyword);
-		final Label removeButton = new Label("x");
-		removeButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				removeHashtag(getKeyword(keywordLabel.getText()));
-				content.remove(panel);
-			}
-
-		});
-		panel.getElement().setId("selectedObjectLabel");
-		removeButton.getElement().setId("removeButton");
-		panel.add(keywordLabel);
-		panel.add(removeButton);
-		content.add(panel);
-	}
-
-	private boolean checkHashtag(String keyword) {
-		String key = keyword;
-		for (Hashtag hashtag : selectedHashtag) {
-			if (key.equals(hashtag.getKeyword())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void removeHashtag(String keyword) {
-		String key = keyword;
-		for (Hashtag hashtag : selectedHashtag) {
-			if (key.equals(hashtag.getKeyword())) {
-				allHashtag.addElement(hashtag);
-				selectedHashtag.remove(hashtag);
-				break;
-			}
-		}
-	}
-
-	private String getKeyword(String keyword) {
-		String result = keyword.trim().replaceAll("#", "");
-		return result;
-	}
-
 	private AsyncCallback<Vector<Hashtag>> getAllHashtagExecute() {
 		AsyncCallback<Vector<Hashtag>> asyncCallback = new AsyncCallback<Vector<Hashtag>>() {
 			@Override
@@ -162,21 +103,61 @@ public class HashtagForm extends TextyForm {
 			@Override
 			public void onSuccess(Vector<Hashtag> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
-				HashtagForm.allHashtag = result;
+				allHashtag = result;
 				setOracle();
 			}
 		};
 		return asyncCallback;
 	}
 
-	private FocusHandler createFocusHandler() {
-		FocusHandler focusHandler = new FocusHandler() {
-			@Override
-			public void onFocus(FocusEvent event) {
+	private void addHashtag(String keyword) {
+		String key = keyword;
+		for (Hashtag hashtag : allHashtag) {
+			if (key.equals(hashtag.getKeyword())) {
+				allSelectedHashtag.addElement(hashtag);
+				allHashtag.remove(hashtag);
+				createHashtagPanel(hashtag);
 				suggestBox.setText("");
+				setOracle();
+				return;
 			}
-		};
-		return focusHandler;
+		}
+		infoBox.setWarningText("Hashtag is unknown!");
+	}
+
+	private void createHashtagPanel(Hashtag hashtag) {
+		final Hashtag selectedHashtag = hashtag;
+		final HorizontalPanel hashtagPanel = new HorizontalPanel();
+		final Label keywordLabel = new Label("#" + selectedHashtag.getKeyword());
+		final Label removeButton = new Label("x");
+		removeButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				removeHashtag(selectedHashtag);
+				content.remove(hashtagPanel);
+			}
+		});
+		hashtagPanel.getElement().setId("selectedObjectLabel");
+		removeButton.getElement().setId("removeButton");
+		hashtagPanel.add(keywordLabel);
+		hashtagPanel.add(removeButton);
+		content.add(hashtagPanel);
+	}
+
+	private boolean checkHashtag(String keyword) {
+		String key = keyword;
+		for (Hashtag hashtag : allSelectedHashtag) {
+			if (key.equals(hashtag.getKeyword())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void removeHashtag(Hashtag hashtag) {
+		allHashtag.addElement(hashtag);
+		allSelectedHashtag.remove(hashtag);
+		setOracle();
 	}
 
 	private void setOracle() {
@@ -211,16 +192,17 @@ public class HashtagForm extends TextyForm {
 		Button subscribeButton = new Button("Subscribe", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (selectedHashtag.size() < 1) {
+				if (allSelectedHashtag.size() < 1) {
 					infoBox.setWarningText("Please select a hashtag!");
 				} else {
 					TextyForm hashtagSubscription = new HashtagSubscriptionForm(
-							"Hashtag Subscriptions", selectedHashtag);
+							"Hashtag Subscriptions", allSelectedHashtag);
 					TextyForm hashtagForm = new HashtagForm("Hashtags");
-					RootPanel.get("Details").clear();
-					RootPanel.get("Details").add(hashtagSubscription);
 					RootPanel.get("Navigator").clear();
 					RootPanel.get("Navigator").add(hashtagForm);
+					RootPanel.get("Details").clear();
+					RootPanel.get("Info").clear();
+					RootPanel.get("Info").add(hashtagSubscription);
 				}
 			}
 		});
@@ -247,6 +229,16 @@ public class HashtagForm extends TextyForm {
 			}
 		};
 		return suggestBoxHandler;
+	}
+
+	private FocusHandler createFocusHandler() {
+		FocusHandler focusHandler = new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				suggestBox.setText("");
+			}
+		};
+		return focusHandler;
 	}
 
 }
