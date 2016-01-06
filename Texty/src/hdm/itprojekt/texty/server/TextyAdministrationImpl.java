@@ -429,30 +429,30 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
-			throws IllegalArgumentException {
-		
-		Vector<Message> allMessagesFromUser = this.mMapper.selectAllMessagesFromUser(user);
-		
-		Vector<Conversation> allConversations = this.cMapper
-				.selectAllConversations();
-		
-		Vector<Conversation> result = new Vector<Conversation>();
+			   throws IllegalArgumentException {
+			  
+			  Vector<Message> allPublicMessagesFromUser = this.mMapper.selectAllPublicMessagesFromUser(user);
+			  
+			  Vector<Conversation> allConversations = this.cMapper
+			    .selectAllPublicConversations();
+			  
+			  Vector<Conversation> result = new Vector<Conversation>();
 
-		
-		for (Conversation conversation : allConversations) {
-			boolean state = true;
-			for (Message message : allMessagesFromUser){
-				if (message.getConversationID() == conversation.getId() && conversation.isPublicly()){
-					conversation.addMessageToConversation(message);
-					if (state){
-						result.add(conversation);
-						state = false;
-					}
-				}
-			}
-		} 
-		return result;
-	}
+			  
+			  for (Conversation conversation : allConversations) {
+			   boolean state = true;
+			   for (Message message : allPublicMessagesFromUser){
+			    if (message.getConversationID() == conversation.getId()){
+			     conversation.addMessageToConversation(message);
+			     if (state){
+			      result.add(conversation);
+			      state = false;
+			     }
+			    }
+			   }
+			  } 
+			  return result;
+			 }
 					
 
 	/**
