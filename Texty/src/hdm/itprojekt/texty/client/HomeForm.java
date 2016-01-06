@@ -180,17 +180,10 @@ public class HomeForm extends TextyForm {
 
 	}
 
-	// Holt sich alle Messages des Hashtags und speichert sie in der
-	// messageListofHashtag
-	private void getMessageSelectedHashtag(Hashtag hashtag) {
-		
-	}
-
 	// Hier entsteht die Detailsanzeige der User
-	public void showMessageSelectedUser(User userView) {
+	public void showMessageSelectedUser(final User user) {
 		
-		final User user = userView;
-		administration.getAllPublicConversationsFromUser(userView,
+		administration.getAllPublicConversationsFromUser(user,
 				new AsyncCallback<Vector<Conversation>>() {
 
 					@Override
@@ -199,7 +192,7 @@ public class HomeForm extends TextyForm {
 					}
 
 					@Override
-					public void onSuccess(Vector<Conversation> result) {
+					public void onSuccess(Vector<Conversation> result) {						
 						TextyForm publicConversationViewer = new PublicConversationViewer("Public Postings from " + user.getFirstName(), result);
 						
 						RootPanel.get("Details").clear();
