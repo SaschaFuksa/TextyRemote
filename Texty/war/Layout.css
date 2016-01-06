@@ -130,16 +130,6 @@ input.gwt-SuggestBox {
 	width: 100%;
 }
 
-#selectedObjectLabel {
-	background-color: #80bfff;
-	border-radius: 10px;
-	height: 25px;
-	margin-top: 5px;
-	margin-left: 10px;
-	padding-left: 8px;
-	width: 50%;
-}
-
 .gwt-Anchor {
 	color: #0080c0;
 	font-family: Texty;
@@ -174,6 +164,12 @@ input.gwt-SuggestBox {
 	text-align: left;
 	height: 20px;
 	width: 96%;
+}
+
+#blackFont{
+	color: #000000;
+	font-family: Texty;
+	font-size: 18px;
 }
 
 #fullSize {

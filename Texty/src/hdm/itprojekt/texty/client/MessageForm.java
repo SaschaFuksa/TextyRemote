@@ -3,6 +3,7 @@ package hdm.itprojekt.texty.client;
 import hdm.itprojekt.texty.shared.FieldVerifier;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -34,6 +35,8 @@ public class MessageForm extends VerticalPanel {
 	private FlexTable messageFormFlexTable = new FlexTable();
 	private static Vector<Hashtag> allHashtag = new Vector<Hashtag>();
 	private static Vector<Hashtag> selectedHashtag = new Vector<Hashtag>();
+	private static Vector<User> allUser = new Vector<User>();
+	private static Vector<User> selectedUser = new Vector<User>();
 	private Button addButton = createAddButton();
 	Button sendButton = new Button("Send");
 	private HorizontalPanel suggestBoxPanel = new HorizontalPanel();

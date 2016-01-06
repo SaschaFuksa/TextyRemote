@@ -3,7 +3,7 @@ package hdm.itprojekt.texty.client.report;
 import java.util.Vector;
 
 import hdm.itprojekt.texty.client.ClientsideSettings;
-import hdm.itprojekt.texty.client.CommunityForm;
+import hdm.itprojekt.texty.client.UserForm;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;

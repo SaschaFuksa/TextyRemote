@@ -9,7 +9,6 @@ import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ClientsideSettings extends CommonSettings {
 
@@ -18,7 +17,7 @@ public class ClientsideSettings extends CommonSettings {
 	private static final String LOGGER_NAME = "Texty Web Client";
 	private static final Logger log = Logger.getLogger(LOGGER_NAME);
 
-	public static LoginServiceAsync getBankVerwaltung() {
+	public static LoginServiceAsync getLoginService() {
 		if (loginService == null) {
 			loginService = GWT.create(LoginService.class);
 		}

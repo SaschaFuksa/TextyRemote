@@ -5,14 +5,48 @@
 	font-size: 1.5em;
 }
 
+#Info .errorLabel{
+	color: #FBCA11;
+}
+
+#Navigator .errorLabel{
+	color: #FBCA11;
+}
+
 .successLabel {
-	color: white;
+	color: green;
 	font-family: Texty;
 	font-size: 1.5em;
+}
+
+#Info .successLabel{
+	color: #62FF31;
+}
+
+#Navigator .successLabel{
+	color: #62FF31;
 }
 
 .warningLabel {
 	color: yellow;
 	font-family: Texty;
 	font-size: 1.5em;
+}
+
+#Details .warningLabel {
+	color: orange;
+}
+
+.infoLabel {
+	color: black;
+	font-family: Texty;
+	font-size: 1.5em;
+}
+
+#Navigator .infoLabel {
+	color: white;
+}
+
+#Info .infoLabel {
+	color: white;
 }

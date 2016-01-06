@@ -426,6 +426,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Vector<Conversation> allConFromUser = this.cMapper
 				.selectAllConversationsFromUser(user);
 		Vector<Conversation> allPublicConFromUser = new Vector<Conversation>();
+		//TODO slectAllPublicMessages
 		for (Conversation elem : allConFromUser) {
 			if (elem.isPublicly() == true) {
 				allPublicConFromUser.add(elem);
