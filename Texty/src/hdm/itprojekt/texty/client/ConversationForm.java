@@ -26,15 +26,24 @@ public class ConversationForm extends TextyForm {
 
 	private static Vector<Conversation> conList = new Vector<Conversation>();
 	private VerticalPanel mainPanel = new VerticalPanel();
+	private TextyForm newMessage = new NewMessage("New Conversation");
 	private Label intro = new Label(
 			"Here you can read and reply to private conversations");
 	private VerticalPanel content = new VerticalPanel();
+	private Conversation conversation = new Conversation();
 	private ScrollPanel scroll = new ScrollPanel(content);
+	private boolean state = false;
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
 	public ConversationForm(String headline) {
 		super(headline);
+	}
+
+	public ConversationForm(String headline, Conversation conversation) {
+		super(headline);
+		this.conversation = conversation;
+		this.state = true;
 	}
 
 	@Override
@@ -55,6 +64,19 @@ public class ConversationForm extends TextyForm {
 						ConversationForm.conList = result;
 						showConversation();
 
+						if (state) {
+							for (Conversation singleConversation : result) {
+								if (conversation.getId() == singleConversation
+										.getId()) {
+									TextyForm singleConversationViewer = new SingleConversationViewer(
+											"Private Conversation",
+											singleConversation);
+									RootPanel.get("Details").add(
+											singleConversationViewer);
+								}
+							}
+							state = false;
+						}
 					}
 				});
 
@@ -66,6 +88,10 @@ public class ConversationForm extends TextyForm {
 		mainPanel.add(getHeadline());
 		mainPanel.add(intro);
 		mainPanel.add(scroll);
+		
+		if (RootPanel.get("Info").getWidgetCount() == 0) {
+			RootPanel.get("Info").add(newMessage);
+		}
 
 		this.add(mainPanel);
 

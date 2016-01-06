@@ -30,20 +30,15 @@ public class SingleConversationViewer extends TextyForm {
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 
+	private Button replyButton = createReplyButton();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private FlexTable chatFlexTable = new FlexTable();
-	private MessageForm messageForm = new MessageForm();
-	private Label header = new Label("New message to reply to conversation");
 	private static Conversation conversation = null;
 	private static User currentUser = null;
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
-
-	public SingleConversationViewer(String headline) {
-		super(headline);
-	}
 
 	public SingleConversationViewer(String headline, Conversation conversation) {
 		super(headline);
@@ -65,47 +60,20 @@ public class SingleConversationViewer extends TextyForm {
 				showAllMessages();
 			}
 		});
-		messageForm.sendButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				administration.addMessageToConversation(conversation,
-						messageForm.getText(), messageForm.getHashtag(),
-						new AsyncCallback<Conversation>() {
-							@Override
-							public void onFailure(Throwable caught) {
-								LOG.severe("Error: " + caught.getMessage());
-							}
-
-							@Override
-							public void onSuccess(Conversation result) {
-								LOG.info("Success :"
-										+ result.getClass().getSimpleName());
-								messageForm.clearSelectedHashtag();
-								RootPanel.get("Details").clear();
-								RootPanel
-										.get("Details")
-										.add(new SingleConversationViewer(
-												"Private Conversation", result));
-							}
-						});
-			}
-		});
 
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("conversationWrapper");
 		scroll.getElement().setId("conversationScroll");
 		content.getElement().setId("conversationContent");
 		chatFlexTable.getElement().setId("conversationContent");
+		replyButton.getElement().setId("button");
 		
 		content.add(chatFlexTable);
 		mainPanel.add(getHeadline());
 		mainPanel.add(scroll);
+		mainPanel.add(replyButton);
 
 		this.add(mainPanel);
-
-		RootPanel.get("Info").clear();
-		RootPanel.get("Info").add(header);
-		RootPanel.get("Info").add(messageForm);
 
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
@@ -294,6 +262,20 @@ public class SingleConversationViewer extends TextyForm {
 
 		}
 		scroll.scrollToBottom();
+	}
+	
+	//TODO ClickHandler reply
+	
+	private Button createReplyButton(){
+		Button replyButton = new Button("Reply", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				MessageForm message = new MessageForm();
+				RootPanel.get("Info").clear();
+//				RootPanel.get("Info").add();
+			}
+		});
+		return replyButton;
 	}
 
 
