@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.bo.Conversation;
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 
 import java.util.Vector;
@@ -81,7 +82,16 @@ public class PublicConversationViewer extends TextyForm {
 
 			wrapper.add(chatFlexTable);
 			conversationPanel.add(wrapper);
+			
+			Vector<Message> messageVector = conversationView.getListOfMessage();
+			
+			for (int i = 0; i < messageVector.size(); i++) {
+				Label hashtagText = new Label("#"
+						+ conversationView.getListOfMessage().get(i).getListOfHashtag().get(i).getKeyword());
+				conversationPanel.add(hashtagText);
+			}
 			mainPanel.add(conversationPanel);
+			
 			//RootPanel.get("Details").add(contentConversation);
 			
 		} // Ende for-Schleife
