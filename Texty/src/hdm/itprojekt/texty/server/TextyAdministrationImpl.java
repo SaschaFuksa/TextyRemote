@@ -372,8 +372,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate)
-			throws IllegalArgumentException {		
-		
+			throws IllegalArgumentException {
+
 		Vector<Message> allMessages = this.mMapper.selectAllMessages();
 		Vector<Message> MessagesByDate = new Vector<Message>();
 		for (int i = 0; i < allMessages.size(); i++) {
@@ -405,6 +405,29 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return allMessagesWhereUserIsAuthor;
 	}
 
+	public Vector<Message> getAllMessagesWhereUserIsAuthorByDate(User user,
+			Date startDate, Date endDate) throws IllegalArgumentException {
+		Vector<Message> allMessagesFromUser = this.mMapper
+				.selectAllMessagesFromUser(user);
+		Vector<Message> allMessagesWhereUserIsAuthor = new Vector<Message>();
+		Vector<Message> allMessagesWhereUserIsAuthorByDate = new Vector<Message>();
+		for (int i = 0; i < allMessagesFromUser.size(); i++) {
+			if (allMessagesFromUser.get(i).getAuthor().getId() == user.getId()) {
+				allMessagesWhereUserIsAuthor.add(allMessagesFromUser.get(i));
+			}
+		}
+		for (int i = 0; i < allMessagesWhereUserIsAuthor.size(); i++) {
+			if (allMessagesWhereUserIsAuthor.get(i).getDateOfCreation()
+					.after(startDate)
+					&& allMessagesWhereUserIsAuthor.get(i).getDateOfCreation()
+							.before(endDate)) {
+				allMessagesWhereUserIsAuthorByDate
+						.add(allMessagesWhereUserIsAuthor.get(i));
+			}
+		}
+		return allMessagesWhereUserIsAuthorByDate;
+	}
+
 	@Override
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException {
@@ -420,40 +443,38 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return MessagesByDate;
 	}
 
-	
 	/**
-	 * Methode zum ausgeben aller öffentlichen Conversations (mit Messages) eines Benutzers.
+	 * Methode zum ausgeben aller öffentlichen Conversations (mit Messages)
+	 * eines Benutzers.
 	 * 
 	 * @return Eine Liste mit allen öffentlichen Conversations
 	 */
 	@Override
-	
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
-			   throws IllegalArgumentException {
-			  
-			  Vector<Message> allPublicMessagesFromUser = this.mMapper.selectAllPublicMessagesFromUser(user);
-			  
-			  Vector<Conversation> allConversations = this.cMapper
-			    .selectAllPublicConversations();
-			  
-			  Vector<Conversation> result = new Vector<Conversation>();
+			throws IllegalArgumentException {
 
-			  
-			  for (Conversation conversation : allConversations) {
-			   boolean state = true;
-			   for (Message message : allPublicMessagesFromUser){
-			    if (message.getConversationID() == conversation.getId()){
-			     conversation.addMessageToConversation(message);
-			     if (state){
-			      result.add(conversation);
-			      state = false;
-			     }
-			    }
-			   }
-			  } 
-			  return result;
-			 }
-					
+		Vector<Message> allPublicMessagesFromUser = this.mMapper
+				.selectAllPublicMessagesFromUser(user);
+
+		Vector<Conversation> allConversations = this.cMapper
+				.selectAllPublicConversations();
+
+		Vector<Conversation> result = new Vector<Conversation>();
+
+		for (Conversation conversation : allConversations) {
+			boolean state = true;
+			for (Message message : allPublicMessagesFromUser) {
+				if (message.getConversationID() == conversation.getId()) {
+					conversation.addMessageToConversation(message);
+					if (state) {
+						result.add(conversation);
+						state = false;
+					}
+				}
+			}
+		}
+		return result;
+	}
 
 	/**
 	 * Methode zum auslesen aller Hashtagabonnements des eingeloggten Benutzers

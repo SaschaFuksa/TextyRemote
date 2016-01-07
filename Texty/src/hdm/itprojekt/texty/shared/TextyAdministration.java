@@ -65,6 +65,8 @@ public interface TextyAdministration extends RemoteService {
 	
 	public Vector<Message> getAllMessagesWhereUserIsAuthor(User user)
 			throws IllegalArgumentException;
+	
+	public Vector<Message> getAllMessagesWhereUserIsAuthorByDate (User user, Date startDate, Date endDate) throws IllegalArgumentException;
 
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException;

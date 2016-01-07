@@ -88,4 +88,7 @@ public interface TextyAdministrationAsync {
 	void getAllMessagesWhereUserIsAuthor(User user,
 			AsyncCallback<Vector<Message>> callback);
 
+	void getAllMessagesWhereUserIsAuthorByDate(User user, Date startDate,
+			Date endDate, AsyncCallback<Vector<Message>> callback);
+
 }
