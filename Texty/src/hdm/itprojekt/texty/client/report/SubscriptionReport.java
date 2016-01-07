@@ -3,7 +3,6 @@ package hdm.itprojekt.texty.client.report;
 import java.util.Vector;
 
 import hdm.itprojekt.texty.client.ClientsideSettings;
-import hdm.itprojekt.texty.client.UserForm;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
@@ -14,12 +13,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class SubscriptionReport extends TextyForm {
@@ -43,7 +40,10 @@ public class SubscriptionReport extends TextyForm {
 
 	@Override
 	public void run() {
+		
 		// Create UI
+		
+		//Hinzufügen des Buttons zum auslösen des Userabo-Reports 
 		Usersubscriptions = new Button("Usersubscriptions", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -66,6 +66,7 @@ public class SubscriptionReport extends TextyForm {
 			};
 		});
 		
+		//Hinzufügen des Buttons zum auslösen des Hashtagabo-Reports
 		Hashtagsubscriptions = new Button("Hashtagsubscriptions", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -87,7 +88,8 @@ public class SubscriptionReport extends TextyForm {
 				});
 			};
 		});
-
+		
+		//Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich
 		// Text
 		chatFlexTable.setText(0, 0, "Subscription of:");
 
@@ -98,15 +100,14 @@ public class SubscriptionReport extends TextyForm {
 		chatFlexTable.setWidget(3, 1, Usersubscriptions);
 		
 		chatFlexTable.setWidget(4, 1, Hashtagsubscriptions);
-		// show.addClickHandler(new ClickHandler() {
-		// public void onClick(ClickEvent event) {
-
+		
+		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Navigator").clear();
 		RootPanel.get("Navigator").add(mainPanel);
 		
-
+		//Auswählen eines registrierten Users aus/in der SuggestBox
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {

@@ -3,7 +3,6 @@ package hdm.itprojekt.texty.client.report;
 import hdm.itprojekt.texty.client.ClientsideSettings;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
-import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
@@ -12,18 +11,13 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
@@ -34,14 +28,13 @@ public class MessagesOfPeriod extends TextyForm {
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable chatFlexTable = new FlexTable();
 	private HorizontalPanel addPanel = new HorizontalPanel();
-	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	private SuggestBox suggestBox = new SuggestBox(oracle);
+
 	private Button MessageReport;
 	private Date date1;
 	private Date date2;
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
-	private static Vector<User> allUser = new Vector<User>();
+
 
 	public MessagesOfPeriod(String headline) {
 		super(headline);
@@ -51,40 +44,31 @@ public class MessagesOfPeriod extends TextyForm {
 	@Override
 	public void run() {
 		
-		// Create a date picker
-	    DateBox dateBox = new DateBox();
-	    final Label text = new Label();
+		// Hinzufügen eines date pickers für das Startdatum
+	    DateBox startDateBox = new DateBox();
 
-	    // Set the value in the text box when the user selects a date
-	    dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+	    // Setzen des Wertes in die TextBox, den der User auswählt
+	    startDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date1 = event.getValue();
-	        String startDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date1);
-	        text.setText(startDate);
 	      }
 	    });
 
-	    // Set the default value
-	    dateBox.setValue(new Date(), false);
 	    
-	 // Create a second date picker
-	    DateBox dateBox2 = new DateBox();
-	    final Label text2 = new Label();
-
-	    // Set the value in the text box when the user selects a date
-	    dateBox2.addValueChangeHandler(new ValueChangeHandler<Date>() {
+	    // Hinzufügen eines date pickers für das Enddatum
+	    DateBox endDateBox = new DateBox();
+	   
+	    // Setzen des Wertes in die TextBox, den der User auswählt
+	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date2 = event.getValue();
-	        String endDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date2);
-	        text2.setText(endDate);
 	      }
 	    });
 
-	    // Set the default value
-	    dateBox2.setValue(new Date(), false);
 	   
 		
 		// Create UI
+	    //Hinzufügen des Buttons zum auslösen des MessagesOfPeriod-Report
 	    MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -103,20 +87,19 @@ public class MessagesOfPeriod extends TextyForm {
 			};
 		});
 	    
-
+		//Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich
 		// Text
 		chatFlexTable.setText(0, 0, "Messagereport in Period of:");
 		chatFlexTable.setText(1, 0, "Start:");
 		chatFlexTable.setText(1, 1, "End:");
 		
 		// Textboxen
-		chatFlexTable.setWidget(2, 0, dateBox);
-		chatFlexTable.setWidget(2, 1, dateBox2);
+		chatFlexTable.setWidget(2, 0, startDateBox);
+		chatFlexTable.setWidget(2, 1, endDateBox);
 		// Save-Button
 		chatFlexTable.setWidget(4, 0, MessageReport);
 		
-		
-		// Add the widgets to the page
+		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Navigator").clear();

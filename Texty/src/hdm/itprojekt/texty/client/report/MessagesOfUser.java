@@ -3,7 +3,6 @@ package hdm.itprojekt.texty.client.report;
 import hdm.itprojekt.texty.client.ClientsideSettings;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
-import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
@@ -43,6 +42,7 @@ public class MessagesOfUser extends TextyForm {
 		
 		// Create UI
 		
+		//Hinzufügen des Buttons zum auslösen des MessagesOfUser-Report 
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -64,6 +64,7 @@ public class MessagesOfUser extends TextyForm {
 			};
 		});
 
+		//Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich
 		// Text
 		chatFlexTable.setText(0, 0, "Messagereport for:");
 
@@ -73,15 +74,15 @@ public class MessagesOfUser extends TextyForm {
 		// Save-Button
 		chatFlexTable.setWidget(3, 1, MessageReport);
 		
-		// show.addClickHandler(new ClickHandler() {
-		// public void onClick(ClickEvent event) {
-
+		
+		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Navigator").clear();
 		RootPanel.get("Navigator").add(mainPanel);
 		
-
+		
+		//Auswählen eines registrierten Users aus/in der SuggestBox
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
