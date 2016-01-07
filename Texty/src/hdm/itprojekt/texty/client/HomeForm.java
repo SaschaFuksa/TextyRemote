@@ -205,7 +205,8 @@ public class HomeForm extends TextyForm {
 	}
 
 	// Hier entsteht die Detailsanzeige der Hashtags
-	public void showMessageSelectedHashtag(Hashtag hashtag) {
+	public void showMessageSelectedHashtag(final Hashtag hashtag) {
+		
 		administration.getAllPublicMessagesFromHashtag(hashtag,
 				new AsyncCallback<Vector<Message>>() {
 
@@ -216,7 +217,10 @@ public class HomeForm extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<Message> result) {
-						HomeForm.messageListofHashtag = result;
+						TextyForm publicHashtagViewer = new PublicHashtagViewer("Public Hashtags of " + hashtag.getKeyword(), result);
+						
+						RootPanel.get("Details").clear();
+						RootPanel.get("Details").add(publicHashtagViewer);
 					}
 
 				});

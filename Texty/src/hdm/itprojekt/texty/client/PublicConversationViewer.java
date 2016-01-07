@@ -17,20 +17,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class PublicConversationViewer extends TextyForm {
 	
 	private Vector<Conversation> conversationListOfUser = new Vector<Conversation>();
-	private Vector<Message> messageListofHashtag = new Vector<Message>();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	
 	public PublicConversationViewer(String headline, Vector<Conversation> conversationListofUser) {
 		super(headline);
 		this.conversationListOfUser = conversationListofUser;
 	}
-	
-	/*public PublicConversationViewer(String headline, Vector<Message> messageListofHashtag) {
-		super(headline);
-		this.messageListofHashtag = messageListofHashtag;
-	}
-	
-	*/
 
 	@Override
 	protected void run() {
