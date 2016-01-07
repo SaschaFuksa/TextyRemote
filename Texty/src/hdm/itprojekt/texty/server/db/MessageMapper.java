@@ -25,22 +25,6 @@ public class MessageMapper {
 
 	}
 
-	public void delete(Message message) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-			// The visibilty of the Message will be changed and users can not
-			// see it anymore
-			// TODO: Boolean Wert umwandeln für die DB? Überprüfen!
-			stmt.executeUpdate("UPDATE textydb.message SET message.visibility = "
-					+ 0 + " WHERE messageId = " + message.getId());
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public User findAuthor(Message message) {
 		Connection con = DBConnection.connection();
 
@@ -97,40 +81,6 @@ public class MessageMapper {
 
 		// Ergebnisvektor zurückgeben
 		return result;
-	}
-	
-	public void removeHashtagInMessage(Message message) {
-		Connection con = DBConnection.connection();
-
-		try {
-			for (int i = 0; i < message.getListOfHashtag().size(); i++) {
-			Statement stmt = con.createStatement();
-			// Hashtag gets removed from the Message
-			stmt.executeUpdate("DELETE FROM hashtag_in_message"
-					+ "WHERE hashtag_in_message.hashtagId = " + message.getListOfHashtag().get(i).getId() + " AND hashtag_in_message.messageId = " + message.getId());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void addHashtagToMessage(Message message) {
-		Connection con = DBConnection.connection();
-
-		try {
-			for (int i = 0; i < message.getListOfHashtag().size(); i++) {
-			Statement stmt = con.createStatement();
-			// Hashtag gets removed from the Message
-			stmt.executeUpdate("INSERT INTO textydb.hashtag_in_message (messageId, hashtagId)"
-					+ "VALUES ("
-					+ message.getId()
-					+ ", "
-					+ message.getListOfHashtag().get(i).getId()
-					+ ")");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public Vector<User> findReceivers(Message message) {
@@ -448,6 +398,22 @@ public class MessageMapper {
 		return resultMessage;
 	}
 
+	public void delete(Message message) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			// The visibilty of the Message will be changed and users can not
+			// see it anymore
+			// TODO: Boolean Wert umwandeln für die DB? Überprüfen!
+			stmt.executeUpdate("UPDATE textydb.message SET message.visibility = "
+					+ 0 + " WHERE messageId = " + message.getId());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public Message update(Vector<Hashtag> listOfHashtag, Message message) {
 		Connection con = DBConnection.connection();
 
@@ -484,13 +450,4 @@ public class MessageMapper {
 
 		return message;
 	}
-
-	// -------- Following Code is for the Report Generator -----------
-	// | | | |
-	// v v v v
-	//
-	// TODO: Nachrichten eines Benutzers ausgeben -> Benutzer auswählen
-	// TODO: Nachrichten eines Benutzers zu einem Zeitraumausgeben ->
-	// Benutzer/Zeitraum auswählen
-	// TODO: Nachrichten eines Zeitraums ausgeben -> Zeitraum auswählen
 }

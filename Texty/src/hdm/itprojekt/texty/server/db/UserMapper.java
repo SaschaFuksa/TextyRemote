@@ -80,67 +80,6 @@ public class UserMapper {
 		return null;
 	}
 
-	public Vector<User> findById(int userId) {
-		Connection con = DBConnection.connection();
-		Vector<User> result = new Vector<User>();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			ResultSet rs = stmt
-					.executeQuery("SELECT userId, givenName, familyName, email, dateOfCreation FROM textydb.user "
-							+ "WHERE userId = '" + userId + "'");
-
-			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
-			while (rs.next()) {
-				User user = new User();
-				user.setId(rs.getInt("userId"));
-				user.setFirstName(rs.getString("givenName"));
-				user.setLastName(rs.getString("familyName"));
-				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
-
-				result.addElement(user);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public Vector<User> findByName(String firstName, String lastName) {
-		Connection con = DBConnection.connection();
-		Vector<User> result = new Vector<User>();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			ResultSet rs = stmt
-					.executeQuery("SELECT userId, givenName, familyName, email, dateOfCreation FROM textydb.user "
-							+ "WHERE givenName = '"
-							+ firstName
-							+ "'"
-							+ "AND familyName = '" + lastName + "'");
-
-			// Für jeden Eintrag wird nun ein User-Objekt erstellt.
-			while (rs.next()) {
-				User user = new User();
-				user.setId(rs.getInt("userId"));
-				user.setFirstName(rs.getString("givenName"));
-				user.setLastName(rs.getString("familyName"));
-				user.setEmail(rs.getString("email"));
-				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
-
-				result.addElement(user);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
 	public User insert(User user) {
 		Connection con = DBConnection.connection();
 
