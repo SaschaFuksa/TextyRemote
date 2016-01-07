@@ -7,12 +7,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -51,38 +49,28 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		//Aufbau der GUI
 		
 		// Create a date picker
-	    DateBox dateBox = new DateBox();
-	    final Label text = new Label();
+	    DateBox startDateBox = new DateBox();
 
 	    // Set the value in the text box when the user selects a date
-	    dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+	    startDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date1 = event.getValue();
-	        String startDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date1);
-	        text.setText(startDate);
 	      }
 	    });
 
-	    // Set the default value
-	    dateBox.setValue(new Date(), false);
 	    
 	 // Create a second date picker
-	    DateBox dateBox2 = new DateBox();
-	    final Label text2 = new Label();
+	    DateBox endDateBox = new DateBox();
 
 	    // Set the value in the text box when the user selects a date
-	    dateBox2.addValueChangeHandler(new ValueChangeHandler<Date>() {
+	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date2 = event.getValue();
-	        String endDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date2);
-	        text2.setText(endDate);
 	      }
 	    });
 
-	    // Set the default value
-	    dateBox2.setValue(new Date(), false);
-		
-		//Button zum auslösen des MEssagesOfUserInPeriod-Reports
+
+		//Hinzufügen des Buttons zum auslösen des MessagesOfUserInPeriod-Reports
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -90,7 +78,7 @@ public class MessagesOfUserInPeriod extends TextyForm{
 				User user = getUserOutOfAllUser(nickName);
 				
 				// 
-				administration.getAllMessagesFromUserByDate(user, date1, date2,new AsyncCallback<Vector<Message>>() {
+				administration.getAllMessagesWhereUserIsAuthorByDate(user, date1, date2,new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -113,8 +101,8 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		chatFlexTable.setText(4, 0, "                to:");
 		// Textboxen
 		chatFlexTable.setWidget(1, 1, suggestBox);
-		chatFlexTable.setWidget(3, 1, dateBox);
-		chatFlexTable.setWidget(4, 1, dateBox2);
+		chatFlexTable.setWidget(3, 1, startDateBox);
+		chatFlexTable.setWidget(4, 1, endDateBox);
 		// Show-Button
 		chatFlexTable.setWidget(5, 1, MessageReport);
 				
