@@ -411,7 +411,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Vector<Message> allMessages = this.mMapper
 				.selectAllMessagesFromUser(user);
 		Vector<Message> MessagesByDate = new Vector<Message>();
-		for (int i = allMessages.size(); i > 0; i--) {
+		for (int i = 0; i < allMessages.size(); i++) {
 			if (allMessages.get(i).getDateOfCreation().after(startDate)
 					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
 				MessagesByDate.add(allMessages.get(i));
