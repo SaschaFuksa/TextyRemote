@@ -42,67 +42,6 @@ public class HashtagSubscriptionMapper {
 		}
 	}
 
-	public Vector<HashtagSubscription> findAll() {
-		Connection con = DBConnection.connection();
-		// Ergebnisvektor vorbereiten
-		Vector<HashtagSubscription> result = new Vector<HashtagSubscription>();
-
-		try {
-			Statement stmt = con.createStatement();
-			// TODO: Date of Creation fehlt
-			ResultSet rs = stmt
-					.executeQuery("SELECT userId, hashtagId, FROM textydb.user");
-
-			// Für jeden Eintrag wird nun ein HashtagSubscription-Objekt
-			// erstellt.
-			while (rs.next()) {
-				HashtagSubscription hashtagSubscription = new HashtagSubscription();
-				// TODO: Add setter
-				// hashtagSubscription.setSubscriberId(rs.getInt("userId"));
-				// hashtagSubscription.setHashtagId(rs.getInt("hashtagId"));
-				hashtagSubscription.setDateOfCreation(rs
-						.getDate("dateOfCreation"));
-
-				// Hinzufügen des neuen Objekts zum Ergebnisvektor
-				result.addElement(hashtagSubscription);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		// Ergebnisvektor zurückgeben
-		return result;
-	}
-
-	public Vector<HashtagSubscription> findByUser(int userId) {
-		Connection con = DBConnection.connection();
-		Vector<HashtagSubscription> result = new Vector<HashtagSubscription>();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			ResultSet rs = stmt
-					.executeQuery("SELECT userId, hashtagId, dateOfCreation"
-							+ "FROM hashtagsubscription " + "WHERE userId="
-							+ userId);
-
-			while (rs.next()) {
-				HashtagSubscription hashtagSubscription = new HashtagSubscription();
-				// TODO: Add setter
-				// hashtagSubscription.setSubscriberId(rs.getInt("userId"));
-				// hashtagSubscription.setHashtagId(rs.getInt("hashtagId"));
-				hashtagSubscription.setDateOfCreation(rs
-						.getDate("dateOfCreation"));
-
-				result.addElement(hashtagSubscription);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
 	public HashtagSubscription insert(HashtagSubscription hashtagSubscription) {
 		Connection con = DBConnection.connection();
 

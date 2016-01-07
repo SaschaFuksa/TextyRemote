@@ -66,58 +66,6 @@ public class HashtagMapper {
 		return result;
 	}
 
-	public Vector<Hashtag> findById(int hashtagId) {
-		Connection con = DBConnection.connection();
-		Vector<Hashtag> result = new Vector<Hashtag>();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			ResultSet rs = stmt
-					.executeQuery("SELECT hashtagId, keyword, dateOfCreation"
-							+ "FROM hashtag" + "WHERE hashtagId=" + hashtagId);
-
-			while (rs.next()) {
-				Hashtag hashtag = new Hashtag();
-				hashtag.setId(rs.getInt("hashtagId"));
-				hashtag.setKeyword(rs.getString("keyword"));
-				hashtag.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
-
-				result.addElement(hashtag);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public Vector<Hashtag> findByKeyword(String keyword) {
-		Connection con = DBConnection.connection();
-		Vector<Hashtag> result = new Vector<Hashtag>();
-
-		try {
-			Statement stmt = con.createStatement();
-
-			ResultSet rs = stmt
-					.executeQuery("SELECT hashtagId, keyword, dateOfCreation"
-							+ "FROM hashtag" + "WHERE keyword=" + keyword);
-
-			while (rs.next()) {
-				Hashtag hashtag = new Hashtag();
-				hashtag.setId(rs.getInt("hashtagId"));
-				hashtag.setKeyword(rs.getString("keyword"));
-				hashtag.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
-
-				result.addElement(hashtag);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
 	public Hashtag insert(Hashtag hashtag) {
 		Connection con = DBConnection.connection();
 
