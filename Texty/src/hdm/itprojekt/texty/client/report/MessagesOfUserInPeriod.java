@@ -37,6 +37,8 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 	private static Vector<User> allUser = new Vector<User>();
+	private Date date1;
+	private Date date2;
 
 	public MessagesOfUserInPeriod(String headline) {
 		super(headline);
@@ -48,6 +50,38 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		
 		//Aufbau der GUI
 		
+		// Create a date picker
+	    DateBox dateBox = new DateBox();
+	    final Label text = new Label();
+
+	    // Set the value in the text box when the user selects a date
+	    dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+	      public void onValueChange(ValueChangeEvent<Date> event) {
+	        date1 = event.getValue();
+	        String startDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date1);
+	        text.setText(startDate);
+	      }
+	    });
+
+	    // Set the default value
+	    dateBox.setValue(new Date(), false);
+	    
+	 // Create a second date picker
+	    DateBox dateBox2 = new DateBox();
+	    final Label text2 = new Label();
+
+	    // Set the value in the text box when the user selects a date
+	    dateBox2.addValueChangeHandler(new ValueChangeHandler<Date>() {
+	      public void onValueChange(ValueChangeEvent<Date> event) {
+	        date2 = event.getValue();
+	        String endDate = DateTimeFormat.getFormat("dd.MM.yyyy").format(date2);
+	        text2.setText(endDate);
+	      }
+	    });
+
+	    // Set the default value
+	    dateBox2.setValue(new Date(), false);
+		
 		//Button zum auslösen des MEssagesOfUserInPeriod-Reports
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
@@ -56,7 +90,7 @@ public class MessagesOfUserInPeriod extends TextyForm{
 				User user = getUserOutOfAllUser(nickName);
 				
 				// 
-				administration.getAllMessagesWhereUserIsAuthor(user, new AsyncCallback<Vector<Message>>() {
+				administration.getAllMessagesFromUserByDate(user, date1, date2,new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -64,23 +98,12 @@ public class MessagesOfUserInPeriod extends TextyForm{
 					@Override
 					public void onSuccess(Vector<Message> result) {
 						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLMessagesFromUserReport.generateMessagesOfUserReport(result));
+						RootPanel.get("Details").add(HTMLMessagesFromUserInPeriod.generateMessagesFromUserInPeriodReport(result));
 					}
 				});
 			};
 		});
-		
-		//Implementierung der Dateboxen zum auswählen des Zeitraums des Reports
-				DateBox dateBox = new DateBox();
-				    dateBox.setValue(new Date());
-				    
-				    
-				 
-				    
-				  //Implementierung der Dateboxen zum auswählen des Zeitraums des Reports
-					DateBox dateBox2 = new DateBox();
-					    dateBox.setValue(new Date());
-					    
+							    
 					  
 				
 		// Text
