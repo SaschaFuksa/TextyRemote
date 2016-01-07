@@ -93,26 +93,28 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		});
 							    
 					  
-				
+		//Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich	
 		// Text
 		chatFlexTable.setText(0, 0, "Please select User and Dateperiod");
 		chatFlexTable.setText(1, 0, "Messagereport for:");
 		chatFlexTable.setText(3, 0, "in Dateperiod from:");
 		chatFlexTable.setText(4, 0, "                to:");
+		
 		// Textboxen
 		chatFlexTable.setWidget(1, 1, suggestBox);
 		chatFlexTable.setWidget(3, 1, startDateBox);
 		chatFlexTable.setWidget(4, 1, endDateBox);
+		
 		// Show-Button
 		chatFlexTable.setWidget(5, 1, MessageReport);
 				
-		
+		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Navigator").clear();
 		RootPanel.get("Navigator").add(mainPanel);
 		
-		
+		//Auswählen eines registrierten Users aus/in der SuggestBox
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
