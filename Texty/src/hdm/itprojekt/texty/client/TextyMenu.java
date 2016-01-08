@@ -41,7 +41,6 @@ public class TextyMenu {
 			reportMenu.addItem("MessageReports", messageReportMenu);
 			reportMenu.addItem("SubscriptionReports",
 					command.getCommand("SubscriptionReport"));
-			reportMenu.addItem("Editor", command.getCommand("Editor"));
 			reportMenu.setStyleName("menubar");
 
 			RootPanel.get("Menu").add(reportMenu);
