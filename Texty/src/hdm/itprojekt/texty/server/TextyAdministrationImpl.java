@@ -362,6 +362,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				}
 			}
 		}
+		for (int i = 0; i < result.size(); i++) {
+			result.get(i).setDateOfLastMessageInCon(
+					result.get(i).getLastMessage().getDateOfCreation());
+		}
+		
 		Collections.sort(result);
 		return result;
 
@@ -478,6 +483,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 					}
 				}
 			}
+		}
+		for (int i = 0; i < result.size(); i++) {
+			result.get(i).setDateOfLastMessageInCon(
+					result.get(i).getLastMessage().getDateOfCreation());
 		}
 		Collections.sort(result);
 		return result;

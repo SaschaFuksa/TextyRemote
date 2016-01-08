@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.shared.bo;
 
+import java.util.Date;
 import java.util.Vector;
 
 public class Conversation extends BusinessObject implements
@@ -7,6 +8,8 @@ public class Conversation extends BusinessObject implements
 
 	private static final long serialVersionUID = 1L;
 	private boolean publicly = false;
+	private Date DateOfLastMessageInCon = null;
+	
 	private Vector<Message> listOfMessage = new Vector<Message>();
 
 	// private Vector<User> listOfParticipant = new Vector<User> ();
@@ -47,10 +50,16 @@ public class Conversation extends BusinessObject implements
 	}
 
 	public int compareTo(Conversation o) {
-		if (getDateOfCreation() == null || o.getDateOfCreation() == null)
+		if (getDateOfLastMessageInCon() == null || o.getDateOfLastMessageInCon() == null)
 			return 0;
-		return getDateOfCreation().compareTo(o.getDateOfCreation());
+		return getDateOfLastMessageInCon().compareTo(o.getDateOfLastMessageInCon());
 
+	}
+	public void setDateOfLastMessageInCon(Date dateOfLastMessageInCon){
+		this.DateOfLastMessageInCon=dateOfLastMessageInCon;
+	}
+	public Date getDateOfLastMessageInCon() {
+		return DateOfLastMessageInCon;
 	}
 
 }
