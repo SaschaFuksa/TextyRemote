@@ -14,6 +14,7 @@ import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 import hdm.itprojekt.texty.shared.bo.UserSubscription;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Vector;
 
@@ -353,6 +354,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			for (Message message : allMesssagesFromUser) {
 				if (message.getConversationID() == conversation.getId()) {
 					conversation.addMessageToConversation(message);
+					Collections.sort(conversation.getListOfMessage());
 					if (state) {
 						result.add(conversation);
 						state = false;
@@ -360,6 +362,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				}
 			}
 		}
+		for (int i = 0; i < result.size(); i++) {
+			result.get(i).setDateOfLastMessageInCon(
+					result.get(i).getLastMessage().getDateOfCreation());
+		}
+		
+		Collections.sort(result);
 		return result;
 
 	}
@@ -381,6 +389,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				MessagesByDate.add(allMessages.get(i));
 			}
 		}
+		Collections.sort(MessagesByDate);
 		return MessagesByDate;
 	}
 
@@ -401,6 +410,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				allMessagesWhereUserIsAuthor.add(allMessagesFromUser.get(i));
 			}
 		}
+		Collections.sort(allMessagesWhereUserIsAuthor);
 		return allMessagesWhereUserIsAuthor;
 	}
 
@@ -424,6 +434,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 						.add(allMessagesWhereUserIsAuthor.get(i));
 			}
 		}
+		Collections.sort(allMessagesWhereUserIsAuthorByDate);
 		return allMessagesWhereUserIsAuthorByDate;
 	}
 
@@ -439,6 +450,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				MessagesByDate.add(allMessages.get(i));
 			}
 		}
+		Collections.sort(MessagesByDate);
 		return MessagesByDate;
 	}
 
@@ -472,6 +484,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 				}
 			}
 		}
+		for (int i = 0; i < result.size(); i++) {
+			result.get(i).setDateOfLastMessageInCon(
+					result.get(i).getLastMessage().getDateOfCreation());
+		}
+		Collections.sort(result);
 		return result;
 	}
 
@@ -513,7 +530,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public Vector<Message> getAllPublicMessagesFromHashtag(
 			Hashtag selectedHashtag) throws IllegalArgumentException {
-		return this.mMapper.selectAllPublicMessagesWithHashtag(selectedHashtag);
+		Vector<Message> result = this.mMapper.selectAllPublicMessagesWithHashtag(selectedHashtag);
+		Collections.sort(result);
+		return result;
 	}
 
 	@Override
