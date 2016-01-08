@@ -27,9 +27,7 @@ public class TextyCommand {
 				case "Conversation":
 					TextyForm conversation = new ConversationForm(
 							"Conversations");
-					TextyForm newMessage = new NewMessage("New Conversation");
 					RootPanel.get("Navigator").add(conversation);
-					RootPanel.get("Info").add(newMessage);
 					break;
 				case "Subscription":
 					TextyForm subscriptionForm = new SubscriptionForm(

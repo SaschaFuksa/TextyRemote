@@ -16,7 +16,6 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -99,8 +98,6 @@ public class MessageForm extends VerticalPanel {
 			public void onSuccess(Vector<Hashtag> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
 				allHashtag = result;
-				Window.alert("size all hash: " + allHashtag.size());
-				Window.alert("size selected hash: " + selectedHashtag.size());
 				setOracle();
 	
 			}
@@ -179,6 +176,8 @@ public class MessageForm extends VerticalPanel {
 			administration.createHashtag(keyword, createHashtagExecute());
 			infoBox.clear();
 			infoBox.setSuccessText("You subscribed a brand new hashtag!");
+		} else {
+			
 		}
 		createHashtagPanel(keyword);
 		setOracle();
@@ -241,7 +240,7 @@ public class MessageForm extends VerticalPanel {
 	public void setText(String text) {
 		textBox.setText(text);
 	}
-
+	
 	private void setOracle() {
 		oracle.clear();
 		for (Hashtag hashtag : allHashtag) {
