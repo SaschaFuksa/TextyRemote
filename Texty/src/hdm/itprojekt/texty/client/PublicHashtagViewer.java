@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class PublicHashtagViewer extends TextyForm {
 
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private static Vector<Message> messageListofHashtag = new Vector<Message>();
+	private Vector<Message> messageListofHashtag = new Vector<Message>();
 
 	public PublicHashtagViewer(String headline,
 			Vector<Message> messageListofHashtag) {

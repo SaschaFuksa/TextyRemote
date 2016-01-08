@@ -30,8 +30,12 @@ public class HomeForm extends TextyForm {
 	private static Vector<Conversation> conListofUser = new Vector<Conversation>();
 	private static Vector<Message> messageListofHashtag = new Vector<Message>();
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private Label intro = new Label(
-			"Here you can see and select your subscribed User and Hashtags");
+	private Label text = new Label(
+			"See your:");
+	private Label headerUser = new Label(
+			"Subscribed user");
+	private Label headerHashtag = new Label(
+			"Subscribed hashtags");
 	private VerticalPanel contentUser = new VerticalPanel();
 	private VerticalPanel userPanel = new VerticalPanel();
 	private ScrollPanel scrollUser = new ScrollPanel(contentUser);
@@ -40,10 +44,10 @@ public class HomeForm extends TextyForm {
 	private ScrollPanel scrollHashtag = new ScrollPanel(contentHashtag);
 	private Vector<String> userVector = new Vector<String>();
 	private Vector<String> hashtagVector = new Vector<String>();
+	private User currentUser = new User();
 	private TextCell textCell = new TextCell();
 	private CellList<String> cellListUser = new CellList<String>(textCell);
 	private CellList<String> cellListHashtag = new CellList<String>(textCell);
-	private NewMessage messageForm = new NewMessage("New Message");
 
 	// Detailsbereich für Anzeige der Conversation
 	private VerticalPanel contentConversation = new VerticalPanel();
@@ -68,7 +72,7 @@ public class HomeForm extends TextyForm {
 
 			@Override
 			public void onSuccess(Vector<User> result) {
-				HomeForm.userList = result;
+				userList = result;
 				showSubscribedUser();
 
 				// Abonnierte Hashtags und deren Postings
@@ -81,11 +85,27 @@ public class HomeForm extends TextyForm {
 
 							@Override
 							public void onSuccess(Vector<Hashtag> result) {
-								HomeForm.hashtagList = result;
+								hashtagList = result;
 								showSubscribedHashtag();
+								if (result.size() == 0){
+									headerHashtag.setText("");
+								}
 							}
 
 						});
+			}
+
+		});
+		
+		administration.getCurrentUser(new AsyncCallback<User>() {
+			@Override
+			public void onFailure(Throwable caught) {
+
+			}
+
+			@Override
+			public void onSuccess(User result) {
+				currentUser = result;
 			}
 
 		});
@@ -105,17 +125,18 @@ public class HomeForm extends TextyForm {
 		hashtagPanel.add(scrollHashtag);
 
 		mainPanel.add(getHeadline());
-		mainPanel.add(intro);
+		mainPanel.add(text);
+		mainPanel.add(headerUser);
 		mainPanel.add(userPanel);
+		mainPanel.add(headerHashtag);
 		mainPanel.add(hashtagPanel);
-		mainPanel.add(contentConversation);
 
 		this.add(mainPanel);
 
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				scrollUser.setHeight(mainPanel.getOffsetHeight() / 3 + "px");
-				scrollHashtag.setHeight(mainPanel.getOffsetHeight() / 3 + "px");
+				scrollUser.setHeight(mainPanel.getOffsetHeight() * 5 / 16 + "px");
+				scrollHashtag.setHeight(mainPanel.getOffsetHeight() * 5 / 16 + "px");
 			}
 		});
 
@@ -124,32 +145,43 @@ public class HomeForm extends TextyForm {
 	// Navigatorbereich User
 	private void showSubscribedUser() {
 
+		createUserTable(currentUser, true);
+		
 		for (User user : userList) {
-			final User userView = user;
-			FlexTable chatFlexTable = new FlexTable();
-			FocusPanel wrapper = new FocusPanel();
-
-			String userName = userView.getFirstName() + " "
-					+ userView.getLastName();
-
-			Label userLabel = new Label(userName);
-			userLabel.getElement().setId("conversationHead");
-
-			wrapper.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					
-					showMessageSelectedUser(userView);
-
-				}
-			});
-
-			chatFlexTable.setWidget(0, 0, userLabel);
-			chatFlexTable.getElement().setId("conversation");
-			wrapper.add(chatFlexTable);
-			contentUser.add(wrapper);
+			createUserTable(user, false);
 		}
 
+	}
+	
+	private void createUserTable(User user, boolean isCurrentUser){
+		final User userView = user;
+		FlexTable chatFlexTable = new FlexTable();
+		FocusPanel wrapper = new FocusPanel();
+		String userName = new String();
+
+		if (isCurrentUser){
+			userName = "Your own public postings";
+		} else {
+			userName = userView.getFirstName() + " "
+					+ userView.getLastName();
+		}
+
+		Label userLabel = new Label(userName);
+		userLabel.getElement().setId("conversationHead");
+
+		wrapper.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				showMessageSelectedUser(userView);
+
+			}
+		});
+
+		chatFlexTable.setWidget(0, 0, userLabel);
+		chatFlexTable.getElement().setId("conversation");
+		wrapper.add(chatFlexTable);
+		contentUser.add(wrapper);
 	}
 
 	// Navigatorbereich Hashtags
@@ -188,11 +220,11 @@ public class HomeForm extends TextyForm {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						
+					
 					}
 
 					@Override
-					public void onSuccess(Vector<Conversation> result) {						
+					public void onSuccess(Vector<Conversation> result) {
 						TextyForm publicConversationViewer = new PublicConversationViewer("Public Postings from " + user.getFirstName(), result);
 						
 						RootPanel.get("Details").clear();
@@ -212,7 +244,7 @@ public class HomeForm extends TextyForm {
 
 					@Override
 					public void onFailure(Throwable caught) {
-
+						
 					}
 
 					@Override

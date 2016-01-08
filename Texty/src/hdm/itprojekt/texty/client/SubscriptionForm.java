@@ -75,7 +75,7 @@ public class SubscriptionForm extends TextyForm {
 	
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				int height = mainPanel.getOffsetHeight();
+				int height = mainPanel.getOffsetHeight() * 2;
 				scrollUserSubscriptions.setHeight(height + "px");
 				scrollHashtagSubscriptions.setHeight(height + "px");
 			}
