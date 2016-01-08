@@ -2,7 +2,8 @@ package hdm.itprojekt.texty.shared.bo;
 
 import java.util.Vector;
 
-public class Conversation extends BusinessObject {
+public class Conversation extends BusinessObject implements
+		Comparable<Conversation> {
 
 	private static final long serialVersionUID = 1L;
 	private boolean publicly = false;
@@ -43,6 +44,13 @@ public class Conversation extends BusinessObject {
 
 	public void setPublicly(boolean publicly) {
 		this.publicly = publicly;
+	}
+
+	public int compareTo(Conversation o) {
+		if (getDateOfCreation() == null || o.getDateOfCreation() == null)
+			return 0;
+		return getDateOfCreation().compareTo(o.getDateOfCreation());
+
 	}
 
 }
