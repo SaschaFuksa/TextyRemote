@@ -2,7 +2,7 @@ package hdm.itprojekt.texty.shared.bo;
 
 import java.util.Vector;
 
-public class Message extends BusinessObject {
+public class Message extends BusinessObject implements Comparable<Message> {
 
 	private static final long serialVersionUID = 1L;
 	private String text = "";
@@ -90,6 +90,12 @@ public class Message extends BusinessObject {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+	public int compareTo(Message o) {
+		if (getDateOfCreation() == null || o.getDateOfCreation() == null)
+		      return 0;
+		    return getDateOfCreation().compareTo(o.getDateOfCreation());
+		
 	}
 
 }

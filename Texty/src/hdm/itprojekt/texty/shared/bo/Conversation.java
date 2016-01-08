@@ -1,11 +1,15 @@
 package hdm.itprojekt.texty.shared.bo;
 
+import java.util.Date;
 import java.util.Vector;
 
-public class Conversation extends BusinessObject {
+public class Conversation extends BusinessObject implements
+		Comparable<Conversation> {
 
 	private static final long serialVersionUID = 1L;
 	private boolean publicly = false;
+	private Date DateOfLastMessageInCon = null;
+	
 	private Vector<Message> listOfMessage = new Vector<Message>();
 
 	// private Vector<User> listOfParticipant = new Vector<User> ();
@@ -43,6 +47,19 @@ public class Conversation extends BusinessObject {
 
 	public void setPublicly(boolean publicly) {
 		this.publicly = publicly;
+	}
+
+	public int compareTo(Conversation o) {
+		if (getDateOfLastMessageInCon() == null || o.getDateOfLastMessageInCon() == null)
+			return 0;
+		return getDateOfLastMessageInCon().compareTo(o.getDateOfLastMessageInCon());
+
+	}
+	public void setDateOfLastMessageInCon(Date dateOfLastMessageInCon){
+		this.DateOfLastMessageInCon=dateOfLastMessageInCon;
+	}
+	public Date getDateOfLastMessageInCon() {
+		return DateOfLastMessageInCon;
 	}
 
 }
