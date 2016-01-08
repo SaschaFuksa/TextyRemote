@@ -56,14 +56,14 @@ public class UserForm extends TextyForm {
 
 	@Override
 	protected void run() {
-
+	
 		administration.getAllUsers(getAllUsersExecute());
-
+	
 		suggestBox.addKeyUpHandler(createSuggestBoxHandler());
 		suggestBox.getValueBox().addFocusHandler(createFocusHandler());
-
+	
 		suggestBox.setText("Search for users");
-
+	
 		this.getElement().setId("fullSize");
 		addButton.getElement().setId("addButton");
 		subscribeButton.getElement().setId("button");
@@ -72,23 +72,23 @@ public class UserForm extends TextyForm {
 		userFormFlexTable.getElement().setId("fullSize");
 		content.getElement().setId("fullWidth");
 		scroll.getElement().setId("fullWidth");
-
+	
 		suggestBoxPanel.add(suggestBox);
 		suggestBoxPanel.add(addButton);
-
+	
 		userFormFlexTable.setWidget(0, 0, text);
 		userFormFlexTable.setWidget(1, 0, suggestBoxPanel);
 		userFormFlexTable.setWidget(2, 0, scroll);
 		userFormFlexTable.setWidget(3, 0, subscribeButton);
 		userFormFlexTable.setWidget(4, 0, infoBox);
-
+	
 		subscribeButton.setVisible(false);
-
+	
 		mainPanel.add(getHeadline());
 		mainPanel.add(userFormFlexTable);
-
+	
 		this.add(mainPanel);
-
+	
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
@@ -102,7 +102,7 @@ public class UserForm extends TextyForm {
 			public void onFailure(Throwable caught) {
 				LOG.severe("Error: " + caught.getMessage());
 			}
-
+	
 			@Override
 			public void onSuccess(Vector<User> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
@@ -118,9 +118,9 @@ public class UserForm extends TextyForm {
 			@Override
 			public void onFailure(Throwable caught) {
 				LOG.severe("Error: " + caught.getMessage());
-
+	
 			}
-
+	
 			@Override
 			public void onSuccess(User result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
@@ -142,7 +142,7 @@ public class UserForm extends TextyForm {
 		}
 	}
 
-	public void addUser(User selectedUser) {
+	private void addUser(User selectedUser) {
 		for (User user : allUser) {
 			if (selectedUser.getId() == user.getId()) {
 				allSelectedUser.addElement(selectedUser);
@@ -153,83 +153,6 @@ public class UserForm extends TextyForm {
 				return;
 			}
 		}
-	}
-
-	private void createUserPanel(User user) {
-		final User selectedUser = user;
-		final HorizontalPanel userPanel = new HorizontalPanel();
-		final Label nameLabel = new Label(selectedUser.getFirstName());
-		final Label removeButton = new Label("x");
-		removeButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				removeUser(selectedUser);
-				content.remove(userPanel);
-				if (allSelectedUser.size() == 0) {
-					subscribeButton.setVisible(false);
-				}
-			}
-		});
-
-		userPanel.getElement().setId("selectedObjectLabel");
-		removeButton.getElement().setId("removeButton");
-		userPanel.add(nameLabel);
-		userPanel.add(removeButton);
-		content.add(userPanel);
-	}
-
-	public boolean checkUser(User user) {
-		for (User selectedUser : allSelectedUser) {
-			if (user.getId() == selectedUser.getId()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void removeUser(User user) {
-		allUser.add(user);
-		allSelectedUser.remove(user);
-		setOracle();
-	}
-
-	private User getSingleUser(String nickName) {
-		for (User user : allUser) {
-			if (nickName.equals(setNickName(user.getEmail()))) {
-				return user;
-			}
-		}
-		return null;
-	}
-
-	private String getNickName(String text) {
-		StringBuffer bufferName = new StringBuffer(text);
-		int firstIndex = bufferName.indexOf("(");
-		bufferName.delete(0, firstIndex + 1);
-		bufferName.deleteCharAt(bufferName.length() - 1);
-		String nickName = bufferName.toString();
-		return nickName;
-	}
-
-	private void setOracle() {
-		oracle.clear();
-		for (User user : allUser) {
-			oracle.add(getNickname(user));
-		}
-	}
-
-	private String setNickName(String email) {
-		StringBuffer bufferName = new StringBuffer(email);
-		bufferName.setLength(bufferName.indexOf("@"));
-		String nickName = bufferName.toString();
-		return nickName;
-	}
-
-	private String getNickname(User user) {
-		StringBuffer bufferName = new StringBuffer(user.getEmail());
-		bufferName.setLength(bufferName.indexOf("@"));
-		String nickName = bufferName.toString();
-		return user.getFirstName() + " (" + nickName + ")";
 	}
 
 	private void addUserSubscriptions() {
@@ -261,7 +184,7 @@ public class UserForm extends TextyForm {
 			public void onFailure(Throwable caught) {
 				LOG.severe("Error: " + caught.getMessage());
 			}
-
+	
 			@Override
 			public void onSuccess(UserSubscription result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
@@ -284,6 +207,76 @@ public class UserForm extends TextyForm {
 		return true;
 	}
 
+	private void createUserPanel(User user) {
+		final User selectedUser = user;
+		final HorizontalPanel userPanel = new HorizontalPanel();
+		final Label nameLabel = new Label(selectedUser.getFirstName());
+		final Label removeButton = new Label("x");
+		removeButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				removeUser(selectedUser);
+				content.remove(userPanel);
+				if (allSelectedUser.size() == 0) {
+					subscribeButton.setVisible(false);
+				}
+			}
+		});
+
+		userPanel.getElement().setId("selectedObjectLabel");
+		removeButton.getElement().setId("removeButton");
+		userPanel.add(nameLabel);
+		userPanel.add(removeButton);
+		content.add(userPanel);
+	}
+
+	private void removeUser(User user) {
+		allUser.add(user);
+		allSelectedUser.remove(user);
+		setOracle();
+	}
+
+	private boolean checkUser(User user) {
+		for (User selectedUser : allSelectedUser) {
+			if (user.getId() == selectedUser.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private User getSingleUser(String nickName) {
+		for (User user : allUser) {
+			if (nickName.equals(setNickName(user.getEmail()))) {
+				return user;
+			}
+		}
+		return null;
+	}
+
+	private String getNickname(String text) {
+		StringBuffer bufferName = new StringBuffer(text);
+		int firstIndex = bufferName.indexOf("(");
+		bufferName.delete(0, firstIndex + 1);
+		bufferName.deleteCharAt(bufferName.length() - 1);
+		String nickName = bufferName.toString();
+		return nickName;
+	}
+
+	private String setNickName(String email) {
+		StringBuffer bufferName = new StringBuffer(email);
+		bufferName.setLength(bufferName.indexOf("@"));
+		return bufferName.toString();
+	}
+
+	private void setOracle() {
+		oracle.clear();
+		for (User user : allUser) {
+			String oracleName = user.getFirstName()+ " (" + setNickName(user.getEmail()) + ")";
+			oracle.add(oracleName);
+		}
+	}
+
 	private Button createAddButton() {
 		Button addButton = new Button("", new ClickHandler() {
 			@Override
@@ -292,7 +285,7 @@ public class UserForm extends TextyForm {
 				if (suggestBox.getText() == "") {
 					infoBox.setWarningText("Please select a user!");
 				} else {
-					String nickname = getNickName(suggestBox.getText());
+					String nickname = getNickname(suggestBox.getText());
 					User user = getSingleUser(nickname);
 					if (user == null) {
 						infoBox.setWarningText("User is unknown!");
@@ -306,7 +299,7 @@ public class UserForm extends TextyForm {
 					}
 				}
 			}
-
+	
 		});
 		return addButton;
 	}
@@ -335,7 +328,7 @@ public class UserForm extends TextyForm {
 					if (suggestBox.getText() == "") {
 						infoBox.setWarningText("Please select a user!");
 					} else {
-						String nickname = getNickName(suggestBox.getText());
+						String nickname = getNickname(suggestBox.getText());
 						User user = getSingleUser(nickname);
 						if (user == null) {
 							infoBox.setWarningText("User is unknown!");
@@ -350,7 +343,7 @@ public class UserForm extends TextyForm {
 					}
 				}
 			}
-
+	
 		};
 		return suggestBoxHandler;
 	}

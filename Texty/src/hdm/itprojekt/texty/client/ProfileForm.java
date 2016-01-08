@@ -20,7 +20,7 @@ public class ProfileForm extends TextyForm {
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 
-	public static User user;
+	private User user = new User();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable chatFlexTable = new FlexTable();
 	private TextBox emailTextBox = new TextBox();
@@ -38,34 +38,34 @@ public class ProfileForm extends TextyForm {
 	@Override
 	protected void run() {
 		administration.getCurrentUser(getCurrentUserExecute());
-
+	
 		// Zeilenbeschriftung
 		chatFlexTable.setText(0, 0, "E-Mail");
 		chatFlexTable.setText(1, 0, "Vorname");
 		chatFlexTable.setText(2, 0, "Nachname");
-
+	
 		// Styles festlegen
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("fullWidth");
 		chatFlexTable.setStyleName("ProfileForm");
 		saveButton.getElement().setId("sendButton");
-		
+	
 		emailTextBox.setEnabled(false);
 		firstnameTextBox.addFocusHandler(createFocusHandler());
 		lastnameTextBox.addFocusHandler(createFocusHandler());
-
+	
 		// Widgets hinzufügen
 		chatFlexTable.setWidget(0, 1, emailTextBox);
 		chatFlexTable.setWidget(1, 1, firstnameTextBox);
 		chatFlexTable.setWidget(2, 1, lastnameTextBox);
 		chatFlexTable.setWidget(3, 1, saveButton);
-		
+	
 		mainPanel.add(getHeadline());
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(infoBox);
-
+	
 		this.add(mainPanel);
-
+	
 	}
 
 	private AsyncCallback<User> getCurrentUserExecute() {
@@ -87,7 +87,7 @@ public class ProfileForm extends TextyForm {
 		};
 		return asyncCallback;
 	}
-	
+
 	private AsyncCallback<Void> updateUserDataExecute() {
 		AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
 			@Override
@@ -96,8 +96,8 @@ public class ProfileForm extends TextyForm {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				LOG.info("Success :" + result.getClass().getSimpleName());
+			public void onSuccess(Void nothing) {
+				
 			}
 		};
 		return asyncCallback;
@@ -107,13 +107,14 @@ public class ProfileForm extends TextyForm {
 		Button saveButton = new Button("Save", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				administration.updateUserData(firstnameTextBox.getText(), lastnameTextBox.getText(), updateUserDataExecute());
+				administration.updateUserData(firstnameTextBox.getText(),
+						lastnameTextBox.getText(), updateUserDataExecute());
 				infoBox.setInfoText("Your changes are successful saved!");
 			}
 		});
 		return saveButton;
 	}
-	
+
 	private FocusHandler createFocusHandler() {
 		FocusHandler focusHandler = new FocusHandler() {
 			@Override

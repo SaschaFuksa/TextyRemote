@@ -45,9 +45,9 @@ public class SubscriptionForm extends TextyForm {
 
 	@Override
 	protected void run() {
-
-		getSubscriptions();
-
+	
+		administration.getAllSubscribedUsers(getAllSubscribedUsersExecute());
+	
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("subscriptionForm");
 		subscriptionFormFlexTable.getElement().setId("fullSize");
@@ -60,19 +60,19 @@ public class SubscriptionForm extends TextyForm {
 				"subscriptionFlexTableCell");
 		subscriptionFormFlexTable.getColumnFormatter().addStyleName(1,
 				"subscriptionFlexTableCell");
-
+	
 		subscriptionFormFlexTable.setText(0, 0, "");
 		subscriptionFormFlexTable.setText(0, 1, "");
 		subscriptionFormFlexTable.setWidget(1, 0, scrollUserSubscriptions);
 		subscriptionFormFlexTable.setWidget(1, 1, scrollHashtagSubscriptions);
-
+	
 		mainPanel.add(getHeadline());
 		mainPanel.add(text);
 		mainPanel.add(subscriptionFormFlexTable);
 		mainPanel.add(infoBox);
-
+	
 		this.add(mainPanel);
-
+	
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				int height = mainPanel.getOffsetHeight();
@@ -82,17 +82,13 @@ public class SubscriptionForm extends TextyForm {
 		});
 	}
 
-	private void getSubscriptions() {
-		administration.getAllSubscribedUsers(getAllSubscribedUsersExecute());
-	}
-
 	private AsyncCallback<Vector<User>> getAllSubscribedUsersExecute() {
 		AsyncCallback<Vector<User>> asyncCallback = new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				LOG.severe("Error: " + caught.getMessage());
 			}
-
+	
 			@Override
 			public void onSuccess(Vector<User> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
@@ -115,7 +111,7 @@ public class SubscriptionForm extends TextyForm {
 			public void onFailure(Throwable caught) {
 				LOG.severe("Error: " + caught.getMessage());
 			}
-
+	
 			@Override
 			public void onSuccess(Vector<Hashtag> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
@@ -159,6 +155,42 @@ public class SubscriptionForm extends TextyForm {
 		}
 	}
 
+	private void deleteUserSubscription(User user) {
+		for (User subscribedUser : allSubscribedUser) {
+			if (user.getId() == subscribedUser.getId()) {
+				infoBox.clear();
+				allSubscribedUser.remove(user);
+				if (allSubscribedUser.size() == 0) {
+					subscriptionFormFlexTable.setText(0, 0, "");
+				}
+				if (allSubscribedHashtag.size() == 0
+						&& allSubscribedUser.size() == 0) {
+					infoBox.setInfoText("You deleted all your subscriptions. To add new subscriptions, select hashtags or user on the right or left side!");
+				}
+				administration.deleteUserSubscription(subscribedUser,
+						deleteUserSubscriptionExecute());
+			}
+		}
+	
+	}
+
+	private AsyncCallback<Void> deleteUserSubscriptionExecute() {
+		AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+	
+			@Override
+			public void onSuccess(Void nothing) {
+				RootPanel.get("Navigator").clear();
+				TextyForm userForm = new UserForm("User", allSubscribedUser);
+				RootPanel.get("Navigator").add(userForm);
+			}
+		};
+		return asyncCallback;
+	}
+
 	private void showHashtagSubscriptions() {
 		if (RootPanel.get("Info").getWidgetCount() == 0) {
 			TextyForm hashtagForm = new HashtagForm("Hashtags",
@@ -184,42 +216,6 @@ public class SubscriptionForm extends TextyForm {
 			hashtagPanel.add(removeButton);
 			contentHashtagSubscriptions.add(hashtagPanel);
 		}
-	}
-
-	private void deleteUserSubscription(User user) {
-		for (User subscribedUser : allSubscribedUser) {
-			if (user.getId() == subscribedUser.getId()) {
-				infoBox.clear();
-				allSubscribedUser.remove(user);
-				if (allSubscribedUser.size() == 0) {
-					subscriptionFormFlexTable.setText(0, 0, "");
-				}
-				if (allSubscribedHashtag.size() == 0
-						&& allSubscribedUser.size() == 0) {
-					infoBox.setInfoText("You deleted all your subscriptions. To add new subscriptions, select hashtags or user on the right or left side!");
-				}
-				administration.deleteUserSubscription(subscribedUser,
-						deleteUserSubscriptionExecute());
-			}
-		}
-
-	}
-
-	private AsyncCallback<Void> deleteUserSubscriptionExecute() {
-		AsyncCallback<Void> asyncCallback = new AsyncCallback<Void>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				LOG.severe("Error: " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Void nothing) {
-				RootPanel.get("Navigator").clear();
-				TextyForm userForm = new UserForm("User", allSubscribedUser);
-				RootPanel.get("Navigator").add(userForm);
-			}
-		};
-		return asyncCallback;
 	}
 
 	private void deleteHashtagSubscription(Hashtag hashtag) {

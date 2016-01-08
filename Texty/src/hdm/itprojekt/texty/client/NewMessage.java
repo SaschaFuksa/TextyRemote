@@ -125,7 +125,31 @@ public class NewMessage extends TextyForm {
 		return asyncCallback;
 	}
 
-	public void addUser(User selectedUser) {
+	private AsyncCallback<Conversation> createConversationExecute() {
+		AsyncCallback<Conversation> asyncCallback = new AsyncCallback<Conversation>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+	
+			@Override
+			public void onSuccess(Conversation result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				TextyForm conversationForm = new ConversationForm(
+						"Conversations", result);
+				TextyForm newMessage = new NewMessage(
+						"New Conversation");
+				RootPanel.get("Details").clear();
+				RootPanel.get("Navigator").clear();
+				RootPanel.get("Info").clear();
+				RootPanel.get("Info").add(newMessage);
+				RootPanel.get("Navigator").add(conversationForm);
+			}
+		};
+		return asyncCallback;
+	}
+
+	private void addUser(User selectedUser) {
 		for (User user : allUser) {
 			if (selectedUser.getId() == user.getId()) {
 				if (message.getSelectedUser().size() == 0){
@@ -161,7 +185,7 @@ public class NewMessage extends TextyForm {
 		content.add(userPanel);
 	}
 
-	public boolean checkUser(User user) {
+	private boolean checkUser(User user) {
 		for (User selectedUser : message.getSelectedUser()) {
 			if (user.getId() == selectedUser.getId()) {
 				return true;
@@ -216,30 +240,6 @@ public class NewMessage extends TextyForm {
 		bufferName.setLength(bufferName.indexOf("@"));
 		String nickName = bufferName.toString();
 		return user.getFirstName() + " (" + nickName + ")";
-	}
-
-	private AsyncCallback<Conversation> createConversationExecute() {
-		AsyncCallback<Conversation> asyncCallback = new AsyncCallback<Conversation>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				LOG.severe("Error: " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Conversation result) {
-				LOG.info("Success :" + result.getClass().getSimpleName());
-				TextyForm conversationForm = new ConversationForm(
-						"Conversations", result);
-				TextyForm newMessage = new NewMessage(
-						"New Conversation");
-				RootPanel.get("Details").clear();
-				RootPanel.get("Navigator").clear();
-				RootPanel.get("Info").clear();
-				RootPanel.get("Navigator").add(conversationForm);
-				RootPanel.get("Info").add(newMessage);
-			}
-		};
-		return asyncCallback;
 	}
 
 	private Button createAddButton() {

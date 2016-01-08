@@ -160,7 +160,6 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		} else {
 			c.setPublicly(false);
 		}
-		c.setId(1);
 
 		return conversation;
 	}

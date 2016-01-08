@@ -16,3 +16,18 @@
 	width: 98%;
 	height: 120px;
 }
+
+#hashtagPanel {
+	background-color: #80bfff;
+	border-radius: 10px;
+	margin-right: 3px;
+	padding: 3px;
+}
+
+#selectedhashtaglabel {
+	color: #ffffff;
+	font-family: texty;
+	font-size: 15px;
+	margin-left: 2px;
+	margin-right: 4px;
+}

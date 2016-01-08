@@ -6,33 +6,15 @@
 	color: white;
 	float: right;
 	font-family: Texty;
-	font-size: 1.5em;
+	font-size: 18px;
 	height: 36px;
 	margin: 2px;
 	padding: 5px;
 	text-align: center;
-	width: 120px;
+	width: 150px;
 }
 
 #button:hover {
-	background-color: #80bfff;
-}
-
-#sendButton {
-	background: none;
-	background-color: #003399;
-	border: 0px outset buttonface;
-	color: white;
-	float: right;
-	font-family: Texty;
-	font-size: 18px;
-	height: 36px;
-	padding: 5px;
-	text-align: center;
-	width: 120px;
-}
-
-#sendButton:hover {
 	background-color: #80bfff;
 }
 
