@@ -27,7 +27,24 @@ public class TextyMenu {
 			RootPanel.get("Menu").add(menu);
 			break;
 		case "Report":
-			// TODO Reportmenü
+
+			// Make some sub-menus that we will cascade from the top menu.
+			MenuBar messageReportMenu = new MenuBar(true);
+			messageReportMenu.addItem("MessagesOfUser",
+					command.getCommand("MessagesOfUser"));
+			messageReportMenu.addItem("MessagesOfPeriod",
+					command.getCommand("MessagesOfPeriod"));
+			messageReportMenu.addItem("MessagesOfUserInPeriod",
+					command.getCommand("MessagesOfUserInPeriod"));
+
+			MenuBar reportMenu = new MenuBar();
+			reportMenu.addItem("MessageReports", messageReportMenu);
+			reportMenu.addItem("SubscriptionReports",
+					command.getCommand("SubscriptionReport"));
+			reportMenu.addItem("Editor", command.getCommand("Editor"));
+			reportMenu.setStyleName("menubar");
+
+			RootPanel.get("Menu").add(reportMenu);
 			break;
 		default:
 			;

@@ -2,6 +2,7 @@ package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.client.Footer;
 import hdm.itprojekt.texty.client.LoginInfo;
+import hdm.itprojekt.texty.client.TextyMenu;
 import hdm.itprojekt.texty.shared.LoginService;
 import hdm.itprojekt.texty.shared.LoginServiceAsync;
 
@@ -25,7 +26,7 @@ public class TextyReport implements EntryPoint {
 	private HorizontalPanel loginPanel = new HorizontalPanel();
 	private Label nickname = new Label();
 	private Anchor signOutLink = new Anchor("Sign Out");
-	private TextyReportMenu reportMenu = new TextyReportMenu();
+	private TextyMenu reportMenu = new TextyMenu();
 
 	private void createLoginPanel() {
 		signOutLink.setHref(loginInfo.getLogoutUrl());
@@ -63,7 +64,7 @@ public class TextyReport implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 
-		reportMenu.execute();
+		reportMenu.execute("Report");
 
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
