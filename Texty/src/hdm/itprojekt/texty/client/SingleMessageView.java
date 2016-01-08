@@ -6,6 +6,7 @@ import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -59,11 +60,11 @@ public class SingleMessageView extends VerticalPanel {
 			}
 			hashtagLabel.setText(keyword);
 		}
-		
+
 		if (user.getId() == message.getAuthor().getId()) {
 			author.setText("You");
-			messageTable.setWidget(0, 2, buttonPanel);	
-			
+			messageTable.setWidget(0, 2, buttonPanel);
+
 			this.getElement().setId("senderPanel");
 			text.getElement().setId("senderPanel");
 			hashtagLabel.getElement().setId("senderPanel");
@@ -73,7 +74,7 @@ public class SingleMessageView extends VerticalPanel {
 			author.setText(message.getAuthor().getFirstName());
 			messageTable.getElement().setId("receiverPanel");
 		}
-		
+
 		buttonPanel.getElement().setId("buttonPanel");
 		deleteButton.getElement().setId("deleteButton");
 		editButton.getElement().setId("editButton");
@@ -87,10 +88,10 @@ public class SingleMessageView extends VerticalPanel {
 		messageTable.setWidget(0, 1, dateLabel);
 		messageTable.setWidget(1, 0, text);
 		messageTable.setWidget(3, 0, hashtagLabel);
-		
+
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
-		
+
 		this.add(messageTable);
 	}
 
@@ -109,7 +110,8 @@ public class SingleMessageView extends VerticalPanel {
 		return asyncCallback;
 	}
 
-	private AsyncCallback<Message> editMessageExecute() {
+	private AsyncCallback<Message> editMessageExecute(
+			final Vector<Hashtag> allSelectedHashtag) {
 		AsyncCallback<Message> asyncCallback = new AsyncCallback<Message>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -120,7 +122,7 @@ public class SingleMessageView extends VerticalPanel {
 			public void onSuccess(Message result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
 				text.setText(result.getText());
-				if (message.getListOfHashtag().size() > 0) {
+				if (allSelectedHashtag.size() > 0) {
 					String keyword = new String();
 					for (Hashtag hashtag : message.getListOfHashtag()) {
 						keyword = keyword + "#" + hashtag.getKeyword() + " ";
@@ -129,7 +131,12 @@ public class SingleMessageView extends VerticalPanel {
 				} else {
 					hashtagLabel.setText("");
 				}
-				
+				if (message.getId() == conversation.getLastMessage().getId()) {
+					RootPanel.get("Navigator").clear();
+					RootPanel.get("Navigator").add(
+							new ConversationForm("Conversations"));
+				}
+
 				messageTable.setWidget(2, 0, null);
 				messageTable.setWidget(1, 0, text);
 				messageTable.setWidget(3, 0, hashtagLabel);
@@ -146,14 +153,14 @@ public class SingleMessageView extends VerticalPanel {
 						deleteMessageExecute());
 				conversation.removeMessageFromConversation(message);
 				RootPanel.get("Details").clear();
-				if (conversation.getListOfMessage().size() == 0){
+				if (conversation.getListOfMessage().size() == 0) {
 					RootPanel.get("Navigator").clear();
 					RootPanel.get("Navigator").add(
 							new ConversationForm("Conversations"));
 				} else {
 					RootPanel.get("Details").add(
-							new SingleConversationViewer("Private Conversation",
-									conversation));
+							new SingleConversationViewer(
+									"Private Conversation", conversation));
 				}
 			}
 		});
@@ -162,23 +169,22 @@ public class SingleMessageView extends VerticalPanel {
 
 	private Button createEditButton() {
 		Button editButton = new Button("", new ClickHandler() {
-			boolean state = true;			
+			boolean state = true;
+
 			@Override
 			public void onClick(ClickEvent event) {
 				if (state) {
-					
-					MessageForm editMessage = new MessageForm();
-					
+
+					MessageForm editMessage = new MessageForm(message
+							.getListOfHashtag());
+
 					editMessage.setText(text.getText());
 					editMessage.setSendButtonName("Edit");
 					editMessage.removeInfoBox();
-					if (message.getListOfHashtag().size() != 0) {
-						for (Hashtag hashtag : message.getListOfHashtag()) {
-							editMessage.addHashtag(hashtag.getKeyword());
-						}
-					}
-					editMessage.sendButton.addClickHandler(createClickHandler(editMessage));
-					
+
+					editMessage.sendButton
+							.addClickHandler(createClickHandler(editMessage));
+
 					messageTable.setWidget(2, 0, editMessage);
 					messageTable.setWidget(1, 0, null);
 					messageTable.setWidget(3, 0, null);
@@ -200,10 +206,11 @@ public class SingleMessageView extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				administration.editMessage(message, editMessage.getText(),
-						editMessage.getHashtag(), editMessageExecute());
+						editMessage.getHashtag(),
+						editMessageExecute(editMessage.getHashtag()));
 			}
 		};
 		return clickHandler;
 	}
-	
+
 }

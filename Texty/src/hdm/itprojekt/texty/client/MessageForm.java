@@ -52,6 +52,11 @@ public class MessageForm extends VerticalPanel {
 	public MessageForm() {
 		run();
 	}
+	
+	public MessageForm(Vector<Hashtag> selectedHashtag) {
+		run();
+		this.selectedHashtag = selectedHashtag;
+	}
 
 	public void run() {
 		administration.getAllHashtags(getAllHashtagsExecute());
@@ -98,6 +103,16 @@ public class MessageForm extends VerticalPanel {
 			public void onSuccess(Vector<Hashtag> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
 				allHashtag = result;
+				if (selectedHashtag.size() != 0){
+					for (Hashtag sendedHashtag : selectedHashtag){
+						for (Hashtag hashtag : allHashtag){
+							if(sendedHashtag.getId() == hashtag.getId()){
+								allHashtag.remove(hashtag);
+								createHashtagPanel(sendedHashtag.getKeyword());
+							}
+						}
+					}
+				} 
 				setOracle();
 	
 			}
