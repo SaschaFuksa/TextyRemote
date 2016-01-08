@@ -6,7 +6,6 @@ import hdm.itprojekt.texty.client.report.MessagesOfUserInPeriod;
 import hdm.itprojekt.texty.client.report.SubscriptionReport;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -24,23 +23,26 @@ public class TextyCommand {
 			public void execute() {
 				RootPanel.get("Details").clear();
 				RootPanel.get("Navigator").clear();
-				RootPanel.get("Info").clear();
 				switch (name) {
 				case "Home":
+					RootPanel.get("Info").clear();
 					TextyForm home = new HomeForm("Home");
 					RootPanel.get("Navigator").add(home);
 					break;
 				case "Conversation":
+					RootPanel.get("Info").clear();
 					TextyForm conversation = new ConversationForm(
 							"Conversations");
 					RootPanel.get("Navigator").add(conversation);
 					break;
 				case "Subscription":
+					RootPanel.get("Info").clear();
 					TextyForm subscriptionForm = new SubscriptionForm(
 							"Subscriptions");
 					RootPanel.get("Details").add(subscriptionForm);
 					break;
 				case "Profile":
+					RootPanel.get("Info").clear();
 					TextyForm profile = new ProfileForm("Profile");
 					RootPanel.get("Navigator").add(profile);
 					break;
@@ -63,9 +65,6 @@ public class TextyCommand {
 					TextyForm subscriptionReport = new SubscriptionReport(
 							"SubscriptionReport");
 					RootPanel.get("Navigator").add(subscriptionReport);
-					break;
-				case "Editor":
-					Window.Location.assign("http://127.0.0.1:8888/Texty.html");
 					break;
 				default:
 					;
