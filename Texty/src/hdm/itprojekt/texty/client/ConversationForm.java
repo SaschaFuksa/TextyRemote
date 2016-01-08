@@ -29,8 +29,8 @@ public class ConversationForm extends TextyForm {
 	private Button newMessageButton = createNewMessageButton();
 	private Vector<Conversation> conversationList = new Vector<Conversation>();
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private Label intro = new Label(
-			"Here you can read and reply to private conversations");
+	private Label text = new Label(
+			"Write a new message or read your private conversations!");
 	private VerticalPanel content = new VerticalPanel();
 	private Conversation conversation = new Conversation();
 	private ScrollPanel scroll = new ScrollPanel(content);
@@ -61,7 +61,7 @@ public class ConversationForm extends TextyForm {
 		newMessageButton.getElement().setId("button");
 
 		mainPanel.add(getHeadline());
-		mainPanel.add(intro);
+		mainPanel.add(text);
 		mainPanel.add(scroll);
 		mainPanel.add(newMessageButton);
 

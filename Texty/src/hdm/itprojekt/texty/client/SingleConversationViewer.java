@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,6 +26,8 @@ public class SingleConversationViewer extends TextyForm {
 	private Button replyButton = createReplyButton();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private VerticalPanel content = new VerticalPanel();
+	private Label text = new Label(
+			"Reply to this conversations or edit you messages!");
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private FlexTable chatFlexTable = new FlexTable();
 	private Conversation conversation = null;
@@ -46,10 +49,12 @@ public class SingleConversationViewer extends TextyForm {
 		scroll.getElement().setId("conversationScroll");
 		content.getElement().setId("conversationContent");
 		chatFlexTable.getElement().setId("conversationContent");
+		text.getElement().setId("blackFont");
 		replyButton.getElement().setId("button");
 
 		content.add(chatFlexTable);
 		mainPanel.add(getHeadline());
+		mainPanel.add(text);
 		mainPanel.add(scroll);
 		mainPanel.add(replyButton);
 

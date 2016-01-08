@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class ReplyMessageForm extends TextyForm {
@@ -15,6 +16,8 @@ public class ReplyMessageForm extends TextyForm {
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 	private MessageForm message = new MessageForm();
+	private Label text = new Label(
+			"Write down your answer to this conversation!");
 	private Conversation conversation = new Conversation();
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
@@ -32,6 +35,7 @@ public class ReplyMessageForm extends TextyForm {
 		this.getElement().setId("fullWidth");
 
 		this.add(getHeadline());
+		this.add(text);
 		this.add(message);
 
 	}
