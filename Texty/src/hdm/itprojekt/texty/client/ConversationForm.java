@@ -136,26 +136,26 @@ public class ConversationForm extends TextyForm {
 			}
 			
 			else if (duration < ONE_HOURS) {
-				Date durationx = new Date(duration*1000);
-				dateString = "Before " + DateTimeFormat.getFormat("mm").format(durationx) + " minutes";
+				Date durationDate = new Date(duration*1000);
+				dateString = "Before " + DateTimeFormat.getFormat("mm").format(durationDate) + " minutes";
 			}
 			
 			else if (duration < ONE_DAYS) {
-				Date durationx = new Date(duration*1000);
+				Date durationDate = new Date(duration*1000);
 				dateString = "Before " + DateTimeFormat.getFormat("HH").format(
-						durationx) + " hours";
+						durationDate) + " hours";
 			}
 			
 			else if (duration < ONE_MONTH) {
-				Date durationx = new Date(duration*1000);
+				Date durationDate = new Date(duration*1000);
 				dateString = "Before " + DateTimeFormat.getFormat("dd").format(
-						durationx) + " days";
+						durationDate) + " days";
 			}
 			
 			else if (duration > ONE_MONTH) {
-				Date durationx = new Date(duration*1000);
+				Date durationDate = new Date(duration*1000);
 				dateString = "No activity since " + DateTimeFormat.getFormat("MM:yyyy").format(
-						durationx);
+						durationDate);
 			}
 
 			Label textLabel = new Label(text);

@@ -30,7 +30,7 @@ public class SingleMessageView extends VerticalPanel {
 	private final static long ONE_HOURS = 60 * ONE_MINUTE;
 	private final static long ONE_DAYS = 24 * ONE_HOURS;
 	private final static long ONE_MONTH = 30 * ONE_DAYS;
-	
+
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private Button deleteButton = createDeleteButton();
 	private Button editButton = createEditButton();
@@ -54,43 +54,42 @@ public class SingleMessageView extends VerticalPanel {
 
 	public void run() {
 
-		String dateString = new String();
-		
+		String dateString = DateTimeFormat.getFormat("HH:mm").format(
+				message.getDateOfCreation());
+
 		Date afterDate = new Date();
 		Date baseDate = message.getDateOfCreation();
-		
-		final long baseTime = baseDate.getTime() / 1000;
-        final long afterTime = afterDate.getTime() / 1000;
+
+		long afterTime = afterDate.getTime() / 1000;
+		long baseTime = baseDate.getTime() / 1000;
 
 		long duration = afterTime - baseTime;
-        
-		if (duration < ONE_MINUTE) {
-			dateString = "Just now";
+
+		if (duration < ONE_DAYS) {
+			String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
+			String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
+
+			if (!baseDay.equals(afterDay)) {
+				dateString = "yesterday at " + dateString;
+			}
+
+		} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
+			Date durationDate = new Date(duration * 1000);
+			dateString = DateTimeFormat.getFormat("dd:MM").format(durationDate)
+					+ " at "
+					+ DateTimeFormat.getFormat("HH").format(durationDate) + "h";
 		}
-		
-		else if (duration < ONE_HOURS) {
-			Date durationx = new Date(duration*1000);
-			dateString = "Before " + DateTimeFormat.getFormat("mm").format(durationx) + " minutes";
-		}
-		
-		else if (duration < ONE_DAYS) {
-			Date durationx = new Date(duration*1000);
-			dateString = "Before " + DateTimeFormat.getFormat("HH").format(
-					durationx) + " hours";
-		}
-		
-		else if (duration < ONE_MONTH) {
-			Date durationx = new Date(duration*1000);
-			dateString = "Before " + DateTimeFormat.getFormat("dd").format(
-					durationx) + " days";
-		}
-		
+
 		else if (duration > ONE_MONTH) {
-			Date durationx = new Date(duration*1000);
-			dateString = "No activity since " + DateTimeFormat.getFormat("MM:yyyy").format(
-					durationx);
+			Date durationDate = new Date(duration * 1000);
+			dateString = DateTimeFormat.getFormat("MM:yyyy").format(
+					durationDate)
+					+ " at "
+					+ DateTimeFormat.getFormat("dd").format(durationDate)
+					+ ", "
+					+ DateTimeFormat.getFormat("HH").format(durationDate) + "h";
 		}
-		
+
 		dateLabel.setText(dateString);
 		text.setText(message.getText());
 
@@ -124,7 +123,7 @@ public class SingleMessageView extends VerticalPanel {
 		messageTable.getFlexCellFormatter().setColSpan(1, 0, 3);
 		messageTable.getFlexCellFormatter().setColSpan(2, 0, 3);
 		messageTable.getFlexCellFormatter().setColSpan(3, 0, 3);
-		messageTable.getCellFormatter().getElement(0, 1).setId("fullWidth");
+		messageTable.getColumnFormatter().setWidth(1, "100%");
 
 		messageTable.setWidget(0, 0, author);
 		messageTable.setWidget(0, 1, dateLabel);
