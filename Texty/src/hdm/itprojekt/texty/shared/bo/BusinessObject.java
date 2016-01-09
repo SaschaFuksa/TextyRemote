@@ -9,6 +9,10 @@ public abstract class BusinessObject implements Serializable {
 	private int id = 0;
 	private Date dateOfCreation = null;
 
+	
+	/**
+	 * Vergleicht ein Objekt mit einem anderen.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -36,12 +40,16 @@ public abstract class BusinessObject implements Serializable {
 	}
 
 	/**
-	 * @return id
+	 * @return ID eines Objektes
 	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Generieren eines Hash Wertes zur eindeutigen Indentifizierung von Objekten. 
+	 * Dient auch zum Vergleichen von Objekten.
+	 */
 	@Override
 	public int hashCode() {
 		final int a = 31;
@@ -53,23 +61,23 @@ public abstract class BusinessObject implements Serializable {
 	}
 
 	/**
+	 * Setzen des Erstellungsdatums
 	 * @param dateOfCreation
-	 *            the dateOfCreation to set
 	 */
 	public void setDateOfCreation(Date dateOfCreation) {
 		this.dateOfCreation = dateOfCreation;
 	}
 
 	/**
+	 * Setzen der Objekt ID
 	 * @param id
-	 *            the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	@Override
-	/*
+	/**
 	 * Rückgabe des Klassennamen und der ID, der jeweiligen Instanz.
 	 */
 	public String toString() {
