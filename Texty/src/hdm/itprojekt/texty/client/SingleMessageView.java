@@ -74,20 +74,18 @@ public class SingleMessageView extends VerticalPanel {
 			}
 
 		} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
-			Date durationDate = new Date(duration * 1000);
-			dateString = DateTimeFormat.getFormat("dd:MM").format(durationDate)
+			dateString = DateTimeFormat.getFormat("dd.MM").format(baseDate)
 					+ " at "
-					+ DateTimeFormat.getFormat("HH").format(durationDate) + "h";
+					+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
 		}
 
 		else if (duration > ONE_MONTH) {
-			Date durationDate = new Date(duration * 1000);
-			dateString = DateTimeFormat.getFormat("MM:yyyy").format(
-					durationDate)
+			dateString = DateTimeFormat.getFormat("MM.yyyy").format(
+					baseDate)
 					+ " at "
-					+ DateTimeFormat.getFormat("dd").format(durationDate)
+					+ DateTimeFormat.getFormat("dd").format(baseDate)
 					+ ", "
-					+ DateTimeFormat.getFormat("HH").format(durationDate) + "h";
+					+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
 		}
 
 		dateLabel.setText(dateString);

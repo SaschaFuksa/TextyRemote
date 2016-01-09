@@ -12,9 +12,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -23,6 +21,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * 
+ * Diese Klasse stellt die abonnierten Hashtags und User in zwei verschiedenen
+ * ScrollBars im Navigatorbereich dar. 
+ *
+ */
 public class HomeForm extends TextyForm {
 
 	private static Vector<User> userList = new Vector<User>();
@@ -30,12 +34,9 @@ public class HomeForm extends TextyForm {
 	private static Vector<Conversation> conListofUser = new Vector<Conversation>();
 	private static Vector<Message> messageListofHashtag = new Vector<Message>();
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private Label text = new Label(
-			"See your:");
-	private Label headerUser = new Label(
-			"Subscribed user");
-	private Label headerHashtag = new Label(
-			"Subscribed hashtags");
+	private Label text = new Label("See your:");
+	private Label headerUser = new Label("Subscribed user");
+	private Label headerHashtag = new Label("Subscribed hashtags");
 	private VerticalPanel contentUser = new VerticalPanel();
 	private VerticalPanel userPanel = new VerticalPanel();
 	private ScrollPanel scrollUser = new ScrollPanel(contentUser);
@@ -51,7 +52,8 @@ public class HomeForm extends TextyForm {
 
 	// Detailsbereich für Anzeige der Conversation
 	private VerticalPanel contentConversation = new VerticalPanel();
-	private ScrollPanel scrollConversation = new ScrollPanel(contentConversation);
+	private ScrollPanel scrollConversation = new ScrollPanel(
+			contentConversation);
 
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
@@ -60,10 +62,14 @@ public class HomeForm extends TextyForm {
 		super(headline);
 	}
 
+	/**
+	 * Diese Methode holt sich alle abonnierten User und Hashtags und speichert
+	 * sie in den Vectoren userList und hashtagList
+	 */
 	@Override
 	protected void run() {
 
-		// Abonnierte User und deren Postings
+		// Abonnierte User
 		administration.getAllSubscribedUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -75,7 +81,7 @@ public class HomeForm extends TextyForm {
 				userList = result;
 				showSubscribedUser();
 
-				// Abonnierte Hashtags und deren Postings
+				// Abonnierte Hashtags 
 				administration
 						.getAllSubscribedHashtags(new AsyncCallback<Vector<Hashtag>>() {
 							@Override
@@ -87,7 +93,7 @@ public class HomeForm extends TextyForm {
 							public void onSuccess(Vector<Hashtag> result) {
 								hashtagList = result;
 								showSubscribedHashtag();
-								if (result.size() == 0){
+								if (result.size() == 0) {
 									headerHashtag.setText("");
 								}
 							}
@@ -96,7 +102,10 @@ public class HomeForm extends TextyForm {
 			}
 
 		});
-		
+
+		/**
+		 * Diese Methode gibt den aktuell eingeloggten User zurück
+		 */
 		administration.getCurrentUser(new AsyncCallback<User>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -135,35 +144,40 @@ public class HomeForm extends TextyForm {
 
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				scrollUser.setHeight(mainPanel.getOffsetHeight() * 5 / 16 + "px");
-				scrollHashtag.setHeight(mainPanel.getOffsetHeight() * 5 / 16 + "px");
+				scrollUser.setHeight(mainPanel.getOffsetHeight() * 5 / 16
+						+ "px");
+				scrollHashtag.setHeight(mainPanel.getOffsetHeight() * 5 / 16
+						+ "px");
 			}
 		});
 
 	}// Ende Run-Methode
 
-	// Navigatorbereich User
+	/**
+	 * Diese Methode wählt in einem Schleifendurchlauf alle beinhalteten User an
+	 * und bezieht dessen Vor -und Nachname, nachdem jeder User an die Methode createUserTable übergeben wurden. 
+	 * Des weiteren kann man auch seine persönliche Chronik aller öffentlichen Messages einsehen.
+	 */
 	private void showSubscribedUser() {
 
 		createUserTable(currentUser, true);
-		
+
 		for (User user : userList) {
 			createUserTable(user, false);
 		}
 
 	}
-	
-	private void createUserTable(User user, boolean isCurrentUser){
+
+	private void createUserTable(User user, boolean isCurrentUser) {
 		final User userView = user;
 		FlexTable chatFlexTable = new FlexTable();
 		FocusPanel wrapper = new FocusPanel();
 		String userName = new String();
 
-		if (isCurrentUser){
+		if (isCurrentUser) {
 			userName = "Your own public postings";
 		} else {
-			userName = userView.getFirstName() + " "
-					+ userView.getLastName();
+			userName = userView.getFirstName() + " " + userView.getLastName();
 		}
 
 		Label userLabel = new Label(userName);
@@ -172,7 +186,7 @@ public class HomeForm extends TextyForm {
 		wrapper.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				showMessageSelectedUser(userView);
 
 			}
@@ -184,7 +198,11 @@ public class HomeForm extends TextyForm {
 		contentUser.add(wrapper);
 	}
 
-	// Navigatorbereich Hashtags
+	/**
+	 * Diese Methode wählt in einem Schleifendurchlauf alle beinhalteten
+	 * Hashtags an und bezieht dessen Keywords, die auf einem Label platziert
+	 * werden
+	 */
 	private void showSubscribedHashtag() {
 
 		for (Hashtag hashtag : hashtagList) {
@@ -212,45 +230,59 @@ public class HomeForm extends TextyForm {
 
 	}
 
-	// Hier entsteht die Detailsanzeige der User
+	/**
+	 * Hier entsteht die Anzeige der User im Detailsbereich. Der angewählte User
+	 * wird, nachdem mir von der Applikations-Ebene dessen Conversations
+	 * geliefert wurden, an die Klasse PublicConversationViewer übergeben
+	 * 
+	 */
 	public void showMessageSelectedUser(final User user) {
-		
+
 		administration.getAllPublicConversationsFromUser(user,
 				new AsyncCallback<Vector<Conversation>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-					
+
 					}
 
 					@Override
 					public void onSuccess(Vector<Conversation> result) {
-						TextyForm publicConversationViewer = new PublicConversationViewer("Public Postings from " + user.getFirstName(), result);
-						
+						TextyForm publicConversationViewer = new PublicConversationViewer(
+								"Public Postings from " + user.getFirstName(),
+								result);
+
 						RootPanel.get("Details").clear();
 						RootPanel.get("Details").add(publicConversationViewer);
-						
+
 					}
 
 				});
 
 	}
 
+	/**
+	 * Hier entsteht die Anzeige der Hashtags im Detailsbereich. Der angewählte
+	 * Hashtag wird an die Klasse PublicHashtagViewer übergeben.
+	 * 
+	 */
 	// Hier entsteht die Detailsanzeige der Hashtags
 	public void showMessageSelectedHashtag(final Hashtag hashtag) {
-		
+
 		administration.getAllPublicMessagesFromHashtag(hashtag,
 				new AsyncCallback<Vector<Message>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						
+
 					}
 
 					@Override
 					public void onSuccess(Vector<Message> result) {
-						TextyForm publicHashtagViewer = new PublicHashtagViewer("Public Hashtags of " + hashtag.getKeyword(), result);
-						
+						TextyForm publicHashtagViewer = new PublicHashtagViewer(
+								"Public Hashtags of " + hashtag.getKeyword(),
+								result);
+
 						RootPanel.get("Details").clear();
 						RootPanel.get("Details").add(publicHashtagViewer);
 					}

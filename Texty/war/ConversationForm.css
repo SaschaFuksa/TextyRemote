@@ -15,6 +15,7 @@
 
 #publicConversation {
 	height: 40%;
+	float: right;
 	width: 100%;
 }
 
@@ -50,9 +51,22 @@
 	float: right;
 }
 
+#floatRight {
+	float: right;
+}
+
 #conversation {
 	background-color: #003399;
 	margin-bottom: 10px;
+	padding: 5px;
+	width: 100%;
+}
+
+#publicConversation {
+	background-color: #0080c0;
+	border-radius: 10px;
+	float: right;
+	margin-bottom: 5px;
 	padding: 5px;
 	width: 100%;
 }

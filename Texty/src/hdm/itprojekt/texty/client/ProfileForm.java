@@ -15,6 +15,14 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * 
+ * Diese Klasse stellt das persönliche Profil des aktuell eingeloggten Users
+ * dar. Er hat die Wahl, ob er seinem Nutzerprofil einen Vor- und Nachnamen
+ * hinzufügt oder den bereits bestehenden ändert.
+ *
+ *
+ */
 public class ProfileForm extends TextyForm {
 
 	private static final Logger LOG = Logger
@@ -38,34 +46,34 @@ public class ProfileForm extends TextyForm {
 	@Override
 	protected void run() {
 		administration.getCurrentUser(getCurrentUserExecute());
-	
+
 		// Zeilenbeschriftung
 		chatFlexTable.setText(0, 0, "E-Mail");
 		chatFlexTable.setText(1, 0, "Vorname");
 		chatFlexTable.setText(2, 0, "Nachname");
-	
+
 		// Styles festlegen
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("fullWidth");
 		chatFlexTable.setStyleName("ProfileForm");
 		saveButton.getElement().setId("sendButton");
-	
+
 		emailTextBox.setEnabled(false);
 		firstnameTextBox.addFocusHandler(createFocusHandler());
 		lastnameTextBox.addFocusHandler(createFocusHandler());
-	
+
 		// Widgets hinzufügen
 		chatFlexTable.setWidget(0, 1, emailTextBox);
 		chatFlexTable.setWidget(1, 1, firstnameTextBox);
 		chatFlexTable.setWidget(2, 1, lastnameTextBox);
 		chatFlexTable.setWidget(3, 1, saveButton);
-	
+
 		mainPanel.add(getHeadline());
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(infoBox);
-	
+
 		this.add(mainPanel);
-	
+
 	}
 
 	private AsyncCallback<User> getCurrentUserExecute() {
@@ -97,7 +105,7 @@ public class ProfileForm extends TextyForm {
 
 			@Override
 			public void onSuccess(Void nothing) {
-				
+
 			}
 		};
 		return asyncCallback;

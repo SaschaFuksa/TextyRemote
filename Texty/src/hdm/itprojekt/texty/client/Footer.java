@@ -4,7 +4,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+/**
+ * 
+ * Diese Klasse stellt das Impressum unserer Gruppe im Footer-Bereich im Browser dar. 
+ *
+ */
 public class Footer extends VerticalPanel {
 
 	private VerticalPanel footerPanel = new VerticalPanel();

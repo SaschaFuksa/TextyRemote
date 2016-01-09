@@ -640,5 +640,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			this.uMapper.update(us);
 		}
 	}
+	
+	public Vector<Message> getAllMesagesFromConversation(Message message)
+			throws IllegalArgumentException {
+
+		return this.mMapper
+				.selectAllMesagesFromConversation(message);
+	}
 
 }

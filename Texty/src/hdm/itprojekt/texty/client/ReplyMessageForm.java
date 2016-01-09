@@ -18,13 +18,15 @@ public class ReplyMessageForm extends TextyForm {
 	private MessageForm message = new MessageForm();
 	private Label text = new Label(
 			"Write down your answer to this conversation!");
+	private boolean isPrivate;
 	private Conversation conversation = new Conversation();
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
-	public ReplyMessageForm(String headline, Conversation conversation) {
+	public ReplyMessageForm(String headline, Conversation conversation, boolean isPrivate) {
 		super(headline);
 		this.conversation = conversation;
+		this.isPrivate = isPrivate;
 	}
 
 	@Override
@@ -50,10 +52,17 @@ public class ReplyMessageForm extends TextyForm {
 			@Override
 			public void onSuccess(Conversation result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
-				RootPanel.get("Navigator").clear();
-				RootPanel.get("Details").clear();
-				RootPanel.get("Info").clear();
-				RootPanel.get("Navigator").add(new ConversationForm("Conversations", result));
+				if (isPrivate){
+					RootPanel.get("Navigator").clear();
+					RootPanel.get("Details").clear();
+					RootPanel.get("Info").clear();
+					RootPanel.get("Navigator").add(new ConversationForm("Conversations", result));
+				} else {
+					RootPanel.get("Navigator").clear();
+					RootPanel.get("Details").clear();
+					RootPanel.get("Info").clear();
+					RootPanel.get("Navigator").add(new HomeForm("Home"));
+				}	
 				
 			}
 		};

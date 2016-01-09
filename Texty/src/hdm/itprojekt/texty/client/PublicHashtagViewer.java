@@ -15,8 +15,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * 
- * Diese Klasse wird in der Klasse HomeForm verwendet und dient der Darstellung
- * aller öffentlichen Nachrichten eines Users, die den abonnierten Hashtag beinhalten. Weiterhin
+ * Diese Klasse wird in der Klasse HomeForm aufgerufen und dient der Darstellung
+ * aller öffentlichen Nachrichten des im Editor ausgewählten Hashtags. Weiterhin
  * werden alle weiteren Hashtags, die in der Message enthalten sind, angezeigt
  *
  */

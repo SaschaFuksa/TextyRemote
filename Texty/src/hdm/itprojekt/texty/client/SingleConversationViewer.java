@@ -110,7 +110,7 @@ public class SingleConversationViewer extends TextyForm {
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("Info").clear();
-				RootPanel.get("Info").add(new ReplyMessageForm("Reply to this conversation", conversation));
+				RootPanel.get("Info").add(new ReplyMessageForm("Reply to this conversation", conversation, true));
 			}
 		});
 		return replyButton;
