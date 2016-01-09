@@ -1,39 +1,46 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 
+import java.util.Date;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * 
- * Diese Klasse wird in der Klasse HomeForm aufgerufen und dient der Darstellung
- * aller öffentlichen Messages des im Editor angewählten Users., die den
- * abonnierten Hashtag beinhalten. Weiterhin werden alle weiteren Hashtags, die
- * in der Message enthalten sind, angezeigt
- *
- */
 public class PublicConversationViewer extends TextyForm {
 
+	private final static long ONE_MINUTE = 60;
+	private final static long ONE_HOURS = 60 * ONE_MINUTE;
+	private final static long ONE_DAYS = 24 * ONE_HOURS;
+	private final static long ONE_MONTH = 30 * ONE_DAYS;
+
+	private static final Logger LOG = Logger
+			.getLogger(SingleConversationViewer.class.getSimpleName());
+
 	private Vector<Conversation> conversationListOfUser = new Vector<Conversation>();
-	private VerticalPanel messagePanel = new VerticalPanel();
+	private FlexTable conversationTable = new FlexTable();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private VerticalPanel content = new VerticalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label(
 			"Here you can see all public messages from your subscribed user!");
+	private final TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
 
 	public PublicConversationViewer(String headline,
 			Vector<Conversation> conversationListofUser) {
@@ -49,105 +56,240 @@ public class PublicConversationViewer extends TextyForm {
 		}
 
 		this.getElement().setId("fullSize");
-		mainPanel.getElement().setId("fullSize");
+		mainPanel.getElement().setId("conversationWrapper");
 		scroll.getElement().setId("conversationScroll");
 		content.getElement().setId("fullWidth");
-		messagePanel.getElement().setId("fullWidth");
+		conversationTable.getElement().setId("fullWidth");
 		text.getElement().setId("blackFont");
 
 		mainPanel.add(getHeadline());
 		mainPanel.add(text);
-		mainPanel.add(scroll);
 
-		content.add(messagePanel);
+		content.add(conversationTable);
 
-		addConversation();
+		showConversation();
 
 		this.add(mainPanel);
 
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				Window.alert("" + mainPanel.getOffsetHeight());
 				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
+				mainPanel.add(scroll);
 			}
 		});
 	}
 
-	private void addConversation() {
-		for (Conversation conversation : conversationListOfUser) {
-			final Conversation conversationView = conversation;
-			final VerticalPanel conversationPanel = new VerticalPanel();
-			Label hashtagLabel = new Label();
-			FlexTable chatFlexTable = new FlexTable();
+	private void showConversation() {
+		int index = 0;
+		for (final Conversation conversation : conversationListOfUser) {
+			VerticalPanel chatPanel = new VerticalPanel();
+			FlexTable messageTable = new FlexTable();
 			FocusPanel wrapper = new FocusPanel();
-			// Vector<Message> messageList = new Vector<Message>();
 
-			chatFlexTable.getElement().setId("conversation");
-
-			String date = DateTimeFormat.getFormat("yyyy-MM-dd").format(
-					conversationView.getListOfMessage().get(0)
-							.getDateOfCreation());
-			Label dateLabel = new Label(date);
-			// messageList = conversationView.getListOfMessage();
-			String text = conversationView.getListOfMessage().firstElement()
-					.getText();
-			final Label textLabel = new Label(text);
-
-			conversationPanel.getElement().setId("conversation");
-
-			wrapper.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					Window.alert("Huhu");
-					for (int i = 1; i < conversationView.getListOfMessage()
-							.size(); i++) {
-
-						VerticalPanel singleConversationPanel = new VerticalPanel();
-						Label messageText = new Label(conversationView
-								.getListOfMessage().get(i).getText());
-						singleConversationPanel.add(messageText);
-						conversationPanel.add(singleConversationPanel);
-					}
-					// RootPanel.get("Info").clear();
-					// RootPanel.get("Details").add(textLabel);
-				}
-			});
-
-			// chatFlexTable.setWidget(0, 0, authorLabel);
-			chatFlexTable.setWidget(0, 0, dateLabel);
-			// chatFlexTable.setWidget(1, 0, receiverLabel);
-			chatFlexTable.setWidget(1, 0, textLabel);
-
-			chatFlexTable.setWidget(2, 0, hashtagLabel);
-
-			wrapper.add(chatFlexTable);
-			conversationPanel.add(wrapper);
-
-			Vector<Message> messageVector = conversationView.getListOfMessage();
+			chatPanel.getElement().setId("fullWidth");
+			messageTable.getElement().setId("conversation");
 
 			String keywordList = new String();
 
-			for (Hashtag hashtag : conversationView.getLastMessage()
-					.getListOfHashtag()) {
+			for (Hashtag hashtag : conversation.getListOfMessage()
+					.firstElement().getListOfHashtag()) {
 				keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
 			}
 
-			hashtagLabel.setText(keywordList);
+			String dateString = DateTimeFormat.getFormat("HH:mm").format(
+					conversation.getListOfMessage()
+					.firstElement().getDateOfCreation());
 
-			// for (Message message : conversationView.getListOfMessage()){
-			//
-			// }
-			// for (int i = 0; i < messageVector.size(); i++) {
-			// Label hashtagText = new Label("#"
-			// +
-			// conversationView.getListOfMessage().get(i).getListOfHashtag().get(i).getKeyword());
-			// conversationPanel.add(hashtagText);
-			// }
-			messagePanel.add(chatFlexTable);
+			Date afterDate = new Date();
+			Date baseDate = conversation.getListOfMessage()
+					.firstElement().getDateOfCreation();
 
-			// RootPanel.get("Details").add(contentConversation);
+			long afterTime = afterDate.getTime() / 1000;
+			long baseTime = baseDate.getTime() / 1000;
 
-		} // Ende for-Schleife
+			long duration = afterTime - baseTime;
+
+			if (duration < ONE_DAYS) {
+				String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
+				String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
+
+				if (!baseDay.equals(afterDay)) {
+					dateString = "yesterday at " + dateString;
+				}
+
+			} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
+				dateString = DateTimeFormat.getFormat("dd.MM").format(baseDate)
+						+ " at "
+						+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+			}
+
+			else if (duration > ONE_MONTH) {
+				dateString = DateTimeFormat.getFormat("MM.yyyy").format(
+						baseDate)
+						+ " at "
+						+ DateTimeFormat.getFormat("dd").format(baseDate)
+						+ ", "
+						+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+			}
+
+			String text = conversation.getListOfMessage().firstElement()
+					.getText();
+
+			Label hashtagLabel = new Label(keywordList);
+			Label dateLabel = new Label(dateString);
+			Label textLabel = new Label(text);
+
+			wrapper.addClickHandler(createClickHandler(conversation, chatPanel));
+
+			messageTable.setWidget(0, 0, dateLabel);
+			messageTable.setWidget(1, 0, textLabel);
+			messageTable.setWidget(2, 0, hashtagLabel);
+
+			wrapper.add(messageTable);
+
+			conversationTable.setWidget(index, 0, wrapper);
+			conversationTable.setWidget(index + 1, 0, chatPanel);
+			index = index + 2;
+		}
+
+	} // Ende for-Schleife
+
+	private ClickHandler createClickHandler(final Conversation conversation,
+			final VerticalPanel chatPanel) {
+		ClickHandler clickHandler = new ClickHandler() {
+			boolean state = true;
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				if (state) {
+					administration.getAllMesagesFromConversation(
+							conversation.getListOfMessage().firstElement(),
+							getAllMesagesFromConversationExecute(conversation,
+									chatPanel));
+					state = false;
+				} else {
+					chatPanel.clear();
+					state = true;
+				}
+
+			}
+		};
+		return clickHandler;
+	}
+
+	private FlexTable createSingleMessage(Message message) {
+		FlexTable messageTable = new FlexTable();
+		messageTable.getElement().setId("publicConversation");
+
+		String author = message.getAuthor().getFirstName();
+		String keywordList = new String();
+
+		for (Hashtag hashtag : message.getListOfHashtag()) {
+			keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
+		}
+
+		String dateString = DateTimeFormat.getFormat("HH:mm").format(
+				message.getDateOfCreation());
+
+		Date afterDate = new Date();
+		Date baseDate = message.getDateOfCreation();
+
+		long afterTime = afterDate.getTime() / 1000;
+		long baseTime = baseDate.getTime() / 1000;
+
+		long duration = afterTime - baseTime;
+
+		if (duration < ONE_DAYS) {
+			String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
+			String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
+
+			if (!baseDay.equals(afterDay)) {
+				dateString = "yesterday at " + dateString;
+			}
+
+		} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
+			dateString = DateTimeFormat.getFormat("dd.MM").format(baseDate)
+					+ " at "
+					+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+		}
+
+		else if (duration > ONE_MONTH) {
+			dateString = DateTimeFormat.getFormat("MM.yyyy").format(
+					baseDate)
+					+ " at "
+					+ DateTimeFormat.getFormat("dd").format(baseDate)
+					+ ", "
+					+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+		}
+
+		String text = message.getText();
+
+		Label authorLabel = new Label(author);
+		Label hashtagLabel = new Label(keywordList);
+		Label dateLabel = new Label(dateString);
+		Label textLabel = new Label(text);
+
+		dateLabel.getElement().setId("floatRight");
+		messageTable.getFlexCellFormatter().setColSpan(1, 0, 3);
+		messageTable.getFlexCellFormatter().setColSpan(2, 0, 3);
+
+		messageTable.setWidget(0, 0, authorLabel);
+		messageTable.setWidget(0, 1, dateLabel);
+		messageTable.setWidget(1, 0, textLabel);
+		messageTable.setWidget(2, 0, hashtagLabel);
+
+		return messageTable;
+	}
+
+	private AsyncCallback<Vector<Message>> getAllMesagesFromConversationExecute(
+			final Conversation conversation, final VerticalPanel chatPanel) {
+		AsyncCallback<Vector<Message>> asyncCallback = new AsyncCallback<Vector<Message>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+
+			}
+
+			@Override
+			public void onSuccess(Vector<Message> result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				conversation.setListOfMessage(result);
+				VerticalPanel contentMessage = new VerticalPanel();
+				ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
+				chatPanel.add(scrollMessage);
+				contentMessage.getElement().setId("fullWidth");
+				scrollMessage.setHeight("200px");
+
+				for (int i = 1; i < conversation.getListOfMessage().size(); i++) {
+					FlexTable messageTable = createSingleMessage(conversation
+							.getListOfMessage().get(i));
+					contentMessage.add(messageTable);
+				}
+				Button replyButton = createReplyButton(conversation);
+				replyButton.getElement().setId("button");
+				contentMessage.add(replyButton);
+				scrollMessage.scrollToBottom();
+
+			}
+
+		};
+		return asyncCallback;
+	}
+
+	private Button createReplyButton(final Conversation conversation) {
+		Button replyButton = new Button("Reply", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				RootPanel.get("Info").clear();
+				RootPanel.get("Info").add(
+						new ReplyMessageForm(
+								"Reply to this public conversation",
+								conversation, false));
+			}
+		});
+		return replyButton;
 	}
 
 }
