@@ -6,6 +6,7 @@ import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -25,6 +26,11 @@ public class SingleMessageView extends VerticalPanel {
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 
+	private final static long ONE_MINUTE = 60;
+	private final static long ONE_HOURS = 60 * ONE_MINUTE;
+	private final static long ONE_DAYS = 24 * ONE_HOURS;
+	private final static long ONE_MONTH = 30 * ONE_DAYS;
+	
 	private HorizontalPanel buttonPanel = new HorizontalPanel();
 	private Button deleteButton = createDeleteButton();
 	private Button editButton = createEditButton();
@@ -48,9 +54,44 @@ public class SingleMessageView extends VerticalPanel {
 
 	public void run() {
 
-		String date = DateTimeFormat.getFormat("yyyy.MM.dd 'at' HH:mm:ss")
-				.format(message.getDateOfCreation());
-		dateLabel.setText(date);
+		String dateString = new String();
+		
+		Date afterDate = new Date();
+		Date baseDate = message.getDateOfCreation();
+		
+		final long baseTime = baseDate.getTime() / 1000;
+        final long afterTime = afterDate.getTime() / 1000;
+
+		long duration = afterTime - baseTime;
+        
+		if (duration < ONE_MINUTE) {
+			dateString = "Just now";
+		}
+		
+		else if (duration < ONE_HOURS) {
+			Date durationx = new Date(duration*1000);
+			dateString = "Before " + DateTimeFormat.getFormat("mm").format(durationx) + " minutes";
+		}
+		
+		else if (duration < ONE_DAYS) {
+			Date durationx = new Date(duration*1000);
+			dateString = "Before " + DateTimeFormat.getFormat("HH").format(
+					durationx) + " hours";
+		}
+		
+		else if (duration < ONE_MONTH) {
+			Date durationx = new Date(duration*1000);
+			dateString = "Before " + DateTimeFormat.getFormat("dd").format(
+					durationx) + " days";
+		}
+		
+		else if (duration > ONE_MONTH) {
+			Date durationx = new Date(duration*1000);
+			dateString = "No activity since " + DateTimeFormat.getFormat("MM:yyyy").format(
+					durationx);
+		}
+		
+		dateLabel.setText(dateString);
 		text.setText(message.getText());
 
 		if (message.getListOfHashtag().size() > 0) {
@@ -83,6 +124,7 @@ public class SingleMessageView extends VerticalPanel {
 		messageTable.getFlexCellFormatter().setColSpan(1, 0, 3);
 		messageTable.getFlexCellFormatter().setColSpan(2, 0, 3);
 		messageTable.getFlexCellFormatter().setColSpan(3, 0, 3);
+		messageTable.getCellFormatter().getElement(0, 1).setId("fullWidth");
 
 		messageTable.setWidget(0, 0, author);
 		messageTable.setWidget(0, 1, dateLabel);

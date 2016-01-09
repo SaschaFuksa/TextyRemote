@@ -5,6 +5,7 @@ import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -25,6 +26,11 @@ public class ConversationForm extends TextyForm {
 
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
+	
+	private final static long ONE_MINUTE = 60;
+	private final static long ONE_HOURS = 60 * ONE_MINUTE;
+	private final static long ONE_DAYS = 24 * ONE_HOURS;
+	private final static long ONE_MONTH = 30 * ONE_DAYS;
 
 	private Button newMessageButton = createNewMessageButton();
 	private Vector<Conversation> conversationList = new Vector<Conversation>();
@@ -115,14 +121,48 @@ public class ConversationForm extends TextyForm {
 					.getText());
 			String receiver = setRecipient(conversation.getLastMessage()
 					.getListOfReceivers());
-			String date = DateTimeFormat.getFormat("yyyy-MM-dd").format(
-					conversation.getLastMessage().getDateOfCreation());
+			String dateString = new String();
+		
+			Date afterDate = new Date();
+			Date baseDate = conversation.getLastMessage().getDateOfCreation();
+			
+			final long baseTime = baseDate.getTime() / 1000;
+	        final long afterTime = afterDate.getTime() / 1000;
+
+			long duration = afterTime - baseTime;
+	        
+			if (duration < ONE_MINUTE) {
+				dateString = "Just now";
+			}
+			
+			else if (duration < ONE_HOURS) {
+				Date durationx = new Date(duration*1000);
+				dateString = "Before " + DateTimeFormat.getFormat("mm").format(durationx) + " minutes";
+			}
+			
+			else if (duration < ONE_DAYS) {
+				Date durationx = new Date(duration*1000);
+				dateString = "Before " + DateTimeFormat.getFormat("HH").format(
+						durationx) + " hours";
+			}
+			
+			else if (duration < ONE_MONTH) {
+				Date durationx = new Date(duration*1000);
+				dateString = "Before " + DateTimeFormat.getFormat("dd").format(
+						durationx) + " days";
+			}
+			
+			else if (duration > ONE_MONTH) {
+				Date durationx = new Date(duration*1000);
+				dateString = "No activity since " + DateTimeFormat.getFormat("MM:yyyy").format(
+						durationx);
+			}
 
 			Label textLabel = new Label(text);
 			Label receiverLabel = new Label(receiver);
 			Label authorLabel = new Label("Last message from: "
 					+ conversation.getLastMessage().getAuthor().getFirstName());
-			Label dateLabel = new Label(date);
+			Label dateLabel = new Label(dateString);
 
 			authorLabel.getElement().setId("conversationHead");
 			receiverLabel.getElement().setId("conversationHead");
