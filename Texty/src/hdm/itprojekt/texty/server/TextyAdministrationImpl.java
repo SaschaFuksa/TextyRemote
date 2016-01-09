@@ -489,6 +489,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 					result.get(i).getLastMessage().getDateOfCreation());
 		}
 		Collections.sort(result);
+		for (int o = 0; o < result.size(); o++) {
+			if(result.get(o).getFirstMessage().getAuthor().getId() != user.getId()){
+				result.remove(o);
+			}
+		}
+		
 		return result;
 	}
 

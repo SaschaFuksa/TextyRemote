@@ -29,7 +29,11 @@ public class Conversation extends BusinessObject implements
 	 * Gibt die letzte Nachricht einer Unterhaltung zurück.
 	 */
 	public Message getLastMessage() {
-		return this.listOfMessage.elementAt(listOfMessage.size() - 1);
+		return this.listOfMessage.lastElement();
+	}
+	
+	public Message getFirstMessage() {
+		return this.listOfMessage.firstElement();
 	}
 
 	/*
