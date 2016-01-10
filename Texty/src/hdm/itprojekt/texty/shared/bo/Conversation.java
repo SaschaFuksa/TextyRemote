@@ -1,9 +1,11 @@
 package hdm.itprojekt.texty.shared.bo;
+
 import java.util.Date;
 import java.util.Vector;
 
 /**
- * Die Klasse Conversation beinhaltet Methoden zum erstellen, und bearbeiten von Unterhaltungen.
+ * Die Klasse Conversation beinhaltet Methoden zum erstellen, und bearbeiten von
+ * Unterhaltungen.
  */
 public class Conversation extends BusinessObject implements
 		Comparable<Conversation> {
@@ -11,14 +13,14 @@ public class Conversation extends BusinessObject implements
 	private static final long serialVersionUID = 1L;
 	private boolean publicly = false;
 	private Date DateOfLastMessageInCon = null;
-	
+
 	private Vector<Message> listOfMessage = new Vector<Message>();
 
 	// private Vector<User> listOfParticipant = new Vector<User> ();
 
-	
 	/**
 	 * Hinzufügen einer Nachricht zu einer Unterhaltung
+	 * 
 	 * @param message
 	 */
 	public void addMessageToConversation(Message message) {
@@ -31,7 +33,7 @@ public class Conversation extends BusinessObject implements
 	public Message getLastMessage() {
 		return this.listOfMessage.lastElement();
 	}
-	
+
 	public Message getFirstMessage() {
 		return this.listOfMessage.firstElement();
 	}
@@ -45,6 +47,7 @@ public class Conversation extends BusinessObject implements
 
 	/**
 	 * Rückgabe eines Vektors mit allen Message Objekten einer Unterhaltung
+	 * 
 	 * @return listOfMessages
 	 */
 	public Vector<Message> getListOfMessage() {
@@ -60,6 +63,7 @@ public class Conversation extends BusinessObject implements
 
 	/**
 	 * Entfernen einer Nachticht aus der Unterhaltung
+	 * 
 	 * @param message
 	 */
 	public void removeMessageFromConversation(Message message) {
@@ -68,6 +72,7 @@ public class Conversation extends BusinessObject implements
 
 	/**
 	 * Hinzufügen einer Liste von Nachrichten zu einer Unterhaltung
+	 * 
 	 * @param listOfMessage
 	 */
 	public void setListOfMessage(Vector<Message> listOfMessage) {
@@ -76,6 +81,7 @@ public class Conversation extends BusinessObject implements
 
 	/**
 	 * Bestimmen der Sichtbarkeit einer Unterhaltung.
+	 * 
 	 * @param publicly
 	 */
 	public void setPublicly(boolean publicly) {
@@ -86,21 +92,25 @@ public class Conversation extends BusinessObject implements
 	 * Vergleichen einer Unterhaltung mit der im Parameter übergebenen.
 	 */
 	public int compareTo(Conversation o) {
-		if (getDateOfLastMessageInCon() == null || o.getDateOfLastMessageInCon() == null)
+		if (getDateOfLastMessageInCon() == null
+				|| o.getDateOfLastMessageInCon() == null)
 			return 0;
-		return getDateOfLastMessageInCon().compareTo(o.getDateOfLastMessageInCon());
+		return getDateOfLastMessageInCon().compareTo(
+				o.getDateOfLastMessageInCon());
 	}
-	
+
 	/**
 	 * Setzten des Datums der letzten Nachricht einer Unterhaltung.
+	 * 
 	 * @param dateOfLastMessageInCon
 	 */
-	public void setDateOfLastMessageInCon(Date dateOfLastMessageInCon){
-		this.DateOfLastMessageInCon=dateOfLastMessageInCon;
+	public void setDateOfLastMessageInCon(Date dateOfLastMessageInCon) {
+		this.DateOfLastMessageInCon = dateOfLastMessageInCon;
 	}
-	
+
 	/**
 	 * Auslesen des Datums der letzten Nachricht einer Unterhaltung.
+	 * 
 	 * @return
 	 */
 	public Date getDateOfLastMessageInCon() {
