@@ -476,7 +476,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 					.selectAllMesagesFromConversation(conversation));
 			conversation.setDateOfLastMessageInCon(conversation
 					.getLastMessage().getDateOfCreation());
-			Collections.sort(conversation.getListOfMessage());
+			Collections.sort(conversation.getListOfMessage());		
 
 			if (conversation.getFirstMessage().getAuthor().getId() == user
 					.getId()) {
@@ -530,6 +530,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		Vector<Message> result = this.mMapper
 				.selectAllPublicMessagesWithHashtag(selectedHashtag);
 		Collections.sort(result);
+		Collections.reverse(result);
 		return result;
 	}
 
