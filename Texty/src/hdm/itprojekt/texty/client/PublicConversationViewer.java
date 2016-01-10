@@ -6,6 +6,7 @@ import hdm.itprojekt.texty.shared.bo.Message;
 
 import java.util.Date;
 import java.util.Vector;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -18,6 +19,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * Das PublicConversationViewer Formular sorgt fuer die Anzeige der öffentlichen
+ * Nachrichten im Details-Bereich der GUI, nachdem man einen abonnierten User
+ * ausgewählt hat
+ * 
+ *
+ */
 public class PublicConversationViewer extends TextyForm {
 
 	private final static long ONE_MINUTE = 60;
@@ -25,6 +33,9 @@ public class PublicConversationViewer extends TextyForm {
 	private final static long ONE_DAYS = 24 * ONE_HOURS;
 	private final static long ONE_MONTH = 30 * ONE_DAYS;
 
+	/**
+	 * Deklaration, Definition und Initialisierung der Widget.
+	 */
 	private Vector<Conversation> conversationListOfUser = new Vector<Conversation>();
 	private FlexTable conversationTable = new FlexTable();
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -33,19 +44,40 @@ public class PublicConversationViewer extends TextyForm {
 	private Label text = new Label(
 			"Here you can see all public messages from your subscribed user!");
 
+	/**
+	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
+	 * Des weiteren werden alle oeffentlichen Unterhaltungen des Users
+	 * uebergeben
+	 * 
+	 * @param headline
+	 * @param conversationListofUser
+	 */
 	public PublicConversationViewer(String headline,
 			Vector<Conversation> conversationListofUser) {
 		super(headline);
 		this.conversationListOfUser = conversationListofUser;
 	}
 
+	/**
+	 * Modifiziert den Standardkonstruktor, um die run() Operation bei der
+	 * Initialisierung aufzurufen.
+	 * 
+	 * @see TextyForm
+	 */
 	@Override
 	protected void run() {
 
+		/*
+		 * Falls der ausgewählte User noch keine oeffentliche Nachricht gepostet
+		 * hat, wird ein entsprechender Hinweis angezeigt
+		 */
 		if (conversationListOfUser.size() == 0) {
 			text.setText("Oops! This user still doesn't have any public conversations!");
 		}
 
+		/*
+		 * Zuweisung der Styles an das jeweilige Widget.
+		 */
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("conversationWrapper");
 		scroll.getElement().setId("conversationScroll");
@@ -53,6 +85,9 @@ public class PublicConversationViewer extends TextyForm {
 		conversationTable.getElement().setId("fullWidth");
 		text.getElement().setId("blackFont");
 
+		/*
+		 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+		 */
 		mainPanel.add(getHeadline());
 		mainPanel.add(text);
 
@@ -62,6 +97,10 @@ public class PublicConversationViewer extends TextyForm {
 
 		this.add(mainPanel);
 
+		/*
+		 * Nachdem das Formular aufgebaut ist, wird die Höhe des jeweiligen
+		 * Panels ausgelesen und als Höhe der Scrollbars gesetzt.
+		 */
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				scroll.setHeight(mainPanel.getOffsetHeight() + "px");
@@ -71,22 +110,33 @@ public class PublicConversationViewer extends TextyForm {
 	}
 
 	private void showConversation() {
+
 		int index = 0;
 		for (final Conversation conversation : conversationListOfUser) {
 			VerticalPanel chatPanel = new VerticalPanel();
 			FlexTable messageTable = new FlexTable();
 			FocusPanel wrapper = new FocusPanel();
 
+			/*
+			 * Zuweisung der Styles an das jeweilige Widget.
+			 */
 			chatPanel.getElement().setId("fullWidth");
 			messageTable.getElement().setId("conversation");
 
 			String keywordList = new String();
 
+			/*
+			 * Für jeden Hashtag in der ListOfHashtag wird das Keyword
+			 * ausgelesen und der keywordList hinzugefügt
+			 */
 			for (Hashtag hashtag : conversation.getListOfMessage()
 					.firstElement().getListOfHashtag()) {
 				keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
 			}
 
+			/*
+			 * Holt sich den Zeitpunkt der Erstellung
+			 */
 			String dateString = DateTimeFormat.getFormat("HH:mm").format(
 					conversation.getListOfMessage().firstElement()
 							.getDateOfCreation());

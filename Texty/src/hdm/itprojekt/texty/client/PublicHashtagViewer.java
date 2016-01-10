@@ -12,41 +12,68 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
+ * Das PublicHashtagViewer Formular sorgt fuer die Anzeige der öffentlichen
+ * Nachrichten im Details-Bereich der GUI, nachdem man einen abonnierten Hashtag
+ * ausgewählt hat
  * 
- * Diese Klasse wird in der Klasse HomeForm verwendet und dient der Darstellung
- * aller öffentlichen Nachrichten eines Users, die den abonnierten Hashtag beinhalten. Weiterhin
- * werden alle weiteren Hashtags, die in der Message enthalten sind, angezeigt
  *
  */
 public class PublicHashtagViewer extends TextyForm {
-	
+
 	private final static long ONE_MINUTE = 60;
 	private final static long ONE_HOURS = 60 * ONE_MINUTE;
 	private final static long ONE_DAYS = 24 * ONE_HOURS;
 	private final static long ONE_MONTH = 30 * ONE_DAYS;
 
+	/**
+	 * Deklaration, Definition und Initialisierung der Widget.
+	 */
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Vector<Message> messageListofHashtag = new Vector<Message>();
 	private Label text = new Label(
 			"Here you can see all public messages with your favourite hashtag!");
 
+	/**
+	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
+	 * Zudem wird die entsprechende Unterhaltung übergeben,
+	 * 
+	 * @param headline
+	 * @param messageListofHashtag
+	 */
 	public PublicHashtagViewer(String headline,
 			Vector<Message> messageListofHashtag) {
 		super(headline);
 		this.messageListofHashtag = messageListofHashtag;
 	}
 
+	/**
+	 * Modifiziert den Standardkonstruktor, um die run() Operation bei der
+	 * Initialisierung aufzurufen.
+	 * 
+	 * @see TextyForm
+	 */
 	@Override
 	protected void run() {
 
+		/*
+		 * Falls noch keine oeffentliche Nachricht des beinhalteten Hashtags von
+		 * einem beliebigen User gepostet wurde, wird ein entsprechender Hinweis
+		 * angezeigt
+		 */
 		if (messageListofHashtag.size() == 0) {
 			text.setText("Oops! This hashtag doesn't exist in any public conversations!");
 		}
-		
+
+		/*
+		 * Zuweisung der Styles an das jeweilige Widget.
+		 */
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("fullWidth");
 		text.getElement().setId("blackFont");
 
+		/*
+		 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+		 */
 		mainPanel.add(getHeadline());
 		mainPanel.add(text);
 
@@ -73,8 +100,10 @@ public class PublicHashtagViewer extends TextyForm {
 			long duration = afterTime - baseTime;
 
 			if (duration < ONE_DAYS) {
-				String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
-				String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
+				String baseDay = DateTimeFormat.getFormat("dd")
+						.format(baseDate);
+				String afterDay = DateTimeFormat.getFormat("dd").format(
+						afterDate);
 
 				if (!baseDay.equals(afterDay)) {
 					dateString = "yesterday at " + dateString;
@@ -94,13 +123,13 @@ public class PublicHashtagViewer extends TextyForm {
 						+ ", "
 						+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
 			}
-			
+
 			String keywordList = new String();
 
 			for (Hashtag hashtag : message.getListOfHashtag()) {
 				keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
 			}
-			
+
 			Label authorLabel = new Label(message.getAuthor().getFirstName());
 			Label dateLabel = new Label(dateString);
 			Label hashtagLabel = new Label(keywordList);
@@ -113,7 +142,7 @@ public class PublicHashtagViewer extends TextyForm {
 
 			chatFlexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 			chatFlexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
-			
+
 			chatFlexTable.setWidget(0, 0, authorLabel);
 			chatFlexTable.setWidget(0, 1, dateLabel);
 			chatFlexTable.setWidget(1, 0, textLabel);

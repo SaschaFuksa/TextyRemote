@@ -21,8 +21,19 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * 
+ * Diese Klasse stellt die abonnierten Hashtags und User in zwei verschiedenen
+ * ScrollBars im Navigatorbereich dar.
+ *
+ */
 public class HomeForm extends TextyForm {
 
+
+	/**
+	 * Der LOG gibt eine mögliche Exception bzw. den Erfolg des asynchronen
+	 * Callbacks aus.
+	 */
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 
@@ -40,13 +51,29 @@ public class HomeForm extends TextyForm {
 	private FlexTable cellListUser = new FlexTable();
 	private FlexTable cellListHashtag = new FlexTable();
 
+	/**
+	 * administration ermöglicht die asynchrone Kommunikation mit der
+	 * Applikationslogik.
+	 */
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
+	/**
+	 *
+	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
+	 * 
+	 * @param headline
+	 */
 	public HomeForm(String headline) {
 		super(headline);
 	}
 
+	/**
+	 * Modifiziert den Standardkonstruktor, um die run() Operation bei der
+	 * Initialisierung aufzurufen.
+	 * 
+	 * @see TextyForm
+	 */
 	@Override
 	protected void run() {
 
@@ -82,6 +109,11 @@ public class HomeForm extends TextyForm {
 
 	}// Ende Run-Methode
 
+	/**
+	 * Diese Methode holt sich alle abonnierten User
+	 * 
+	 * @return
+	 */
 	private AsyncCallback<Vector<User>> getAllSubscribedUsersExecute() {
 		AsyncCallback<Vector<User>> asyncCallback = new AsyncCallback<Vector<User>>() {
 			@Override
@@ -93,14 +125,20 @@ public class HomeForm extends TextyForm {
 			public void onSuccess(Vector<User> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
 				userList = result;
-				administration.getCurrentUser(getCurrentUserExecuter());
+				administration.getCurrentUser(getCurrentUserExecute());
 			}
 
 		};
 		return asyncCallback;
 	}
 
-	private AsyncCallback<User> getCurrentUserExecuter() {
+	/**
+	 * Diese Methode holt sich den aktuell eingeloggten User und ruft von der
+	 * Applikations-Ebene getAllSubscribedHashtags auf.
+	 * 
+	 * @return
+	 */
+	private AsyncCallback<User> getCurrentUserExecute() {
 		AsyncCallback<User> asyncCallback = new AsyncCallback<User>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -124,6 +162,11 @@ public class HomeForm extends TextyForm {
 		return asyncCallback;
 	}
 
+	/**
+	 * Diese Methode holt sich alle abonnierten Hashtags
+	 * 
+	 * @return
+	 */
 	private AsyncCallback<Vector<Hashtag>> getAllSubscribedHashtagsExecute() {
 		AsyncCallback<Vector<Hashtag>> asyncCallback = new AsyncCallback<Vector<Hashtag>>() {
 			@Override
@@ -202,7 +245,11 @@ public class HomeForm extends TextyForm {
 		return asyncCallback;
 	}
 
-	// Navigatorbereich Hashtags
+	/**
+	 * Diese Methode wählt in einem Schleifendurchlauf alle beinhalteten
+	 * Hashtags an und bezieht dessen Keywords, die auf einem Label platziert
+	 * werden.
+	 */
 	private void showSubscribedHashtag() {
 
 		for (final Hashtag hashtag : hashtagList) {
@@ -231,8 +278,16 @@ public class HomeForm extends TextyForm {
 
 	}
 
+	/**
+	 * Diese Methode holt sich alle öffentlichen Nachrichten, die den
+	 * abonnierten Hashtag beinhalten
+	 * 
+	 * @param hashtag
+	 * @return
+	 */
 	// Hier entsteht die Detailsanzeige der Hashtags
-	public AsyncCallback<Vector<Message>> getAllPublicMessagesFromHashtagExecute(final Hashtag hashtag) {
+	public AsyncCallback<Vector<Message>> getAllPublicMessagesFromHashtagExecute(
+			final Hashtag hashtag) {
 
 		AsyncCallback<Vector<Message>> asyncCallback = new AsyncCallback<Vector<Message>>() {
 			@Override
@@ -244,7 +299,8 @@ public class HomeForm extends TextyForm {
 			public void onSuccess(Vector<Message> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
 				TextyForm publicHashtagViewer = new PublicHashtagViewer(
-						"Public Posting with hashtag #" + hashtag.getKeyword(), result);
+						"Public Posting with hashtag #" + hashtag.getKeyword(),
+						result);
 
 				RootPanel.get("Details").clear();
 				RootPanel.get("Info").clear();

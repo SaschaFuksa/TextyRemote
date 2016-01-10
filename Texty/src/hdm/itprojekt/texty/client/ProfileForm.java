@@ -25,6 +25,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class ProfileForm extends TextyForm {
 
+	/**
+	 * Der LOG gibt eine mögliche Exception bzw. den Erfolg des asynchronen
+	 * Callbacks aus.
+	 */
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
 
@@ -36,6 +40,11 @@ public class ProfileForm extends TextyForm {
 	private TextBox lastnameTextBox = new TextBox();
 	private InfoBox infoBox = new InfoBox();
 	private Button saveButton = createSaveButton();
+	
+	/**
+	 * administration ermöglicht die asynchrone Kommunikation mit der
+	 * Applikationslogik.
+	 */
 	private TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 
