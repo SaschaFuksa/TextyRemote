@@ -462,7 +462,6 @@ public class MessageMapper {
 		return resultMessage;
 	}
 
-	// alle nachrichten aus einer conversation
 	/**
 	 * Die Methode selectAllMesagesFromConversation gibt alle sichtbaren
 	 * Nachrichten einer Unterhaltung aus.
