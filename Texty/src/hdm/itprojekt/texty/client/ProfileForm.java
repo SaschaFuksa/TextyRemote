@@ -56,7 +56,7 @@ public class ProfileForm extends TextyForm {
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("fullWidth");
 		chatFlexTable.setStyleName("ProfileForm");
-		saveButton.getElement().setId("sendButton");
+		saveButton.getElement().setId("button");
 
 		emailTextBox.setEnabled(false);
 		firstnameTextBox.addFocusHandler(createFocusHandler());
