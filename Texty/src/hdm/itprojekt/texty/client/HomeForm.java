@@ -6,6 +6,7 @@ import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Collections;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -187,6 +188,7 @@ public class HomeForm extends TextyForm {
 			@Override
 			public void onSuccess(Vector<Conversation> result) {
 				LOG.info("Success :" + result.getClass().getSimpleName());
+				Collections.reverse(result);
 				TextyForm publicConversationViewer = new PublicConversationViewer(
 						"Public Postings from " + user.getFirstName(), result);
 

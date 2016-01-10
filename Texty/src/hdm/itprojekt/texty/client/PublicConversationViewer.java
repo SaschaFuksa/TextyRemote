@@ -1,19 +1,15 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 
 import java.util.Date;
 import java.util.Vector;
-import java.util.logging.Logger;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -29,9 +25,6 @@ public class PublicConversationViewer extends TextyForm {
 	private final static long ONE_DAYS = 24 * ONE_HOURS;
 	private final static long ONE_MONTH = 30 * ONE_DAYS;
 
-	private static final Logger LOG = Logger
-			.getLogger(SingleConversationViewer.class.getSimpleName());
-
 	private Vector<Conversation> conversationListOfUser = new Vector<Conversation>();
 	private FlexTable conversationTable = new FlexTable();
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -39,8 +32,6 @@ public class PublicConversationViewer extends TextyForm {
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private Label text = new Label(
 			"Here you can see all public messages from your subscribed user!");
-	private final TextyAdministrationAsync administration = ClientsideSettings
-			.getTextyAdministration();
 
 	public PublicConversationViewer(String headline,
 			Vector<Conversation> conversationListofUser) {
@@ -97,12 +88,12 @@ public class PublicConversationViewer extends TextyForm {
 			}
 
 			String dateString = DateTimeFormat.getFormat("HH:mm").format(
-					conversation.getListOfMessage()
-					.firstElement().getDateOfCreation());
+					conversation.getListOfMessage().firstElement()
+							.getDateOfCreation());
 
 			Date afterDate = new Date();
-			Date baseDate = conversation.getListOfMessage()
-					.firstElement().getDateOfCreation();
+			Date baseDate = conversation.getListOfMessage().firstElement()
+					.getDateOfCreation();
 
 			long afterTime = afterDate.getTime() / 1000;
 			long baseTime = baseDate.getTime() / 1000;
@@ -110,8 +101,10 @@ public class PublicConversationViewer extends TextyForm {
 			long duration = afterTime - baseTime;
 
 			if (duration < ONE_DAYS) {
-				String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
-				String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
+				String baseDay = DateTimeFormat.getFormat("dd")
+						.format(baseDate);
+				String afterDay = DateTimeFormat.getFormat("dd").format(
+						afterDate);
 
 				if (!baseDay.equals(afterDay)) {
 					dateString = "yesterday at " + dateString;
@@ -163,10 +156,21 @@ public class PublicConversationViewer extends TextyForm {
 			public void onClick(ClickEvent event) {
 
 				if (state) {
-					administration.getAllMesagesFromConversation(
-							conversation.getListOfMessage().firstElement(),
-							getAllMesagesFromConversationExecute(conversation,
-									chatPanel));
+					VerticalPanel contentMessage = new VerticalPanel();
+					ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
+					chatPanel.add(scrollMessage);
+					contentMessage.getElement().setId("fullWidth");
+					scrollMessage.setHeight("200px");
+
+					for (int i = 1; i < conversation.getListOfMessage().size(); i++) {
+						FlexTable messageTable = createSingleMessage(conversation
+								.getListOfMessage().get(i));
+						contentMessage.add(messageTable);
+					}
+					Button replyButton = createReplyButton(conversation);
+					replyButton.getElement().setId("button");
+					contentMessage.add(replyButton);
+					scrollMessage.scrollToBottom();
 					state = false;
 				} else {
 					chatPanel.clear();
@@ -210,17 +214,15 @@ public class PublicConversationViewer extends TextyForm {
 
 		} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
 			dateString = DateTimeFormat.getFormat("dd.MM").format(baseDate)
-					+ " at "
-					+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+					+ " at " + DateTimeFormat.getFormat("HH").format(baseDate)
+					+ "h";
 		}
 
 		else if (duration > ONE_MONTH) {
-			dateString = DateTimeFormat.getFormat("MM.yyyy").format(
-					baseDate)
-					+ " at "
-					+ DateTimeFormat.getFormat("dd").format(baseDate)
-					+ ", "
-					+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+			dateString = DateTimeFormat.getFormat("MM.yyyy").format(baseDate)
+					+ " at " + DateTimeFormat.getFormat("dd").format(baseDate)
+					+ ", " + DateTimeFormat.getFormat("HH").format(baseDate)
+					+ "h";
 		}
 
 		String text = message.getText();
@@ -240,42 +242,6 @@ public class PublicConversationViewer extends TextyForm {
 		messageTable.setWidget(2, 0, hashtagLabel);
 
 		return messageTable;
-	}
-
-	private AsyncCallback<Vector<Message>> getAllMesagesFromConversationExecute(
-			final Conversation conversation, final VerticalPanel chatPanel) {
-		AsyncCallback<Vector<Message>> asyncCallback = new AsyncCallback<Vector<Message>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				LOG.severe("Error: " + caught.getMessage());
-
-			}
-
-			@Override
-			public void onSuccess(Vector<Message> result) {
-				LOG.info("Success :" + result.getClass().getSimpleName());
-				conversation.setListOfMessage(result);
-				VerticalPanel contentMessage = new VerticalPanel();
-				ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
-				chatPanel.add(scrollMessage);
-				contentMessage.getElement().setId("fullWidth");
-				scrollMessage.setHeight("200px");
-
-				for (int i = 1; i < conversation.getListOfMessage().size(); i++) {
-					FlexTable messageTable = createSingleMessage(conversation
-							.getListOfMessage().get(i));
-					contentMessage.add(messageTable);
-				}
-				Button replyButton = createReplyButton(conversation);
-				replyButton.getElement().setId("button");
-				contentMessage.add(replyButton);
-				scrollMessage.scrollToBottom();
-
-			}
-
-		};
-		return asyncCallback;
 	}
 
 	private Button createReplyButton(final Conversation conversation) {

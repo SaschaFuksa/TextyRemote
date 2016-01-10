@@ -13,6 +13,7 @@ import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 import hdm.itprojekt.texty.shared.bo.UserSubscription;
+import hdm.itprojekt.texty.shared.report.AllUserSubscriptionsReport;
 
 import java.util.Collections;
 import java.util.Date;
@@ -366,7 +367,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			result.get(i).setDateOfLastMessageInCon(
 					result.get(i).getLastMessage().getDateOfCreation());
 		}
-		
+
 		Collections.sort(result);
 		return result;
 
@@ -464,38 +465,28 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException {
 
-		Vector<Message> allPublicMessagesFromUser = this.mMapper
-				.selectAllPublicMessagesFromUser(user);
-
-		Vector<Conversation> allConversations = this.cMapper
+		Vector<Conversation> allPublicConversations = this.cMapper
 				.selectAllPublicConversations();
 
 		Vector<Conversation> result = new Vector<Conversation>();
 
-		for (Conversation conversation : allConversations) {
-			boolean state = true;
-			for (Message message : allPublicMessagesFromUser) {
-				if (message.getConversationID() == conversation.getId()) {
-					conversation.addMessageToConversation(message);
-					if (state) {
-						result.add(conversation);
-						state = false;
-					}
-				}
+		for (Conversation conversation : allPublicConversations) {
+
+			conversation.setListOfMessage(this.mMapper
+					.selectAllMesagesFromConversation(conversation));
+			conversation.setDateOfLastMessageInCon(conversation
+					.getLastMessage().getDateOfCreation());
+			Collections.sort(conversation.getListOfMessage());		
+
+			if (conversation.getFirstMessage().getAuthor().getId() == user
+					.getId()) {
+				result.add(conversation);
+
 			}
-		}
-		for (int i = 0; i < result.size(); i++) {
-			result.get(i).setDateOfLastMessageInCon(
-					result.get(i).getLastMessage().getDateOfCreation());
 		}
 		Collections.sort(result);
-		for (int o = 0; o < result.size(); o++) {
-			if(result.get(o).getFirstMessage().getAuthor().getId() != user.getId()){
-				result.remove(o);
-			}
-		}
-		
 		return result;
+
 	}
 
 	/**
@@ -536,8 +527,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public Vector<Message> getAllPublicMessagesFromHashtag(
 			Hashtag selectedHashtag) throws IllegalArgumentException {
-		Vector<Message> result = this.mMapper.selectAllPublicMessagesWithHashtag(selectedHashtag);
+		Vector<Message> result = this.mMapper
+				.selectAllPublicMessagesWithHashtag(selectedHashtag);
 		Collections.sort(result);
+		Collections.reverse(result);
 		return result;
 	}
 
@@ -646,12 +639,12 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			this.uMapper.update(us);
 		}
 	}
-	
-	public Vector<Message> getAllMesagesFromConversation(Message message)
-			throws IllegalArgumentException {
 
-		return this.mMapper
-				.selectAllMesagesFromConversation(message);
-	}
+	/*
+	 * public Vector<Message> getAllMesagesFromConversation(Message message)
+	 * throws IllegalArgumentException {
+	 * 
+	 * return this.mMapper .selectAllMesagesFromConversation(message); }
+	 */
 
 }
