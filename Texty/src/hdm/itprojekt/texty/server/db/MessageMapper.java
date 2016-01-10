@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.server.db;
 
+import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
@@ -354,31 +355,25 @@ public class MessageMapper {
 	}
 
 	//alle nachrichten aus einer conversation
-	public Vector<Message> selectAllMesagesFromConversation(Message message) {
+	public Vector<Message> selectAllMesagesFromConversation(Conversation conversation) {
 		Connection con = DBConnection.connection();
 		Vector<Message> resultMessage = new Vector<Message>();
-
 		try {
 			Statement stmt = con.createStatement();
-
 			ResultSet rsMessages = stmt
 					.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message inner join textydb.conversation ON message.conversationId = conversation.conversationId "
 							+ "WHERE message.conversationId = "
-							+ message.getConversationID()
+							+ conversation.getId()
 							+ " AND conversation.publicly = '1'"
 							+ " AND message.visibility = '1' ");
-
 			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
 			while (rsMessages.next()) {
 				Message allmessages = new Message();
-
 				allmessages.setId(rsMessages.getInt("message.messageId"));
-
 				allmessages.setAuthor(findAuthor(allmessages));
 				allmessages.setListOfReceivers(findReceivers(allmessages));
 				allmessages
 						.setListOfHashtag(findHashtagsInMessage(allmessages));
-
 				allmessages
 						.setText(rsMessages.getString("message.messageText"));
 				allmessages.setConversationID(rsMessages
@@ -387,14 +382,11 @@ public class MessageMapper {
 						.getBoolean("message.visibility"));
 				allmessages.setDateOfCreation(rsMessages
 						.getTimestamp("message.dateOfCreation"));
-
 				resultMessage.addElement(allmessages);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return resultMessage;
 	}
 

@@ -163,10 +163,10 @@ public class PublicConversationViewer extends TextyForm {
 			public void onClick(ClickEvent event) {
 
 				if (state) {
-					administration.getAllMesagesFromConversation(
+				/*	administration.getAllMesagesFromConversation(
 							conversation.getListOfMessage().firstElement(),
 							getAllMesagesFromConversationExecute(conversation,
-									chatPanel));
+									chatPanel));*/
 					state = false;
 				} else {
 					chatPanel.clear();
