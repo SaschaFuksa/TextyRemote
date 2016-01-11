@@ -4,15 +4,21 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 /**
  * 
- * Diese Klasse stellt das Impressum unserer Gruppe im Footer-Bereich im Browser dar. 
+ * Diese Klasse stellt das Impressum unserer Gruppe im Impressums-Bereich im
+ * Browser dar.
  *
  */
 public class Footer extends VerticalPanel {
 
 	private VerticalPanel footerPanel = new VerticalPanel();
 	private HTML aboutHtml = new HTML();
+	
+	/*
+	 * Alle relevanten Informationen für den Inhalt des Impressums
+	 */
 	private String about = "IT-Projekt WS 2015/2016<br>"
 			+ "Texty Messagesystem<br>"
 			+ "Hochschule der Medien Stuttgart<br>"
@@ -23,12 +29,19 @@ public class Footer extends VerticalPanel {
 	@Override
 	public void onLoad() {
 
+		/*
+		 * Das Impressum wird mit den entsprechenden Angaben zusammengebaut und
+		 * formatiert
+		 */
 		footerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		aboutHtml.setHTML(about);
 		aboutHtml.addStyleName("Footer");
 		footerPanel.add(aboutHtml);
 		footerPanel.addStyleName("Footer");
 
+		/*
+		 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+		 */
 		RootPanel.get("Details").add(footerPanel);
 	}
 }

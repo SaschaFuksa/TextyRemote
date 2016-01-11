@@ -28,6 +28,7 @@ public class PublicHashtagViewer extends TextyForm {
 	/**
 	 * Deklaration, Definition und Initialisierung der Widget.
 	 */
+	private RefreshForm refreshForm = new RefreshForm("");
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Vector<Message> messageListofHashtag = new Vector<Message>();
 	private Label text = new Label(
@@ -54,6 +55,8 @@ public class PublicHashtagViewer extends TextyForm {
 	 */
 	@Override
 	protected void run() {
+		
+		refreshForm.run();
 
 		/*
 		 * Falls noch keine oeffentliche Nachricht des beinhalteten Hashtags von
@@ -86,6 +89,9 @@ public class PublicHashtagViewer extends TextyForm {
 	private void addConversation() {
 		for (final Message message : messageListofHashtag) {
 
+			/*
+			 * Erzeugen einer neuen FlexTable
+			 */
 			FlexTable chatFlexTable = new FlexTable();
 
 			String dateString = DateTimeFormat.getFormat("HH:mm").format(
@@ -99,6 +105,9 @@ public class PublicHashtagViewer extends TextyForm {
 
 			long duration = afterTime - baseTime;
 
+			/*
+			 * Unterschiedliche Behandlung der Datumanzeige
+			 */
 			if (duration < ONE_DAYS) {
 				String baseDay = DateTimeFormat.getFormat("dd")
 						.format(baseDate);
@@ -126,10 +135,17 @@ public class PublicHashtagViewer extends TextyForm {
 
 			String keywordList = new String();
 
+			/*
+			 * Geht jeden Hashtag in der Nachricht durch und übergibt diese an
+			 * die keywordList
+			 */
 			for (Hashtag hashtag : message.getListOfHashtag()) {
 				keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
 			}
 
+			/*
+			 * Hinzufügen der Informationen über Author, Datum und Hashtags
+			 */
 			Label authorLabel = new Label(message.getAuthor().getFirstName());
 			Label dateLabel = new Label(dateString);
 			Label hashtagLabel = new Label(keywordList);
@@ -137,12 +153,18 @@ public class PublicHashtagViewer extends TextyForm {
 			String text = message.getText();
 			final Label textLabel = new Label(text);
 
+			/*
+			 * Zuweisung der Styles an das jeweilige Widget.
+			 */
 			dateLabel.getElement().setId("floatRight");
 			chatFlexTable.getElement().setId("conversation");
 
 			chatFlexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 			chatFlexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
 
+			/*
+			 * Hinzufügen der Widgets in die jeweilige Spalte der FlexTable
+			 */
 			chatFlexTable.setWidget(0, 0, authorLabel);
 			chatFlexTable.setWidget(0, 1, dateLabel);
 			chatFlexTable.setWidget(1, 0, textLabel);

@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class HomeForm extends TextyForm {
 
-
 	/**
 	 * Der LOG gibt eine mögliche Exception bzw. den Erfolg des asynchronen
 	 * Callbacks aus.
@@ -50,6 +49,7 @@ public class HomeForm extends TextyForm {
 	private ScrollPanel scrollHashtag = new ScrollPanel(contentHashtag);
 	private FlexTable cellListUser = new FlexTable();
 	private FlexTable cellListHashtag = new FlexTable();
+	private RefreshForm refreshForm = new RefreshForm("");
 
 	/**
 	 * administration ermöglicht die asynchrone Kommunikation mit der
@@ -76,10 +76,15 @@ public class HomeForm extends TextyForm {
 	 */
 	@Override
 	protected void run() {
+		
+		refreshForm.run();
 
 		// Abonnierte User und deren Postings
 		administration.getAllSubscribedUsers(getAllSubscribedUsersExecute());
 
+		/*
+		 * Zuweisung der Styles an das jeweilige Widget.
+		 */
 		this.getElement().setId("fullSize");
 		mainPanel.getElement().setId("conversationWrapper");
 		scrollUser.getElement().setId("conversationScroll");
@@ -90,6 +95,9 @@ public class HomeForm extends TextyForm {
 		contentUser.add(cellListUser);
 		contentHashtag.add(cellListHashtag);
 
+		/*
+		 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+		 */
 		mainPanel.add(getHeadline());
 		mainPanel.add(text);
 		mainPanel.add(headerUser);
@@ -99,6 +107,10 @@ public class HomeForm extends TextyForm {
 
 		this.add(mainPanel);
 
+		/*
+		 * Nachdem das Formular aufgebaut ist, wird die Höhe des jeweiligen
+		 * Panels ausgelesen und als Höhe der Scrollbars gesetzt.
+		 */
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				scrollUser.setHeight(mainPanel.getOffsetHeight() * 0.45 + "px");
@@ -163,7 +175,8 @@ public class HomeForm extends TextyForm {
 	}
 
 	/**
-	 * Diese Methode holt sich alle abonnierten Hashtags
+	 * Diese Methode holt sich alle abonnierten Hashtags und speichert das
+	 * result in hashtagList
 	 * 
 	 * @return
 	 */

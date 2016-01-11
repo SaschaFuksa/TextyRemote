@@ -36,6 +36,7 @@ public class PublicConversationViewer extends TextyForm {
 	/**
 	 * Deklaration, Definition und Initialisierung der Widget.
 	 */
+	private RefreshForm refreshForm = new RefreshForm("");
 	private Vector<Conversation> conversationListOfUser = new Vector<Conversation>();
 	private FlexTable conversationTable = new FlexTable();
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -67,6 +68,8 @@ public class PublicConversationViewer extends TextyForm {
 	@Override
 	protected void run() {
 
+		refreshForm.run();
+		
 		/*
 		 * Falls der ausgewählte User noch keine oeffentliche Nachricht gepostet
 		 * hat, wird ein entsprechender Hinweis angezeigt
@@ -109,6 +112,9 @@ public class PublicConversationViewer extends TextyForm {
 		});
 	}
 
+	/**
+	 * Diese Methode zeigt die Unterhaltung an
+	 */
 	private void showConversation() {
 
 		int index = 0;
@@ -150,6 +156,9 @@ public class PublicConversationViewer extends TextyForm {
 
 			long duration = afterTime - baseTime;
 
+			/*
+			 * Unterschiedliche Behandlung der Datumanzeige
+			 */
 			if (duration < ONE_DAYS) {
 				String baseDay = DateTimeFormat.getFormat("dd")
 						.format(baseDate);
@@ -184,6 +193,9 @@ public class PublicConversationViewer extends TextyForm {
 
 			wrapper.addClickHandler(createClickHandler(conversation, chatPanel));
 
+			/*
+			 * Hinzufügen der Widgets in die jeweilige Spalte der FlexTable
+			 */
 			messageTable.setWidget(0, 0, dateLabel);
 			messageTable.setWidget(1, 0, textLabel);
 			messageTable.setWidget(2, 0, hashtagLabel);
@@ -207,6 +219,7 @@ public class PublicConversationViewer extends TextyForm {
 
 				if (state) {
 					VerticalPanel contentMessage = new VerticalPanel();
+					
 					ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
 					chatPanel.add(scrollMessage);
 					contentMessage.getElement().setId("fullWidth");
@@ -232,13 +245,26 @@ public class PublicConversationViewer extends TextyForm {
 		return clickHandler;
 	}
 
+	/**
+	 * Erzeugen einer einzelnen Nachricht der Unterhaltung
+	 * @param message
+	 * @return
+	 */
 	private FlexTable createSingleMessage(Message message) {
 		FlexTable messageTable = new FlexTable();
+		
+		/*
+		 * Zuweisung der Styles an das jeweilige Widget.
+		 */
 		messageTable.getElement().setId("publicConversation");
 
 		String author = message.getAuthor().getFirstName();
 		String keywordList = new String();
 
+		/*
+		 * Geht jeden Hashtag in der Nachricht durch und übergibt diese an die
+		 * keywordList
+		 */
 		for (Hashtag hashtag : message.getListOfHashtag()) {
 			keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
 		}
@@ -254,6 +280,9 @@ public class PublicConversationViewer extends TextyForm {
 
 		long duration = afterTime - baseTime;
 
+		/*
+		 * Unterschiedliche Behandlung der Datumanzeige
+		 */
 		if (duration < ONE_DAYS) {
 			String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
 			String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
@@ -286,6 +315,9 @@ public class PublicConversationViewer extends TextyForm {
 		messageTable.getFlexCellFormatter().setColSpan(1, 0, 3);
 		messageTable.getFlexCellFormatter().setColSpan(2, 0, 3);
 
+		/*
+		 * Hinzufügen der Widgets in die jeweilige Spalte der FlexTable
+		 */
 		messageTable.setWidget(0, 0, authorLabel);
 		messageTable.setWidget(0, 1, dateLabel);
 		messageTable.setWidget(1, 0, textLabel);
@@ -294,11 +326,24 @@ public class PublicConversationViewer extends TextyForm {
 		return messageTable;
 	}
 
+	/**
+	 * Button zum Antworten in Unterhaltungen.
+	 * 
+	 * @return
+	 */
 	private Button createReplyButton(final Conversation conversation) {
 		Button replyButton = new Button("Reply", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				
+				/*
+				 * Entfernung der Child Widgets vom jeweiligen Parent Widget.
+				 */
 				RootPanel.get("Info").clear();
+				
+				/*
+				 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+				 */
 				RootPanel.get("Info").add(
 						new ReplyMessageForm(
 								"Reply to this public conversation",
