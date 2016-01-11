@@ -16,12 +16,11 @@ public class Conversation extends BusinessObject implements
 
 	private Vector<Message> listOfMessage = new Vector<Message>();
 
-	// private Vector<User> listOfParticipant = new Vector<User> ();
-
 	/**
 	 * Hinzufügen einer Nachricht zu einer Unterhaltung
 	 * 
-	 * @param message
+	 * @param message	 * 
+	 * 
 	 */
 	public void addMessageToConversation(Message message) {
 		listOfMessage.addElement(message);
@@ -29,21 +28,21 @@ public class Conversation extends BusinessObject implements
 
 	/**
 	 * Gibt die letzte Nachricht einer Unterhaltung zurück.
+	 * 
+	 * @return Das letzte Element der Nachrichtenliste
 	 */
 	public Message getLastMessage() {
 		return this.listOfMessage.lastElement();
 	}
 
+	/**
+	 * Gibt das erste Element der Nachrichtliste zurück
+	 * 
+	 * @return Das erste Element der Nachrichtenliste
+	 */
 	public Message getFirstMessage() {
 		return this.listOfMessage.firstElement();
 	}
-
-	/*
-	 * public Vector<User> getListOfParticipant() { return listOfParticipant; }
-	 * 
-	 * public void setListOfParticipant(Vector<User> listOfParticipant) {
-	 * this.listOfParticipant = listOfParticipant; }
-	 */
 
 	/**
 	 * Rückgabe eines Vektors mit allen Message Objekten einer Unterhaltung
@@ -56,6 +55,7 @@ public class Conversation extends BusinessObject implements
 
 	/**
 	 * Prüft ob die Unterhaltung öffentlich ist.
+	 * 
 	 */
 	public boolean isPublicly() {
 		return publicly;
@@ -111,7 +111,7 @@ public class Conversation extends BusinessObject implements
 	/**
 	 * Auslesen des Datums der letzten Nachricht einer Unterhaltung.
 	 * 
-	 * @return
+	 * @return Das Erstellungsdatum der letzen Nachricht
 	 */
 	public Date getDateOfLastMessageInCon() {
 		return DateOfLastMessageInCon;

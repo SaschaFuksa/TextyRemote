@@ -8,11 +8,18 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+/**
+ * Dies ist die Implementierungsklasse des Interface {@link LoginService}
+ */
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Diese Methode führt den Login aus und ruft die Daten von der Google
+	 * Accounts API ab.
+	 */
 	@Override
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();

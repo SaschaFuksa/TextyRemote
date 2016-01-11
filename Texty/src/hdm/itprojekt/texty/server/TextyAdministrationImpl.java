@@ -83,8 +83,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 * @return Die geänderte Unterhaltung
 	 */
 	@Override
-	public Conversation addMessageToConversation(Conversation conversation, String text,
-			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException {
+	public Conversation addMessageToConversation(Conversation conversation,
+			String text, Vector<Hashtag> listOfHashtag)
+			throws IllegalArgumentException {
 		// Abfrage des aktuell eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
@@ -105,9 +106,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 * der letzen Nachricht, exklusive des eingeloggten Benutzers, als
 		 * Empfänger der Nachricht hinzugefügt.
 		 */
-		if (conversation.getLastMessage().getAuthor().getId() != currentUser.getId()) {
+		if (conversation.getLastMessage().getAuthor().getId() != currentUser
+				.getId()) {
 			m.addReceivers(conversation.getLastMessage().getAuthor());
-			for (User receiver : conversation.getLastMessage().getListOfReceivers()) {
+			for (User receiver : conversation.getLastMessage()
+					.getListOfReceivers()) {
 				if (receiver.getId() != currentUser.getId()) {
 					m.addReceivers(receiver);
 				}
@@ -118,7 +121,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			 * übernommen.
 			 */
 		} else {
-			m.setListOfReceivers(conversation.getLastMessage().getListOfReceivers());
+			m.setListOfReceivers(conversation.getLastMessage()
+					.getListOfReceivers());
 		}
 
 		m.setListOfHashtag(listOfHashtag);
@@ -238,7 +242,8 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 
 		hashtagSubscription.setSubscribedHashtag(subscribedHashtag);
 		// Der Abonierende ist immer der eingelogte Benutzer
-		hashtagSubscription.setSubscriber(this.uMapper.findByEmail(user.getEmail()));
+		hashtagSubscription.setSubscriber(this.uMapper.findByEmail(user
+				.getEmail()));
 
 		/*
 		 * Setzen einer vorläufigen ID, der Insetz Aufruf liefert dann ein
@@ -595,6 +600,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public Vector<Message> getAllMessagesWhereUserIsAuthor(User user)
 			throws IllegalArgumentException {
+		// Erstellen eines Vektors mit allen Nachrichten des Benutzers
 		Vector<Message> allMessagesFromUser = this.mMapper
 				.selectAllMessagesFromUser(user);
 		Vector<Message> allMessagesWhereUserIsAuthor = new Vector<Message>();
@@ -641,21 +647,36 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 *            Der Benutzer von dem die Nachrichten abgefragt werden sollen.
 	 * 
 	 * @param startDate
+	 *            Das Startdatum des Zeitraums
+	 * 
+	 * @param endDate
+	 *            Das Enddatum des Zeitraums
+	 * 
+	 * @return Ein Vektor mit den Nachrichten
 	 */
 	@Override
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException {
-		Vector<Message> allMessages = this.mMapper
+		// Erstellen des Vektors mit allen Nachrichten des übergebenen Benutzers
+		Vector<Message> allMessagesFromUser = this.mMapper
 				.selectAllMessagesFromUser(user);
-		Vector<Message> MessagesByDate = new Vector<Message>();
-		for (int i = 0; i < allMessages.size(); i++) {
-			if (allMessages.get(i).getDateOfCreation().after(startDate)
-					&& allMessages.get(i).getDateOfCreation().before(endDate)) {
-				MessagesByDate.add(allMessages.get(i));
+		// Erstellen des Ergebnisvektors
+		Vector<Message> result = new Vector<Message>();
+		/*
+		 * Alle Nachrichten werden durchlaufen und geprüft ob sie zwischen den
+		 * Zeitraum aus den Parametern liegen. Trifft dies zu, werden sie dem
+		 * Ergebnisvektor hinzugefügt.
+		 */
+		for (int i = 0; i < allMessagesFromUser.size(); i++) {
+			if (allMessagesFromUser.get(i).getDateOfCreation().after(startDate)
+					&& allMessagesFromUser.get(i).getDateOfCreation()
+							.before(endDate)) {
+				result.add(allMessagesFromUser.get(i));
 			}
 		}
-		Collections.sort(MessagesByDate);
-		return MessagesByDate;
+		// Sortieren des Ergebnisvektors
+		Collections.sort(result);
+		return result;
 	}
 
 	/**
@@ -668,25 +689,37 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException {
 
+		// Erstellen eines Vektors mit allen Unterhaltungen aus der Db
 		Vector<Conversation> allPublicConversations = this.cMapper
 				.selectAllPublicConversations();
 
+		// Erstellen des Ergebnisvektors
 		Vector<Conversation> result = new Vector<Conversation>();
-
+		/*
+		 * Durchlaufen aller Unterhaltungen´. Zunächst wird für jede
+		 * Unterhaltung die Nachrichtenliste gefüllt, anschließend wird in jeder
+		 * Unterhaltung das Datum der letzen Nachricht gesetzt um diese danach
+		 * sortieren zu können.
+		 */
 		for (Conversation conversation : allPublicConversations) {
 
 			conversation.setListOfMessage(this.mMapper
 					.selectAllMesagesFromConversation(conversation));
 			conversation.setDateOfLastMessageInCon(conversation
 					.getLastMessage().getDateOfCreation());
+			// Sortieren der Nachrichten
 			Collections.sort(conversation.getListOfMessage());
-
+			/*
+			 * Der Ergebnisvektor wird nur mit UNterhaltungen gefüllt, in denen
+			 * der übergebene Benutzer, AUthor der ersten Nachricht ist.
+			 */
 			if (conversation.getFirstMessage().getAuthor().getId() == user
 					.getId()) {
 				result.add(conversation);
 
 			}
 		}
+		// Sortieren der Unterhaltungen
 		Collections.sort(result);
 		return result;
 
@@ -700,6 +733,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public Vector<Hashtag> getAllSubscribedHashtags()
 			throws IllegalArgumentException {
+		// Abfragen des eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
@@ -730,6 +764,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public Vector<User> getAllSubscribedUsers() throws IllegalArgumentException {
+		// Abfragen des eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
@@ -751,7 +786,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			Hashtag selectedHashtag) throws IllegalArgumentException {
 		Vector<Message> result = this.mMapper
 				.selectAllPublicMessagesWithHashtag(selectedHashtag);
+		//Sortieren des Vektors
 		Collections.sort(result);
+		//Umdrehen des Vektors
 		Collections.reverse(result);
 		return result;
 	}
@@ -789,6 +826,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public User getCurrentUser() throws IllegalArgumentException {
+		//Abfragen des eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 
@@ -797,8 +835,17 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		return us;
 	}
 
+	/**
+	 * Initalisierungsmethode. Diese Methode muss für jede instant aufgerufen
+	 * werden.
+	 */
 	@Override
 	public void init() throws IllegalArgumentException {
+		/*
+		 * Ganz wesentlich ist, dass die TextyAdministrationImpl einen
+		 * vollständigen Satz von Mappern besitzt, mit deren Hilfe sie dann mit
+		 * der Datenbank kommunizieren kann.
+		 */
 		this.cMapper = ConversationMapper.conversationMapper();
 		this.hMapper = HashtagMapper.hashtagMapper();
 		this.hsMapper = HashtagSubscriptionMapper.hashtagSubscriptionMapper();
@@ -828,11 +875,14 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public void updateUserData(String firstName, String lastName)
 			throws IllegalArgumentException {
+		//Abfragen des eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
+		//Abgleich des Google Nutzers mit den Nutzer aus der Db
 		User us = this.uMapper.findByEmail(user.getEmail());
+		//Wenn User in DB ist, werden die Daten gesetzt und update aus Mapper aufgerufen
 		if (us != null) {
 			us.setFirstName(firstName);
 			us.setLastName(lastName);
