@@ -6,13 +6,16 @@ import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 import hdm.itprojekt.texty.shared.bo.UserSubscription;
-
 import java.util.Date;
 import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+/**
+ * Sychrones Interface für RPC Fähige Klasse zu verwalten des Messengers Für
+ * eine detailierte Dokumentation der einzelnen Methoden sie
+ * {@link hdm.itprojekt.texty.server.TextyAdministrationImpl} .
+ */
 @RemoteServiceRelativePath("administration")
 public interface TextyAdministration extends RemoteService {
 
@@ -62,11 +65,12 @@ public interface TextyAdministration extends RemoteService {
 
 	public Vector<Message> getAllMessagesFromUser(User user)
 			throws IllegalArgumentException;
-	
+
 	public Vector<Message> getAllMessagesWhereUserIsAuthor(User user)
 			throws IllegalArgumentException;
-	
-	public Vector<Message> getAllMessagesWhereUserIsAuthorByDate (User user, Date startDate, Date endDate) throws IllegalArgumentException;
+
+	public Vector<Message> getAllMessagesWhereUserIsAuthorByDate(User user,
+			Date startDate, Date endDate) throws IllegalArgumentException;
 
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException;
@@ -84,8 +88,9 @@ public interface TextyAdministration extends RemoteService {
 
 	public Vector<User> getAllSubscribedUsersFromUser(User selectedUser)
 			throws IllegalArgumentException;
-	
-	public Vector<Message> getAllPublicMessagesFromHashtag(Hashtag selectedHashtag) throws IllegalArgumentException;
+
+	public Vector<Message> getAllPublicMessagesFromHashtag(
+			Hashtag selectedHashtag) throws IllegalArgumentException;
 
 	public Vector<User> getAllUsers() throws IllegalArgumentException;
 
@@ -96,5 +101,4 @@ public interface TextyAdministration extends RemoteService {
 	public void updateUserData(String firstName, String lastName)
 			throws IllegalArgumentException;
 
-	//public Vector<Message> getAllMesagesFromConversation(Message message) throws IllegalArgumentException;
 }

@@ -12,6 +12,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+
+
+/**Das asynchrone Gegenstück des Interface {@link TextyAdministration}. Es wird
+* semiautomatisch durch das Google Plugin erstellt und gepflegt. Daher erfolgt
+* hier keine weitere Dokumentation. Für weitere Informationen siehe das
+* synchrone Interface {@link TextyAdministration}.
+*/
 public interface TextyAdministrationAsync {
 
 	void addMessageToConversation(Conversation c, String text,
