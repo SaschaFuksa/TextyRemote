@@ -45,7 +45,6 @@ public class SingleConversationViewer extends TextyForm {
 			"Reply to this conversations or edit you messages!");
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private FlexTable chatFlexTable = new FlexTable();
-	private RefreshForm refreshForm = new RefreshForm("");
 
 	/**
 	 * Deklaration, Definition und Initialisierung BO.
@@ -83,7 +82,6 @@ public class SingleConversationViewer extends TextyForm {
 	@Override
 	protected void run() {
 		
-		refreshForm.run();
 
 		/*
 		 * Holt den aktuellen User aus der Datenbank.

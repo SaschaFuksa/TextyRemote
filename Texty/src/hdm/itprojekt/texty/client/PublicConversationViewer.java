@@ -36,7 +36,6 @@ public class PublicConversationViewer extends TextyForm {
 	/**
 	 * Deklaration, Definition und Initialisierung der Widget.
 	 */
-	private RefreshForm refreshForm = new RefreshForm("");
 	private Vector<Conversation> conversationListOfUser = new Vector<Conversation>();
 	private FlexTable conversationTable = new FlexTable();
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -68,7 +67,6 @@ public class PublicConversationViewer extends TextyForm {
 	@Override
 	protected void run() {
 
-		refreshForm.run();
 		
 		/*
 		 * Falls der ausgewählte User noch keine oeffentliche Nachricht gepostet

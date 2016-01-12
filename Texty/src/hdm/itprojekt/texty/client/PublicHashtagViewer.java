@@ -28,7 +28,6 @@ public class PublicHashtagViewer extends TextyForm {
 	/**
 	 * Deklaration, Definition und Initialisierung der Widget.
 	 */
-	private RefreshForm refreshForm = new RefreshForm("");
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Vector<Message> messageListofHashtag = new Vector<Message>();
 	private Label text = new Label(
@@ -56,7 +55,6 @@ public class PublicHashtagViewer extends TextyForm {
 	@Override
 	protected void run() {
 		
-		refreshForm.run();
 
 		/*
 		 * Falls noch keine oeffentliche Nachricht des beinhalteten Hashtags von

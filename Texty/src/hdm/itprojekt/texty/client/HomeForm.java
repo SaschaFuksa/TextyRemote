@@ -49,7 +49,6 @@ public class HomeForm extends TextyForm {
 	private ScrollPanel scrollHashtag = new ScrollPanel(contentHashtag);
 	private FlexTable cellListUser = new FlexTable();
 	private FlexTable cellListHashtag = new FlexTable();
-	private RefreshForm refreshForm = new RefreshForm("");
 
 	/**
 	 * administration ermöglicht die asynchrone Kommunikation mit der
@@ -77,7 +76,6 @@ public class HomeForm extends TextyForm {
 	@Override
 	protected void run() {
 		
-		refreshForm.run();
 
 		// Abonnierte User und deren Postings
 		administration.getAllSubscribedUsers(getAllSubscribedUsersExecute());
