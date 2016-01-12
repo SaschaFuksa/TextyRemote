@@ -5,14 +5,11 @@ import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
-import java.util.Collections;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -81,7 +78,6 @@ public class SingleConversationViewer extends TextyForm {
 	 */
 	@Override
 	protected void run() {
-		
 
 		/*
 		 * Holt den aktuellen User aus der Datenbank.
@@ -108,9 +104,8 @@ public class SingleConversationViewer extends TextyForm {
 		mainPanel.add(scroll);
 		mainPanel.add(replyButton);
 
-		
 		this.add(mainPanel);
-		
+
 		/*
 		 * Nachdem das Formular aufgebaut ist, wird die Höhe des jeweiligen
 		 * Panels ausgelesen und als Höhe der Scrollbars gesetzt.
@@ -121,7 +116,6 @@ public class SingleConversationViewer extends TextyForm {
 			}
 		});
 
-		
 	}
 
 	/**

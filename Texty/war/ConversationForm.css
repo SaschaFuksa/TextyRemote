@@ -13,10 +13,33 @@
 	width: 100%;
 }
 
+#singlePublicConversation {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
 #publicConversation {
 	height: 40%;
 	float: right;
 	width: 100%;
+}
+
+#publicMessageBottom {
+	border-color: #C62133;
+	border-style: solid;
+    border-width: 5px;
+	width: 100%;
+}
+
+#publicMessageHead {
+	background-color: #C62133;
+	margin-bottom: 10px;
+	padding: 5px;
+	width: 100%;
+}
+
+#publicMessageHead:hover {
+	background-color: #D56B76;
 }
 
 .chatFlexTableCell {
@@ -60,6 +83,11 @@
 	margin-bottom: 10px;
 	padding: 5px;
 	width: 100%;
+
+}
+
+#conversation:hover {
+	background-color: #80bfff;
 }
 
 #publicConversation {
@@ -69,10 +97,6 @@
 	margin-bottom: 5px;
 	padding: 5px;
 	width: 100%;
-}
-
-#conversation:hover {
-	background-color: #80bfff;
 }
 
 #conversationHead {

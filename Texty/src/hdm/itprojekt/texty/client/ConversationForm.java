@@ -234,23 +234,31 @@ public class ConversationForm extends TextyForm {
 
 			else if (duration < ONE_HOURS) {
 				Date durationDate = new Date(duration * 1000);
-				dateString = "Before "
-						+ DateTimeFormat.getFormat("mm").format(durationDate)
-						+ " minutes";
+				dateString = DateTimeFormat.getFormat("mm").format(durationDate)
+						+ " minutes ago";
+				
+				if(ONE_DAYS - ONE_HOURS < duration && duration < ONE_DAYS){
+					dateString = "23:" + DateTimeFormat.getFormat("mm").format(
+							conversation.getLastMessage().getDateOfCreation()) + " ago";
+				}
+			}
+			
+			else if(duration >= ONE_HOURS && duration <= ONE_HOURS*2) {
+				Date durationDate = new Date(duration * 1000);
+				dateString = DateTimeFormat.getFormat("HH").format(durationDate)
+						+ " hour ago";
 			}
 
 			else if (duration < ONE_DAYS) {
 				Date durationDate = new Date(duration * 1000);
-				dateString = "Before "
-						+ DateTimeFormat.getFormat("HH").format(durationDate)
-						+ " hours";
+				dateString = DateTimeFormat.getFormat("HH").format(durationDate)
+						+ " hours ago";
 			}
 
 			else if (duration < ONE_MONTH) {
 				Date durationDate = new Date(duration * 1000);
-				dateString = "Before "
-						+ DateTimeFormat.getFormat("dd").format(durationDate)
-						+ " days";
+				dateString = DateTimeFormat.getFormat("dd").format(durationDate)
+						+ " days ago";
 			}
 
 			else if (duration > ONE_MONTH) {

@@ -212,7 +212,32 @@ public class SingleMessageView extends VerticalPanel {
 
 			@Override
 			public void onSuccess(Void nothing) {
+				conversation.removeMessageFromConversation(message);
 
+				messageTable.removeFromParent();
+
+				/*
+				 * Überprüfung ob die letzte Nachricht der Unterhaltung gelöscht
+				 * wurde.
+				 */
+				if (conversation.getListOfMessage().size() == 0) {
+					/*
+					 * Entfernung der Child Widgets vom jeweiligen Parent
+					 * Widget.
+					 */
+					RootPanel.get("Navigator").clear();
+
+					/*
+					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+					 */
+					if (conversation.isPublicly()) {
+						RootPanel.get("Navigator").add(new HomeForm("Home"));
+					} else {
+						RootPanel.get("Navigator").add(
+								new ConversationForm("Conversations"));
+					}
+				}
+				
 			}
 		};
 		return asyncCallback;
@@ -260,8 +285,13 @@ public class SingleMessageView extends VerticalPanel {
 				 */
 				if (message.getId() == conversation.getLastMessage().getId()) {
 					RootPanel.get("Navigator").clear();
-					RootPanel.get("Navigator").add(
-							new ConversationForm("Conversations"));
+					if (conversation.isPublicly()) {
+						RootPanel.get("Navigator").add(new HomeForm("Home"));
+					} else {
+						RootPanel.get("Navigator").add(
+								new ConversationForm("Conversations"));
+					}
+
 				}
 
 				/*
@@ -290,37 +320,6 @@ public class SingleMessageView extends VerticalPanel {
 				 */
 				administration.deleteMessage(conversation, message,
 						deleteMessageExecute());
-				conversation.removeMessageFromConversation(message);
-
-				/*
-				 * Entfernung der Child Widgets vom jeweiligen Parent Widget.
-				 */
-				RootPanel.get("Details").clear();
-
-				/*
-				 * Überprüfung ob die letzte Nachricht der Unterhaltung gelöscht
-				 * wurde.
-				 */
-				if (conversation.getListOfMessage().size() == 0) {
-					/*
-					 * Entfernung der Child Widgets vom jeweiligen Parent
-					 * Widget.
-					 */
-					RootPanel.get("Navigator").clear();
-
-					/*
-					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
-					 */
-					RootPanel.get("Navigator").add(
-							new ConversationForm("Conversations"));
-				} else {
-					/*
-					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
-					 */
-					RootPanel.get("Details").add(
-							new SingleConversationViewer(
-									"Private Conversation", conversation));
-				}
 			}
 		});
 		return deleteButton;

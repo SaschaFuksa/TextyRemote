@@ -2,7 +2,7 @@ package hdm.itprojekt.texty.client;
 
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
-import hdm.itprojekt.texty.shared.bo.Message;
+import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Date;
 import java.util.Vector;
@@ -45,6 +45,11 @@ public class PublicConversationViewer extends TextyForm {
 			"Here you can see all public messages from your subscribed user!");
 
 	/**
+	 * Deklaration, Definition und Initialisierung BO.
+	 */
+	private User user = new User();
+
+	/**
 	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
 	 * Des weiteren werden alle oeffentlichen Unterhaltungen des Users
 	 * uebergeben
@@ -67,13 +72,15 @@ public class PublicConversationViewer extends TextyForm {
 	@Override
 	protected void run() {
 
-		
 		/*
 		 * Falls der ausgewählte User noch keine oeffentliche Nachricht gepostet
 		 * hat, wird ein entsprechender Hinweis angezeigt
 		 */
 		if (conversationListOfUser.size() == 0) {
 			text.setText("Oops! This user still doesn't have any public conversations!");
+		} else {
+			user = conversationListOfUser.firstElement().getFirstMessage()
+					.getAuthor();
 		}
 
 		/*
@@ -170,7 +177,7 @@ public class PublicConversationViewer extends TextyForm {
 			} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
 				dateString = DateTimeFormat.getFormat("dd.MM").format(baseDate)
 						+ " at "
-						+ DateTimeFormat.getFormat("HH").format(baseDate) + "h";
+						+ DateTimeFormat.getFormat("HH:mm").format(baseDate);
 			}
 
 			else if (duration > ONE_MONTH) {
@@ -189,7 +196,7 @@ public class PublicConversationViewer extends TextyForm {
 			Label dateLabel = new Label(dateString);
 			Label textLabel = new Label(text);
 
-			wrapper.addClickHandler(createClickHandler(conversation, chatPanel));
+			wrapper.addClickHandler(createClickHandler(conversation, chatPanel, messageTable));
 
 			/*
 			 * Hinzufügen der Widgets in die jeweilige Spalte der FlexTable
@@ -208,7 +215,7 @@ public class PublicConversationViewer extends TextyForm {
 	} // Ende for-Schleife
 
 	private ClickHandler createClickHandler(final Conversation conversation,
-			final VerticalPanel chatPanel) {
+			final VerticalPanel chatPanel, final FlexTable messageTable) {
 		ClickHandler clickHandler = new ClickHandler() {
 			boolean state = true;
 
@@ -217,111 +224,37 @@ public class PublicConversationViewer extends TextyForm {
 
 				if (state) {
 					VerticalPanel contentMessage = new VerticalPanel();
-					
+
 					ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
 					chatPanel.add(scrollMessage);
 					contentMessage.getElement().setId("fullWidth");
 					scrollMessage.setHeight("200px");
 
 					for (int i = 1; i < conversation.getListOfMessage().size(); i++) {
-						FlexTable messageTable = createSingleMessage(conversation
-								.getListOfMessage().get(i));
-						contentMessage.add(messageTable);
+						SingleMessageView singleMessage = new SingleMessageView(
+								conversation.getListOfMessage().get(i), user,
+								conversation);
+						singleMessage.getElement().setId(
+								"singlePublicConversation");
+						contentMessage.add(singleMessage);
 					}
 					Button replyButton = createReplyButton(conversation);
 					replyButton.getElement().setId("button");
 					contentMessage.add(replyButton);
 					scrollMessage.scrollToBottom();
+					chatPanel.getElement().setId("publicMessageBottom");
+					messageTable.getElement().setId("publicMessageHead");
 					state = false;
 				} else {
 					chatPanel.clear();
+					chatPanel.getElement().setId("fullWidth");
+					messageTable.getElement().setId("conversation");
 					state = true;
 				}
 
 			}
 		};
 		return clickHandler;
-	}
-
-	/**
-	 * Erzeugen einer einzelnen Nachricht der Unterhaltung
-	 * @param message
-	 * @return
-	 */
-	private FlexTable createSingleMessage(Message message) {
-		FlexTable messageTable = new FlexTable();
-		
-		/*
-		 * Zuweisung der Styles an das jeweilige Widget.
-		 */
-		messageTable.getElement().setId("publicConversation");
-
-		String author = message.getAuthor().getFirstName();
-		String keywordList = new String();
-
-		/*
-		 * Geht jeden Hashtag in der Nachricht durch und übergibt diese an die
-		 * keywordList
-		 */
-		for (Hashtag hashtag : message.getListOfHashtag()) {
-			keywordList = keywordList + "#" + hashtag.getKeyword() + " ";
-		}
-
-		String dateString = DateTimeFormat.getFormat("HH:mm").format(
-				message.getDateOfCreation());
-
-		Date afterDate = new Date();
-		Date baseDate = message.getDateOfCreation();
-
-		long afterTime = afterDate.getTime() / 1000;
-		long baseTime = baseDate.getTime() / 1000;
-
-		long duration = afterTime - baseTime;
-
-		/*
-		 * Unterschiedliche Behandlung der Datumanzeige
-		 */
-		if (duration < ONE_DAYS) {
-			String baseDay = DateTimeFormat.getFormat("dd").format(baseDate);
-			String afterDay = DateTimeFormat.getFormat("dd").format(afterDate);
-
-			if (!baseDay.equals(afterDay)) {
-				dateString = "yesterday at " + dateString;
-			}
-
-		} else if (duration > ONE_DAYS && duration < ONE_MONTH) {
-			dateString = DateTimeFormat.getFormat("dd.MM").format(baseDate)
-					+ " at " + DateTimeFormat.getFormat("HH").format(baseDate)
-					+ "h";
-		}
-
-		else if (duration > ONE_MONTH) {
-			dateString = DateTimeFormat.getFormat("MM.yyyy").format(baseDate)
-					+ " at " + DateTimeFormat.getFormat("dd").format(baseDate)
-					+ ", " + DateTimeFormat.getFormat("HH").format(baseDate)
-					+ "h";
-		}
-
-		String text = message.getText();
-
-		Label authorLabel = new Label(author);
-		Label hashtagLabel = new Label(keywordList);
-		Label dateLabel = new Label(dateString);
-		Label textLabel = new Label(text);
-
-		dateLabel.getElement().setId("floatRight");
-		messageTable.getFlexCellFormatter().setColSpan(1, 0, 3);
-		messageTable.getFlexCellFormatter().setColSpan(2, 0, 3);
-
-		/*
-		 * Hinzufügen der Widgets in die jeweilige Spalte der FlexTable
-		 */
-		messageTable.setWidget(0, 0, authorLabel);
-		messageTable.setWidget(0, 1, dateLabel);
-		messageTable.setWidget(1, 0, textLabel);
-		messageTable.setWidget(2, 0, hashtagLabel);
-
-		return messageTable;
 	}
 
 	/**
@@ -333,12 +266,12 @@ public class PublicConversationViewer extends TextyForm {
 		Button replyButton = new Button("Reply", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				/*
 				 * Entfernung der Child Widgets vom jeweiligen Parent Widget.
 				 */
 				RootPanel.get("Info").clear();
-				
+
 				/*
 				 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
 				 */
