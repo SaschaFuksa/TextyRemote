@@ -5,11 +5,13 @@ import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -31,6 +33,11 @@ public class SingleConversationViewer extends TextyForm {
 	 */
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
+
+	/**
+	 * Zeitintervall des automatischen Refresh.
+	 */
+	private static final int REFRESH_INTERVAL = 5000;
 
 	/**
 	 * Deklaration, Definition und Initialisierung der Widget.
@@ -107,6 +114,18 @@ public class SingleConversationViewer extends TextyForm {
 		this.add(mainPanel);
 
 		/*
+		 * Timer um eine automatische Überprüfung vorzunehmen, ob eine neue
+		 * Nachricht der Unterhaltung hinzugefügt wurde.
+		 */
+		Timer refreshTimer = new Timer() {
+			@Override
+			public void run() {
+				checkNewMessage();
+			}
+		};
+		refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
+
+		/*
 		 * Nachdem das Formular aufgebaut ist, wird die Höhe des jeweiligen
 		 * Panels ausgelesen und als Höhe der Scrollbars gesetzt.
 		 */
@@ -140,6 +159,48 @@ public class SingleConversationViewer extends TextyForm {
 				currentUser = result;
 				showAllMessages();
 			}
+		};
+		return asyncCallback;
+	}
+	
+	/**
+	 * AsyncCallback zur Überprüfung der Aktualität der Unterhaltung.
+	 */
+	private AsyncCallback<Vector<Message>> getRecentMessagesExecute(){
+		AsyncCallback<Vector<Message>> asyncCallback = new AsyncCallback<Vector<Message>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+				
+			}
+
+			@Override
+			public void onSuccess(Vector<Message> result) {
+				/*
+				 * Überprüfung ob neue Nachrichten in der Unterhaltung sind.
+				 */
+				if(result.size() > 0){
+					for(Message message : result){
+						conversation.addMessageToConversation(message);
+						SingleMessageView messageView = new SingleMessageView(message,
+								currentUser, conversation);
+
+						/*
+						 * Zuweisung der Styles an das jeweilige Widget.
+						 */
+						chatFlexTable.getColumnFormatter().addStyleName(chatFlexTable.getRowCount(),
+								"chatFlexTableCell");
+
+						/*
+						 * Fügt die neue Nachricht der Tabelle zu.
+						 */
+						chatFlexTable.setWidget(chatFlexTable.getRowCount(), 0, messageView);
+					}
+				}
+				
+			}
+			
 		};
 		return asyncCallback;
 	}
@@ -179,6 +240,13 @@ public class SingleConversationViewer extends TextyForm {
 		}
 		scroll.scrollToBottom();
 	}
+	
+	/**
+	 * Methode zur Überprüfung der Aktualität der Unterhaltung.
+	 */
+	private void checkNewMessage(){
+		administration.getRecentMessages(conversation.getLastMessage(), getRecentMessagesExecute());
+	}
 
 	/**
 	 * Button zum Antworten in Unterhaltungen.
@@ -204,4 +272,5 @@ public class SingleConversationViewer extends TextyForm {
 		});
 		return replyButton;
 	}
+	
 }

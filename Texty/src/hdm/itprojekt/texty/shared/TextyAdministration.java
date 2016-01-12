@@ -100,5 +100,7 @@ public interface TextyAdministration extends RemoteService {
 
 	public void updateUserData(String firstName, String lastName)
 			throws IllegalArgumentException;
+	
+	public Vector<Message> getRecentMessages(Message message) throws IllegalArgumentException;
 
 }

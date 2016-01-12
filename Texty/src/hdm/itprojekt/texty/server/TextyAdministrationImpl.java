@@ -894,4 +894,10 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	@Override
+	public Vector<Message> getRecentMessages(Message message)
+			throws IllegalArgumentException {
+		return this.mMapper.selectRecentMessages(message);
+	}
+
 }

@@ -1,16 +1,21 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Conversation;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Date;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.shared.DateTimeFormat;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -28,10 +33,22 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class PublicConversationViewer extends TextyForm {
 
+	/**
+	 * Der LOG gibt eine mögliche Exception bzw. den Erfolg des asynchronen
+	 * Callbacks aus.
+	 */
+	private static final Logger LOG = Logger
+			.getLogger(SingleConversationViewer.class.getSimpleName());
+	
 	private final static long ONE_MINUTE = 60;
 	private final static long ONE_HOURS = 60 * ONE_MINUTE;
 	private final static long ONE_DAYS = 24 * ONE_HOURS;
 	private final static long ONE_MONTH = 30 * ONE_DAYS;
+	
+	/**
+	 * Zeitintervall des automatischen Refresh.
+	 */
+	private static final int REFRESH_INTERVAL = 5000;
 
 	/**
 	 * Deklaration, Definition und Initialisierung der Widget.
@@ -47,8 +64,15 @@ public class PublicConversationViewer extends TextyForm {
 	/**
 	 * Deklaration, Definition und Initialisierung BO.
 	 */
-	private User user = new User();
+	private User currentUser = new User();
 
+	/**
+	 * Die administration ermöglicht die asynchrone Kommunikation mit der
+	 * Applikationslogik.
+	 */
+	private final TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
+	
 	/**
 	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
 	 * Des weiteren werden alle oeffentlichen Unterhaltungen des Users
@@ -73,14 +97,16 @@ public class PublicConversationViewer extends TextyForm {
 	protected void run() {
 
 		/*
+		 * Holt den aktuellen User aus der Datenbank.
+		 */
+		administration.getCurrentUser(getCurrentUserExecute());
+		
+		/*
 		 * Falls der ausgewählte User noch keine oeffentliche Nachricht gepostet
 		 * hat, wird ein entsprechender Hinweis angezeigt
 		 */
 		if (conversationListOfUser.size() == 0) {
 			text.setText("Oops! This user still doesn't have any public conversations!");
-		} else {
-			user = conversationListOfUser.firstElement().getFirstMessage()
-					.getAuthor();
 		}
 
 		/*
@@ -115,6 +141,82 @@ public class PublicConversationViewer extends TextyForm {
 				mainPanel.add(scroll);
 			}
 		});
+	}
+	
+	/**
+	 * AsyncCallback für das Auslesen des aktuellen User aus der Datenbank.
+	 * 
+	 * @return
+	 */
+	private AsyncCallback<User> getCurrentUserExecute() {
+		AsyncCallback<User> asyncCallback = new AsyncCallback<User>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(User result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				/*
+				 * Übergibt das result an currentUser und zeigt im Anschluss
+				 * alle Nachrichten der Unterhaltung an.
+				 */
+				currentUser = result;
+			}
+		};
+		return asyncCallback;
+	}
+	
+	/**
+	 * AsyncCallback zur Überprüfung der Aktualität der Unterhaltung.
+	 */
+	private AsyncCallback<Vector<Message>> getRecentMessagesExecute(final Conversation conversation, final VerticalPanel contentMessage, final Button replyButton){
+		AsyncCallback<Vector<Message>> asyncCallback = new AsyncCallback<Vector<Message>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+				
+			}
+
+			@Override
+			public void onSuccess(Vector<Message> result) {
+				/*
+				 * Überprüfung ob neue Nachrichten in der Unterhaltung sind.
+				 */
+				if(result.size() > 0){
+					
+					replyButton.removeFromParent();
+					
+					for(Message message : result){
+						conversation.addMessageToConversation(message);
+						SingleMessageView messageView = new SingleMessageView(message,
+								currentUser, conversation);
+						
+						messageView.getElement().setId(
+								"singlePublicConversation");
+						
+						/*
+						 * Fügt die neue Nachricht dem Panel zu.
+						 */
+						contentMessage.add(messageView);
+					}
+					
+					contentMessage.add(replyButton);
+				}
+				
+			}
+			
+		};
+		return asyncCallback;
+	}
+	
+	/**
+	 * Methode zur Überprüfung der Aktualität der Unterhaltung.
+	 */
+	private void checkNewMessage(Conversation conversation, VerticalPanel contentMessage, Button replyButton){
+		administration.getRecentMessages(conversation.getLastMessage(), getRecentMessagesExecute(conversation, contentMessage, replyButton));
 	}
 
 	/**
@@ -223,23 +325,36 @@ public class PublicConversationViewer extends TextyForm {
 			public void onClick(ClickEvent event) {
 
 				if (state) {
-					VerticalPanel contentMessage = new VerticalPanel();
+					
+					final VerticalPanel contentMessage = new VerticalPanel();
+					final Button replyButton = createReplyButton(conversation);
+					replyButton.getElement().setId("button");
 
 					ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
 					chatPanel.add(scrollMessage);
 					contentMessage.getElement().setId("fullWidth");
 					scrollMessage.setHeight("200px");
+					
+					/*
+					 * Timer um eine automatische Überprüfung vorzunehmen, ob eine neue
+					 * Nachricht der Unterhaltung hinzugefügt wurde.
+					 */
+					Timer refreshTimer = new Timer() {
+						@Override
+						public void run() {
+							checkNewMessage(conversation, contentMessage, replyButton);
+						}
+					};
+					refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
 
 					for (int i = 1; i < conversation.getListOfMessage().size(); i++) {
 						SingleMessageView singleMessage = new SingleMessageView(
-								conversation.getListOfMessage().get(i), user,
+								conversation.getListOfMessage().get(i), currentUser,
 								conversation);
 						singleMessage.getElement().setId(
 								"singlePublicConversation");
 						contentMessage.add(singleMessage);
 					}
-					Button replyButton = createReplyButton(conversation);
-					replyButton.getElement().setId("button");
 					contentMessage.add(replyButton);
 					scrollMessage.scrollToBottom();
 					chatPanel.getElement().setId("publicMessageBottom");

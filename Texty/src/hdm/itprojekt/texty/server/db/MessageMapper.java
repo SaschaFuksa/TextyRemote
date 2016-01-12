@@ -471,7 +471,8 @@ public class MessageMapper {
 	 *            um die conversationId herauszufinden.
 	 * @return
 	 */
-	public Vector<Message> selectAllMesagesFromConversation(Conversation conversation) {
+	public Vector<Message> selectAllMesagesFromConversation(
+			Conversation conversation) {
 		// Datenbankverbindung holen
 		Connection con = DBConnection.connection();
 		// Ergebnisvektor vorbereiten
@@ -647,5 +648,54 @@ public class MessageMapper {
 		}
 		// Message Objekt zurückgeben
 		return message;
+	}
+
+	public Vector<Message> selectRecentMessages(Message message) {
+		
+		//setzt result des statements.
+		Vector<Message> result = new Vector<Message>();
+		
+		// Datenbankverbindung holen
+		Connection con = DBConnection.connection();
+		try {
+			// Neues Statement anlegen
+			Statement stmt = con.createStatement();
+			// Statement ausfüllen und als Query an die Datenbank schicken
+			ResultSet rsMessages = stmt
+					.executeQuery("SELECT * FROM textydb.message WHERE message.dateOfCreation > '"
+							+ message.getDateOfCreation()
+							+ "' AND message.visibility = '1' AND message.conversationId = '"
+							+ message.getConversationID() + "'");
+
+			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
+			while (rsMessages.next()) {
+				Message messages = new Message();
+
+				messages.setId(rsMessages.getInt("message.messageId"));
+
+				messages.setAuthor(findAuthor(messages));
+				messages.setListOfReceivers(findReceivers(messages));
+				messages.setListOfHashtag(findHashtagsInMessage(messages));
+
+				messages.setText(rsMessages.getString("message.messageText"));
+				messages.setConversationID(rsMessages
+						.getInt("message.conversationId"));
+				messages.setVisible(rsMessages.getBoolean("message.visibility"));
+				messages.setDateOfCreation(rsMessages
+						.getTimestamp("message.dateOfCreation"));
+				// Das Objekt wird nun dem Ergebnisvektor hinzugefügt
+				result.addElement(messages);
+			}
+
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// SELECT * FROM textydb.message WHERE message.dateOfCreation >
+		// '2016-01-12 15:15:09';
+
+		return null;
 	}
 }
