@@ -13,9 +13,12 @@ import hdm.itprojekt.texty.shared.bo.HashtagSubscription;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 import hdm.itprojekt.texty.shared.bo.UserSubscription;
+
 import java.util.Collections;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -852,6 +855,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		this.mMapper = MessageMapper.messageMapper();
 		this.uMapper = UserMapper.userMapper();
 		this.usMapper = UserSubscriptionMapper.userSubscriptionMapper();
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+1:00"));
 
 	}
 

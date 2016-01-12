@@ -11,21 +11,21 @@
 	</welcome-file-list>
 
 	<security-constraint>
-        <web-resource-collection>
-            <web-resource-name>profile</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>*</role-name>
-        </auth-constraint>
-    </security-constraint>
-	
+		<web-resource-collection>
+			<web-resource-name>profile</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>hdm.itprojekt.texty.server.LoginServiceImpl</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>administrationServlet</servlet-name>
 		<servlet-class>hdm.itprojekt.texty.server.TextyAdministrationImpl</servlet-class>
@@ -36,7 +36,7 @@
 		<url-pattern>/texty/login</url-pattern>
 		<url-pattern>/textyreports/login</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>administrationServlet</servlet-name>
 		<url-pattern>/texty/administration</url-pattern>
