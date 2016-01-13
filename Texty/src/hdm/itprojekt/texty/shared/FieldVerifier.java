@@ -42,7 +42,7 @@ public class FieldVerifier {
 	}
 	
 	public static boolean isValidHashtag(String keyword) {
-		if (keyword.length() < 3){
+		if (keyword.length() <3){
 			return false;
 		}
 		return true;

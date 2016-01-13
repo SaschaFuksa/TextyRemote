@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -478,26 +479,32 @@ public class MessageForm extends VerticalPanel {
 		KeyUpHandler suggestBoxHandler = new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				infoBox.clear();
 
-				/*
-				 * Erzeugt aus den Text aus dem Suchfeld das Keyword und
-				 * entfernt ggf. Leerzeichen.
-				 */
-				String keyword = suggestBox.getText().trim()
-						.replaceAll(" ", "");
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 
-				/*
-				 * Überprüfung ob mindestens drei Zeichen eingegeben wurden.
-				 */
-				if (!FieldVerifier.isValidHashtag(keyword)) {
-					infoBox.setWarningText("Please select a Hashtag with at least three characters!");
-				} else {
+					infoBox.clear();
+
 					/*
-					 * Fügt den ausgewählten Hashtag über addHashtag() den
-					 * selectedHashtag hinzu.
+					 * Erzeugt aus den Text aus dem Suchfeld das Keyword und
+					 * entfernt ggf. Leerzeichen.
 					 */
-					addHashtag(keyword);
+					String keyword = suggestBox.getText().trim()
+							.replaceAll(" ", "");
+
+					/*
+					 * Überprüfung ob mindestens drei Zeichen eingegeben wurden.
+					 */
+					if (!FieldVerifier.isValidHashtag(keyword)) {
+						infoBox.setWarningText("Please select a Hashtag with at least three characters!");
+					} else {
+						/*
+						 * Fügt den ausgewählten Hashtag über addHashtag() den
+						 * selectedHashtag hinzu.
+						 */
+						addHashtag(keyword);
+
+					}
+
 				}
 			}
 		};
