@@ -7,17 +7,20 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 import hdm.itprojekt.texty.client.ClientsideSettings;
+import hdm.itprojekt.texty.client.InfoBox;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Message;
@@ -37,6 +40,8 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	private static Vector<User> allUser = new Vector<User>();
 	private Date date1;
 	private Date date2;
+	private ScrollPanel scrollPanel = new ScrollPanel();
+	private InfoBox infoBox = new InfoBox();
 
 	public MessagesOfUserInPeriod(String headline) {
 		super(headline);
@@ -48,34 +53,98 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		
 		//Aufbau der GUI
 		
-		// Create a date picker
+		// Hinzufügen eines date pickers für das Startdatum
 	    DateBox startDateBox = new DateBox();
+	    startDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss")));
+	    startDateBox.setFireNullValues(true);
 
-	    // Set the value in the text box when the user selects a date
+	    // Setzen des Wertes in die TextBox, den der User auswählt
 	    startDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date1 = event.getValue();
 	      }
+	      
 	    });
+//		// Create a date picker
+//	    DateBox startDateBox = new DateBox();
+//
+//	    // Set the value in the text box when the user selects a date
+//	    startDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+//	      public void onValueChange(ValueChangeEvent<Date> event) {
+//	        date1 = event.getValue();
+//	      }
+//	    });
 
-	    
-	 // Create a second date picker
+	 // Hinzufügen eines date pickers für das Enddatum
 	    DateBox endDateBox = new DateBox();
-
-	    // Set the value in the text box when the user selects a date
+	    endDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss")));
+	    endDateBox.setFireNullValues(true);
+	    // Setzen des Wertes in die TextBox, den der User auswählt
 	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date2 = event.getValue();
+	        date2.setHours(23);
+	        date2.setMinutes(59);
+	        date2.setSeconds(59);
 	      }
 	    });
+//	 // Create a second date picker
+//	    DateBox endDateBox = new DateBox();
+//
+//	    // Set the value in the text box when the user selects a date
+//	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+//	      public void onValueChange(ValueChangeEvent<Date> event) {
+//	        date2 = event.getValue();
+//	      }
+//	    });
 
 
 		//Hinzufügen des Buttons zum auslösen des MessagesOfUserInPeriod-Reports
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String nickName = getNickName(suggestBox.getText());
-				User user = getUserOutOfAllUser(nickName);
+				
+				infoBox.clear();
+				scrollPanel.clear();
+				
+				if(suggestBox.getText() == ""){
+					infoBox.setWarningText("Please select a user!");
+				}else{	
+					String nickName = getNickName(suggestBox.getText());
+					User user = getUserOutOfAllUser(nickName);
+				
+				if (user == null){
+					infoBox.setErrorText("Unknown User!");
+				}else{
+					if (date1 == null || date2 == null){
+						if (date1 == null && date2 == null)	
+							infoBox.setWarningText("Please select startdate & enddate!");
+						else if(date1 == null)
+							infoBox.setWarningText("Please select startdate!");
+						else
+							infoBox.setWarningText("Please select enddate!");
+					}else {
+//				if (date1 == null || date2 == null || suggestBox.getText() == "")
+//				if(suggestBox.getText() == ""){
+//					infoBox.setWarningText("Please select a user!");
+//				}else{	
+//					String nickName = getNickName(suggestBox.getText());
+//					User user = getUserOutOfAllUser(nickName);
+//				
+//				if (user == null){
+//					infoBox.setErrorText("Unknown User!");
+//				}else{
+//					if (date1 == null || date2 == null){
+//						if (date1 == null && date2 == null)	
+//							infoBox.setWarningText("Please select startdate & enddate!");
+//						else if(date1 == null)
+//							infoBox.setWarningText("Please select startdate!");
+//						else
+//							infoBox.setWarningText("Please select enddate!");
+//					}else {
+//				
+				//String nickName = getNickName(suggestBox.getText());
+				//User user = getUserOutOfAllUser(nickName);
 				
 				// 
 				administration.getAllMessagesWhereUserIsAuthorByDate(user, date1, date2,new AsyncCallback<Vector<Message>>() {
@@ -85,12 +154,17 @@ public class MessagesOfUserInPeriod extends TextyForm{
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
-						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLMessagesFromUserInPeriod.generateMessagesFromUserInPeriodReport(result));
+						scrollPanel.setSize("100%", "100%");
+						RootPanel.get("Details").add(scrollPanel);
+						scrollPanel.add(HTMLMessagesFromUserInPeriod.generateMessagesFromUserInPeriodReport(result));
 					}
 				});
+				}
+				}
 			};
+			}
 		});
+		
 							    
 					  
 		//Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich	
@@ -107,6 +181,9 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		
 		// Show-Button
 		chatFlexTable.setWidget(5, 1, MessageReport);
+		
+		//Hinzufügen der infoBox für Fehlermeldungen
+		chatFlexTable.setWidget(6, 1, infoBox);
 				
 		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);

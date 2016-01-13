@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.client.ClientsideSettings;
+import hdm.itprojekt.texty.client.InfoBox;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Message;
@@ -13,13 +14,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.gwt.user.datepicker.client.DateBox.Format;
 
 
 public class MessagesOfPeriod extends TextyForm {
@@ -34,6 +39,8 @@ public class MessagesOfPeriod extends TextyForm {
 	private Date date2;
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
+	private ScrollPanel scrollPanel = new ScrollPanel();
+	private InfoBox infoBox = new InfoBox();
 
 
 	public MessagesOfPeriod(String headline) {
@@ -43,25 +50,32 @@ public class MessagesOfPeriod extends TextyForm {
 
 	@Override
 	public void run() {
-		
+				
 		// Hinzufügen eines date pickers für das Startdatum
 	    DateBox startDateBox = new DateBox();
+	    startDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss")));
+	    startDateBox.setFireNullValues(true);
 
 	    // Setzen des Wertes in die TextBox, den der User auswählt
 	    startDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date1 = event.getValue();
 	      }
+	      
 	    });
 
 	    
 	    // Hinzufügen eines date pickers für das Enddatum
 	    DateBox endDateBox = new DateBox();
-	   
+	    endDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss")));
+	    endDateBox.setFireNullValues(true);
 	    // Setzen des Wertes in die TextBox, den der User auswählt
 	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date2 = event.getValue();
+	        date2.setHours(23);
+	        date2.setMinutes(59);
+	        date2.setSeconds(59);
 	      }
 	    });
 
@@ -72,7 +86,17 @@ public class MessagesOfPeriod extends TextyForm {
 	    MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-
+				infoBox.clear();
+				scrollPanel.clear();
+				if (date1 == null || date2 == null){
+					if (date1 == null && date2 == null)	
+						infoBox.setWarningText("Please select startdate & enddate!");
+					else if(date1 == null)
+						infoBox.setWarningText("Please select startdate!");
+					else
+						infoBox.setWarningText("Please select enddate!");
+				}else {
+				
 				administration.getAllMessagesByDate(date1, date2, new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -80,10 +104,12 @@ public class MessagesOfPeriod extends TextyForm {
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
-						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result));
+						scrollPanel.setSize("100%", "100%");
+						RootPanel.get("Details").add(scrollPanel);
+						scrollPanel.add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result));
 					}
 				});
+				}
 			};
 		});
 	    
@@ -98,6 +124,9 @@ public class MessagesOfPeriod extends TextyForm {
 		chatFlexTable.setWidget(2, 1, endDateBox);
 		// Save-Button
 		chatFlexTable.setWidget(4, 0, MessageReport);
+		
+		//InfoBox hinzufügen
+		chatFlexTable.setWidget(5, 0, infoBox);
 		
 		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);

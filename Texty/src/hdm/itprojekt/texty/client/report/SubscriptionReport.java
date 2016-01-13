@@ -3,6 +3,7 @@ package hdm.itprojekt.texty.client.report;
 import java.util.Vector;
 
 import hdm.itprojekt.texty.client.ClientsideSettings;
+import hdm.itprojekt.texty.client.InfoBox;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
@@ -16,12 +17,22 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+/**
+ * In dieser Klasse wird der Report für die Userabo`s eines ausgewählten Users in HTML 
+ * aufgebaut. Die Ausgabe der abonnierten User erfolgt in einer Tabelle mit zwei Spalten, 
+ * in denen zum einen der Vorname des abonnierten Users ausgegeben wird und zum anderen 
+ * dessen E-Mailadresse.
+ *
+ */
 
 public class SubscriptionReport extends TextyForm {
 
 	public static User user;
+	private ScrollPanel scrollPanel = new ScrollPanel(); 
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable chatFlexTable = new FlexTable();
 	private HorizontalPanel addPanel = new HorizontalPanel();
@@ -32,6 +43,7 @@ public class SubscriptionReport extends TextyForm {
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 	private static Vector<User> allUser = new Vector<User>();
+	private InfoBox infoBox = new InfoBox();
 
 	public SubscriptionReport(String headline) {
 		super(headline);
@@ -43,12 +55,21 @@ public class SubscriptionReport extends TextyForm {
 		
 		// Create UI
 		
-		//Hinzufügen des Buttons zum auslösen des Userabo-Reports 
+		//Hinzufügen des Usersubscription-Buttons zum auslösen des Userabo-Reports 
 		Usersubscriptions = new Button("Usersubscriptions", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				scrollPanel.clear();
+				infoBox.clear();
+				if(suggestBox.getText() == ""){
+					infoBox.setWarningText("Please select a user!");
+				}else{	
 				String nickName = getNickName(suggestBox.getText());
 				User user = getUserOutOfAllUser(nickName);
+				
+				if (user == null){
+					infoBox.setErrorText("Unknown User!");
+				}else{
 				
 				// 
 				administration.getAllSubscribedUsersFromUser(user, new AsyncCallback<Vector<User>>() {
@@ -59,20 +80,31 @@ public class SubscriptionReport extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<User> result) {
-						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLUserReport.generateUserSubscriptionReport(result));
+						scrollPanel.setSize("100%", "100%");
+						RootPanel.get("Details").add(scrollPanel);
+						scrollPanel.add(HTMLUserSubscriptionReport.generateUserSubscriptionReport(result));
 					}
 				});
+				}
+				}
 			};
 		});
 		
-		//Hinzufügen des Buttons zum auslösen des Hashtagabo-Reports
+		//Hinzufügen des Hashtagsubscription-Buttons zum auslösen des Hashtagabo-Reports
 		Hashtagsubscriptions = new Button("Hashtagsubscriptions", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String nickName = getNickName(suggestBox.getText());
-				User user = getUserOutOfAllUser(nickName);
+				infoBox.clear();
+				scrollPanel.clear();
+				if(suggestBox.getText() == ""){
+					infoBox.setWarningText("Please select a user!");
+				}else{	
+					String nickName = getNickName(suggestBox.getText());
+					User user = getUserOutOfAllUser(nickName);
 				
+				if (user == null){
+					infoBox.setErrorText("Unknown User!");
+				}else{
 				// 
 				administration.getAllSubscribedHashtagsFromUser(user, new AsyncCallback<Vector<Hashtag>>() {
 					@Override
@@ -83,9 +115,13 @@ public class SubscriptionReport extends TextyForm {
 					@Override
 					public void onSuccess(Vector<Hashtag> result) {
 						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLHashtagReport.generateHashtagSubscriptionReport(result));
+						scrollPanel.setSize("100%", "100%");
+						RootPanel.get("Details").add(scrollPanel);
+						scrollPanel.add(HTMLHashtagSubscriptionReport.generateHashtagSubscriptionReport(result));
 					}
 				});
+				}
+				}
 			};
 		});
 		
@@ -98,8 +134,10 @@ public class SubscriptionReport extends TextyForm {
 
 		// Save-Button
 		chatFlexTable.setWidget(3, 1, Usersubscriptions);
-		
 		chatFlexTable.setWidget(4, 1, Hashtagsubscriptions);
+		
+		//Hinzufügen der infoBox für Fehlermeldungen
+		chatFlexTable.setWidget(5, 1, infoBox);
 		
 		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
@@ -107,7 +145,11 @@ public class SubscriptionReport extends TextyForm {
 		RootPanel.get("Navigator").clear();
 		RootPanel.get("Navigator").add(mainPanel);
 		
-		//Auswählen eines registrierten Users aus/in der SuggestBox
+		
+	/*
+	 * Auslesen & Hinzufügen eines registrierten Users aus/in der SuggestBox
+	 */
+		
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
 			@Override
 			public void onFailure(Throwable caught) {

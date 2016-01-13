@@ -1,0 +1,39 @@
+/** Set general style for html, body, font and captions */
+@import "Button.css";
+
+@import "Layout.css";
+
+@import "Menu.css";
+
+@import "MessageForm.css";
+
+@import "SubscriptionForm.css";
+
+@import "InfoBox.css";
+
+@import "ConversationForm.css";
+
+@font-face {
+	font-family: Texty;
+	src: url('Texty.otf');
+}
+
+#reporttable {
+  border: solid 2px gray; border-radius: 6px
+  
+}
+
+#spaltenueberschrift {
+	width:100px;
+	border: solid 2px gray; 
+	border-radius: 6px;
+	background-color: silver;
+}
+
+#spalten {
+	border:1px solid silver;  
+}
+
+#zellen {
+	border:1px solid silver; 
+}

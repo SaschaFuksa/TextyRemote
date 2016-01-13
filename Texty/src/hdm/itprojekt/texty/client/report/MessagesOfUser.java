@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.client.ClientsideSettings;
+import hdm.itprojekt.texty.client.InfoBox;
 import hdm.itprojekt.texty.client.TextyForm;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Message;
@@ -16,6 +17,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -31,6 +33,8 @@ public class MessagesOfUser extends TextyForm {
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
 	private static Vector<User> allUser = new Vector<User>();
+	private InfoBox infoBox = new InfoBox();
+	private ScrollPanel scrollPanel = new ScrollPanel();
 
 	public MessagesOfUser(String headline) {
 		super(headline);
@@ -46,10 +50,19 @@ public class MessagesOfUser extends TextyForm {
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				String nickName = getNickName(suggestBox.getText());
-				User user = getUserOutOfAllUser(nickName);
 				
-				// 
+				infoBox.clear();
+				scrollPanel.clear();
+				if(suggestBox.getText() == ""){
+					infoBox.setWarningText("Please select a user!");
+				}else{	
+					String nickName = getNickName(suggestBox.getText());
+					User user = getUserOutOfAllUser(nickName);
+				
+				if (user == null){
+					infoBox.setErrorText("Unknown User!");
+				}else{				
+				
 				administration.getAllMessagesWhereUserIsAuthor(user, new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -57,10 +70,13 @@ public class MessagesOfUser extends TextyForm {
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
-						RootPanel.get("Details").clear();
-						RootPanel.get("Details").add(HTMLMessagesFromUserReport.generateMessagesOfUserReport(result));
+						scrollPanel.setSize("100%", "100%");
+						RootPanel.get("Details").add(scrollPanel);
+						scrollPanel.add(HTMLMessagesFromUserReport.generateMessagesOfUserReport(result));
 					}
 				});
+				}
+				}
 			};
 		});
 
@@ -74,6 +90,9 @@ public class MessagesOfUser extends TextyForm {
 		// Save-Button
 		chatFlexTable.setWidget(3, 1, MessageReport);
 		
+		//InfoBox hinzufügen
+		chatFlexTable.setWidget(4, 1, infoBox);
+		
 		
 		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
@@ -84,9 +103,9 @@ public class MessagesOfUser extends TextyForm {
 		
 		//Auswählen eines registrierten Users aus/in der SuggestBox
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
+			
 			@Override
 			public void onFailure(Throwable caught) {
-
 			}
 
 			@Override
