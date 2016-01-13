@@ -263,14 +263,100 @@ public class SingleConversationViewer extends TextyForm {
 				RootPanel.get("Info").clear();
 
 				/*
+				 * Instanziierung einer neuen Antwort.
+				 */
+				ReplyMessageForm replyMessage = new ReplyMessageForm("Reply to conversation");
+				
+				/*
+				 * Zuweisung der Handler an das jeweilige Widget.
+				 */
+				replyMessage.message.sendButton
+						.addClickHandler(createClickHandler(replyMessage));
+				
+				/*
 				 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
 				 */
-				RootPanel.get("Info").add(
-						new ReplyMessageForm("Reply to this conversation",
-								conversation, true));
+				RootPanel.get("Info").add(replyMessage);
 			}
 		});
 		return replyButton;
+	}
+	
+	/**
+	 * Erzeugt einen Handler für den SendButton.
+	 * 
+	 * @return
+	 */
+	private ClickHandler createClickHandler(final ReplyMessageForm replyMessage) {
+		ClickHandler clickHandler = new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				/*
+				 * Fügt die neue Nachricht der bestehenden Unterhaltung hinzu.
+				 */
+				administration.addMessageToConversation(conversation.getLastMessage() ,conversation.getId(),
+						replyMessage.message.getText(), replyMessage.message.getHashtag(),
+						addMessageToConversationExecute());
+			}
+		};
+		return clickHandler;
+	}
+	
+	/**
+	 * AsyncCallback für das hinzufügen einer neuen Nachricht in einer
+	 * bestehenden Unterhaltung.
+	 * 
+	 * @return
+	 */
+	private AsyncCallback<Message> addMessageToConversationExecute() {
+		AsyncCallback<Message> asyncCallback = new AsyncCallback<Message>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Message result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				/*
+				 * Entfernung der Child Widgets vom jeweiligen Parent Widget.
+				 */
+				RootPanel.get("Navigator").clear();
+				RootPanel.get("Info").clear();
+				
+				/*
+				 * Füge die neue Message der Unterhaltung hinzu.
+				 */
+				conversation.addMessageToConversation(result);
+				
+				/*
+				 * Erstelle ein Panel für die neue Nachricht.
+				 */
+				SingleMessageView messageView = new SingleMessageView(
+						result, currentUser, conversation);
+
+				/*
+				 * Zuweisung der Styles an das jeweilige Widget.
+				 */
+				chatFlexTable.getColumnFormatter().addStyleName(
+						chatFlexTable.getRowCount(),
+						"chatFlexTableCell");
+
+				/*
+				 * Fügt die neue Nachricht der Tabelle zu.
+				 */
+				chatFlexTable.setWidget(chatFlexTable.getRowCount(), 1,
+						messageView);
+
+				/*
+				 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+				 */
+				RootPanel.get("Navigator").add(
+						new ConversationForm("Conversations"));
+
+			}
+		};
+		return asyncCallback;
 	}
 	
 }

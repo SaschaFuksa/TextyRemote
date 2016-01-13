@@ -21,8 +21,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 */
 public interface TextyAdministrationAsync {
 
-	void addMessageToConversation(Conversation c, String text,
-			Vector<Hashtag> listOfHashtag, AsyncCallback<Conversation> callback);
+	void addMessageToConversation(Message lastMessage, int conversationId,
+			String text, Vector<Hashtag> listOfHashtag,
+			AsyncCallback<Message> callback);
 
 	void checkUserData(AsyncCallback<Void> callback);
 

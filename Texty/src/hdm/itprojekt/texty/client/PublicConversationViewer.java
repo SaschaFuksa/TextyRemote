@@ -39,12 +39,12 @@ public class PublicConversationViewer extends TextyForm {
 	 */
 	private static final Logger LOG = Logger
 			.getLogger(SingleConversationViewer.class.getSimpleName());
-	
+
 	private final static long ONE_MINUTE = 60;
 	private final static long ONE_HOURS = 60 * ONE_MINUTE;
 	private final static long ONE_DAYS = 24 * ONE_HOURS;
 	private final static long ONE_MONTH = 30 * ONE_DAYS;
-	
+
 	/**
 	 * Zeitintervall des automatischen Refresh.
 	 */
@@ -72,7 +72,7 @@ public class PublicConversationViewer extends TextyForm {
 	 */
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
-	
+
 	/**
 	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
 	 * Des weiteren werden alle oeffentlichen Unterhaltungen des Users
@@ -100,7 +100,7 @@ public class PublicConversationViewer extends TextyForm {
 		 * Holt den aktuellen User aus der Datenbank.
 		 */
 		administration.getCurrentUser(getCurrentUserExecute());
-		
+
 		/*
 		 * Falls der ausgewählte User noch keine oeffentliche Nachricht gepostet
 		 * hat, wird ein entsprechender Hinweis angezeigt
@@ -142,7 +142,7 @@ public class PublicConversationViewer extends TextyForm {
 			}
 		});
 	}
-	
+
 	/**
 	 * AsyncCallback für das Auslesen des aktuellen User aus der Datenbank.
 	 * 
@@ -167,17 +167,19 @@ public class PublicConversationViewer extends TextyForm {
 		};
 		return asyncCallback;
 	}
-	
+
 	/**
 	 * AsyncCallback zur Überprüfung der Aktualität der Unterhaltung.
 	 */
-	private AsyncCallback<Vector<Message>> getRecentMessagesExecute(final Conversation conversation, final VerticalPanel contentMessage, final Button replyButton){
+	private AsyncCallback<Vector<Message>> getRecentMessagesExecute(
+			final Conversation conversation,
+			final VerticalPanel contentMessage, final Button replyButton) {
 		AsyncCallback<Vector<Message>> asyncCallback = new AsyncCallback<Vector<Message>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				LOG.severe("Error: " + caught.getMessage());
-				
+
 			}
 
 			@Override
@@ -185,38 +187,42 @@ public class PublicConversationViewer extends TextyForm {
 				/*
 				 * Überprüfung ob neue Nachrichten in der Unterhaltung sind.
 				 */
-				if(result.size() > 0){
-					
+				if (result.size() > 0) {
+
 					replyButton.removeFromParent();
-					
-					for(Message message : result){
+
+					for (Message message : result) {
 						conversation.addMessageToConversation(message);
-						SingleMessageView messageView = new SingleMessageView(message,
-								currentUser, conversation);
-						
+						SingleMessageView messageView = new SingleMessageView(
+								message, currentUser, conversation);
+
 						messageView.getElement().setId(
 								"singlePublicConversation");
-						
+
 						/*
 						 * Fügt die neue Nachricht dem Panel zu.
 						 */
 						contentMessage.add(messageView);
 					}
-					
+
 					contentMessage.add(replyButton);
 				}
-				
+
 			}
-			
+
 		};
 		return asyncCallback;
 	}
-	
+
 	/**
 	 * Methode zur Überprüfung der Aktualität der Unterhaltung.
 	 */
-	private void checkNewMessage(Conversation conversation, VerticalPanel contentMessage, Button replyButton){
-		administration.getRecentMessages(conversation.getLastMessage(), getRecentMessagesExecute(conversation, contentMessage, replyButton));
+	private void checkNewMessage(Conversation conversation,
+			VerticalPanel contentMessage, Button replyButton) {
+		administration.getRecentMessages(
+				conversation.getLastMessage(),
+				getRecentMessagesExecute(conversation, contentMessage,
+						replyButton));
 	}
 
 	/**
@@ -298,7 +304,8 @@ public class PublicConversationViewer extends TextyForm {
 			Label dateLabel = new Label(dateString);
 			Label textLabel = new Label(text);
 
-			wrapper.addClickHandler(createClickHandler(conversation, chatPanel, messageTable));
+			wrapper.addClickHandler(createClickHandler(conversation, chatPanel,
+					messageTable));
 
 			/*
 			 * Hinzufügen der Widgets in die jeweilige Spalte der FlexTable
@@ -325,32 +332,34 @@ public class PublicConversationViewer extends TextyForm {
 			public void onClick(ClickEvent event) {
 
 				if (state) {
-					
+
 					final VerticalPanel contentMessage = new VerticalPanel();
-					final Button replyButton = createReplyButton(conversation);
+					final Button replyButton = createReplyButton(conversation,
+							contentMessage);
 					replyButton.getElement().setId("button");
 
 					ScrollPanel scrollMessage = new ScrollPanel(contentMessage);
 					chatPanel.add(scrollMessage);
 					contentMessage.getElement().setId("fullWidth");
 					scrollMessage.setHeight("200px");
-					
+
 					/*
-					 * Timer um eine automatische Überprüfung vorzunehmen, ob eine neue
-					 * Nachricht der Unterhaltung hinzugefügt wurde.
+					 * Timer um eine automatische Überprüfung vorzunehmen, ob
+					 * eine neue Nachricht der Unterhaltung hinzugefügt wurde.
 					 */
 					Timer refreshTimer = new Timer() {
 						@Override
 						public void run() {
-							checkNewMessage(conversation, contentMessage, replyButton);
+							checkNewMessage(conversation, contentMessage,
+									replyButton);
 						}
 					};
 					refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
 
 					for (int i = 1; i < conversation.getListOfMessage().size(); i++) {
 						SingleMessageView singleMessage = new SingleMessageView(
-								conversation.getListOfMessage().get(i), currentUser,
-								conversation);
+								conversation.getListOfMessage().get(i),
+								currentUser, conversation);
 						singleMessage.getElement().setId(
 								"singlePublicConversation");
 						contentMessage.add(singleMessage);
@@ -377,8 +386,10 @@ public class PublicConversationViewer extends TextyForm {
 	 * 
 	 * @return
 	 */
-	private Button createReplyButton(final Conversation conversation) {
-		Button replyButton = new Button("Reply", new ClickHandler() {
+	private Button createReplyButton(final Conversation conversation,
+			final VerticalPanel contentMessage) {
+		final Button replyButton = new Button("Reply");
+		replyButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 
@@ -388,15 +399,109 @@ public class PublicConversationViewer extends TextyForm {
 				RootPanel.get("Info").clear();
 
 				/*
+				 * Instanziierung einer neuen Antwort.
+				 */
+				ReplyMessageForm replyMessage = new ReplyMessageForm(
+						"Reply to conversation");
+
+				/*
+				 * Zuweisung der Handler an das jeweilige Widget.
+				 */
+				replyMessage.message.sendButton
+						.addClickHandler(createClickHandler(conversation,
+								contentMessage, replyMessage, replyButton));
+
+				/*
 				 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
 				 */
-				RootPanel.get("Info").add(
-						new ReplyMessageForm(
-								"Reply to this public conversation",
-								conversation, false));
+				RootPanel.get("Info").add(replyMessage);
 			}
 		});
 		return replyButton;
+	}
+
+	/**
+	 * Erzeugt einen Handler für den SendButton.
+	 * 
+	 * @return
+	 */
+	private ClickHandler createClickHandler(final Conversation conversation,
+			final VerticalPanel contentMessage,
+			final ReplyMessageForm replyMessage, final Button replyButton) {
+		ClickHandler clickHandler = new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				/*
+				 * Fügt die neue Nachricht der bestehenden Unterhaltung hinzu.
+				 */
+				administration.addMessageToConversation(
+						conversation.getLastMessage(),
+						conversation.getId(),
+						replyMessage.message.getText(),
+						replyMessage.message.getHashtag(),
+						addMessageToConversationExecute(conversation,
+								contentMessage, replyButton));
+			}
+		};
+		return clickHandler;
+	}
+
+	/**
+	 * AsyncCallback für das hinzufügen einer neuen Nachricht in einer
+	 * bestehenden Unterhaltung.
+	 * 
+	 * @return
+	 */
+	private AsyncCallback<Message> addMessageToConversationExecute(
+			final Conversation conversation, final VerticalPanel contentMessage, final Button replyButton) {
+		AsyncCallback<Message> asyncCallback = new AsyncCallback<Message>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				LOG.severe("Error: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Message result) {
+				LOG.info("Success :" + result.getClass().getSimpleName());
+				/*
+				 * Entfernung der Child Widgets vom jeweiligen Parent Widget.
+				 */
+				RootPanel.get("Navigator").clear();
+				RootPanel.get("Info").clear();
+				replyButton.removeFromParent();
+
+				/*
+				 * Füge die neue Message der Unterhaltung hinzu.
+				 */
+				conversation.addMessageToConversation(result);
+
+				/*
+				 * Erstelle ein Panel für die neue Nachricht.
+				 */
+				SingleMessageView messageView = new SingleMessageView(result,
+						currentUser, conversation);
+
+				/*
+				 * Zuweisung der Styles an das jeweilige Widget.
+				 */
+				messageView.getElement().setId("singlePublicConversation");
+
+				/*
+				 * Fügt die neue Nachricht dem Panel zu.
+				 */
+				contentMessage.add(messageView);
+
+				contentMessage.add(replyButton);
+
+				/*
+				 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+				 */
+				RootPanel.get("Navigator").add(
+						new HomeForm("Home"));
+			}
+
+		};
+		return asyncCallback;
 	}
 
 }

@@ -253,6 +253,9 @@ public class ConversationForm extends TextyForm {
 				Date durationDate = new Date(duration * 1000);
 				dateString = DateTimeFormat.getFormat("HH").format(durationDate)
 						+ " hours ago";
+				if(duration >= ONE_DAYS-ONE_HOURS && duration < ONE_DAYS){
+					dateString = "23 hours ago";
+				}
 			}
 
 			else if (duration < ONE_MONTH) {

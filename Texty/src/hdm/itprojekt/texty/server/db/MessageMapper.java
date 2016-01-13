@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -235,6 +236,7 @@ public class MessageMapper {
 								+ message.getListOfHashtag().get(i).getId()
 								+ ")");
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -651,10 +653,10 @@ public class MessageMapper {
 	}
 
 	public Vector<Message> selectRecentMessages(Message message) {
-		
-		//setzt result des statements.
+
+		// setzt result des statements.
 		Vector<Message> result = new Vector<Message>();
-		
+
 		// Datenbankverbindung holen
 		Connection con = DBConnection.connection();
 		try {
@@ -698,4 +700,26 @@ public class MessageMapper {
 
 		return null;
 	}
+
+	public Date getDateOfCreation(Message message) {
+		// Datenbankverbindung holen
+		Connection con = DBConnection.connection();
+
+		try {
+			// Neues Statement anlegen
+			Statement stmtDate = con.createStatement();
+			ResultSet rs = stmtDate
+					.executeQuery("SELECT message.dateOfCreation FROM textydb.message WHERE message.messageId = '"
+							+ message.getId() + "'");
+			if (rs.next()) {
+				message.setDateOfCreation(rs
+						.getTimestamp("message.dateOfCreation"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return message.getDateOfCreation();
+	}
+
 }

@@ -83,11 +83,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 * @param listOfHastags
 	 *            Die Hashtags welche der Nachricht angehängt wurden
 	 * 
-	 * @return Die geänderte Unterhaltung
+	 * @return Die neu erstellte Nachricht 
 	 */
 	@Override
-	public Conversation addMessageToConversation(Conversation conversation,
-			String text, Vector<Hashtag> listOfHashtag)
+	public Message addMessageToConversation(Message lastMessage,
+			int conversationId, String text, Vector<Hashtag> listOfHashtag)
 			throws IllegalArgumentException {
 		// Abfrage des aktuell eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
@@ -96,11 +96,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		User currentUser = this.uMapper.findByEmail(user.getEmail());
 
 		// Erstellen des neuen MessageObjekt und zuweisung der Parameter
-		Message m = new Message();
-		m.setText(text);
-		m.setAuthor(currentUser);
+		Message message = new Message();
+		message.setText(text);
+		message.setAuthor(currentUser);
 		// Nachricht wird auf sichtbar gesetzt.
-		m.setVisible(true);
+		message.setVisible(true);
 
 		/*
 		 * Abfrage ob der eingelogte Benutzer Author der letzen der Nachricht in
@@ -109,13 +109,11 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		 * der letzen Nachricht, exklusive des eingeloggten Benutzers, als
 		 * Empfänger der Nachricht hinzugefügt.
 		 */
-		if (conversation.getLastMessage().getAuthor().getId() != currentUser
-				.getId()) {
-			m.addReceivers(conversation.getLastMessage().getAuthor());
-			for (User receiver : conversation.getLastMessage()
-					.getListOfReceivers()) {
+		if (lastMessage.getAuthor().getId() != currentUser.getId()) {
+			message.addReceivers(lastMessage.getAuthor());
+			for (User receiver : lastMessage.getListOfReceivers()) {
 				if (receiver.getId() != currentUser.getId()) {
-					m.addReceivers(receiver);
+					message.addReceivers(receiver);
 				}
 			}
 			/*
@@ -124,19 +122,19 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			 * übernommen.
 			 */
 		} else {
-			m.setListOfReceivers(conversation.getLastMessage()
-					.getListOfReceivers());
+			message.setListOfReceivers(lastMessage.getListOfReceivers());
 		}
 
-		m.setListOfHashtag(listOfHashtag);
+		message.setListOfHashtag(listOfHashtag);
 		/*
 		 * Setzen der UnterhaltungsID innerhalb der Nachricht um die
 		 * Zugehörigkeit zur richtigen Unterhaltung festzuhalten
 		 */
-		m.setConversationID(conversation.getId());
-		conversation.addMessageToConversation(this.mMapper.insert(m));
+		message.setConversationID(conversationId);
+		Message result = this.mMapper.insert(message);
+		result.setDateOfCreation(this.mMapper.getDateOfCreation(result));
 
-		return conversation;
+		return result;
 	}
 
 	/**
@@ -789,9 +787,9 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 			Hashtag selectedHashtag) throws IllegalArgumentException {
 		Vector<Message> result = this.mMapper
 				.selectAllPublicMessagesWithHashtag(selectedHashtag);
-		//Sortieren des Vektors
+		// Sortieren des Vektors
 		Collections.sort(result);
-		//Umdrehen des Vektors
+		// Umdrehen des Vektors
 		Collections.reverse(result);
 		return result;
 	}
@@ -829,7 +827,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public User getCurrentUser() throws IllegalArgumentException {
-		//Abfragen des eingelogten Benutzers
+		// Abfragen des eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 
@@ -879,14 +877,15 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	@Override
 	public void updateUserData(String firstName, String lastName)
 			throws IllegalArgumentException {
-		//Abfragen des eingelogten Benutzers
+		// Abfragen des eingelogten Benutzers
 		com.google.appengine.api.users.UserService userService = com.google.appengine.api.users.UserServiceFactory
 				.getUserService();
 
 		com.google.appengine.api.users.User user = userService.getCurrentUser();
-		//Abgleich des Google Nutzers mit den Nutzer aus der Db
+		// Abgleich des Google Nutzers mit den Nutzer aus der Db
 		User us = this.uMapper.findByEmail(user.getEmail());
-		//Wenn User in DB ist, werden die Daten gesetzt und update aus Mapper aufgerufen
+		// Wenn User in DB ist, werden die Daten gesetzt und update aus Mapper
+		// aufgerufen
 		if (us != null) {
 			us.setFirstName(firstName);
 			us.setLastName(lastName);
