@@ -307,7 +307,7 @@ public class SubscriptionForm extends TextyForm {
 			 * Deklaration, Definition und Initialisierung der Widget.
 			 */
 			final HorizontalPanel userPanel = new HorizontalPanel();
-			final Label nameLabel = new Label(user.getFirstName());
+			final Label nameLabel = new Label(user.getFirstName() + " " + user.getLastName());
 			final Label removeButton = new Label("x");
 
 			/*
