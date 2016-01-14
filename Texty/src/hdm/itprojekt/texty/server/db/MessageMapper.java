@@ -652,6 +652,14 @@ public class MessageMapper {
 		return message;
 	}
 
+	/**
+	 * Die Methode selectRecentMessages gibt die letzte Nachricht einer
+	 * Conversation aus.
+	 * 
+	 * @param message
+	 *            um die Conversation zu bestimmten
+	 * @return Message Vektor
+	 */
 	public Vector<Message> selectRecentMessages(Message message) {
 
 		// setzt result des statements.
@@ -701,6 +709,14 @@ public class MessageMapper {
 		return null;
 	}
 
+	/**
+	 * Die Methode getDateOfCreation gibt den Erstellungszeitpunkt einer
+	 * Nachricht aus.
+	 * 
+	 * @param message
+	 *            von der, der Erstellungszeitpukt ausgegeben werden soll
+	 * @return Message-Objekt
+	 */
 	public Date getDateOfCreation(Message message) {
 		// Datenbankverbindung holen
 		Connection con = DBConnection.connection();
