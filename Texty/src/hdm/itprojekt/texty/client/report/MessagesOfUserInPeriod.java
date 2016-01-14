@@ -29,26 +29,49 @@ import hdm.itprojekt.texty.shared.bo.User;
 
 public class MessagesOfUserInPeriod extends TextyForm{
 	
-	public static User user;
+	/**
+	 * Deklaration, Definition und Initialisierung der Widgets.
+	 */
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable chatFlexTable = new FlexTable();
 	private HorizontalPanel addPanel = new HorizontalPanel();
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private Button MessageReport;
+	private ScrollPanel scrollPanel = new ScrollPanel();
+	private InfoBox infoBox = new InfoBox();
+	
+	/**
+	 * Die administration ermöglicht die asynchrone Kommunikation mit der
+	 * Applikationslogik.
+	 */
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
+	
+	/**
+	 * Deklaration & Definition von Variablen der Klasse.
+	 */
+	public static User user;
 	private static Vector<User> allUser = new Vector<User>();
 	private Date date1;
 	private Date date2;
-	private ScrollPanel scrollPanel = new ScrollPanel();
-	private InfoBox infoBox = new InfoBox();
-
+	
+	/**
+	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
+	 * 
+	 * @see TextyForm
+	 * @param headline
+	 */
 	public MessagesOfUserInPeriod(String headline) {
 		super(headline);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Diese Methode wird sofort aufgerufen, sobald ein Formular im Browser
+	 * eingebaut wird.
+	 * 
+	 * @see TextyForm
+	 */
 	@Override
 	protected void run() {
 		
@@ -66,20 +89,12 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	      }
 	      
 	    });
-//		// Create a date picker
-//	    DateBox startDateBox = new DateBox();
-//
-//	    // Set the value in the text box when the user selects a date
-//	    startDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
-//	      public void onValueChange(ValueChangeEvent<Date> event) {
-//	        date1 = event.getValue();
-//	      }
-//	    });
 
 	 // Hinzufügen eines date pickers für das Enddatum
 	    DateBox endDateBox = new DateBox();
 	    endDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss")));
 	    endDateBox.setFireNullValues(true);
+	    
 	    // Setzen des Wertes in die TextBox, den der User auswählt
 	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
@@ -89,65 +104,77 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	        date2.setSeconds(59);
 	      }
 	    });
-//	 // Create a second date picker
-//	    DateBox endDateBox = new DateBox();
-//
-//	    // Set the value in the text box when the user selects a date
-//	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
-//	      public void onValueChange(ValueChangeEvent<Date> event) {
-//	        date2 = event.getValue();
-//	      }
-//	    });
-
 
 		//Hinzufügen des Buttons zum auslösen des MessagesOfUserInPeriod-Reports
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				
+				/*
+				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung
+				 * in der infoBox
+				 */
 				infoBox.clear();
+				
+				/*
+				 * Entfernung des evtl. zuvor generierten Reports
+				 */
 				scrollPanel.clear();
 				
+				/*
+				 * Überprüfung ob der Text des Suchfeldes leer ist.
+				 */
 				if(suggestBox.getText() == ""){
 					infoBox.setWarningText("Please select a user!");
 				}else{	
+					/*
+					* Erzeugt aus den Text aus dem Suchfeld den Nicknamen und
+					* im Anschluss wird anhand des Nicknamen der User über die
+					* Methode getUserOutOfAllUser(nickName) ermittelt.
+					*/
 					String nickName = getNickName(suggestBox.getText());
 					User user = getUserOutOfAllUser(nickName);
-				
+				/*
+				 * Überprüfung ob die Suche nach einem User mit dem
+				 * entsprechenden Nickname keinen User zurückgab.
+				 */
 				if (user == null){
 					infoBox.setErrorText("Unknown User!");
 				}else{
+					/*
+					 * Überprüfung ob eine der Dateboxen den wert "null"
+					 * zurückgibt.
+					 */
 					if (date1 == null || date2 == null){
+						/*
+						 * Überprüfung ob beide Dateboxen den wert "null" zurückgeben.
+						 */
 						if (date1 == null && date2 == null)	
+							/*
+							 * Setzt Warnung, dass Start- und Enddatum ausgewählt werden müssen
+							 */
 							infoBox.setWarningText("Please select startdate & enddate!");
+						/*
+						 * Überprüfung ob startDateBox den wert "null" zurückgeben.
+						 */
 						else if(date1 == null)
+							/*
+							 * Setzt Warnung, dass Startdatum ausgewählt werden muss.
+							 */
 							infoBox.setWarningText("Please select startdate!");
 						else
+							/*
+							 * Setzt Warnung, dass Enddatum ausgewählt werden muss.
+							 */
 							infoBox.setWarningText("Please select enddate!");
-					}else {
-//				if (date1 == null || date2 == null || suggestBox.getText() == "")
-//				if(suggestBox.getText() == ""){
-//					infoBox.setWarningText("Please select a user!");
-//				}else{	
-//					String nickName = getNickName(suggestBox.getText());
-//					User user = getUserOutOfAllUser(nickName);
-//				
-//				if (user == null){
-//					infoBox.setErrorText("Unknown User!");
-//				}else{
-//					if (date1 == null || date2 == null){
-//						if (date1 == null && date2 == null)	
-//							infoBox.setWarningText("Please select startdate & enddate!");
-//						else if(date1 == null)
-//							infoBox.setWarningText("Please select startdate!");
-//						else
-//							infoBox.setWarningText("Please select enddate!");
-//					}else {
-//				
-				//String nickName = getNickName(suggestBox.getText());
-				//User user = getUserOutOfAllUser(nickName);
+					}else 
 				
-				// 
+						/*
+						* Lädt alle Nachrichten, in denen der ausgewählte User der Author ist und startet die Methode 
+						* "generateMessagesOfUserReport(result)" der Klasse "HTMLMessagesFromUserReport", 
+						* die den Report aufbaut und im ScrollPanel ausgibt
+						* 
+						* @see HTMLMessagesFromUserReport
+						*/  
 				administration.getAllMessagesWhereUserIsAuthorByDate(user, date1, date2,new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -155,16 +182,24 @@ public class MessagesOfUserInPeriod extends TextyForm{
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						/*
+						 * Umkehrung der Reihenfolge der Liste.
+						 */
 						Collections.reverse(result);
+						/*
+						 * Zuweisung und Anpassung des Widgets.
+						 */
 						scrollPanel.setSize("100%", "100%");
 						RootPanel.get("Details").add(scrollPanel);
+						/*
+						 * Fügt den generierten Report dem scrollPanel hinzu.
+						 */
 						scrollPanel.add(HTMLMessagesFromUserInPeriod.generateMessagesFromUserInPeriodReport(result));
 					}
 				});
 				}
 				}
 			};
-			}
 		});
 		
 							    
@@ -176,7 +211,7 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		chatFlexTable.setText(3, 0, "in Dateperiod from:");
 		chatFlexTable.setText(4, 0, "                to:");
 		
-		// Textboxen
+		// Textboxe
 		chatFlexTable.setWidget(1, 1, suggestBox);
 		chatFlexTable.setWidget(3, 1, startDateBox);
 		chatFlexTable.setWidget(4, 1, endDateBox);
@@ -209,6 +244,9 @@ public class MessagesOfUserInPeriod extends TextyForm{
 		
 	}
 	
+	/*
+	 * Setzt die nicht ausgewählten User als Vorschläge im Suchfeld.
+	 */
 		private void setOracle() {
 			oracle.clear();
 			for (int i = 0; i < allUser.size(); i++) {
@@ -226,6 +264,13 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	
 		}
 		
+		/*
+		 * Wandelt den ausgewählten Namen aus dem Suchfeld in den Nickname um. Dabei
+		 * wird der Vorname und die '(' & ')' Klammern entfernt.
+		 * 
+		 * @param text
+		 * @return
+		 */
 		private String getNickName(String text) {
 			StringBuffer bufferName = new StringBuffer(text);
 			int firstIndex = bufferName.indexOf("(");
@@ -245,6 +290,12 @@ public class MessagesOfUserInPeriod extends TextyForm{
 			return null;
 		}
 		
+		/*
+		 * Mittels der E-Mail wird der Nickname des Users erstellt und ausgegeben.
+		 * 
+		 * @param email
+		 * @return
+		 */
 		private String setNickName(String email) {
 			StringBuffer bufferName = new StringBuffer(email);
 			bufferName.setLength(bufferName.indexOf("@"));

@@ -22,10 +22,8 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * In dieser Klasse wird der Report für die Userabo`s eines ausgewählten Users in HTML 
- * aufgebaut. Die Ausgabe der abonnierten User erfolgt in einer Tabelle mit zwei Spalten, 
- * in denen zum einen der Vorname des abonnierten Users ausgegeben wird und zum anderen 
- * dessen E-Mailadresse.
+ * In dieser Klasse wird das UI für die Userabo`s aufgebaut. Die Widgets werden 
+ * im Navigatorbereich implementiert.
  *
  */
 

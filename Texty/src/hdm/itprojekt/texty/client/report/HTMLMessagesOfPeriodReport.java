@@ -10,62 +10,81 @@ import com.google.gwt.user.client.ui.HTML;
 
 /**
  * 
- * In dieser Klasse wird der Report für die Nachrichten eines ausgewählten Zeitraums in HTML 
- * aufgebaut. Die Ausgabe der Nachrichten erfolgt in einer Tabelle. Die Tabelle besteht aus drei Spalten in denen der Author, 
- * die gesendete Nachricht und das Datum der Erstellung der Nachricht ausgegeben wird. 
+ * In dieser Klasse wird der Report für die Nachrichten eines ausgewählten
+ * Zeitraums in HTML aufgebaut. Die Ausgabe der Nachrichten erfolgt in einer
+ * Tabelle. Die Tabelle besteht aus drei Spalten in denen der Author, die
+ * gesendete Nachricht und das Datum der Erstellung der Nachricht ausgegeben
+ * wird.
  *
  */
 
 public class HTMLMessagesOfPeriodReport {
-	
-	//Aufbau der Tabelle im HTML-Format
+
+	// Aufbau der Tabelle im HTML-Format
 	private static String generateReportHead() {
-		return 	"<html>"
-				+ "<head>"
-				+ "<title></title>"
-				+ "</head>"
-				+ "<body>";
-}
+		return "<html>" + "<head>" + "<title></title>" + "</head>" + "<body>";
+	}
 
-private static String generateReportEnd(String currentReport) {
-	return currentReport + "</body></html>";
-}
+	private static String generateReportEnd(String currentReport) {
+		return currentReport + "</body></html>";
+	}
 
-public static HTML generateMessagesOfPeriodReport(Vector<Message> messages) {
-	String report = generateReportHead();
-	
-	report += "<div>";
-	
-	// Hinzufügen des aktuellen Datums mit Uhrzeit für die Überschrift des Reports.
-	Date today = new Date();
-    DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
+	public static HTML generateMessagesOfPeriodReport(Vector<Message> messages) {
+		String report = generateReportHead();
 
-    report += "<br>";
-	report += "Messagereport generated at " + fmt.format(today) + "<br>";
-	report += "<br>";
-	report += "<table id=\"reporttable\">"
-			+ "<tr>"
+		report += "<div>";
+
+		// Hinzufügen des aktuellen Datums mit Uhrzeit für die Überschrift des
+		// Reports.
+		Date today = new Date();
+		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
+
+		report += "<br>";
+		report += "Messagereport generated at " + fmt.format(today) + "<br>";
+		report += "<br>";
+		report += "<table id=\"reporttable\">" + "<tr>"
 				+ "<th id=\"author\">Author</th>"
 				+ "<th id=\"receiver\">Receivers</th>"
 				+ "<th id=\"creationdate\">Date of Creation</th>"
-				+ "<th id=\"message\">Message</th>"
-			+ "</tr>";
-	
-	for(Message message : messages) {
-		report += "<tr id=\"spalten\">"
-				+ "<td id=\"zelle\">" + message.getAuthor().getEmail() +"</td>"
-				+ "<td id=\"zelle\">" + message.getListOfReceivers() + "</td>"
-				+ "<td id=\"zelle\">" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td>"
-				+ "<td id=\"zelle\">" + message.getText() + "</td>"
-				+ "</tr>";
+				+ "<th id=\"message\">Message</th>" + "</tr>";
+
+		for (Message message : messages) {
+			if (message.getListOfReceivers() == null
+					|| message.getListOfReceivers().size() == 0
+					|| message.getListOfReceivers().isEmpty()) {
+				report += "<tr id=\"spalten\">"
+						+ "<td id=\"zelle\">"
+						+ message.getAuthor().toString()
+						+ "</td>"
+						+ "<td id=\"zelle\">"
+						+ "Public message"
+						+ "</td>"
+						+ "<td id=\"zelle\">"
+						+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
+								.format(message.getDateOfCreation()) + "</td>"
+						+ "<td id=\"zelle\">" + message.getText() + "</td>"
+						+ "</tr>";
+			} else
+				report += "<tr id=\"spalten\">"
+						+ "<td id=\"zelle\">"
+						+ message.getAuthor().toString()
+						+ "</td>"
+						+ "<td id=\"zelle\">"
+						+ message.getListOfReceivers()
+						+ "</td>"
+						+ "<td id=\"zelle\">"
+						+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
+								.format(message.getDateOfCreation()) + "</td>"
+						+ "<td id=\"zelle\">" + message.getText() + "</td>"
+						+ "</tr>";
+		}
+
+		report += "</table>";
+
+		report += "</div>";
+
+		report = generateReportEnd(report);
+		return new HTML(report);
 	}
-	
-	report += "</table>";
-	
-	report += "</div>";
-	
-	report = generateReportEnd(report);
-	return new HTML(report);
-}
 
 }

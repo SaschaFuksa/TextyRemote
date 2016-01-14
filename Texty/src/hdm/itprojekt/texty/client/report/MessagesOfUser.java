@@ -124,6 +124,9 @@ public class MessagesOfUser extends TextyForm {
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						/*
+						 * Umkehrung der Reihenfolge der Liste.
+						 */
 						Collections.reverse(result);
 						/*
 						 * Zuweisung und Anpassung des Widgets.

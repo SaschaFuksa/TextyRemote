@@ -109,7 +109,16 @@ public class MessagesOfPeriod extends TextyForm {
 	    MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				
+				/*
+				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung
+				 * in der infoBox
+				 */
 				infoBox.clear();
+				
+				/*
+				 * Entfernung des evtl. zuvor generierten Reports
+				 */
 				scrollPanel.clear();
 				if (date1 == null || date2 == null){
 					if (date1 == null && date2 == null)	
@@ -127,9 +136,18 @@ public class MessagesOfPeriod extends TextyForm {
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						/*
+						 * Umkehrung der Reihenfolge der Liste.
+						 */
 						Collections.reverse(result);
+						/*
+						 * Zuweisung und Anpassung des Widgets.
+						 */
 						scrollPanel.setSize("100%", "100%");
 						RootPanel.get("Details").add(scrollPanel);
+						/*
+						 * Fügt den generierten Report dem scrollPanel hinzu.
+						 */
 						scrollPanel.add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result));
 					}
 				});

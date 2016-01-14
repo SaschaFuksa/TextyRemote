@@ -97,10 +97,10 @@ public class User extends BusinessObject {
 	 */
 	@Override
 	public String toString() {
-		if (this.firstName == "" && this.lastName == "") {
-			return super.toString() + " " + this.email;
-		}
-		return super.toString() + " " + this.firstName + " " + this.lastName;
+	if (this.firstName == "" && this.lastName == "") {
+		return this.email;
+		}	
+		return  this.firstName + " " + this.lastName;
 	}
 
 }
