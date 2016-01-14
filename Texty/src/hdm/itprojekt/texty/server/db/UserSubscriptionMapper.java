@@ -142,4 +142,45 @@ public class UserSubscriptionMapper {
 		// User Vektor zurückgeben
 		return result;
 	}
+
+	/**
+	 * Die Methode selectAllSubscriber gibt alle abonnierenden Nutzer eines
+	 * bestimmten Nutzers zurück.
+	 * 
+	 * @param subscribed
+	 *            von dem die Abonnenten zurück gegeben werden sollen
+	 * @return User Vektor
+	 */
+	public Vector<User> selectAllSubscriber(User subscribed) {
+		// Datenbankverbindung holen
+		Connection con = DBConnection.connection();
+		// Ergebnisvektor vorbereiten
+		Vector<User> result = new Vector<User>();
+
+		try {
+			// Neues Statement anlegen
+			Statement stmt = con.createStatement();
+			// Statement ausfüllen und als Query an die Datenbank schicken
+			ResultSet rs = stmt
+					.executeQuery("SELECT userId, givenName, familyName, email, user.dateOfCreation FROM textydb.user INNER JOIN textydb.usersubscription ON user.userId = usersubscription.subscriber_userId "
+							+ "WHERE subscribed_userId = " + subscribed.getId());
+
+			// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				user.setEmail(rs.getString("email"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
+				// Das Objekt wird nun dem Ergebnisvektor hinzugefügt
+				result.addElement(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// User Vektor zurückgeben
+		return result;
+	}
 }

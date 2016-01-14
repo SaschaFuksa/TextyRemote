@@ -146,4 +146,46 @@ public class HashtagSubscriptionMapper {
 		// Hashtag Vektor zurückgeben
 		return result;
 	}
+
+	/**
+	 * Die Methode selectAllHashtagSubscriber gibt alle Nutzer zurück, die den
+	 * gefragten Hashtag abnonnieren.
+	 * 
+	 * @param hashtag
+	 *            von dem die abonnierten Nutzer ausgelesen werden sollen
+	 * @return User Vektor
+	 */
+	public Vector<User> selectAllHashtagSubscriber(Hashtag hashtag) {
+		// Datenbankverbindung holen
+		Connection con = DBConnection.connection();
+		// Ergebnisvektor vorbereiten
+		Vector<User> result = new Vector<User>();
+
+		try {
+			// Neues Statement anlegen
+			Statement stmt = con.createStatement();
+			// Statement ausfüllen und als Query an die Datenbank schicken
+			ResultSet rs = stmt
+					.executeQuery("SELECT user.userId, user.givenName, user.familyName, user.email, user.dateOfCreation FROM textydb.user INNER JOIN textydb.hashtagsubscription ON user.userId = hashtagsubscription.userId "
+							+ "WHERE hashtagsubscription.hashtagId = "
+							+ hashtag.getId());
+
+			// Für jeden Eintrag wird nun ein Usersubscription-Objekt erstellt.
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setFirstName(rs.getString("givenName"));
+				user.setLastName(rs.getString("familyName"));
+				user.setEmail(rs.getString("email"));
+				user.setDateOfCreation(rs.getTimestamp("dateOfCreation"));
+				// Das Objekt wird nun dem Ergebnisvektor hinzugefügt
+				result.addElement(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// User Vektor zurückgeben
+		return result;
+	}
 }
