@@ -19,12 +19,40 @@
 }
 
 #reporttable {
-  border: solid 2px gray; border-radius: 6px
+  width: 100%;
+  border: solid 2px gray; 
+  border-radius: 6px
   
 }
 
-#spaltenueberschrift {
-	width:100px;
+#receiver {
+	width:20%;
+	border: solid 2px gray; 
+	border-radius: 6px;
+	background-color: silver;
+}
+
+#author {
+	width:20%;
+	border: solid 2px gray; 
+	border-radius: 6px;
+	background-color: silver;
+}
+#message{
+	width:45%;
+	border: solid 2px gray; 
+	border-radius: 6px;
+	background-color: silver;
+}
+#creationdate {
+	width:15%;
+	border: solid 2px gray; 
+	border-radius: 6px;
+	background-color: silver;
+}
+
+#hashtag {
+	width:45%;
 	border: solid 2px gray; 
 	border-radius: 6px;
 	background-color: silver;
@@ -34,6 +62,7 @@
 	border:1px solid silver;  
 }
 
-#zellen {
-	border:1px solid silver; 
+#zelle {
+	border:1px solid silver;
+	
 }

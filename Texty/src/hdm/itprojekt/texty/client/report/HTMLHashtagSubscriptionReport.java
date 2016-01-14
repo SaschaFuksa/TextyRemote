@@ -44,12 +44,12 @@ public class HTMLHashtagSubscriptionReport{
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"
-				+ "<th id=\"spaltenueberschrift\">Hashtag</th>"
+				+ "<th id=\"hashtag\">Hashtag</th>"
 				+ "</tr>";
 		
 		for(Hashtag hashtag : hashtags) {
 			report += "<tr id=\"spalten\">"
-					+ "<td id=\"zellen\">"+ "#" + hashtag.getKeyword() + "</td>"
+					+ "<td id=\"zelle\">"+ "#" + hashtag.getKeyword() + "</td>"
 					+ "</tr>";
 		}
 		

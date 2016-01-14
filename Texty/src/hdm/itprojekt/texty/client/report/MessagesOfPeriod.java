@@ -7,6 +7,7 @@ import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Vector;
 
@@ -29,25 +30,47 @@ import com.google.gwt.user.datepicker.client.DateBox.Format;
 
 public class MessagesOfPeriod extends TextyForm {
 
-	public static User user;
+	/**
+	 * Deklaration, Definition und Initialisierung der Widgets.
+	 */
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable chatFlexTable = new FlexTable();
 	private HorizontalPanel addPanel = new HorizontalPanel();
-
-	private Button MessageReport;
-	private Date date1;
-	private Date date2;
-	private final TextyAdministrationAsync administration = ClientsideSettings
-			.getTextyAdministration();
 	private ScrollPanel scrollPanel = new ScrollPanel();
 	private InfoBox infoBox = new InfoBox();
-
-
+	private Button MessageReport;
+	
+	/**
+	 * Die administration ermöglicht die asynchrone Kommunikation mit der
+	 * Applikationslogik.
+	 */
+	private final TextyAdministrationAsync administration = ClientsideSettings
+			.getTextyAdministration();
+	
+	/**
+	 * Deklaration & Definition von Variablen der Klasse.
+	 */
+	public static User user;
+	private Date date1;
+	private Date date2;
+	
+	/**
+	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
+	 * 
+	 * @see TextyForm
+	 * @param headline
+	 */
 	public MessagesOfPeriod(String headline) {
 		super(headline);
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Diese Methode wird sofort aufgerufen, sobald ein Formular im Browser
+	 * eingebaut wird.
+	 * 
+	 * @see TextyForm
+	 */
 	@Override
 	public void run() {
 				
@@ -95,8 +118,8 @@ public class MessagesOfPeriod extends TextyForm {
 						infoBox.setWarningText("Please select startdate!");
 					else
 						infoBox.setWarningText("Please select enddate!");
-				}else {
-				
+				}else  {
+					
 				administration.getAllMessagesByDate(date1, date2, new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -104,6 +127,7 @@ public class MessagesOfPeriod extends TextyForm {
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						Collections.reverse(result);
 						scrollPanel.setSize("100%", "100%");
 						RootPanel.get("Details").add(scrollPanel);
 						scrollPanel.add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result));

@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client.report;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Vector;
 
@@ -154,6 +155,7 @@ public class MessagesOfUserInPeriod extends TextyForm{
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						Collections.reverse(result);
 						scrollPanel.setSize("100%", "100%");
 						RootPanel.get("Details").add(scrollPanel);
 						scrollPanel.add(HTMLMessagesFromUserInPeriod.generateMessagesFromUserInPeriodReport(result));

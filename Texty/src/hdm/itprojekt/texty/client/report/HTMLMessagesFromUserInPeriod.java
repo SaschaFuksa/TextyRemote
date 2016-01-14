@@ -46,18 +46,16 @@ public class HTMLMessagesFromUserInPeriod {
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"
-					+ "<th id=\"spaltenueberschrift\">Author</th>"
-					+ "<th id=\"spaltenueberschrift\">Receiver</th>"
-					+ "<th id=\"spaltenueberschrift\">Message</th>"
-					+ "<th id=\"spaltenueberschrift\">Date of Creation</th>"
+					+ "<th id=\"receiver\">Receiver</th>"
+					+ "<th id=\"creationdate\">Date of Creation</th>"
+					+ "<th id=\"message\">Message</th>"
 				+ "</tr>";
 		
 		for(Message message : messages) {
 			report += "<tr id=\"spalten\">"
-					+ "<td id=\"zellen\">" + message.getAuthor() + "</td>"
-					+ "<td id=\"zellen\">" + message.getListOfReceivers() + "</td>"
-					+ "<td id=\"zellen\">" + message.getText() + "</td>"
-					+ "<td id=\"zellen\">" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td>"
+					+ "<td id=\"zelle\">" + message.getListOfReceivers()+ "</td>"
+					+ "<td id=\"zelle\">" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td>"
+					+ "<td id=\"zelle\">" + message.getText() + "</td>"
 					+ "</tr>";
 		}
 		

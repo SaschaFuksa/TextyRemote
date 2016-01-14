@@ -44,14 +44,14 @@ public class HTMLUserSubscriptionReport {
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"
-				+ "<th id=\"spaltenueberschrift\">Vorname</th>"
-				+ "<th id=\"spaltenueberschrift\">E-Mail</th>"
+				+ "<th id=\"author\">Vorname</th>"
+				+ "<th id=\"author\">E-Mail</th>"
 				+ "</tr>";
 		
 		for(User user : users) {
 			report += "<tr id=\"spalten\">"
-					+ "<td id=\"zellen\">" + user.getFirstName() + "</td>"
-					+ "<td id=\"zellen\">" + user.getEmail() + "</td>"
+					+ "<td id=\"zelle\">" + user.getFirstName() + "</td>"
+					+ "<td id=\"zelle\">" + user.getEmail() + "</td>"
 					+ "</tr>";
 		}
 		
