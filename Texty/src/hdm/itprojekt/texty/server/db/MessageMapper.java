@@ -314,7 +314,7 @@ public class MessageMapper {
 			Statement stmt = con.createStatement();
 			// Statement ausfüllen und als Query an die Datenbank schicken
 			ResultSet rsMessages = stmt
-					.executeQuery("SELECT DISTINCT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message INNER JOIN textydb.receiver ON message.messageId = receiver.messageId "
+					.executeQuery("SELECT DISTINCT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message LEFT JOIN textydb.receiver ON message.messageId = receiver.messageId "
 							+ "WHERE author_userId = "
 							+ currentuser.getId()
 							+ " AND message.visibility = '1' "
