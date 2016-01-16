@@ -44,23 +44,29 @@ public class HTMLMessagesFromUserInPeriod {
 		report += "<br>";
 		report += "Messagereport generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
-		report += "<table id=\"reporttable\">" + "<tr>"
+		report += "<table id=\"reporttable\">" + 
+				"<tr>"
 				+ "<th id=\"receiver\">Receiver</th>"
 				+ "<th id=\"creationdate\">Date of Creation</th>"
 				+ "<th id=\"message\">Message</th>" + "</tr>";
 
 		for (Message message : messages) {
-
-			report += "<tr id=\"spalten\">"
-					+ "<td id=\"zelle\">"
-					+ message.getListOfReceivers()
-					+ "</td>"
-					+ "<td id=\"zelle\">"
-					+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
-							.format(message.getDateOfCreation()) + "</td>"
-					+ "<td id=\"zelle\">" + message.getText() + "</td>"
-					+ "</tr>";
-
+			if (message.getListOfReceivers() == null
+					|| message.getListOfReceivers().size() == 0
+					|| message.getListOfReceivers().isEmpty()) {
+				report += "<tr id=\"spalten\">"
+						+ "<td id=\"zelle\">"+ "Public message"+ "</td>"
+						+ "<td id=\"zelle\">"+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
+								.format(message.getDateOfCreation()) + "</td>"
+						+ "<td id=\"zelle\">" + message.getText() + "</td>"
+						+ "</tr>";
+			} else
+				report += "<tr id=\"spalten\">"
+						+ "<td id=\"zelle\">"+ message.getListOfReceivers()+ "</td>"
+						+ "<td id=\"zelle\">"+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
+								.format(message.getDateOfCreation()) + "</td>"
+						+ "<td id=\"zelle\">" + message.getText() + "</td>"
+						+ "</tr>";
 		}
 
 		report += "</table>";

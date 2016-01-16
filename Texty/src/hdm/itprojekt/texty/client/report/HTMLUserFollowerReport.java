@@ -5,17 +5,10 @@ import hdm.itprojekt.texty.shared.bo.User;
 import java.util.Date;
 import java.util.Vector;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.HTML;
 
-/**
- * In dieser Klasse wird der Report für die Userabo`s eines ausgewählten Users in HTML 
- * aufgebaut. Die Ausgabe der abonnierten User erfolgt in einer Tabelle mit zwei Spalten, 
- * in denen zum einen der Vorname des abonnierten Users ausgegeben wird und zum anderen 
- * dessen E-Mailadresse.
- *
- */
-public class HTMLUserSubscriptionReport {
+public class HTMLUserFollowerReport {
 	
 	//Aufbau der Tabelle im HTML-Format
 	private static String generateReportHead() {
@@ -50,7 +43,7 @@ public class HTMLUserSubscriptionReport {
 		
 		for(User user : users) {
 			report += "<tr id=\"spalten\">"
-					+ "<td id=\"zelle\">" + user.getFirstName() + " " + ""+ user.getLastName() +"</td>"
+					+ "<td id=\"zelle\">" + user.getFirstName() + " " + ""+ user.getFirstName() +"</td>"
 					+ "<td id=\"zelle\">" + user.getEmail() + "</td>"
 					+ "</tr>";
 		}

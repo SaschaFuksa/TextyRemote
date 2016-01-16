@@ -1,9 +1,11 @@
 package hdm.itprojekt.texty.client;
 
+import hdm.itprojekt.texty.client.report.HashtagSubscriptionReport;
+import hdm.itprojekt.texty.client.report.MessagesOfHashtag;
 import hdm.itprojekt.texty.client.report.MessagesOfPeriod;
 import hdm.itprojekt.texty.client.report.MessagesOfUser;
 import hdm.itprojekt.texty.client.report.MessagesOfUserInPeriod;
-import hdm.itprojekt.texty.client.report.SubscriptionReport;
+import hdm.itprojekt.texty.client.report.UserSubscriptionReport;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -108,6 +110,19 @@ public class TextyCommand {
 					 */
 					RootPanel.get("Navigator").add(profile);
 					break;
+				case "MessagesOfHashtag":
+					/*
+					 * Instanziierung des jeweiligen Formulars, welches im
+					 * entsprechenden Parent Widget angezeigt wird.
+					 */
+					TextyForm messagesOfHashtag = new MessagesOfHashtag(
+							"MessagesOfHashtag");
+					
+					/*
+					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+					 */
+					RootPanel.get("Navigator").add(messagesOfHashtag);
+					break;
 				case "MessagesOfUser":
 					/*
 					 * Instanziierung des jeweiligen Formulars, welches im
@@ -147,18 +162,31 @@ public class TextyCommand {
 					 */
 					RootPanel.get("Navigator").add(messagesOfUserInPeriod);
 					break;
-				case "SubscriptionReport":
+				case "UserSubscriptionReport":
 					/*
 					 * Instanziierung des jeweiligen Formulars, welches im
 					 * entsprechenden Parent Widget angezeigt wird.
 					 */
-					TextyForm subscriptionReport = new SubscriptionReport(
+					TextyForm userSubscriptionReport = new UserSubscriptionReport(
 							"SubscriptionReport");
 					
 					/*
 					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
 					 */
-					RootPanel.get("Navigator").add(subscriptionReport);
+					RootPanel.get("Navigator").add(userSubscriptionReport);
+					break;
+				case "HashtagSubscriptionReport":
+					/*
+					 * Instanziierung des jeweiligen Formulars, welches im
+					 * entsprechenden Parent Widget angezeigt wird.
+					 */
+					TextyForm hashtagSubscriptionReport = new HashtagSubscriptionReport(
+							"SubscriptionReport");
+					
+					/*
+					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
+					 */
+					RootPanel.get("Navigator").add(hashtagSubscriptionReport);
 					break;
 				default:
 					;

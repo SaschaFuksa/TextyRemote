@@ -63,19 +63,25 @@ public class TextyMenu {
 			 * Bereiche.
 			 */
 			MenuBar subMenu = new MenuBar(true);
-			subMenu.addItem("MessagesOfUser",
+			subMenu.addItem("Messages of Hashtag",
+					command.getCommand("MessagesOfHashtag"));
+			subMenu.addItem("Messages of user",
 					command.getCommand("MessagesOfUser"));
-			subMenu.addItem("MessagesOfPeriod",
+			subMenu.addItem("Messages of period",
 					command.getCommand("MessagesOfPeriod"));
-			subMenu.addItem("MessagesOfUserInPeriod",
+			subMenu.addItem("Messages of user in period",
 					command.getCommand("MessagesOfUserInPeriod"));
-
+			
+			MenuBar subMenu2 = new MenuBar(true);
+			subMenu2.addItem("Usersubscriptions",
+					command.getCommand("UserSubscriptionReport"));
+			subMenu2.addItem("Hashtagsubscriptions",
+					command.getCommand("HashtagSubscriptionReport"));
 			/*
 			 * Zuteilung der einzelnen Bereiche and das Menü.
 			 */
 			menu.addItem("MessageReports", subMenu);
-			menu.addItem("SubscriptionReports",
-					command.getCommand("SubscriptionReport"));
+			menu.addItem("Subscriptionreports",subMenu2);
 
 			/*
 			 * Zuweisung der Styles an das jeweilige Widget.

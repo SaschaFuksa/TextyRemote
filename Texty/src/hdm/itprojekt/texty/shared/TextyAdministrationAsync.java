@@ -101,6 +101,15 @@ public interface TextyAdministrationAsync {
 
 	void getRecentMessages(Message message,
 			AsyncCallback<Vector<Message>> callback);
+
+	void getAllMessagesFromHashtag(Hashtag selectedHashtag,
+			AsyncCallback<Vector<Message>> callback);
+
+	void getAllFollowersFromHashtag(Hashtag selectedHashtag,
+			AsyncCallback<Vector<User>> callback);
+
+	void getAllFollowerFromUser(User selectedUser,
+			AsyncCallback<Vector<User>> callback);
 	
 
 }

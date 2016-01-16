@@ -83,7 +83,7 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	 * @param listOfHastags
 	 *            Die Hashtags welche der Nachricht angehängt wurden
 	 * 
-	 * @return Die neu erstellte Nachricht 
+	 * @return Die neu erstellte Nachricht
 	 */
 	@Override
 	public Message addMessageToConversation(Message lastMessage,
@@ -527,6 +527,32 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 	}
 
 	/**
+	 * Die Methode gibt alle Follower eines Hashtags zurück.
+	 * 
+	 * @param selectedHashtag
+	 *            Der ausgewählte Hashtag
+	 * 
+	 * @return Ein Vektor mit den entsprechenden Benutzer Objekten
+	 */
+	public Vector<User> getAllFollowersFromHashtag(Hashtag selectedHashtag)
+			throws IllegalArgumentException {
+		return this.hsMapper.selectAllHashtagSubscriber(selectedHashtag);
+	}
+
+	/**
+	 * Die Methode gibt alle Follower eines Benutzer zurück.
+	 * 
+	 * @param selectedHashtag
+	 *            Der ausgewählte Benutzer
+	 * 
+	 * @return Ein Vektor mit den entsprechenden Benutzer Objekten
+	 */
+	public Vector<User> getAllFollowerFromUser(User selectedUser)
+			throws IllegalArgumentException {
+		return this.usMapper.selectAllSubscriber(selectedUser);
+	}
+
+	/**
 	 * Diese Methode gibt alle bereits angelegten Hashtag Objekte zurück.
 	 * 
 	 * @return Vektor mit allen vorhandenen Hashtags
@@ -678,6 +704,16 @@ public class TextyAdministrationImpl extends RemoteServiceServlet implements
 		// Sortieren des Ergebnisvektors
 		Collections.sort(result);
 		return result;
+	}
+
+	public Vector<Message> getAllMessagesFromHashtag(Hashtag selectedHashtag)
+			throws IllegalArgumentException {
+		Vector<Message> result = this.mMapper
+				.selectAllMessagesWithHashtag(selectedHashtag);
+		Collections.sort(result);
+		Collections.reverse(result);
+		return result;
+
 	}
 
 	/**

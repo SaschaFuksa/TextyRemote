@@ -53,14 +53,9 @@ public class HTMLMessagesOfPeriodReport {
 					|| message.getListOfReceivers().size() == 0
 					|| message.getListOfReceivers().isEmpty()) {
 				report += "<tr id=\"spalten\">"
-						+ "<td id=\"zelle\">"
-						+ message.getAuthor().toString()
-						+ "</td>"
-						+ "<td id=\"zelle\">"
-						+ "Public message"
-						+ "</td>"
-						+ "<td id=\"zelle\">"
-						+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
+						+ "<td id=\"zelle\">"+ message.getAuthor().toString()+ "</td>"
+						+ "<td id=\"zelle\">"+ "Public message"+ "</td>"
+						+ "<td id=\"zelle\">"+ DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
 								.format(message.getDateOfCreation()) + "</td>"
 						+ "<td id=\"zelle\">" + message.getText() + "</td>"
 						+ "</tr>";

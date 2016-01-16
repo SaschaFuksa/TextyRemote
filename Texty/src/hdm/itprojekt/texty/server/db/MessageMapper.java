@@ -578,6 +578,60 @@ public class MessageMapper {
 	}
 
 	/**
+	 * Die Methode selectAllMessagesWithHashtag gibt alle Nachrichten aus, die
+	 * einen bestimmten Hashtag enthalten.
+	 * 
+	 * @param hashtag
+	 *            der in einer Nachricht verlinkt wurde
+	 * @return
+	 */
+	public Vector<Message> selectAllMessagesWithHashtag(Hashtag hashtag) {
+		// Datenbankverbindung holen
+		Connection con = DBConnection.connection();
+		// Ergebnisvektor vorbereiten
+		Vector<Message> resultMessage = new Vector<Message>();
+
+		try {
+			// Neues Statement anlegen
+			Statement stmt = con.createStatement();
+			// Statement ausfüllen und als Query an die Datenbank schicken
+			ResultSet rsMessages = stmt
+					.executeQuery("SELECT message.messageId, message.author_userId, message.messageText, message.conversationId, message.visibility, message.dateOfCreation FROM textydb.message inner join textydb.hashtag_in_message ON message.messageId = hashtag_in_message.messageId inner join textydb.conversation ON message.conversationId = conversation.conversationId "
+							+ "WHERE hashtag_in_message.hashtagId = "
+							+ hashtag.getId()
+							+ " AND message.visibility = '1' ");
+
+			// Für jeden Eintrag wird nun ein Message-Objekt erstellt.
+			while (rsMessages.next()) {
+				Message allmessages = new Message();
+
+				allmessages.setId(rsMessages.getInt("message.messageId"));
+
+				allmessages.setAuthor(findAuthor(allmessages));
+				allmessages.setListOfReceivers(findReceivers(allmessages));
+				allmessages
+						.setListOfHashtag(findHashtagsInMessage(allmessages));
+
+				allmessages
+						.setText(rsMessages.getString("message.messageText"));
+				allmessages.setConversationID(rsMessages
+						.getInt("message.conversationId"));
+				allmessages.setVisible(rsMessages
+						.getBoolean("message.visibility"));
+				allmessages.setDateOfCreation(rsMessages
+						.getTimestamp("message.dateOfCreation"));
+				// Das Objekt wird nun dem Ergebnisvektor hinzugefügt
+				resultMessage.addElement(allmessages);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// Message Vektor zurückgeben
+		return resultMessage;
+	}
+
+	/**
 	 * Die methode delete setzt die visibility einer bestimmten Nachricht auf 0.
 	 * Nachrichten mit der visibility 0 werden Nutzern nicht mehr angezeigt.
 	 * 

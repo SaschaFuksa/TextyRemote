@@ -19,8 +19,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("administration")
 public interface TextyAdministration extends RemoteService {
 
-	public Message addMessageToConversation(Message lastMessage, int conversationId, String text,
-			Vector<Hashtag> listOfHashtag) throws IllegalArgumentException;
+	public Message addMessageToConversation(Message lastMessage,
+			int conversationId, String text, Vector<Hashtag> listOfHashtag)
+			throws IllegalArgumentException;
 
 	public void checkUserData() throws IllegalArgumentException;
 
@@ -58,6 +59,12 @@ public interface TextyAdministration extends RemoteService {
 	public Vector<Conversation> getAllConversationsFromUser()
 			throws IllegalArgumentException;
 
+	public Vector<User> getAllFollowersFromHashtag(Hashtag selectedHashtag)
+			throws IllegalArgumentException;
+
+	public Vector<User> getAllFollowerFromUser(User selectedUser)
+			throws IllegalArgumentException;
+
 	public Vector<Hashtag> getAllHashtags() throws IllegalArgumentException;
 
 	public Vector<Message> getAllMessagesByDate(Date startDate, Date endDate)
@@ -74,6 +81,9 @@ public interface TextyAdministration extends RemoteService {
 
 	public Vector<Message> getAllMessagesFromUserByDate(User user,
 			Date startDate, Date endDate) throws IllegalArgumentException;
+
+	public Vector<Message> getAllMessagesFromHashtag(Hashtag selectedHashtag)
+			throws IllegalArgumentException;
 
 	public Vector<Conversation> getAllPublicConversationsFromUser(User user)
 			throws IllegalArgumentException;
@@ -100,7 +110,8 @@ public interface TextyAdministration extends RemoteService {
 
 	public void updateUserData(String firstName, String lastName)
 			throws IllegalArgumentException;
-	
-	public Vector<Message> getRecentMessages(Message message) throws IllegalArgumentException;
+
+	public Vector<Message> getRecentMessages(Message message)
+			throws IllegalArgumentException;
 
 }

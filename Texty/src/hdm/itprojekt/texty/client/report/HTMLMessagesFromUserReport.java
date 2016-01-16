@@ -54,12 +54,22 @@ public class HTMLMessagesFromUserReport {
 				+ "</tr>";
 		
 		for(Message message : messages) {			
-			report += "<tr id=\"spalten\">"
-					+ "<td id=\"zelle\">" + message.getListOfReceivers() + "</td>"
-					+ "<td id=\"zelle\">" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td>"
-					+ "<td id=\"zelle\">" + message.getText() + "</td>"
-					+ "</tr>";
+			if (message.getListOfReceivers() == null
+					|| message.getListOfReceivers().size() == 0
+					|| message.getListOfReceivers().isEmpty()) {
+				report += "<tr id=\"spalten\">"
+						+ "<td id=\"zelle\">"+ "Public message"+ "</td>"
+						+ "<td id=\"zelle\">" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td>"
+						+ "<td id=\"zelle\">" + message.getText() + "</td>"
+						+ "</tr>";
+			} else
+				report += "<tr id=\"spalten\">"
+						+ "<td id=\"zelle\">" + message.getListOfReceivers() + "</td>"
+						+ "<td id=\"zelle\">" + DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss").format(message.getDateOfCreation()) + "</td>"
+						+ "<td id=\"zelle\">" + message.getText() + "</td>"
+						+ "</tr>";
 		}
+			
 		
 		report += "</table>";
 		

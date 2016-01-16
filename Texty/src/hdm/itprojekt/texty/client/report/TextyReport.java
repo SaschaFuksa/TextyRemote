@@ -36,30 +36,6 @@ public class TextyReport implements EntryPoint {
 		RootPanel.get("Banner").add(loginPanel);
 	}
 
-	/*
-	 * Command cmd = new Command() { public void execute() {
-	 * Window.alert("You selected a menu item!"); } };
-	 * 
-	 * Command cmdEditor = new Command() { public void execute() {
-	 * Window.Location.assign("http://127.0.0.1:8888/Texty.html"); } };
-	 * 
-	 * TextyCommand test = new TextyCommand();
-	 * 
-	 * 
-	 * // Make some sub-menus that we will cascade from the top menu. MenuBar
-	 * fooMenu = new MenuBar(true); fooMenu.addItem("Back", cmdEditor);
-	 * 
-	 * // Make a new menu bar, adding a few cascading menus to it. MenuBar
-	 * menuReport = new MenuBar(); menuReport.addItem("MessageReport", fooMenu);
-	 * menuReport
-	 * .addItem("SubscriptionReport",test.getCommand("SubscriptionReport"));
-	 * menuReport.addItem("Editor", cmdEditor);
-	 * menuReport.setStyleName("menubar");
-	 * 
-	 * // Add it to the root panel. RootPanel.get("Menu").add(menuReport);
-	 * 
-	 * }
-	 */
 
 	@Override
 	public void onModuleLoad() {
