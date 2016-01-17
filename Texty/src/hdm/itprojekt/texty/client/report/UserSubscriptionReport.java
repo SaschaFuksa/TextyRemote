@@ -234,7 +234,7 @@ public class UserSubscriptionReport extends TextyForm {
 				 * 
 				 * @see HTMLUserSubscriptionReport
 				 */ 
-				administration.getAllSubscribedUsersFromUser(user, new AsyncCallback<Vector<User>>() {
+				administration.getAllFollowerFromUser(user, new AsyncCallback<Vector<User>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -251,7 +251,7 @@ public class UserSubscriptionReport extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLUserSubscriptionReport.generateUserSubscriptionReport(result));
+						scrollPanel.add(HTMLUserFollowerReport.generateUserFollowerReport(result));
 					}
 				});
 				}

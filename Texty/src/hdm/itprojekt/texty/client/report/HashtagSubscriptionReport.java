@@ -56,8 +56,9 @@ public class HashtagSubscriptionReport extends TextyForm {
 	 * Deklaration & Definition von Variablen der Klasse.
 	 */
 	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
-	private static Vector<User> allUser = new Vector<User>();
+//	private static Vector<User> allUser = new Vector<User>();
 	public static User user;
+	private Hashtag hashtagSelection = null;
 	
 	/**
 	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
@@ -91,6 +92,12 @@ public class HashtagSubscriptionReport extends TextyForm {
 		Follower = new Button("Show Follower", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				
+				/*
+				 * Entfernung des evtl. zuvor generierten Reports
+				 */
+				scrollPanel.clear();
+				
 				/*
 				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung
 				 * in der infoBox
@@ -103,6 +110,11 @@ public class HashtagSubscriptionReport extends TextyForm {
 					 */
 					String keyword = suggestBox.getText().trim()
 							.replaceAll(" ", "");
+					for (Hashtag hashtag : allHashtag) {
+						if (hashtag.getKeyword() == keyword) {
+							hashtagSelection = hashtag;
+						}
+					}
 
 					/*
 					 * Überprüfung ob mindestens drei Zeichen eingegeben wurden.
@@ -118,7 +130,7 @@ public class HashtagSubscriptionReport extends TextyForm {
 				 * 
 				 * @see HTMLUserSubscriptionReport
 				 */ 
-				administration.getAllSubscribedUsersFromUser(user, new AsyncCallback<Vector<User>>() {
+				administration.getAllFollowersFromHashtag(hashtagSelection, new AsyncCallback<Vector<User>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -135,7 +147,7 @@ public class HashtagSubscriptionReport extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLUserSubscriptionReport.generateUserSubscriptionReport(result));
+						scrollPanel.add(HTMLHashtagFollowerReport.generateHashtagFollowerReport(result));
 					}
 				});
 				}
@@ -146,7 +158,7 @@ public class HashtagSubscriptionReport extends TextyForm {
 		 * Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich
 		 */
 		// Text
-		chatFlexTable.setText(0, 0, "Messages of: #");
+		chatFlexTable.setText(0, 0, "Follower of: #");
 
 		// Textbox
 		chatFlexTable.setWidget(0, 1, suggestBox);
@@ -200,14 +212,14 @@ public class HashtagSubscriptionReport extends TextyForm {
 			}
 		}
 		
-		private void addHashtag(String keyword) {
-			for (Hashtag hashtag : allHashtag) {
-				if (keyword.equals(hashtag.getKeyword())) {
-					suggestBox.setText("");
-					setOracle();
-					return;
-				}
-			}
-			infoBox.setWarningText("Hashtag is unknown!");
-		}
+//		private void addHashtag(String keyword) {
+//			for (Hashtag hashtag : allHashtag) {
+//				if (keyword.equals(hashtag.getKeyword())) {
+//					suggestBox.setText("");
+//					setOracle();
+//					return;
+//				}
+//			}
+//			infoBox.setWarningText("Hashtag is unknown!");
+//		}
 }

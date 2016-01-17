@@ -8,7 +8,7 @@ import java.util.Vector;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
 
-public class HTMLUserFollowerReport {
+public class HTMLHashtagFollowerReport {
 	
 	//Aufbau der Tabelle im HTML-Format
 	private static String generateReportHead() {
@@ -23,7 +23,7 @@ public class HTMLUserFollowerReport {
 		return currentReport + "</body></html>";
 	}
 	
-	public static HTML generateUserFollowerReport(Vector<User> users) {
+	public static HTML generateHashtagFollowerReport(Vector<User> users) {
 		String report = generateReportHead();
 		
 		report += "<div>";

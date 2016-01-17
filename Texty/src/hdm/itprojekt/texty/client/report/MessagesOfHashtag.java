@@ -100,6 +100,9 @@ public class MessagesOfHashtag extends TextyForm {
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				/*
+				 * Entfernung des evtl. zuvor generierten Reports
+				 */
 				scrollPanel.clear();
 
 				/*
@@ -147,10 +150,6 @@ public class MessagesOfHashtag extends TextyForm {
 								@Override
 								public void onSuccess(Vector<Message> result) {
 									/*
-									 * Umkehrung der Reihenfolge der Liste.
-									 */
-									Collections.reverse(result);
-									/*
 									 * Zuweisung und Anpassung des Widgets.
 									 */
 									scrollPanel.setSize("100%", "100%");
@@ -172,7 +171,7 @@ public class MessagesOfHashtag extends TextyForm {
 		 * Navigatorbereich
 		 */
 		// Text
-		chatFlexTable.setText(0, 0, "Messagereport for:");
+		chatFlexTable.setText(0, 0, "Messagereport for: #");
 
 		// Textbox
 		chatFlexTable.setWidget(0, 1, suggestBox);

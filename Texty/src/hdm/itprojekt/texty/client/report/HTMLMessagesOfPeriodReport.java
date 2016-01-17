@@ -45,7 +45,7 @@ public class HTMLMessagesOfPeriodReport {
 		report += "<table id=\"reporttable\">" + "<tr>"
 				+ "<th id=\"author\">Author</th>"
 				+ "<th id=\"receiver\">Receivers</th>"
-				+ "<th id=\"creationdate\">Date of Creation</th>"
+				+ "<th id=\"creationdate\">Date of creation</th>"
 				+ "<th id=\"message\">Message</th>" + "</tr>";
 
 		for (Message message : messages) {

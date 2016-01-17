@@ -38,12 +38,17 @@ public static HTML generateMessagesOfHashtagReport(Vector<Message> messages) {
 	report += "<br>";
 	report += "<table id=\"reporttable\">"
 			+ "<tr>"
-			+ "<th id=\"hashtag\">Hashtag</th>"
+			+ "<th id=\"author\">Author</th>"
+			+ "<th id=\"creationdate\">Date of creation</th>"
+			+ "<th id=\"hashtag\">Message</th>"
 			+ "</tr>";
 	
 	for(Message message : messages) {
 		report += "<tr id=\"spalten\">"
-				+ "<td id=\"zelle\">"+ "#" + message.getText() + "</td>"
+				+ "<td id=\"zelle\">"+ message.getAuthor().toString() + "</td>"
+				+ "<td id=\"zelle\">"+DateTimeFormat.getFormat("dd.MM.yyyy 'at' HH:mm:ss")
+				.format(message.getDateOfCreation()) + "</td>"
+				+ "<td id=\"zelle\">"+ message.getText() + "</td>"
 				+ "</tr>";
 	}
 	

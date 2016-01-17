@@ -80,7 +80,7 @@ public class TextyMenu {
 			/*
 			 * Zuteilung der einzelnen Bereiche and das Menü.
 			 */
-			menu.addItem("MessageReports", subMenu);
+			menu.addItem("Messagereports", subMenu);
 			menu.addItem("Subscriptionreports",subMenu2);
 
 			/*
