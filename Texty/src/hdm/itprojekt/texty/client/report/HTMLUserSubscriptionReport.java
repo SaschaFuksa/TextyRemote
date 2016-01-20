@@ -31,7 +31,7 @@ public class HTMLUserSubscriptionReport {
 	}
 	
 	//Aufbau der Tabelle
-	public static HTML generateUserSubscriptionReport(Vector<User> users) {
+	public static HTML generateUserSubscriptionReport(Vector<User> users, User selectedUser) {
 		String report = generateReportHead();
 		
 		report += "<div>";
@@ -41,7 +41,7 @@ public class HTMLUserSubscriptionReport {
 	    DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 
 	    report += "<br>";
-		report += "Usersubscriptionreport generated at " + fmt.format(today) + "<br>";
+		report += "Usersubscriptions of: "+ selectedUser +" generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"

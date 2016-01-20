@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client.report;
 
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ private static String generateReportEnd(String currentReport) {
 }
 
 //Aufbau der Tabelle
-public static HTML generateMessagesOfHashtagReport(Vector<Message> messages) {
+public static HTML generateMessagesOfHashtagReport(Vector<Message> messages, Hashtag selctedHashtag) {
 	String report = generateReportHead();
 	
 	report += "<div>";
@@ -43,7 +44,7 @@ public static HTML generateMessagesOfHashtagReport(Vector<Message> messages) {
     DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
     
     report += "<br>";
-	report += "Messagereport generated at " + fmt.format(today) + "<br>";
+	report += "Messagereport of #" + selctedHashtag.toString() + " generated at " + fmt.format(today) + "<br>";
 	report += "<br>";
 	report += "<table id=\"reporttable\">"
 			+ "<tr>"

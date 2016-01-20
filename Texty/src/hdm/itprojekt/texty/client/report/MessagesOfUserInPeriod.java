@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -57,7 +58,7 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	/**
 	 * Deklaration & Definition von Variablen der Klasse.
 	 */
-	public static User user;
+	private User selectedUser;
 	private static Vector<User> allUser = new Vector<User>();
 	private Date date1;
 	private Date date2;
@@ -135,12 +136,12 @@ public class MessagesOfUserInPeriod extends TextyForm{
 					* Methode getUserOutOfAllUser(nickName) ermittelt.
 					*/
 					String nickName = getNickName(suggestBox.getText());
-					User user = getUserOutOfAllUser(nickName);
+					selectedUser = getUserOutOfAllUser(nickName);
 				/*
 				 * Überprüfung ob die Suche nach einem User mit dem
 				 * entsprechenden Nickname keinen User zurückgab.
 				 */
-				if (user == null){
+				if (selectedUser == null){
 					infoBox.setErrorText("Unknown User!");
 				}else{
 					/*
@@ -178,13 +179,18 @@ public class MessagesOfUserInPeriod extends TextyForm{
 						* 
 						* @see HTMLMessagesFromUserReport
 						*/  
-				administration.getAllMessagesWhereUserIsAuthorByDate(user, date1, date2,new AsyncCallback<Vector<Message>>() {
+				administration.getAllMessagesWhereUserIsAuthorByDate(selectedUser, date1, date2,new AsyncCallback<Vector<Message>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						if (result.isEmpty()
+								|| result.size() == 0
+								|| result == null) {
+							Window.alert("No Messages written by the chosen user in chosen period ");
+						} else {
 						/*
 						 * Umkehrung der Reihenfolge der Liste.
 						 */
@@ -197,7 +203,8 @@ public class MessagesOfUserInPeriod extends TextyForm{
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLMessagesOfUserInPeriod.generateMessagesFromUserInPeriodReport(result));
+						scrollPanel.add(HTMLMessagesOfUserInPeriod.generateMessagesFromUserInPeriodReport(result, date1 , date2, selectedUser));
+					}
 					}
 				});
 				}

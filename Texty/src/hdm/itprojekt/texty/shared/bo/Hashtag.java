@@ -33,5 +33,9 @@ public class Hashtag extends BusinessObject {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
+	@Override
+	public String toString(){
+		return this.getKeyword();
+	}
 
 }

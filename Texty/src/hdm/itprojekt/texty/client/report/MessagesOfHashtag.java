@@ -161,7 +161,7 @@ public class MessagesOfHashtag extends TextyForm {
 									 * scrollPanel hinzu.
 									 */
 									scrollPanel.add(HTMLMessagesOfHashtagReport
-											.generateMessagesOfHashtagReport(result));
+											.generateMessagesOfHashtagReport(result, hashtagSelection));
 								}
 							});
 				}

@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -23,8 +24,8 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * In dieser Klasse wird das UI für die Nachrichten in einem ausgewählten User´s aufgebaut. 
- * Die Widgets werden im Navigatorbereich implementiert.
+ * In dieser Klasse wird das UI für die Nachrichten in einem ausgewählten User´s
+ * aufgebaut. Die Widgets werden im Navigatorbereich implementiert.
  *
  */
 public class MessagesOfUser extends TextyForm {
@@ -40,20 +41,20 @@ public class MessagesOfUser extends TextyForm {
 	private Button MessageReport;
 	private InfoBox infoBox = new InfoBox();
 	private ScrollPanel scrollPanel = new ScrollPanel();
-	
+
 	/**
 	 * Die administration ermöglicht die asynchrone Kommunikation mit der
 	 * Applikationslogik.
 	 */
 	private final TextyAdministrationAsync administration = ClientsideSettings
 			.getTextyAdministration();
-	
+
 	/**
 	 * Deklaration & Definition von Variablen der Klasse.
 	 */
-	public static User user;
+	private User selectedUser;
 	private static Vector<User> allUser = new Vector<User>();
-	
+
 	/**
 	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
 	 * 
@@ -72,85 +73,104 @@ public class MessagesOfUser extends TextyForm {
 	 */
 	@Override
 	public void run() {
-		
+
 		// Create UI
-		
+
 		/*
-		 * Erzeugt einen Button der das Erstellen des Reports für Nachrichten eines ausgewählten Users ausgibt.
-		 */ 
+		 * Erzeugt einen Button der das Erstellen des Reports für Nachrichten
+		 * eines ausgewählten Users ausgibt.
+		 */
 		MessageReport = new Button("Show Messages", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				/*
-				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung
-				 * in der infoBox
+				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung in der
+				 * infoBox
 				 */
 				infoBox.clear();
-				
+
 				/*
 				 * Entfernung des evtl. zuvor generierten Reports
 				 */
 				scrollPanel.clear();
-				
+
 				/*
 				 * Überprüfung ob der Text des Suchfeldes leer ist.
 				 */
-				if(suggestBox.getText() == ""){
+				if (suggestBox.getText() == "") {
 					infoBox.setWarningText("Please select a user!");
-				}else{	
+				} else {
 					/*
-					* Erzeugt aus den Text aus dem Suchfeld den Nicknamen und
-					* im Anschluss wird anhand des Nicknamen der User über die
-					* Methode getUserOutOfAllUser(nickName) ermittelt.
-					*/
+					 * Erzeugt aus den Text aus dem Suchfeld den Nicknamen und
+					 * im Anschluss wird anhand des Nicknamen der User über die
+					 * Methode getUserOutOfAllUser(nickName) ermittelt.
+					 */
 					String nickName = getNickName(suggestBox.getText());
-					User user = getUserOutOfAllUser(nickName);
-					
-				/*
-				 * Überprüfung ob die Suche nach einem User mit dem
-				 * entsprechenden Nickname keinen User zurückgab.
-				 */
-				if (user == null){
-					infoBox.setErrorText("Unknown User!");
-				}else{	
-					
-				/*
-				* Lädt alle Nachrichten, in denen der ausgewählte User der Author ist und startet die Methode 
-				* "generateMessagesOfUserReport(result)" der Klasse "HTMLMessagesFromUserReport", 
-				* die den Report aufbaut und im ScrollPanel ausgibt
-				* 
-				* @see HTMLMessagesFromUserReport
-				*/ 
-				
-				administration.getAllMessagesWhereUserIsAuthor(user, new AsyncCallback<Vector<Message>>() {
-					@Override
-					public void onFailure(Throwable caught) {
+					selectedUser = getUserOutOfAllUser(nickName);
 
+					/*
+					 * Überprüfung ob die Suche nach einem User mit dem
+					 * entsprechenden Nickname keinen User zurückgab.
+					 */
+					if (selectedUser == null) {
+						infoBox.setErrorText("Unknown User!");
+					} else {
+
+						/*
+						 * Lädt alle Nachrichten, in denen der ausgewählte User
+						 * der Author ist und startet die Methode
+						 * "generateMessagesOfUserReport(result)" der Klasse
+						 * "HTMLMessagesFromUserReport", die den Report aufbaut
+						 * und im ScrollPanel ausgibt
+						 * 
+						 * @see HTMLMessagesFromUserReport
+						 */
+
+						administration.getAllMessagesWhereUserIsAuthor(selectedUser,
+								new AsyncCallback<Vector<Message>>() {
+									@Override
+									public void onFailure(Throwable caught) {
+
+									}
+
+									@Override
+									public void onSuccess(Vector<Message> result) {
+
+										if (result.isEmpty()
+												|| result.size() == 0
+												|| result == null) {
+											Window.alert("No Messages written by chosen user");
+										} else {
+											/*
+											 * Umkehrung der Reihenfolge der
+											 * Liste.
+											 */
+											Collections.reverse(result);
+											/*
+											 * Zuweisung und Anpassung des
+											 * Widgets.
+											 */
+											scrollPanel.setSize("100%", "100%");
+											RootPanel.get("Details").add(
+													scrollPanel);
+											/*
+											 * Fügt den generierten Report dem
+											 * scrollPanel hinzu.
+											 */
+											scrollPanel
+													.add(HTMLMessagesOfUserReport
+															.generateMessagesOfUserReport(result, selectedUser));
+										}
+									}
+								});
 					}
-					@Override
-					public void onSuccess(Vector<Message> result) {
-						/*
-						 * Umkehrung der Reihenfolge der Liste.
-						 */
-						Collections.reverse(result);
-						/*
-						 * Zuweisung und Anpassung des Widgets.
-						 */
-						scrollPanel.setSize("100%", "100%");
-						RootPanel.get("Details").add(scrollPanel);
-						/*
-						 * Fügt den generierten Report dem scrollPanel hinzu.
-						 */
-						scrollPanel.add(HTMLMessagesOfUserReport.generateMessagesOfUserReport(result));
-					}
-				});
-				}
 				}
 			};
 		});
 
 		/*
-		 * Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich
+		 * Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im
+		 * Navigatorbereich
 		 */
 		// Text
 		chatFlexTable.setText(0, 0, "Messagereport for:");
@@ -160,23 +180,22 @@ public class MessagesOfUser extends TextyForm {
 
 		// Show-Button
 		chatFlexTable.setWidget(3, 1, MessageReport);
-		
-		//InfoBox hinzufügen
+
+		// InfoBox hinzufügen
 		chatFlexTable.setWidget(4, 1, infoBox);
-		
-		
+
 		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
 		mainPanel.add(addPanel);
 		RootPanel.get("Navigator").clear();
 		RootPanel.get("Navigator").add(mainPanel);
-		
-		
+
 		/*
-		 * Auslesen der registrierten User & Hinzufügen des ausgewählten Users in die SuggestBox
+		 * Auslesen der registrierten User & Hinzufügen des ausgewählten Users
+		 * in die SuggestBox
 		 */
 		administration.getAllUsers(new AsyncCallback<Vector<User>>() {
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 			}
@@ -188,7 +207,7 @@ public class MessagesOfUser extends TextyForm {
 			}
 		});
 	}
-	
+
 	/*
 	 * Setzt die nicht ausgewählten User als Vorschläge im Suchfeld.
 	 */
@@ -199,7 +218,7 @@ public class MessagesOfUser extends TextyForm {
 					.get(i).getEmail()));
 		}
 	}
-	
+
 	private String getOracleName(String firstName, String email) {
 		StringBuffer bufferName = new StringBuffer(email);
 		bufferName.setLength(bufferName.indexOf("@"));
@@ -208,12 +227,13 @@ public class MessagesOfUser extends TextyForm {
 		return name;
 
 	}
-	
+
 	/*
 	 * Wandelt den ausgewählten Namen aus dem Suchfeld in den Nickname um. Dabei
 	 * wird der Vorname und die '(' & ')' Klammern entfernt.
 	 * 
 	 * @param text
+	 * 
 	 * @return
 	 */
 	private String getNickName(String text) {
@@ -234,11 +254,12 @@ public class MessagesOfUser extends TextyForm {
 		}
 		return null;
 	}
-	
+
 	/*
 	 * Mittels der E-Mail wird der Nickname des Users erstellt und ausgegeben.
 	 * 
 	 * @param email
+	 * 
 	 * @return
 	 */
 	private String setNickName(String email) {

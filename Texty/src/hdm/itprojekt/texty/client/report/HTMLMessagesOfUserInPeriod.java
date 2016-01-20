@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.shared.bo.Message;
+import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Date;
 import java.util.Vector;
@@ -35,7 +36,7 @@ public class HTMLMessagesOfUserInPeriod {
 
 	//Aufbau der Tabelle
 	public static HTML generateMessagesFromUserInPeriodReport(
-			Vector<Message> messages) {
+			Vector<Message> messages, Date date1, Date date2, User selectedUser) {
 		String report = generateReportHead();
 
 		report += "<div>";
@@ -46,7 +47,7 @@ public class HTMLMessagesOfUserInPeriod {
 		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 
 		report += "<br>";
-		report += "Messagereport generated at " + fmt.format(today) + "<br>";
+		report += "Messagereport of " + selectedUser +" between "+ fmt.format(date1) +" and "+ fmt.format(date2) +" generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
 		report += "<table id=\"reporttable\">" + 
 				"<tr>"

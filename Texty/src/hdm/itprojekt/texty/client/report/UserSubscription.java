@@ -11,6 +11,7 @@ import hdm.itprojekt.texty.shared.bo.User;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -55,6 +56,7 @@ public class UserSubscription extends TextyForm {
 	 */
 	private static Vector<User> allUser = new Vector<User>();
 	public static User user;
+	private User selectedUser;
 	
 	/**
 	 * Der Konstruktor erzwingt die Eingabe einer Überschrift für das Formular.
@@ -108,13 +110,13 @@ public class UserSubscription extends TextyForm {
 				* Methode getUserOutOfAllUser(nickName) ermittelt.
 				*/
 				String nickName = getNickName(suggestBox.getText());
-				User user = getUserOutOfAllUser(nickName);
+				selectedUser = getUserOutOfAllUser(nickName);
 				
 				/*
 				 * Überprüfung ob die Suche nach einem User mit dem
 				 * entsprechenden Nickname keinen User zurückgab.
 				 */
-				if (user == null){
+				if (selectedUser == null){
 					infoBox.setErrorText("Unknown User!");
 				}else{
 				
@@ -125,7 +127,7 @@ public class UserSubscription extends TextyForm {
 				 * 
 				 * @see HTMLUserSubscriptionReport
 				 */ 
-				administration.getAllSubscribedUsersFromUser(user, new AsyncCallback<Vector<User>>() {
+				administration.getAllSubscribedUsersFromUser(selectedUser, new AsyncCallback<Vector<User>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -133,6 +135,12 @@ public class UserSubscription extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<User> result) {
+						if (result.isEmpty()
+								|| result.size() == 0
+								|| result == null) {
+							Window.alert("No Usersubscriptions for chosen user");
+						} else {
+						
 						/*
 						 * Zuweisung und Anpassung des Widgets.
 						 */
@@ -142,7 +150,8 @@ public class UserSubscription extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLUserSubscriptionReport.generateUserSubscriptionReport(result));
+						scrollPanel.add(HTMLUserSubscriptionReport.generateUserSubscriptionReport(result, selectedUser));
+					}
 					}
 				});
 				}
@@ -157,21 +166,49 @@ public class UserSubscription extends TextyForm {
 		Hashtagsubscriptions = new Button("Hashtagsubscriptions", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				
+				/*
+				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung
+				 * in der infoBox
+				 */
 				infoBox.clear();
+				
+				/*
+				 * Entfernung des evtl. zuvor generierten Reports
+				 */
 				scrollPanel.clear();
+				
+				/*
+				 * Überprüfung ob der Text des Suchfeldes leer ist.
+				 */
 				if(suggestBox.getText() == ""){
 					infoBox.setWarningText("Please select a user!");
-				}else{	
+				}else{
+					
+					/*
+					* Erzeugt aus den Text aus dem Suchfeld den Nicknamen und
+					* im Anschluss wird anhand des Nicknamen der User über die
+					* Methode getUserOutOfAllUser(nickName) ermittelt.
+					*/
 					String nickName = getNickName(suggestBox.getText());
-					user = getUserOutOfAllUser(nickName);
+					selectedUser = getUserOutOfAllUser(nickName);
 				
-				if (user == null){
+					/*
+					 * Überprüfung ob die Suche nach einem User mit dem
+					 * entsprechenden Nickname keinen User zurückgab.
+					 */
+				if (selectedUser == null){
 					infoBox.setErrorText("Unknown User!");
 				}else{
-				/*
-				 * Lädt alle Hashtags, die der ausgewählte User abonniert hat.
-				 */ 
-				administration.getAllSubscribedHashtagsFromUser(user, new AsyncCallback<Vector<Hashtag>>() {
+					
+					/*
+					 * Lädt alle User, die der ausgewählte User abonniert hat und startet die Methode 
+					 * "generateHashtagSubscriptionReport(result, selectedUser)" der Klasse "HTMLHashtagSubscriptionReport", 
+					 * die den Report aufbaut und im ScrollPanel ausgibt
+					 * 
+					 * @see HTMLUserSubscriptionReport
+					 */
+				administration.getAllSubscribedHashtagsFromUser(selectedUser, new AsyncCallback<Vector<Hashtag>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -179,10 +216,23 @@ public class UserSubscription extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<Hashtag> result) {
-						RootPanel.get("Details").clear();
+						if (result.isEmpty()
+								|| result.size() == 0
+								|| result == null) {
+							Window.alert("No Hashtagsubscriptions for chosen user ");
+						} else {
+						
+						/*
+						* Zuweisung und Anpassung des Widgets.
+						*/
 						scrollPanel.setSize("100%", "100%");
 						RootPanel.get("Details").add(scrollPanel);
-						scrollPanel.add(HTMLHashtagSubscriptionReport.generateHashtagSubscriptionReport(result));
+						
+						/*
+						 * Fügt den generierten Report dem scrollPanel hinzu.
+						 */
+						scrollPanel.add(HTMLHashtagSubscriptionReport.generateHashtagSubscriptionReport(result, selectedUser));
+					}
 					}
 				});
 				}
@@ -220,13 +270,13 @@ public class UserSubscription extends TextyForm {
 				* Methode getUserOutOfAllUser(nickName) ermittelt.
 				*/
 				String nickName = getNickName(suggestBox.getText());
-				User user = getUserOutOfAllUser(nickName);
+				selectedUser = getUserOutOfAllUser(nickName);
 				
 				/*
 				 * Überprüfung ob die Suche nach einem User mit dem
 				 * entsprechenden Nickname keinen User zurückgab.
 				 */
-				if (user == null){
+				if (selectedUser == null){
 					infoBox.setErrorText("Unknown User!");
 				}else{
 				
@@ -237,7 +287,7 @@ public class UserSubscription extends TextyForm {
 				 * 
 				 * @see HTMLUserSubscriptionReport
 				 */ 
-				administration.getAllFollowerFromUser(user, new AsyncCallback<Vector<User>>() {
+				administration.getAllFollowerFromUser(selectedUser, new AsyncCallback<Vector<User>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 
@@ -245,6 +295,12 @@ public class UserSubscription extends TextyForm {
 
 					@Override
 					public void onSuccess(Vector<User> result) {
+						
+						if (result.isEmpty()
+								|| result.size() == 0
+								|| result == null) {
+							Window.alert("No Follower for chosen user ");
+						} else {
 						/*
 						 * Zuweisung und Anpassung des Widgets.
 						 */
@@ -254,7 +310,8 @@ public class UserSubscription extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLUserFollowerReport.generateUserFollowerReport(result));
+						scrollPanel.add(HTMLUserFollowerReport.generateUserFollowerReport(result, selectedUser));
+					}
 					}
 				});
 				}

@@ -1,6 +1,7 @@
 package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.shared.bo.Hashtag;
+import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Date;
 import java.util.Vector;
@@ -30,7 +31,7 @@ public class HTMLHashtagSubscriptionReport{
 	}
 	
 	//Aufbau der Tabelle
-	public static HTML generateHashtagSubscriptionReport(Vector<Hashtag> hashtags) {
+	public static HTML generateHashtagSubscriptionReport(Vector<Hashtag> hashtags, User selectedUser) {
 		String report = generateReportHead();
 		
 		report += "<div>";
@@ -40,7 +41,7 @@ public class HTMLHashtagSubscriptionReport{
 	    DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 	    
 	    report += "<br>";
-		report += "Hashtagsubscriptionreport generated at " + fmt.format(today) + "<br>";
+		report += "Hashtagsubscriptions of: "+ selectedUser + " generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"

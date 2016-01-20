@@ -30,7 +30,7 @@ public class HTMLUserFollowerReport {
 	}
 	
 	//Aufbau der Tabelle
-	public static HTML generateUserFollowerReport(Vector<User> users) {
+	public static HTML generateUserFollowerReport(Vector<User> users, User selectedUser) {
 		String report = generateReportHead();
 		
 		report += "<div>";
@@ -40,7 +40,7 @@ public class HTMLUserFollowerReport {
 	    DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 
 	    report += "<br>";
-		report += "Followerreport generated at " + fmt.format(today) + "<br>";
+		report += "Followerreport of: "+ selectedUser +" generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"

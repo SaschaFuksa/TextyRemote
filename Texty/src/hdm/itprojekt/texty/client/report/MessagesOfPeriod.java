@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -134,6 +135,13 @@ public class MessagesOfPeriod extends TextyForm {
 					}
 					@Override
 					public void onSuccess(Vector<Message> result) {
+						
+						if (result.isEmpty()
+								|| result.size() == 0
+								|| result == null) {
+							Window.alert("No Messages written in chosen period");
+						} else {
+						
 						/*
 						 * Umkehrung der Reihenfolge der Liste.
 						 */
@@ -146,7 +154,8 @@ public class MessagesOfPeriod extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result));
+						scrollPanel.add(HTMLMessagesOfPeriodReport.generateMessagesOfPeriodReport(result, date1, date2));
+					}
 					}
 				});
 				}

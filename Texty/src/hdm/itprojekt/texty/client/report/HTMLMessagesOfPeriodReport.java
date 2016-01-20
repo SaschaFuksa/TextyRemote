@@ -34,7 +34,7 @@ public class HTMLMessagesOfPeriodReport {
 	}
 
 	//Aufbau der Tabelle
-	public static HTML generateMessagesOfPeriodReport(Vector<Message> messages) {
+	public static HTML generateMessagesOfPeriodReport(Vector<Message> messages, Date date1, Date date2) {
 		String report = generateReportHead();
 
 		report += "<div>";
@@ -43,9 +43,9 @@ public class HTMLMessagesOfPeriodReport {
 		// Reports.
 		Date today = new Date();
 		DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
-
+		
 		report += "<br>";
-		report += "Messagereport generated at " + fmt.format(today) + "<br>";
+		report += "Messagereport between "+ fmt.format(date1) +" and "+ fmt.format(date2) +" generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
 		report += "<table id=\"reporttable\">" + "<tr>"
 				+ "<th id=\"author\">Author</th>"

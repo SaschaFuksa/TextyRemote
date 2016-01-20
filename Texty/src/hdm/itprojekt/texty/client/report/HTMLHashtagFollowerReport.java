@@ -1,5 +1,6 @@
 package hdm.itprojekt.texty.client.report;
 
+import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ public class HTMLHashtagFollowerReport {
 		return currentReport + "</body></html>";
 	}
 	
-	public static HTML generateHashtagFollowerReport(Vector<User> users) {
+	public static HTML generateHashtagFollowerReport(Vector<User> users, Hashtag selctedHashtag) {
 		String report = generateReportHead();
 		
 		report += "<div>";
@@ -43,7 +44,7 @@ public class HTMLHashtagFollowerReport {
 	    DateTimeFormat fmt = DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss");
 
 	    report += "<br>";
-		report += "Followerreport generated at " + fmt.format(today) + "<br>";
+		report += "Followerreport of #" + selctedHashtag.toString() + " generated at " + fmt.format(today) + "<br>";
 		report += "<br>";
 		report += "<table id=\"reporttable\">"
 				+ "<tr>"

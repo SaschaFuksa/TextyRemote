@@ -146,7 +146,7 @@ public class HashtagSubscription extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLHashtagFollowerReport.generateHashtagFollowerReport(result));
+						scrollPanel.add(HTMLHashtagFollowerReport.generateHashtagFollowerReport(result, hashtagSelection));
 					}
 				});
 				}
