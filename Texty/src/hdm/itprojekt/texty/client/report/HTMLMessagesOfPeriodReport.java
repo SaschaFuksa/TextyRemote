@@ -12,23 +12,28 @@ import com.google.gwt.user.client.ui.HTML;
  * 
  * In dieser Klasse wird der Report für die Nachrichten eines ausgewählten
  * Zeitraums in HTML aufgebaut. Die Ausgabe der Nachrichten erfolgt in einer
- * Tabelle. Die Tabelle besteht aus drei Spalten in denen der Author, die
- * gesendete Nachricht und das Datum der Erstellung der Nachricht ausgegeben
+ * Tabelle. Die Tabelle besteht aus vier Spalten in denen der Author,die Empfänger, 
+ * das Datum der Erstellung der Nachrichtd und die gesendete Nachricht ausgegeben
  * wird.
  *
  */
 
 public class HTMLMessagesOfPeriodReport {
 
-	// Aufbau der Tabelle im HTML-Format
+	//Aufbau der HTML Seite
 	private static String generateReportHead() {
-		return "<html>" + "<head>" + "<title></title>" + "</head>" + "<body>";
+		return "<html>"
+				+ "<head>"
+				+ "<title></title>"
+				+ "</head>"
+				+ "<body>";
 	}
 
 	private static String generateReportEnd(String currentReport) {
 		return currentReport + "</body></html>";
 	}
 
+	//Aufbau der Tabelle
 	public static HTML generateMessagesOfPeriodReport(Vector<Message> messages) {
 		String report = generateReportHead();
 

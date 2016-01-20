@@ -1,7 +1,6 @@
 package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.shared.bo.Message;
-import hdm.itprojekt.texty.shared.bo.User;
 
 import java.util.Date;
 import java.util.Vector;
@@ -19,17 +18,22 @@ import com.google.gwt.user.client.ui.HTML;
  *
  */
 
-public class HTMLMessagesFromUserInPeriod {
+public class HTMLMessagesOfUserInPeriod {
 
-	// Aufbau der Tabelle im HTML-Format
+	//Aufbau der HTML Seite
 	private static String generateReportHead() {
-		return "<html>" + "<head>" + "<title></title>" + "</head>" + "<body>";
+		return "<html>"
+				+ "<head>"
+				+ "<title></title>"
+				+ "</head>"
+				+ "<body>";
 	}
 
 	private static String generateReportEnd(String currentReport) {
 		return currentReport + "</body></html>";
 	}
 
+	//Aufbau der Tabelle
 	public static HTML generateMessagesFromUserInPeriodReport(
 			Vector<Message> messages) {
 		String report = generateReportHead();

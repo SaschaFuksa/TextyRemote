@@ -1,11 +1,11 @@
 package hdm.itprojekt.texty.client;
 
-import hdm.itprojekt.texty.client.report.HashtagSubscriptionReport;
+import hdm.itprojekt.texty.client.report.HashtagSubscription;
 import hdm.itprojekt.texty.client.report.MessagesOfHashtag;
 import hdm.itprojekt.texty.client.report.MessagesOfPeriod;
 import hdm.itprojekt.texty.client.report.MessagesOfUser;
 import hdm.itprojekt.texty.client.report.MessagesOfUserInPeriod;
-import hdm.itprojekt.texty.client.report.UserSubscriptionReport;
+import hdm.itprojekt.texty.client.report.UserSubscription;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -167,7 +167,7 @@ public class TextyCommand {
 					 * Instanziierung des jeweiligen Formulars, welches im
 					 * entsprechenden Parent Widget angezeigt wird.
 					 */
-					TextyForm userSubscriptionReport = new UserSubscriptionReport(
+					TextyForm userSubscriptionReport = new UserSubscription(
 							"SubscriptionReport");
 					
 					/*
@@ -180,7 +180,7 @@ public class TextyCommand {
 					 * Instanziierung des jeweiligen Formulars, welches im
 					 * entsprechenden Parent Widget angezeigt wird.
 					 */
-					TextyForm hashtagSubscriptionReport = new HashtagSubscriptionReport(
+					TextyForm hashtagSubscriptionReport = new HashtagSubscription(
 							"SubscriptionReport");
 					
 					/*

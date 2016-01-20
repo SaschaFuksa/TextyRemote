@@ -8,9 +8,18 @@ import java.util.Vector;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
 
+/**
+ * In dieser Klasse wird der Report für die Follower eines Hashtag`s in HTML 
+ * aufgebaut. Die Ausgabe der abonnierten Hashtags erfolgt in einer Tabelle .
+ * Die Tabelle besteht aus zwei Spalten für den Namen und die E-Mail Adresse des Followers. 
+ *
+ */
+
 public class HTMLHashtagFollowerReport {
 	
-	//Aufbau der Tabelle im HTML-Format
+	public static User user;
+	
+	//Aufbau der HTML Seite
 	private static String generateReportHead() {
 		return "<html>"
 				+ "<head>"
@@ -19,6 +28,7 @@ public class HTMLHashtagFollowerReport {
 				+ "<body>";
 	}
 	
+	//Aufbau der Tabelle
 	private static String generateReportEnd(String currentReport) {
 		return currentReport + "</body></html>";
 	}

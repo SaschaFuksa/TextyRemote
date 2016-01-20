@@ -2,7 +2,6 @@ package hdm.itprojekt.texty.client.report;
 
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
@@ -17,7 +16,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class HTMLHashtagSubscriptionReport{
 
-	//Aufbau der Tabelle im HTML-Format
+	//Aufbau der HTML Seite
 	private static String generateReportHead() {
 		return "<html>"
 				+ "<head>"
@@ -30,6 +29,7 @@ public class HTMLHashtagSubscriptionReport{
 		return currentReport + "</body></html>";
 	}
 	
+	//Aufbau der Tabelle
 	public static HTML generateHashtagSubscriptionReport(Vector<Hashtag> hashtags) {
 		String report = generateReportHead();
 		

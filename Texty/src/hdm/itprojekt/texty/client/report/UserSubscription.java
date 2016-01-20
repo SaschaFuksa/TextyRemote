@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 
-public class SubscriptionReport extends TextyForm {
+public class UserSubscription extends TextyForm {
 	
 	/**
 	 * Deklaration, Definition und Initialisierung der Widgets.
@@ -41,6 +41,7 @@ public class SubscriptionReport extends TextyForm {
 	private InfoBox infoBox = new InfoBox();
 	private Button Usersubscriptions;
 	private Button Hashtagsubscriptions ;
+	private Button Follower;
 	
 	/**
 	 * Die administration ermöglicht die asynchrone Kommunikation mit der
@@ -61,7 +62,7 @@ public class SubscriptionReport extends TextyForm {
 	 * @see TextyForm
 	 * @param headline
 	 */
-	public SubscriptionReport(String headline) {
+	public UserSubscription(String headline) {
 		super(headline);
 	}
 
@@ -162,7 +163,7 @@ public class SubscriptionReport extends TextyForm {
 					infoBox.setWarningText("Please select a user!");
 				}else{	
 					String nickName = getNickName(suggestBox.getText());
-					User user = getUserOutOfAllUser(nickName);
+					user = getUserOutOfAllUser(nickName);
 				
 				if (user == null){
 					infoBox.setErrorText("Unknown User!");
@@ -190,6 +191,78 @@ public class SubscriptionReport extends TextyForm {
 		});
 		
 		/*
+		 * Erzeugt einen Button der das Erstellen des Reports für Follower eines ausgewählten User´s ausgibt.
+		 */
+		Follower = new Button("Show Follower", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				/*
+				 * Entfernung des evtl. zuvor generierten Reports
+				 */
+				scrollPanel.clear();
+				
+				/*
+				 * Entfernung der evtl. zuvor ausgegebenen Fehlermeldung
+				 * in der infoBox
+				 */
+				infoBox.clear();
+				
+				/*
+				 * Überprüfung ob der Text des Suchfeldes leer ist.
+				 */
+				if(suggestBox.getText() == ""){
+					infoBox.setWarningText("Please select a user!");
+				}else{	
+				/*
+				* Erzeugt aus den Text aus dem Suchfeld den Nicknamen und
+				* im Anschluss wird anhand des Nicknamen der User über die
+				* Methode getUserOutOfAllUser(nickName) ermittelt.
+				*/
+				String nickName = getNickName(suggestBox.getText());
+				User user = getUserOutOfAllUser(nickName);
+				
+				/*
+				 * Überprüfung ob die Suche nach einem User mit dem
+				 * entsprechenden Nickname keinen User zurückgab.
+				 */
+				if (user == null){
+					infoBox.setErrorText("Unknown User!");
+				}else{
+				
+				/*
+				 * Lädt alle User, die der ausgewählte User abonniert hat und startet die Methode 
+				 * "generateUserSubscriptionReport(result)" der Klasse "HTMLUserSubscriptionReport", 
+				 * die den Report aufbaut und im ScrollPanel ausgibt
+				 * 
+				 * @see HTMLUserSubscriptionReport
+				 */ 
+				administration.getAllFollowerFromUser(user, new AsyncCallback<Vector<User>>() {
+					@Override
+					public void onFailure(Throwable caught) {
+
+					}
+
+					@Override
+					public void onSuccess(Vector<User> result) {
+						/*
+						 * Zuweisung und Anpassung des Widgets.
+						 */
+						scrollPanel.setSize("100%", "100%");
+						RootPanel.get("Details").add(scrollPanel);
+						
+						/*
+						 * Fügt den generierten Report dem scrollPanel hinzu.
+						 */
+						scrollPanel.add(HTMLUserFollowerReport.generateUserFollowerReport(result));
+					}
+				});
+				}
+				}
+			};
+		});
+		
+		/*
 		 * Anlegen einer chatFlexTable zum Anordnen der verschiedenen Widgets im Navigatorbereich
 		 */
 		// Text
@@ -201,9 +274,10 @@ public class SubscriptionReport extends TextyForm {
 		// Show-Button
 		chatFlexTable.setWidget(3, 1, Usersubscriptions);
 		chatFlexTable.setWidget(4, 1, Hashtagsubscriptions);
+		chatFlexTable.setWidget(5, 1, Follower);
 		
 		//Hinzufügen der infoBox für Fehlermeldungen
-		chatFlexTable.setWidget(5, 1, infoBox);
+		chatFlexTable.setWidget(6, 1, infoBox);
 		
 		// Hinzufügen der widgets
 		mainPanel.add(chatFlexTable);
@@ -223,7 +297,7 @@ public class SubscriptionReport extends TextyForm {
 
 			@Override
 			public void onSuccess(Vector<User> result) {
-				SubscriptionReport.allUser = result;
+				UserSubscription.allUser = result;
 				setOracle();
 			}
 		});

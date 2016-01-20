@@ -8,15 +8,13 @@ import hdm.itprojekt.texty.shared.FieldVerifier;
 import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Hashtag;
 import hdm.itprojekt.texty.shared.bo.Message;
-import hdm.itprojekt.texty.shared.bo.User;
 
-import java.util.Collections;
+
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -27,6 +25,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * In dieser Klasse wird das UI für die Nachrichten eines Hashtag´s aufgebaut. 
+ * Die Widgets werden im Navigatorbereich implementiert.
+ *
+ */
 public class MessagesOfHashtag extends TextyForm {
 
 	/**
@@ -64,7 +67,6 @@ public class MessagesOfHashtag extends TextyForm {
 	 * Deklaration, Definition und Initialisierung BO.
 	 */
 	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
-	private static Vector<User> allUser = new Vector<User>();
 	private Hashtag hashtagSelection = null;
 
 	/**
@@ -224,15 +226,5 @@ public class MessagesOfHashtag extends TextyForm {
 		}
 	}
 
-	private void addHashtag(String keyword) {
-		for (Hashtag hashtag : allHashtag) {
-			if (keyword.equals(hashtag.getKeyword())) {
-				suggestBox.setText("");
-				setOracle();
-				return;
-			}
-		}
-		infoBox.setWarningText("Hashtag is unknown!");
-	}
 
 }

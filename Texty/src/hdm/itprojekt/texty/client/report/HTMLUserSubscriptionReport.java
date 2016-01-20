@@ -17,7 +17,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
  */
 public class HTMLUserSubscriptionReport {
 	
-	//Aufbau der Tabelle im HTML-Format
+	//Aufbau der HTML Seite
 	private static String generateReportHead() {
 		return "<html>"
 				+ "<head>"
@@ -30,6 +30,7 @@ public class HTMLUserSubscriptionReport {
 		return currentReport + "</body></html>";
 	}
 	
+	//Aufbau der Tabelle
 	public static HTML generateUserSubscriptionReport(Vector<User> users) {
 		String report = generateReportHead();
 		

@@ -22,6 +22,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * In dieser Klasse wird das UI für die Nachrichten in einem ausgewählten User´s aufgebaut. 
+ * Die Widgets werden im Navigatorbereich implementiert.
+ *
+ */
 public class MessagesOfUser extends TextyForm {
 
 	/**
@@ -136,7 +141,7 @@ public class MessagesOfUser extends TextyForm {
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLMessagesFromUserReport.generateMessagesOfUserReport(result));
+						scrollPanel.add(HTMLMessagesOfUserReport.generateMessagesOfUserReport(result));
 					}
 				});
 				}

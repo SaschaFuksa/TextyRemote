@@ -27,6 +27,12 @@ import hdm.itprojekt.texty.shared.TextyAdministrationAsync;
 import hdm.itprojekt.texty.shared.bo.Message;
 import hdm.itprojekt.texty.shared.bo.User;
 
+/**
+ * In dieser Klasse wird das UI für die Nachrichten eines ausgewählten User´s in einem 
+ * ausgewählten Zeitraum aufgebaut. 
+ * Die Widgets werden im Navigatorbereich implementiert.
+ *
+ */
 public class MessagesOfUserInPeriod extends TextyForm{
 	
 	/**
@@ -99,9 +105,6 @@ public class MessagesOfUserInPeriod extends TextyForm{
 	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date2 = event.getValue();
-	        date2.setHours(23);
-	        date2.setMinutes(59);
-	        date2.setSeconds(59);
 	      }
 	    });
 
@@ -194,7 +197,7 @@ public class MessagesOfUserInPeriod extends TextyForm{
 						/*
 						 * Fügt den generierten Report dem scrollPanel hinzu.
 						 */
-						scrollPanel.add(HTMLMessagesFromUserInPeriod.generateMessagesFromUserInPeriodReport(result));
+						scrollPanel.add(HTMLMessagesOfUserInPeriod.generateMessagesFromUserInPeriodReport(result));
 					}
 				});
 				}

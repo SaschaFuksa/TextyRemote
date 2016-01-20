@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class HashtagSubscriptionReport extends TextyForm {
+public class HashtagSubscription extends TextyForm {
 	
 	/**
 	 * Der LOG gibt eine mögliche Exception bzw. den Erfolg des asynchronen
@@ -56,7 +56,6 @@ public class HashtagSubscriptionReport extends TextyForm {
 	 * Deklaration & Definition von Variablen der Klasse.
 	 */
 	private Vector<Hashtag> allHashtag = new Vector<Hashtag>();
-//	private static Vector<User> allUser = new Vector<User>();
 	public static User user;
 	private Hashtag hashtagSelection = null;
 	
@@ -66,7 +65,7 @@ public class HashtagSubscriptionReport extends TextyForm {
 	 * @see TextyForm
 	 * @param headline
 	 */
-	public HashtagSubscriptionReport(String headline) {
+	public HashtagSubscription(String headline) {
 		super(headline);
 	}
 
@@ -212,14 +211,4 @@ public class HashtagSubscriptionReport extends TextyForm {
 			}
 		}
 		
-//		private void addHashtag(String keyword) {
-//			for (Hashtag hashtag : allHashtag) {
-//				if (keyword.equals(hashtag.getKeyword())) {
-//					suggestBox.setText("");
-//					setOracle();
-//					return;
-//				}
-//			}
-//			infoBox.setWarningText("Hashtag is unknown!");
-//		}
 }

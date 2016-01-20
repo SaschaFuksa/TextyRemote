@@ -16,7 +16,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -25,9 +24,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.gwt.user.datepicker.client.DateBox.Format;
 
-
+/**
+ * In dieser Klasse wird das UI für die Nachrichten in einem ausgewählten Zeitraum aufgebaut. 
+ * Die Widgets werden im Navigatorbereich implementiert.
+ *
+ */
 public class MessagesOfPeriod extends TextyForm {
 
 	/**
@@ -62,7 +64,6 @@ public class MessagesOfPeriod extends TextyForm {
 	 */
 	public MessagesOfPeriod(String headline) {
 		super(headline);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -96,9 +97,6 @@ public class MessagesOfPeriod extends TextyForm {
 	    endDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
 	      public void onValueChange(ValueChangeEvent<Date> event) {
 	        date2 = event.getValue();
-	        date2.setHours(23);
-	        date2.setMinutes(59);
-	        date2.setSeconds(59);
 	      }
 	    });
 

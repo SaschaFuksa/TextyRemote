@@ -5,8 +5,6 @@ import hdm.itprojekt.texty.shared.bo.Message;
 import java.util.Date;
 import java.util.Vector;
 
-import java.util.Collections;
-
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -15,13 +13,13 @@ import com.google.gwt.user.client.ui.HTML;
  * In dieser Klasse wird der Report für die Nachrichten eines ausgewählten Users 
  * in HTML aufgebaut. Die Ausgabe der Nachrichten erfolgt in einer Tabelle. 
  * Die Tabelle besteht aus drei Spalten in denen die Empfänger, 
- * die gesendete Nachricht und das Datum der Erstellung der Nachricht ausgegeben wird. 
+ * das Datum der Erstellung der Nachricht und die gesendete Nachricht ausgegeben wird. 
  *
  */
 
-public class HTMLMessagesFromUserReport {
+public class HTMLMessagesOfUserReport {
 	
-	//Aufbau der Tabelle im HTML-Format
+	//Aufbau der HTML Seite
 	private static String generateReportHead() {
 		return "<html>"
 				+ "<head>"
@@ -34,6 +32,7 @@ public class HTMLMessagesFromUserReport {
 		return currentReport + "</body></html>";
 	}
 	
+	//Aufbau der Tabelle
 	public static HTML generateMessagesOfUserReport(Vector<Message> messages) {
 		String report = generateReportHead();
 		
@@ -69,7 +68,6 @@ public class HTMLMessagesFromUserReport {
 						+ "<td id=\"zelle\">" + message.getText() + "</td>"
 						+ "</tr>";
 		}
-			
 		
 		report += "</table>";
 		
