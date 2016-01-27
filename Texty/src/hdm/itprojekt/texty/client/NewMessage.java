@@ -49,7 +49,7 @@ public class NewMessage extends TextyForm {
 	private HorizontalPanel content = new HorizontalPanel();
 	private ScrollPanel scroll = new ScrollPanel(content);
 	private MessageForm message = new MessageForm();
-	private Label text = new Label("New public message to all user!");
+	private Label text = new Label("New public message to all users!");
 	private MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 	private SuggestBox suggestBox = new SuggestBox(oracle);
 	private VerticalPanel mainPanel = new VerticalPanel();

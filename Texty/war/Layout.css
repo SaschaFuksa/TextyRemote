@@ -16,14 +16,14 @@ div#Wrapper {
 }
 
 div#Header {
-	background-color: #003399;
+	background-color: #01A9DB;
 	clear: left;
 	height: 17%;
 	padding: 5px;
 }
 
 div#Menu {
-	background-color: #80bfff;
+	background-color: #90CFEE;
 	height: 44px;
 	padding: 5px;
 }
@@ -36,7 +36,7 @@ div#container {
 }
 
 div#Navigator {
-	background-color: #0080c0;
+	background-color: #81DAF5;
 	height: 100%;
 	flex: 1;
 	padding: 0% 1%;
@@ -52,7 +52,7 @@ div#Details {
 }
 
 div#Info {
-	background-color: #0080c0;
+	background-color: #81DAF5;
 	height: 100%;
 	flex: 1;
 	padding: 0% 1%;
@@ -60,7 +60,7 @@ div#Info {
 }
 
 div#Footer {
-	background-color: #80bfff;
+	background-color: #90CFEE;
 	color: white;
 	height: 5%;
 	padding: 5px;

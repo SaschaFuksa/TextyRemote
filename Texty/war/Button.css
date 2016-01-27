@@ -1,7 +1,7 @@
 /** Set ids using widget.getElement().setId("idOfElement") for buttons */
 #button {
 	background: none;
-	background-color: #003399;
+	background-color: #0080c0;
 	border: 0px outset buttonface;
 	color: white;
 	float: right;
@@ -16,6 +16,25 @@
 
 #button:hover {
 	background-color: #80bfff;
+}
+
+#editMessageButton {
+	background: none;
+	background-color: #80bfff;
+	border: 0px outset buttonface;
+	color: white;
+	float: right;
+	font-family: Texty;
+	font-size: 18px;
+	height: 36px;
+	margin: 2px;
+	padding: 5px;
+	text-align: center;
+	width: 150px;
+}
+
+#editMessageButton:hover {
+	background-color: #81DAF5;
 }
 
 #addButton {

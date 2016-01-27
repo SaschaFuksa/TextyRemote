@@ -41,7 +41,7 @@ public class HomeForm extends TextyForm {
 	private User currentUser = new User();
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private Label text = new Label("See your:");
-	private Label headerUser = new Label("Subscribed user");
+	private Label headerUser = new Label("Subscribed users");
 	private Label headerHashtag = new Label("Subscribed hashtags");
 	private VerticalPanel contentUser = new VerticalPanel();
 	private VerticalPanel contentHashtag = new VerticalPanel();
@@ -244,7 +244,7 @@ public class HomeForm extends TextyForm {
 				LOG.info("Success :" + result.getClass().getSimpleName());
 				Collections.reverse(result);
 				TextyForm publicConversationViewer = new PublicConversationViewer(
-						"Public Postings from " + user.getFirstName(), result);
+						"Public Postings by " + user.getFirstName(), result);
 
 				RootPanel.get("Details").clear();
 				RootPanel.get("Info").clear();

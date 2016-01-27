@@ -160,13 +160,14 @@ public class SingleMessageView extends VerticalPanel {
 			text.getElement().setId("senderPanel");
 			hashtagLabel.getElement().setId("senderPanel");
 			messageTable.getElement().setId("senderPanel");
-			getElement().setId("senderPanel");
+			
 		} else {
 			/*
 			 * Deklaration, Definition und Initialisierung der Widget. Zuweisung
 			 * der Styles an das jeweilige Widget.
 			 */
 			author.setText(message.getAuthor().getFirstName());
+			text.getElement().setId("receiverPanel");
 			messageTable.getElement().setId("receiverPanel");
 		}
 
@@ -360,7 +361,12 @@ public class SingleMessageView extends VerticalPanel {
 					 */
 					editMessage.sendButton
 							.addClickHandler(createClickHandler(editMessage));
-
+					
+					/*
+					 * Zuweisung der Styles an das jeweilige Widget.
+					 */
+					editMessage.sendButton.getElement().setId("editMessageButton");
+					
 					/*
 					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
 					 */
@@ -374,6 +380,7 @@ public class SingleMessageView extends VerticalPanel {
 					 */
 					state = false;
 				} else {
+					
 					/*
 					 * Zuweisung des jeweiligen Child Widget zum Parent Widget.
 					 */
